@@ -14,17 +14,27 @@ $(document).ready(function () {
 					var response = JSON.parse(response);
 					var data = response[0];
 					var html = "";
+
+					if (data["user_profile_image"]!=null && data["user_profile_image"]!="") {
+						$(".user_profile_img").attr("src", profile_image_url+"/"+data["user_profile_image"]);
+					}
+					else{
+						$(".user_profile_img").attr("src", profile_image_url+"/no-user-image.png");
+					}
+					
 					html +="<h1>"+data['name']+"</h1><hr>";
-					html +="<h4>NID NO: "+data['nid_no']+"</h4><hr>";
-					html +="<h4>Contact NO: "+data['contact_no']+"</h4><hr>";
-					html +="<h4>Email: "+data['email']+"</h4><hr>";
-					html +="<h4>Address: "+data['address']+"</h4><hr>";
-					html +="<h4>Remarks: "+data['remarks']+"</h4><hr>";
+					
+					html +="<h4><i class='fa fa-phone'></i>  "+data['contact_no']+"</h4><hr>";
+					html +="<h4><i class='fa fa-envelope'></i> "+data['email']+"</h4><hr>";
+					html +="<h4><i  class='clip-location'></i> "+data['address']+"</h4><hr>";
+					html +="<h4><b>NID NO: </b>"+data['nid_no']+"</h4><hr>";
+					
+					html +="<h4><b>Profile Details: </b>"+data['remarks']+"</h4><hr>";
 					html +="<button class='btn btn-info' onclick='edit_profile()'>Edit Profile</button>";
 					html +=" <button class='btn btn-danger' onclick='change_password()'>Change Password</button>";
 					$("#profile_info").html(html);
 				}
-			});
+			}); 	
 		}
 		profile_info();
 
@@ -43,6 +53,8 @@ $(document).ready(function () {
 					$("#email").val(data['email']);
 					$("#address").val(data['address']);
 					$("#remarks").val(data['remarks']);
+					//$("#emp_image_upload").val(data['user_profile_image']);
+					$("#emp_img").attr("src", profile_image_url+"/"+data["user_profile_image"]);
 				}
 			});			
 		}
@@ -71,6 +83,7 @@ $(document).ready(function () {
 			success_or_error_msg('#form_submit_error','danger',"Select Email","#email");			
 		}	
 		else{
+			
 			$.ajax({
 				url: url+"/profile/my-profile-update",
 				type:'POST',
@@ -90,7 +103,7 @@ $(document).ready(function () {
 						});
 						resultHtml += '</ul>';
 						success_or_error_msg('#master_message_div',"danger",resultHtml);
-						clear_form();
+						//clear_form();
 					}
 					else{				
 						success_or_error_msg('#master_message_div',"success","Update Successfully");

@@ -85,6 +85,7 @@ class CoursesController extends Controller
                     $created_by = Auth::user()->name;
                     $column_value = [
                         'course_title'=>$request->course_title,
+                        'course_code'=>$request->course_code,
                         'details'=>$request->details,
                         'duration'=>$request->duration,  
                         'course_type'=>$request->course_type,   
@@ -99,6 +100,7 @@ class CoursesController extends Controller
                         'payment_method'=>$request->payment_method,
                         'course_teacher'=>$request->course_teacher,
                         'discount_message'=>$request->discount_message,
+                        'perticipants_limit'=>$request->perticipants_limit,
                     ];
                     $response = CourseMaster::create($column_value);
 
@@ -158,6 +160,7 @@ class CoursesController extends Controller
                     $updated_by = Auth::user()->name;
                     $column_value = [
                         'course_title'=>$request->course_title,
+                        'course_code'=>$request->course_code,
                         'details'=>$request->details,
                         'duration'=>$request->duration,  
                         'course_type'=>$request->course_type,   
@@ -172,6 +175,7 @@ class CoursesController extends Controller
                         'payment_method'=>$request->payment_method,
                         'course_teacher'=>$request->course_teacher,
                         'discount_message'=>$request->discount_message,
+                        'perticipants_limit'=>$request->perticipants_limit,
                     ];
 
                    
@@ -217,16 +221,18 @@ class CoursesController extends Controller
                     if($data_check['course_status']!='2'){
 
                         if ($request->course_status=='2') {     ##Approve Course
-
-                            $Interested_user_id = CoursePerticipant::select('perticipant_id')
-                                                ->where('is_interested','1')
-                                                ->get();
+ 
+                            $Interested_user_id = AppUser::select('id')->get();
+                            // CoursePerticipant::select('perticipant_id')
+                            //                     ->where('is_interested','1')
+                            //                     ->orWhere('is_interested','3')
+                            //                     ->get();
                             foreach($Interested_user_id as $Interested_user_id){
                                 ##Notification Entry
                                 $column_value4 = [
                                     'from_id'=>$from_id,
                                     'from_user_type'=>$from_user_type,
-                                    'to_id'=>$Interested_user_id['perticipant_id'],
+                                    'to_id'=>$Interested_user_id['id'],
                                     'to_user_type'=>$to_user_type,
                                     'notification_title'=>'BILS Approved '.$request->course_title.' Course',
                                     'view_url'=>'course/'.$request->course_edit_id,
@@ -243,6 +249,7 @@ class CoursesController extends Controller
 
                             $Interested_user_id = CoursePerticipant::select('perticipant_id')
                                                 ->where('is_interested','1')
+                                                ->orWhere('is_interested','3')
                                                 ->get();
                             foreach($Interested_user_id as $Interested_user_id){
                                 ##Notification Entry
@@ -266,6 +273,7 @@ class CoursesController extends Controller
 
                             $Interested_user_id = CoursePerticipant::select('perticipant_id')
                                                 ->where('is_interested','1')
+                                                ->orWhere('is_interested','3')
                                                 ->get();
                             foreach($Interested_user_id as $Interested_user_id){
                                 ##Notification Entry
@@ -289,6 +297,7 @@ class CoursesController extends Controller
 
                             $Interested_user_id = CoursePerticipant::select('perticipant_id')
                                                 ->where('is_interested','1')
+                                                ->orWhere('is_interested','3')
                                                 ->get();
                             foreach($Interested_user_id as $Interested_user_id){
                                 ##Notification Entry
@@ -332,11 +341,13 @@ class CoursesController extends Controller
         $edit_permisiion    = $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
         $delete_permisiion  = $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
 
-        $message_list = CourseMaster::Select('id', 'course_title', 'duration', 'pub_status','course_status')
-                        ->orderBy('id','desc')
-                        ->get();
+        $message_list = CourseMaster::Select('id', 'course_title', 'duration', 'pub_status','course_status', 'course_teacher')->orderBy('id','desc')->get();
+
         $return_arr = array();
-        foreach($message_list as $data){ 
+        foreach($message_list as $data){
+            $teacher = Teacher::select('name')->where('id', $data->course_teacher)->first();
+            $data['course_teacher'] = $teacher['name'];
+
             $data['pub_status']=($data->pub_status == 1)?"<button class='btn btn-xs btn-success' disabled>Published</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-published</button>";       
             if($data->course_status==1){
                 $data['course_status'] = "<button class='btn btn-xs btn-warning' disabled>Initiate</button>";
@@ -369,7 +380,14 @@ class CoursesController extends Controller
 
     //Course view
     public function courseView($id){
-        $data = CourseMaster::find($id);
+        $data = DB::table('course_masters as a')
+                ->leftJoin('teachers as t', 'a.course_teacher', '=', 't.id')
+                ->leftJoin('course_categories as cc', 'a.course_type', '=', 'cc.id')
+                ->select('a.*', 't.name as t_name', 't.remarks as remarks', 'cc.category_name as category_name')
+                ->where('a.id', $id)
+                ->first();
+
+        //$data = CourseMaster::find($id);
         return json_encode($data);
     }
 
@@ -403,7 +421,7 @@ class CoursesController extends Controller
                             ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
                             ->where('cp.course_id', $c_id)
                             ->where('cp.is_interested', '3')
-                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile', 'cp.id as cp_id', 'cp.is_selected as is_selected')
+                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile', 'cp.id as cp_id', 'cp.is_selected as is_selected', 'cp.payment as payment', 'cp.payment_method as payment_method', 'cp.reference_no as reference_no', 'cp.is_payment_verified as is_payment_verified', 'cp.id as v_id')
                             ->get();
 
         $selectedList = DB::table('course_perticipants as cp')
@@ -503,21 +521,124 @@ class CoursesController extends Controller
 
         $data=[];
         foreach ( $summary_data as $key=>$value){
+            $teacher = Teacher::select('name')->where('id',$value->course_teacher)->first();
+            $value['teacher']=$teacher['name'];
+
             $interested = CoursePerticipant::where('course_id','=',$value->id)
                         ->whereIn('is_interested',[1,3])
                         ->count();
             $value['interested']=$interested;
+            $registered = CoursePerticipant::where('course_id','=',$value->id)
+                        ->where('is_interested',3)
+                        ->count();
+            $value['registered']=$registered;
+            $selected = CoursePerticipant::where('course_id','=',$value->id)
+                        ->where('is_selected',1)
+                        ->count();
+
+            $value['selected']=$selected;
            
             $data[]=$value;
         }
+
         $userName = Auth::User()->name;
         $data['user']=$userName;
 
         return json_encode($data);
     }
 
+    public function getCourseDetails(){
+        $data['page_title'] = $this->page_title;
+        $data['module_name'] = "Reports";
+        $data['sub_module'] = "Course Details";
+
+        return view('reports.course_details', $data);
+    }
+
+    // public function getCourseNameAutoComplete(){
+    //     $course_name_code = $_REQUEST['term'];
+
+    //     $data = CourseMaster::select('id', 'course_code', 'course_title')
+    //         ->where('course_title','like','%'.$course_name_code.'%')
+    //         ->orwhere('course_code','like','%'.$course_name_code.'%')
+    //         ->get();
+    //     $data_count = $data->count();
+
+    //     if($data_count>0){
+    //         foreach ($data as $row) {
+    //             $json[] = array('id' => $row["id"],'label' => $row["course_code"].'->'.$row["course_title"]);
+    //         }
+    //     }
+    //     else {
+    //         $json[] = array('id' => "0",'label' => "Not Found !!!");
+    //     }
+    //     return json_encode($json);
+    // }
+
+    public function getCourseTitle(){
+        $data = CourseMaster::select('id','course_title', 'course_code')->get();
+        return json_encode($data);
+    }
+
+    public function getCourseDetailsReport(){
+        $c_id = $_POST['id'];
+        $data = CourseMaster::where('id',$c_id)->first();
+        $interested_list = DB::table('course_perticipants as cp')
+                            ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
+                            ->where('cp.course_id', $c_id)
+                            ->whereIn('cp.is_interested', ['1','3'])
+                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile')
+                            ->get();
+         $registeredList = DB::table('course_perticipants as cp')
+                            ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
+                            ->where('cp.course_id', $c_id)
+                            ->where('cp.is_interested', '3')
+                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile')
+                            ->get();
+
+        $selectedList = DB::table('course_perticipants as cp')
+                            ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
+                            ->where('cp.course_id', $c_id)
+                            ->where('cp.is_selected', '1')
+                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile')
+                            ->get();
+
+        return json_encode(array(
+            'course_details'=>$data,
+            'interested_list'=>$interested_list,
+            'registeredList'=>$registeredList,
+            'selectedList'=>$selectedList,
+        ));
+    }
 
 
+    ## Auto complete
+    public function loadTeacherName(){
+        $name = $_REQUEST['term'];
+        
+        $data = Teacher::select('id', 'name', 'email', 'contact_no')
+                ->where('name','like','%'.$name.'%')
+                ->orwhere('email','like','%'.$name.'%')
+                ->orwhere('contact_no','like','%'.$name.'%')
+                ->get();
+        $data_count = $data->count();
+
+         if($data_count>0){
+            foreach ($data as $row) {
+                $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["email"].", ".$row["contact_no"].")",'name'=>$row["name"] );
+            }
+        } 
+        else {
+            $json[] = array('id' => "0",'label' => "Not Found !!!");
+        }
+        return json_encode($json);
+    }
+
+
+    public function paymentVerify($id){
+        $data = CoursePerticipant::find($id);
+        $data->update(['is_payment_verified' => 1]);
+    }
 
 
 

@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('style')
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"><link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	
 @endsection
 @section('content')
 	<!--MESSAGE-->
@@ -20,7 +20,7 @@
                            <b> Message List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="message_entry">
 	                           <b> Add Message</b>
@@ -58,11 +58,9 @@
 									<table class="table table-bordered table-hover message_table" id="message_table" style="width:100% !important"> 
 										<thead>
 											<tr>
-												<th>ID</th>
-												<th>Mess Id</th>
-												<th>Admin ID </th>
-												<th>Admin Mess </th>
-												<th>App User ID </th>
+												<th>Admin Message </th>
+												<th>Category</th>
+												<th>App User Name </th>
 												<th>Seen Status </th>
 												<th class="hidden-xs">Status</th>
 												<th>Actions</th>
@@ -99,6 +97,13 @@
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<input type="file" id="attachment" name="attachment" class="form-control col-lg-12"/>
 										</div>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Message Category</label>
+										<div class="col-md-4 col-sm-4 col-xs-6">
+											<select name="message_category" id="message_category" class="form-control">
+												<option disabled="" selected="" value="">Select Message Category</option>
+												option
+											</select>
+										</div>
 									</div>
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Is Active</label>
@@ -119,6 +124,15 @@
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >App User Group</label>
 										<div class="col-md-10 col-sm-10 col-xs-6">
 											<div id="app_user_group">
+												
+											</div>
+										</div>
+									</div>
+
+									<div class="form-group">
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" ><button id="load_app_user_from_group" type="submit" class="btn btn-sm btn-info">Load App User</button></label>
+										<div class="col-md-10 col-sm-10 col-xs-6">
+											<div id="app_user_group_members">
 												
 											</div>
 										</div>
@@ -152,8 +166,14 @@
 
 
 @section('JScript')
+	
+	<script>
+		var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
+		var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
+		var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
+	</script>
+
 	<script src="{{ asset('assets/js/bils/message/message.js')}}"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 	
 {{-- <script src=" {{ asset('ckeditor/ckeditor.js') }} "></script>
 	<script>

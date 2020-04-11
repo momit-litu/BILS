@@ -17,7 +17,7 @@
                            <b> App User List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="app_user_button">
 	                           <b> Add App User</b>
@@ -55,10 +55,10 @@
 									<table class="table table-bordered table-hover admin_user_table" id="app_user_table" style="width:100% !important"> 
 										<thead>
 											<tr>
-												<th width="100">Photo</th>
-												<th>User ID</th>
+												<th>ID</th>
 												<th>Name</th>
 												<th>Email </th>
+												<th>Groups </th>
 												<th class="hidden-xs">Status</th>
 												<th>Actions</th>
 											</tr>
@@ -124,13 +124,13 @@
 									</div>
 									<br/>
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6">Remarks</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6">Profile Details</label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
 											<textarea rows="2" cols="100" id="remarks" name="remarks" class="form-control col-lg-12"></textarea> 
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >App User Group</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Select Group</label>
 										<div id="select_app_user_group" class="col-md-10 col-sm-10 col-xs-12"></div>
 									</div>
 									<div class="ln_solid"></div>
@@ -166,7 +166,7 @@
 
 
 @section('JScript')
-<script>
+	<script>
 		var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 	</script>
 

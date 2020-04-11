@@ -10,6 +10,9 @@ use \App\System;
 use App\AppUser;
 use App\UserGroup;
 use App\AppUserGroupMember;
+use App\MessageMaster;
+use App\MessageAttachment;
+use App\CoursePerticipant;
 use Auth;
 use App\Traits\HasPermission;
 
@@ -121,16 +124,21 @@ class AppUserController extends Controller
 					$response = AppUser::create($column_value);
 					$app_user_id = $response->id;
 					$group = $request->input('group');
-					$status = 1;
-					if ($group!="") {
+					
+					$app_user_group = UserGroup::select('id')->where('type',2)->get();
+					foreach ($app_user_group as $app_user_group ) {
+						$data_for_group_entry = new AppUserGroupMember();
+						$data_for_group_entry->group_id=$app_user_group['id'];
+						$data_for_group_entry->app_user_id=$app_user_id;
+						$data_for_group_entry->status=0;
+						$data_for_group_entry->save();
+					}
+					if ($group != "") {
 						foreach ($group as $group ) {
-							$data_for_group_entry = new AppUserGroupMember();
-							$data_for_group_entry->group_id=$group;
-							$data_for_group_entry->app_user_id=$app_user_id;
-							$data_for_group_entry->status=$status;
-							$data_for_group_entry->save();
+							$a=	DB::table('app_user_group_members')->where('app_user_id',$app_user_id)->where('group_id',$group)->update(['status'=>1]);
 						}
 					}
+					
 				}
 				#Update
 				else if($request->app_user_edit_id != ''){
@@ -192,10 +200,18 @@ class AppUserController extends Controller
 		$delete_action_id 	= 10;
 		$edit_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
 		$delete_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
-    	$app_user_details = AppUser::Select('user_profile_image', 'id',  'name',  'email', 'status')->orderBy('id', 'desc')->get();		
+    	$app_user_details = AppUser::Select('id',  'name',  'email', 'status')->orderBy('id', 'desc')->get();		
 		$return_arr = array();
-		foreach($app_user_details as $user){	
-			$user['app_user_profile_image'] = '<img height="70" max-width="100" src="'.$app_user_image_path.'/'.$user->user_profile_image.'" alt="image" />';
+		foreach($app_user_details as $user){
+
+			$groups =  DB::table('app_user_group_members as augm')
+					->leftJoin('user_groups as ug', 'augm.group_id', '=', 'ug.id')
+					->select(DB::raw('group_concat("", ug.group_name, "") AS group_name'))
+					->where('augm.app_user_id', $user->id)
+					->where('augm.status', 1)
+					->get();
+			$user['groups_name'] = $groups[0]->group_name;	
+			
 
 			if($user->status == 0){
 				$user['status']="<button class='btn btn-xs btn-warning' disabled>In-active</button>";
@@ -255,7 +271,17 @@ class AppUserController extends Controller
     /*----- App User View Start -----*/
     public function app_user_view($id){
     	$data = AppUser::find($id);
-		return json_encode($data);
+    	$groups =  DB::table('app_user_group_members as augm')
+					->leftJoin('user_groups as ug', 'augm.group_id', '=', 'ug.id')
+					->select(DB::raw('group_concat("", ug.group_name, "") AS group_name'))
+					->where('augm.app_user_id', $id)
+					->where('augm.status', 1)
+					->get();
+
+		return json_encode(array(
+			'data'=>$data,
+			'groups'=>$groups,
+		));
     }
     /*----- App User View End -----*/
 
@@ -316,7 +342,204 @@ class AppUserController extends Controller
     /*----- Get App User Group List End -----*/
 
 
+
+
+
+
+    ############ Frontend App user message ##########
+    public function appUserMessage($id){
+    	$data = AppUser::where('id',$id)->get();
+    	//return $data;
+
+    	return view('frontend.message.app_user_message',compact('data'));
+    }
+
+    public function appUserMessageSave(Request $r){
+    	$app_user_id = $r->app_user_id;
+    	$app_user_message = $r->app_user_message;
+    	$attachment = $r->file('app_user_attachment');
+
+    	if($r->hasFile('app_user_attachment')){
+			$app_user_msg_save = new MessageMaster();
+			$app_user_msg_save->app_user_message = $app_user_message;
+			$app_user_msg_save->app_user_id = $app_user_id;
+			$app_user_msg_save->is_attachment_app_user = 1;
+			$app_user_msg_save->save();
+			$mm_id = $app_user_msg_save->id;
+			
+            foreach ($attachment as $attachment) {
+                $attachment_name = rand().time().$attachment->getClientOriginalName();
+                $ext = strtoupper($attachment->getClientOriginalExtension());
+               
+                if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+                    $attachment_type = 1;
+                }
+                else if ($ext=="MP4" || $ext=="3GP") {
+                    $attachment_type = 2;
+                }
+                else if ($ext=="MP3") {
+                    $attachment_type = 3;
+                }
+                else{
+                    $attachment_type = 4;
+                }
+                //$attachment_full_name = $attachment_name.'.'.$ext;
+                $upload_path = 'assets/images/message/';
+                    
+                $success=$attachment->move($upload_path,$attachment_name);
+                ##Save image to the message attachment table
+                $msg_attachment = new MessageAttachment();
+                $msg_attachment->message_master_id = $mm_id;
+                $msg_attachment->app_user_attachment = $attachment_name;
+                $msg_attachment->attachment_type = $attachment_type;
+                $msg_attachment->save();
+            }
+         }
+
+    	else{
+    		$app_user_msg_save = new MessageMaster();
+	    	$app_user_msg_save->app_user_id = $app_user_id;
+	    	$app_user_msg_save->app_user_message = $app_user_message;
+	    	$app_user_msg_save->save();
+    	}
+    	return redirect()->back();
+
+    }
+
+    ##App user report here
+
+    public function appUserReport(){
+    	$data['page_title'] = $this->page_title;
+		$data['module_name']= "Reports";
+		$data['sub_module']= "App User";
+
+        return view('reports.app_user', $data);
+    }
+
+    public function appUserNameAutoComplete(){
+		$name = $_REQUEST['term'];
+		
+		$data = AppUser::select('id', 'name', 'email', 'contact_no')
+				->where('name','like','%'.$name.'%')
+				->orwhere('email','like','%'.$name.'%')
+				->orwhere('contact_no','like','%'.$name.'%')
+				->get();
+		$data_count = $data->count();
+
+		 if($data_count>0){
+            foreach ($data as $row) {
+                $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["email"].", ".$row["contact_no"].")" );
+            }
+        } 
+        else {
+            $json[] = array('id' => "0",'label' => "Not Found !!!");
+        }
+		return json_encode($json);
+	}
+
+	
+
+	public function changeAppUserStatus($id){
+		$data = AppUser::where('id', $id)->first();
+		if ($data->status==1) {
+			AppUser::where('id', $id)->update(['status'=>0]);
+		}
+		else if ($data->status==0) {
+			AppUser::where('id', $id)->update(['status'=>1]);
+		}
+		
+	}
+
+
+	public function appUserGroupNameAutoComplete(){
+		$name = $_REQUEST['term'];
+		
+		$data = UserGroup::select('id', 'group_name')
+				->where('group_name','like','%'.$name.'%')
+				->where('type',2)
+				->get();
+		$data_count = $data->count();
+
+		 if($data_count>0){
+            foreach ($data as $row) {
+                $json[] = array('id' => $row["id"],'label' => $row["group_name"]);
+            }
+        } 
+        else {
+            $json[] = array('id' => "0",'label' => "Not Found !!!");
+        }
+		return json_encode($json);
+	}
+
+
+	// public function getAppUserReport($id){
+	// 	$app_user_report = AppUser::where('id', $id)->get();
+
+	// 	$group_name = DB::table('app_user_group_members as augm')
+	// 				->leftJoin('user_groups as ug', 'augm.group_id', '=', 'ug.id')
+	// 				->select(DB::raw('group_concat("", ug.group_name, "") AS group_name'))
+	// 				->where('augm.app_user_id', $id)
+	// 				->get();
+	// 	return json_encode(array(
+	// 		'app_user_report'=>$app_user_report,
+	// 		'group_name'=>$group_name,
+	// 	));
+	// }
    
+   	public function getAppUserReport(Request $r){
+		if ($r->app_user_group_id_id!="" && $r->search_criteria!="") {
+			if($r->search_criteria=="0" || $r->search_criteria=="1" ){
+				$app_users = DB::table('app_users as au')
+						->leftJoin('app_user_group_members as augm', 'au.id', '=', 'augm.app_user_id')
+						->where('augm.group_id',$r->app_user_group_id_id)
+						->where('augm.status',1)
+						->where('au.status',$r->search_criteria)
+						->select('au.*')
+						->get();
+			}
+			else{
+				$app_users = "";
+			}
+		}
+		else if($r->app_user_group_id_id!="" && $r->search_criteria==""){
+			$app_users = DB::table('app_users as au')
+					->leftJoin('app_user_group_members as augm', 'au.id', '=', 'augm.app_user_id')
+					->where('augm.group_id',$r->app_user_group_id_id)
+					->where('augm.status',1)
+					->select('au.*')
+					->get();
+		}
+		else if($r->app_user_group_id_id=="" && $r->search_criteria!=""){
+			if($r->search_criteria=="0" || $r->search_criteria=="1" ){
+				$app_users = AppUser::where('status',$r->search_criteria)->get();
+			}
+			else if($r->search_criteria=="3"){
+				// $app_users = CoursePerticipant::select('perticipant_id')->distinct('perticipant_id')->get();
+				$app_users = DB::table('course_perticipants as cp')
+							->leftJoin('app_users as au', 'au.id', '=', 'cp.perticipant_id')
+							->select('au.*','cp.perticipant_id')
+							->distinct('cp.perticipant_id')
+							->get();
+			}
+			else if($r->search_criteria=="4"){
+				// $app_users = CoursePerticipant::select('perticipant_id')->distinct('perticipant_id')->get();
+				$app_users = DB::table('survey_participants as cp')
+							->leftJoin('app_users as au', 'au.id', '=', 'cp.app_user_id')
+							->select('au.*','cp.app_user_id')
+							->distinct('cp.app_user_id')
+							->get();
+			}
+			else{
+				$app_users = "";
+			}
+			
+		}
+
+		
+
+
+		return json_encode($app_users);
+	}
 
 
 

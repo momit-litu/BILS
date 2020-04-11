@@ -18,6 +18,7 @@ use App\AppUser;
 use App\CoursePerticipant;
 use App\Notification;
 use App\Teacher;
+use App\UserGroupMember;
 
 class TeacherController extends Controller
 {
@@ -45,6 +46,7 @@ class TeacherController extends Controller
 
     ##Teache Entry
     public function teacherEntryUpdate(Request $request){
+    	// $a = asset('assets/images/user/admin');
 		$rule = [
             'name' => 'Required|max:100',
             'contact_no' => 'Required|max:20',
@@ -84,16 +86,49 @@ class TeacherController extends Controller
 			try{
 				DB::beginTransaction();
 				$is_active = ($request->is_active=="")?"0":"1";
+				$admin_image = $request->file('user_profile_image');
 
 				$password = md5('1234');
-				$column_value = [
-					'name'=>$request->name,
-					'nid'=>$request->nid,
-					'contact_no'=>$request->contact_no,
-					'email'=>$request->email,
-					'address'=>$request->address,
-					'status'=>$is_active,
-				];
+
+
+				if (isset($admin_image)) {
+					
+					$image_name = time();
+					$ext = $admin_image->getClientOriginalExtension();
+					$image_full_name = $image_name.'.'.$ext;
+					$upload_path = 'assets/images/user/admin/';
+					
+					$success=$admin_image->move($upload_path,$image_full_name);
+
+
+					$column_value = [
+						'name'=>$request->name,
+						'nid'=>$request->nid,
+						'contact_no'=>$request->contact_no,
+						'remarks'=>$request->remarks,
+						'email'=>$request->email,
+						'address'=>$request->address,
+						'status'=>$is_active,
+						'user_profile_image'=>$image_full_name,
+					];
+
+				}
+				else{
+					$column_value = [
+						'name'=>$request->name,
+						'nid'=>$request->nid,
+						'contact_no'=>$request->contact_no,
+						'remarks'=>$request->remarks,
+						'email'=>$request->email,
+						'address'=>$request->address,
+						'status'=>$is_active,
+					];
+				}
+
+
+
+
+				
 
 				if ($request->teacher_edit_id == '') {
 					$response = Teacher::create($column_value);
@@ -106,6 +141,7 @@ class TeacherController extends Controller
 							return json_encode($return);
 						}
 						
+						if (isset($admin_image)) {
 							$column_value1 = [
 								'name'=>$request->name,
 								'nid_no'=>$request->nid,
@@ -115,24 +151,86 @@ class TeacherController extends Controller
 								'password'=>$password,
 								'status'=>$is_active,
 								'user_type'=>3,
+								'remarks'=>$request->remarks,
+								'user_profile_image'=>$image_full_name,
 							];
+						}
+
+						else{
+							$column_value1 = [
+								'name'=>$request->name,
+								'nid_no'=>$request->nid,
+								'contact_no'=>$request->contact_no,
+								'email'=>$request->email,
+								'address'=>$request->address,
+								'password'=>$password,
+								'status'=>$is_active,
+								'user_type'=>3,
+								'remarks'=>$request->remarks,
+							];
+						}
+
+
 							$response = User::create($column_value1);
+							
+							$t_id = $response->id;
+							$group_id=37;
+							$status = 1;
+							
+							$data_for_group_entry = new UserGroupMember();
+							$data_for_group_entry->group_id=$group_id;
+							$data_for_group_entry->emp_id=$t_id;
+							$data_for_group_entry->status=$status;
+							$data_for_group_entry->save();
+
+							$get_group_id = UserGroup::select('id')->where('type',1)->where('id','!=',$group_id)->get();
+							foreach ($get_group_id as $get_group_id ){
+								$group_entry = new UserGroupMember();
+								$group_entry->group_id=$get_group_id['id'];
+								$group_entry->emp_id=$t_id;
+								$group_entry->status=0;
+								$group_entry->save();
+						}
 						
 					}
+
 				}
 				else if($request->teacher_edit_id != ''){
+					$img = Teacher::find($request->teacher_edit_id);
+					$old_image = $img->user_profile_image;
+					if (isset($admin_image) && $old_image!="") {
+						$delete_img = $upload_path.$old_image;
+						unlink($delete_img);
+					}
+
 					$data = Teacher::find($request->teacher_edit_id);
 					$data->update($column_value);
 					
 					$admin_user_update = User::find($request->admin_id);
-					$column_value2 = [
-						'name'=>$request->name,
-						'nid_no'=>$request->nid,
-						'contact_no'=>$request->contact_no,
-						'email'=>$request->email,
-						'address'=>$request->address,
-						'status'=>$is_active,
-					];
+					if (isset($admin_image)) {
+						$column_value2 = [
+							'name'=>$request->name,
+							'nid_no'=>$request->nid,
+							'contact_no'=>$request->contact_no,
+							'email'=>$request->email,
+							'address'=>$request->address,
+							'status'=>$is_active,
+							'remarks'=>$request->remarks,
+							'user_profile_image'=>$image_full_name,
+						];
+					}
+					else{
+						$column_value2 = [
+							'name'=>$request->name,
+							'nid_no'=>$request->nid,
+							'contact_no'=>$request->contact_no,
+							'email'=>$request->email,
+							'address'=>$request->address,
+							'status'=>$is_active,
+							'remarks'=>$request->remarks,
+						];
+					}
+
 					$admin_user_update->update($column_value2);
 
 				}
@@ -157,12 +255,14 @@ class TeacherController extends Controller
 		
 		$data = User::select('id', 'name', 'nid_no', 'contact_no', 'email', 'address')
 				->where('name','like','%'.$name.'%')
+				->orwhere('email','like','%'.$name.'%')
+				->orwhere('contact_no','like','%'.$name.'%')
 				->get();
 		$data_count = $data->count();
 
 		 if($data_count>0){
             foreach ($data as $row) {
-                $json[] = array('id' => $row["id"],'label' => $row["name"], 'email' => $row["email"], 'nid_no' => $row["nid_no"], 'contact_no' => $row["contact_no"], 'address' => $row["address"] );
+                $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["contact_no"].")", 'email' => $row["email"], 'nid_no' => $row["nid_no"], 'contact_no' => $row["contact_no"], 'address' => $row["address"] );
             }
         } 
         else {

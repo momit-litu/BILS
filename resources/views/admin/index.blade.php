@@ -17,7 +17,7 @@
                            <b> Admin User List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="admin_user_add_button">
 	                           <b> Add Admin User</b>
@@ -55,12 +55,13 @@
 									<table class="table table-bordered table-hover admin_user_table" id="admin_user_table" style="width:100% !important"> 
 										<thead>
 											<tr>
-												<th width="100px">Photo</th>
-												<th>User ID</th>
-												<th>Name</th>
-												<th>Email </th>
-												<th class="hidden-xs">Status</th>
-												<th>Actions</th>
+												<th width="10%">Photo</th>
+												<th width="5%">ID</th>
+												<th width="20%">Name</th>
+												<th width="20%">Email </th>
+												<th width="20%">Groups </th>
+												<th class="hidden-xs" width="10%">Status</th>
+												<th width="15%">Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -132,7 +133,7 @@
 									</div>
 									<br/>
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6">Remarks</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6">Profile Details</label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
 											<textarea rows="2" cols="100" id="remarks" name="remarks" class="form-control col-lg-12"></textarea> 
 										</div>
@@ -180,7 +181,9 @@
 	<script>
 		var profile_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
 	</script>
+	
 	<script src="{{ asset('assets/js/bils/admin/user.js')}}"></script>
+	
 	<script>
 	// save the state of the page in local storage
 	</script>

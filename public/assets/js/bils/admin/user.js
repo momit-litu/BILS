@@ -15,6 +15,7 @@ $(document).ready(function () {
 			{ mData: 'id'},
 			{ mData: 'name' },
 			{ mData: 'email'},
+			{ mData: 'groups_name'},
 			{ mData: 'status', className: "text-center"},
 			{ mData: 'actions' , className: "text-center"},
 		],
@@ -82,7 +83,7 @@ $(document).ready(function () {
 						resultHtml += '</ul>';
 						success_or_error_msg('#master_message_div',"danger",resultHtml);
 						//load_data("");
-						clear_form();
+						// clear_form();
 					}
 					else{				
 						success_or_error_msg('#master_message_div',"success","Save Successfully");
@@ -92,6 +93,8 @@ $(document).ready(function () {
 						$("#save_admin_info").html("save");
 						$("#admin_user_add_button").html('Add Admin User');
 						$("#cancle_admin_update").addClass('hidden');
+						$("#emp_img").attr("src", "src");
+						$("#id").val('');
 					}
 					$(window).scrollTop();
 				 }	
@@ -110,7 +113,9 @@ $(document).ready(function () {
 		$("#admin_user_list_button").trigger('click');
 		$("#admin_user_add_button").html('Add Admin User');
 		$("#cancle_admin_update").addClass('hidden');
+		$("#clear_button").removeClass('hidden');
 		$("#emp_img").attr("src", "src");
+		$("#id").val('');
 	});
 
 	
@@ -126,6 +131,8 @@ $(document).ready(function () {
 				var data = JSON.parse(response);
 				var emp_data = data['data'];
 				var user_group_member_details = data['user_group_member_details'];
+
+				$("#clear_button").addClass('hidden');
 
 				$("#admin_user_add_button").trigger('click');
 				$("#admin_user_add_button").html('Update Admin User');
@@ -187,7 +194,9 @@ $(document).ready(function () {
 		$.ajax({
 			url: url+'/admin/admin-view/'+user_id,
 			success: function(response){
-				var data = JSON.parse(response);
+				var response = JSON.parse(response);
+				var data = response['data'];
+				var groups = response['groups'];
 
 				$("#profile_modal").modal();
 				$("#name_div").html('<h2>'+data['name']+'</h2>');
@@ -195,9 +204,27 @@ $(document).ready(function () {
 				$("#email_div").html(data['email']);
 				$("#nid_div").html(data['nid_no']);
 				$("#address_div").html(data['address']);
-				$("#remarks_div").html('<h2>Remarks</h2>');
-				$("#remarks_details").html(data['remarks']);
-				$(".profile_image").html('<img src="'+profile_image_url+'/'+data["user_profile_image"]+'" alt="User Image" class="img img-responsive">');
+
+				
+				$("#group_div").html('<span class="badge badge-warning">'+groups[0]["group_name"]+'</span>');
+				
+				
+				if (data['remarks']!=null && data['remarks']!="") {
+					$("#remarks_div").html('<h2>Profile Details</h2>');
+					$("#remarks_details").html(data['remarks']);
+				}
+				else{
+					$("#remarks_div").html('');
+					$("#remarks_details").html("");
+				}
+				
+				if (data["user_profile_image"]!=null && data["user_profile_image"]!="") {
+					$(".profile_image").html('<img src="'+profile_image_url+'/'+data["user_profile_image"]+'" alt="User Image" class="img img-responsive">');
+				}
+				else{
+					$(".profile_image").html('<img src="'+profile_image_url+'/no-user-image.png" alt="User Image" class="img img-responsive">');
+				}
+				
 				
 				if(data['status']==1){
 					$("#status_div").html('<span class="badge badge-success">Active</span>');
@@ -283,9 +310,9 @@ $(document).ready(function () {
 					}
 					else{				
 						success_or_error_msg('#master_message_div',"success","Save Successfully");
-						
-						admin_group.ajax.reload();
 						clear_form();
+						admin_group.ajax.reload();
+						$("#edit_id").val('');
 						$("#cancle_admin_user_group_button").addClass('hidden');
 						$(".save").html('Save');
 
@@ -343,6 +370,7 @@ $(document).ready(function () {
 			clear_form();
 			$("#cancle_admin_user_group_button").addClass('hidden');
 			$(".save").html('Save');
+			$("#edit_id").val('');
 			
 		});
 	}

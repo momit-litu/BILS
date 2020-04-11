@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('style')
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css"><link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	
 @endsection
 @section('content')
 	<!--MESSAGE-->
@@ -20,7 +20,7 @@
                            <b> Teacher List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="teacher_add_button">
 	                           <b> Teacher Entry</b>
@@ -90,7 +90,7 @@
 								@csrf
 								<div class="row">
 									<input type="hidden" name="teacher_edit_id" id="teacher_edit_id">
-								<div class="col-md-12">
+								<div class="col-md-9">
 								
 
 									 <div class="form-group">
@@ -131,9 +131,20 @@
 											<input checked="" type="checkbox" id="is_active" name="is_active" class="form-control col-lg-12"/>
 										</div>
 									</div>
+									<div class="form-group">
+										<label class="control-label col-md-2 col-sm-2 col-xs-6">Profile Details</label>
+										<div class="col-md-10 col-sm-10 col-xs-12">
+											<textarea rows="2" cols="100" id="remarks" name="remarks" class="form-control col-lg-12"></textarea> 
+										</div>
+									</div>
 									<br/>
 								
 									
+								</div>
+
+								<div class="col-md-3">
+									<img src="src" width="70%" height="70%" class="img-thumbnail" id="teacher_img">
+									<input type="file" name="user_profile_image" id="user_profile_image"> 
 								</div>
 								
 								</div>
@@ -166,8 +177,12 @@
 
 @section('JScript')
 
+	<script>
+		var profile_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
+	</script>
+
 	<script src="{{ asset('assets/js/bils/teacher/teacher.js')}}"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	
 
 @endsection
 

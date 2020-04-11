@@ -17,7 +17,7 @@
                            <b> Surveys List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="Survey_add_button">
 	                           <b> Add Surveys</b>
@@ -62,9 +62,6 @@
 									</div>
 								</div>
 								<div class="panel-body">
-									<div class="text-center">
-										<h2 class="text-info">Survey Grid Summary</h2>
-									</div>
 									<table class="table table-bordered table-hover admin_user_table" id="survey_data_table" style="width:100% !important">
 										<thead>
 											<tr>
@@ -88,10 +85,10 @@
                     <!-- PANEL FOR SURVEY ENTRY UPDATE -->
                     <div id="entry_form_div" class="tab-pane in">
                         <div class="row no-margin-row">
-                            <input type="hidden" id="survey_id">
-                            <div style="border: solid 1px; padding: 20px; margin-bottom: 20px">
+                            
 							    <form id="survey_body" name="survey_body" enctype="multipart/form-data" class="form form-horizontal form-label-left" >
-								@csrf
+                                    <input type="hidden" id="survey_id">
+								    @csrf
 								<div class="row">
 								    <div class="col-md-12">
 
@@ -120,16 +117,17 @@
 									</div>
 
 
-									<div class="form-group">
+									{{-- <div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6">Survey People</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<select name="user_group" id="user_group" class="form-control col-lg-12">
 												<option value="" disabled selected>Select Survey People</option>
 											</select>
 										</div>
-									</div>
+									</div> --}}
+
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Is Active</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Is Published</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<input type="checkbox" id="is_active" name="is_active" checked="checked" class="form-control col-lg-12"/>
 										</div>
@@ -141,6 +139,25 @@
 											<textarea rows="4" cols="100" id="remarks" name="remarks" class="form-control col-lg-12"></textarea>
 										</div>
 									</div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-6" >Survey People</label>
+                                        <div class="col-md-10 col-sm-10 col-xs-6">
+                                            <div id="app_user_group">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-6" ><button id="load_app_user_from_group" type="submit" class="btn btn-sm btn-info">Load App User</button></label>
+                                        <div class="col-md-10 col-sm-10 col-xs-6">
+                                            <div id="app_user_group_members">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
 
                                 </div>
@@ -155,8 +172,8 @@
                                     </div>
                                 </div>
                             </form>
-                            </div>
-                            <div class="survey_question_display"  style="border: solid 1px; padding: 20px; margin-bottom: 20px">
+                            
+                            <div class="survey_question_display"  style="padding: 20px; margin-bottom: 20px">
 
                                 <table class="table table-bordered table-hover course_table" id="question_table" style="width:100% !important">
                                     <thead>
@@ -172,7 +189,7 @@
                                 </table>
                             </div>
 
-                            <div class="survey_question_display" style="border: solid 1px; padding: 20px; margin-bottom: 20px">
+                            <div class="survey_question_display" style="padding: 20px; margin-bottom: 20px">
 
                                 <form id="survey_question" name="survey_question" enctype="multipart/form-data" class="form form-horizontal form-label-left">
                                 @csrf
@@ -260,9 +277,12 @@
                     <!-- END PANEL FOR SURVEY CREATE/UPDATE -->
 
                     <!--Survey View  Start-->
-                    <div id="survey_view" class="tab-pane in" style="width: 595px; border: solid 1px">
+                    <div id="survey_view" class="tab-pane in" style="width: 595px; ">
                         <div class="row no-margin-row">
-                            <div class="col-md-12">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+
+                                <div class="col-md-12">
                                 <div class="col-md-12">
                                     <div class="col-md-12" style="text-align: center">
                                         <span id="survey_title"></span>
@@ -287,6 +307,13 @@
 
                                 </div>
                             </div>
+
+                        </div>
+
+
+                            </div>
+
+
 
                         </div>
                     </div>
@@ -318,10 +345,7 @@
                                     </div>
                                 </div>
                                 <div class="panel-body">
-                                    <div class="text-center">
-                                        <h2 class="text-info" id="survey_name_participant_view">Survey Grid Summary</h2>
-                                        <p id="survey_details_participant_view"></p>
-                                    </div>
+                                    
                                     <div class="col-md-12" style="margin-left: 5px;">
                                         <div id="left_sub_participant_view" class="col-md-6"></div>
                                         <div id="right_sub_participant_view" class="col-md-6" style="text-align: right"></div>
@@ -341,7 +365,7 @@
                                     </table>
                                 </div>
                                 <div class="panel panel-default" style="display: block; alignment: center">
-                                    <div id="survey_view_participant" class="tab-pane in" style="width: 595px; border: solid 1px">
+                                    <div id="survey_view_participant" class="tab-pane in" style="width: 595px;">
                                         <div class="row no-margin-row">
                                             <div class="col-md-12">
                                                 <div class="col-md-12" id="survey_participant_body_view">

@@ -1,9 +1,6 @@
 // All the user related js functions will be here
 
 $(document).ready(function () {
-
-
-
     // for get site url
     var url = $('.site_url').val();
     var global_id ;
@@ -54,6 +51,9 @@ $(document).ready(function () {
         if($.trim($('#course_title').val()) == ""){
             success_or_error_msg('#form_submit_error','danger',"Please Insert Course Title","#course_title");
         }
+        // else if($.trim($('#course_code').val()) == ""){
+        //     success_or_error_msg('#form_submit_error','danger',"Please Insert Course Code","#course_code");
+        // }
 
 
         else{
@@ -103,6 +103,7 @@ $(document).ready(function () {
         "aoColumns": [
             { mData: 'id'},
             { mData: 'course_title' },
+            { mData: 'course_teacher' },
             { mData: 'duration'},
             { mData: 'pub_status', className: "text-center"},
             { mData: 'course_status', className: "text-center"},
@@ -117,6 +118,7 @@ $(document).ready(function () {
             url: url+'/course/course-view/'+id,
             success: function(response){
                 var data = JSON.parse(response);
+
                 $("#course_view_li").css('display','block');
                 $("#course_view_button").trigger('click');
                 $("#c_title").html("<h2>"+data['course_title']+"</h2>");
@@ -136,13 +138,18 @@ $(document).ready(function () {
                 $("#status_btn").html(status_btn);
 
                 var left_sub = "";
-                if(data['duration']!=null){left_sub += "<br><b>Duration: </b>"+data['duration']+" Hours";}
+                if(data['duration']!=null){left_sub += "<br><b>Duration: </b>"+data['duration'];}
                 if(data['appx_start_time']!=null){left_sub += "<br><b>Approximate Start Time: </b>"+data['appx_start_time'];}
                 if(data['act_start_time']!=null){left_sub += "<br><b>Actual Start Time: </b>"+data['act_start_time'];}
-                if(data['course_type']!=null){left_sub += "<br><b>Course Type: </b>"+data['course_type'];}
-                left_sub += "<br><b>Created By: </b>"+data['created_by'];
-                if(data['payment_fee']!=null){left_sub += "<br><b>Payment Fee: </b>"+data['payment_fee'];}
-                if(data['discount_message']!=null){left_sub += "<br><b>Discount Message: </b>"+data['discount_message'];}
+                if(data['category_name']!=null){left_sub += "<br><b>Course Type: </b>"+data['category_name'];}
+                // left_sub += "<br><b>Created By: </b>"+data['created_by'];
+                if(data['payment_fee']!=null && data['payment_fee']!="" && data['payment_fee']!= 0){
+                    left_sub += "<br><b>Payment Fee: </b>"+data['payment_fee'];
+                }
+                else{
+                   left_sub += "<br><b>Payment Fee: </b> Free Course"; 
+                }
+                if(data['discount_message']!=null && data['discount_message']!=""){left_sub += "<br><b>Discount Message: </b>"+data['discount_message'];}
                 $("#left_sub").html(left_sub);
 
 
@@ -150,22 +157,36 @@ $(document).ready(function () {
 
                 if(data['appx_end_time']!=null){right_sub +="<br/><b>Approximate End Time: </b>"+data['appx_end_time'];}
                 if(data['act_end_time']!=null){right_sub +="<br/><b>Actual End Time: </b>"+data['act_end_time'];}
-                if(data['course_teacher']!=null){right_sub +="<br/><b>Course Teacher: </b>"+data['course_teacher'];}
-                right_sub +="<br/><b>Updated By: </b>"+data['updated_by'];
+                
+                // right_sub +="<br/><b>Updated By: </b>"+data['updated_by'];
                 if(data['payment_method']!=null){right_sub +="<br/><b>Payment Method: </b>"+data['payment_method'];}
                 right_sub +="<br/><b>Course Responsible Person: </b>"+data['course_responsible_person'];
 
                 $("#right_sub").html(right_sub);
-
-                var description = "";
+                 var description = "";
+                if(data['t_name']!=null){
+                    description +="<hr><b>Course Coordinator: </b>"+data['t_name'];
+                    if (data['remarks']!=null && data['remarks']!="") {
+                        description +="<br><b>Coordinator Profile: </b><br>"+data['remarks'];
+                    }
+                }
+               
                 description +="<hr>"+data['details']+"<hr>";
                 $("#description").html(description);
                 global_id = id;
                 perticipant_manage();
 
+                $("#back_li").css('display','block');
+
             }
         });
     }
+
+    $("#back_btn").click(function(){
+        $("#back_li").css('display','none');
+        $("#course_view_li").css('display','none');
+        $("#courses_list_button").trigger('click');
+    });
 
 
 
@@ -182,16 +203,18 @@ $(document).ready(function () {
                 var perticipantTotal = perticipants['perticipantTotal'];
                 var registerTotal = perticipants['registerTotal'];
                 var selectedTotal = perticipants['selectedTotal'];
-
+                var status_btn;
                 
 	
                 if(!jQuery.isEmptyObject(perticipants)){
                     var html='';
                     html +='<br><div class="tabbable">';
                     html +='<ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">';
+                    
                     html +='<li class="active"><a id="interested_list_button" data-toggle="tab" href="#interested_div"><b>Interested List <span class="badge badge-pill badge-warning">'+perticipantTotal+'</span></b></a></li>';
                     if(registerTotal>0){html +='<li><a id="registered_list_button" data-toggle="tab" href="#registered_div"><b>Registered List <span class="badge badge-pill badge-warning">'+registerTotal+'</span></b></a></li>';}
                     if(selectedTotal>0){html +='<li><a id="selected_list_button" data-toggle="tab" href="#selected_div"><b>Selected List <span class="badge badge-pill badge-warning">'+selectedTotal+'</span></b></a></li>';}
+
                     html +='</ul>';
                     html +='<div class="tab-content">';
 
@@ -215,25 +238,37 @@ $(document).ready(function () {
 
                     //Registered Table Start
                     html +='<div id="registered_div" class="tab-pane">';
-                    html += '<form id="select_form" name="courses_form" enctype="multipart/form-data" class="form form-horizontal form-label-left"><table class="table table-bordered"><thead><tr class="headings"><th style="width:10%">SL NO</th><th style="width:35%">Name</th><th style="width:20%">Email</th><th style="width:20%">Phone</th><th style="width:15%">Selection</th></tr></thead>';
+                    html += '<form id="select_form" name="courses_form" enctype="multipart/form-data" class="form form-horizontal form-label-left">';
+                    html += '<table class="table table-bordered">';
+                    html += '<thead><tr class="headings"><th>SL NO</th><th>Name</th><th>Email</th><th>Phone</th><th class="text-right">Payment</th><th>Payment Method</th><th>Reference No</th><th>Payment Status</th><th>Selection</th></tr></thead>';
                     var register_sl = 1;
-                    $.each(registeredList, function(i,register_row){
+                    $.each(registeredList, function(i,register_row){ //style="width:10%"  style="width:35%" style="width:20%" style="width:20%" style="width:15%" 
                         html += '<tr>';
                         html += '<td>'+register_sl+'</td>';
                         html += '<td>'+register_row["name"]+'</td>';
                         html += '<td>'+register_row["email"]+'</td>';
                         html += '<td>'+register_row["mobile"]+'</td>';
+                        html += '<td class="text-right">'+register_row["payment"]+'</td>';
+                        html += '<td>'+register_row["payment_method"]+'</td>';
+                        html += '<td>'+register_row["reference_no"]+'</td>';
+                        if (register_row["is_payment_verified"]==0) {
+                            status_btn = "<button onclick='paymentVerify("+register_row["v_id"]+")' type='button' title='Click For Verify' class='btn btn-xs btn-danger'>Not Varified</button>";
+                        }
+                        else{
+                            status_btn = "<button class='btn btn-xs btn-success' disabled>Varified</button>";
+                        }
+                        html += '<td>'+status_btn+'</td>';
                         html += '<td>';
                        
-                        if(select_perticipant_permisiion==1){
+                        if(select_perticipant_permisiion>0){
                             html +=(register_row["is_selected"]=="1")?'<input class="form-control" checked value="'+register_row["cp_id"]+'"  type="checkbox" name="selected_person[]">':'<input class="form-control" value="'+register_row["cp_id"]+'"  type="checkbox" name="selected_person[]">';
                         }
                         html += '</td></tr>';
                         register_sl++;
                     });
-                    html +='<tr><td class="text-center" colspan="4"></td>';
+                    html +='<tr><td class="text-center" colspan="8"></td>';
                     html +='<td>'
-                    if(select_perticipant_permisiion==1){
+                    if(select_perticipant_permisiion>0){
                         html +='<button onclick="saveSelect()" class="btn btn-sam btn-success">Submit Selection</button></td></tr>'
                     }
                     html +='</td></tr>'
@@ -252,7 +287,7 @@ $(document).ready(function () {
                         html += '<td>'+selected_row["email"]+'</td>';
                         html += '<td>'+selected_row["mobile"]+'</td>';
                         html += '<td class="rem_input" >';
-                        if(select_perticipant_permisiion==1){
+                        if(select_perticipant_permisiion>0){
                             html += '<input class="form-control" value="'+selected_row["cp_id"]+'" type="checkbox" name="remove_person[]">';
                         }
                         html +='</td>;'
@@ -261,7 +296,7 @@ $(document).ready(function () {
                     });
                     html +='<tr><td class="text-center" colspan="4"></td>';
                     html +='<td>';
-                    if(select_perticipant_permisiion==1){
+                    if(select_perticipant_permisiion>0){
                         html +='<button onclick="save_remove_person()" class="btn btn-sm btn-danger" >Remove</button>';
                     }
                     html +='</td>';
@@ -280,6 +315,19 @@ $(document).ready(function () {
                     checkboxClass: 'icheckbox_flat-green',
                     radioClass: 'iradio_flat-green'
                 });
+            }
+        });
+    }
+
+    paymentVerify = function paymentVerify(v_id){
+        var varify_id = v_id;
+        var course_id = global_id;
+         $.ajax({
+            url: url+'/course/verify-payment/'+varify_id,
+            
+            success: function(response){
+                perticipant_manage();
+                $("#registered_list_button").trigger('click');
             }
         });
     }
@@ -329,6 +377,7 @@ $(document).ready(function () {
                 $(".save").html('Update');
 
                 $("#course_edit_id").val(data['id']);
+                $("#course_code").val(data['course_code']);
                 $("#course_title").val(data['course_title']);
                 $("#details").val(data['details']);
                 $("#duration").val(data['duration']);
@@ -339,6 +388,7 @@ $(document).ready(function () {
                 $("#act_end_time").val(data['act_end_time']);
                 $("#payment_fee").val(data['payment_fee']);
                 $("#payment_method").val(data['payment_method']);
+                $("#perticipants_limit").val(data['perticipants_limit']);
                 
                 $("#discount_message").val(data['discount_message']);
                 (data['pub_status']=='0')?$("#pub_status").iCheck('uncheck'):$("#pub_status").iCheck('check');
@@ -346,9 +396,23 @@ $(document).ready(function () {
                 $("#course_status").val(data['course_status']).change();
                 $("#course_teacher").val(data['course_teacher']).change();
 
+                $("#clear_button").addClass('hidden');
+                $("#course_cancel_btn").removeClass('hidden');
+
             }
         });
     }
+
+    //Cancel course update
+    $("#course_cancel_btn").click(function(){
+        clear_form();
+        $("#courses_add_button").html('Open Course');
+        $(".save").html('Save');
+        $("#courses_list_button").trigger('click');
+        $("#clear_button").removeClass('hidden');
+        $("#course_cancel_btn").addClass('hidden');
+    });
+    
 
     // Get Course Category
     $.ajax({
@@ -433,6 +497,40 @@ $(document).ready(function () {
         });
 
     }
+
+
+    //autosuggest
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $("#teacher_name").autocomplete({
+
+        search: function() {
+        },
+        source: function(request, response) {
+            $.ajax({
+                url: url+'/course/teacher-name',
+                dataType: "json",
+                type: "post",
+                async:false,
+                data: {
+                    term: request.term
+                },
+                success: function(data) {
+                    response(data);
+                }
+            });
+        },
+        minLength: 1,
+        select: function(event, ui) { 
+            var id = ui.item.id;
+            var name = ui.item.name;
+            $(this).next().val(id);
+            $("#course_teacher").val(id);
+        }
+    });
 
 
 

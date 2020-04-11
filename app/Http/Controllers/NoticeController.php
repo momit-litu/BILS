@@ -40,7 +40,7 @@ class NoticeController extends Controller
     }
 
     public function load_app_user_groups(){
-    	$app_user_group = UserGroup::where('type','2')->get();
+    	$app_user_group = UserGroup::where('type','2')->orderBy('group_name')->get();
     	return json_encode($app_user_group);
     }
 
@@ -60,6 +60,7 @@ class NoticeController extends Controller
 		else{
 			/*----- For notification -----*/
 			$app_user_group = $request->input('app_user_group');
+			$app_users = $request->input('app_users');
 			$app_user_name = $request->app_user_name;
 			$app_user_id = $request->app_user_id;
 			$from_id = Auth::user()->id;
@@ -86,7 +87,8 @@ class NoticeController extends Controller
 						'created_by'=>$created_by,	
 					];
 					$response = Notice::create($column_value);
-
+					$notice_id = $response->id;
+					$view_url = 'notice/'.$notice_id;
 					## Insert Into Notification For Single App User
 					if (isset($app_user_id)&&isset($app_user_name)&&$app_user_id!=""&&$app_user_name!="") {
 						
@@ -99,32 +101,80 @@ class NoticeController extends Controller
 							'to_id'=>$to_id,	
 							'to_user_type'=>$to_user_type,	
 							'notification_title'=>$notification_title,	
-							'message'=>$message,	
+							'message'=>$message,
+							'view_url'=>$view_url,	
 						];
 						$response = Notification::create($column_value);
+						
 					}
 					if (isset($app_user_group)&& $app_user_group!="") {
-						foreach ($app_user_group as $row) {
-							$to_user_id = AppUserGroupMember::distinct()
-											->select('app_user_id')
-											->where('group_id',$row)
-											->groupBy('app_user_id')
-											->get();
 
-							foreach ($to_user_id as $k) {
-								
-								$to_id = $k['app_user_id'];
-								$column_value = [
-									'from_id'=>$from_id,
-									'from_user_type'=>$from_user_type,
-									'to_id'=>$to_id,	
-									'to_user_type'=>$to_user_type,	
-									'notification_title'=>$notification_title,	
-									'message'=>$message,	
-								];
-								$response = Notification::create($column_value);
+						 if(isset($app_users)&& $app_users!=""){
+						 	foreach ($app_users as $j) {
+						 		$old_noti = Notification::select('id')
+											->where('to_id', $j)
+											->where('view_url', $view_url)
+											->count();
+								if ($old_noti == 0) {
+									$to_id = $j;
+									$column_value = [
+										'from_id'=>$from_id,
+										'from_user_type'=>$from_user_type,
+										'to_id'=>$to_id,	
+										'to_user_type'=>$to_user_type,	
+										'notification_title'=>$notification_title,	
+										'message'=>$message,	
+										'view_url'=>$view_url,	
+									];
+									$response = Notification::create($column_value);
+								}
+						 	}
+						 }
+						 else{
+						 	foreach ($app_user_group as $row) {
+								$to_user_id = AppUserGroupMember::distinct()
+												->select('app_user_id')
+												->where('group_id',$row)
+												->groupBy('app_user_id')
+												->get();
+
+								foreach ($to_user_id as $k) {
+
+									$old_noti = Notification::select('id')
+												->where('to_id', $k['app_user_id'])
+												->where('view_url', $view_url)
+												->count();
+									
+									if ($old_noti == 0) {
+										$to_id = $k['app_user_id'];
+										$column_value = [
+											'from_id'=>$from_id,
+											'from_user_type'=>$from_user_type,
+											'to_id'=>$to_id,	
+											'to_user_type'=>$to_user_type,	
+											'notification_title'=>$notification_title,	
+											'message'=>$message,	
+											'view_url'=>$view_url,	
+										];
+										$response = Notification::create($column_value);
+									}
+
+								}
+
+
 							}
-						}
+						 }
+
+
+
+
+						
+
+
+
+
+
+
 					}
 
 
@@ -165,7 +215,7 @@ class NoticeController extends Controller
 		$edit_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
 		$delete_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
 
-		$notice_list = Notice::Select('id', 'title', 'details', 'status')
+		$notice_list = Notice::Select('id', 'title', 'details', 'status','notice_date')
 						->orderBy('id','desc')
 						->get();
 		$return_arr = array();
@@ -205,17 +255,19 @@ class NoticeController extends Controller
 		return json_encode($data);
 	}
 
-	public function appUserNameAutoComplete(){
+	 public function appUserNameAutoComplete(){
 		$name = $_REQUEST['term'];
 		
-		$data = AppUser::select('id', 'name')
+		$data = AppUser::select('id', 'name', 'email', 'contact_no')
 				->where('name','like','%'.$name.'%')
+				->orwhere('email','like','%'.$name.'%')
+				->orwhere('contact_no','like','%'.$name.'%')
 				->get();
 		$data_count = $data->count();
 
 		 if($data_count>0){
             foreach ($data as $row) {
-                $json[] = array('id' => $row["id"],'label' => $row["name"]);
+                $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["email"].", ".$row["contact_no"].")" );
             }
         } 
         else {

@@ -1,7 +1,4 @@
 @extends('layout.master')
-@section('style')
-	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-@endsection
 @section('content')
 	<!--MESSAGE-->
 	<div class="row ">
@@ -20,7 +17,7 @@
                            <b> Notice List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="notice_entry">
 	                           <b> Add notice</b>
@@ -58,9 +55,10 @@
 									<table class="table table-bordered table-hover notice_table" id="notice_table" style="width:100% !important"> 
 										<thead>
 											<tr>
-												<th>Notice ID</th>
+												<th> ID</th>
 												<th>Title</th>
-												<th>Details </th>
+												{{-- <th>Details </th> --}}
+												<th>Notice Date </th>
 												<th class="hidden-xs">Status</th>
 												<th>Actions</th>
 											</tr>
@@ -135,14 +133,24 @@
 										</div>
 									</div>
 
+									<div class="form-group">
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" ><button id="load_app_user_from_group" type="submit" class="btn btn-sm btn-info">Load App User</button></label>
+										<div class="col-md-10 col-sm-10 col-xs-6">
+											<div id="app_user_group_members">
+												
+											</div>
+										</div>
+									</div>
+
 								</div>
 								
 								</div>
 								<div class="form-group">
 								<label class="control-label col-md-2 col-sm-2 col-xs-6"></label>
 								<div class="col-md-3 col-sm-3 col-xs-12"> 
-									<button type="submit" id="save_notice" class="btn btn-success">Save</button>                    
+									<button type="submit" id="save_notice" class="btn btn-success save">Save</button>                    
 									<button type="button" id="clear_button" class="btn btn-warning">Clear</button>                         
+									<button type="button" id="cancel_notice" class="btn btn-danger hidden">Cancel</button>                         
 								</div>
 								 <div class="col-md-7 col-sm-7 col-xs-12">
 									<div id="form_submit_error" class="text-center" style="display:none"></div>
@@ -163,12 +171,12 @@
 
 
 @section('JScript')
-	<script src="{{ asset('assets/js/bils/notice/notice.js')}}"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-{{-- <script src=" {{ asset('ckeditor/ckeditor.js') }} "></script>
+
 	<script>
-    	CKEDITOR.replace( 'details' );
-	</script> --}}
+		var notice_attachment_url = "<?php echo asset('assets/images/notice'); ?>";
+	</script>
+
+	<script src="{{ asset('assets/js/bils/notice/notice.js')}}"></script>
 
 @endsection
 

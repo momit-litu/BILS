@@ -17,7 +17,7 @@
                            <b> Courses List</b>
                         </a>
                     </li>
-                    @if($actions['add_permisiion']==1)
+                    @if($actions['add_permisiion']>0)
 	                    <li class="">
 	                        <a data-toggle="tab" href="#entry_form_div" id="courses_add_button">
 	                           <b> Open Courses</b>
@@ -27,6 +27,12 @@
 	                <li style="display: none;" id="course_view_li">
                         <a data-toggle="tab" href="#course_view" id="course_view_button">
                            <b>Courses View</b>
+                        </a>
+	                </li>
+	                <li style="float:right; display: none; cursor:pointer;
+	                " id="back_li">
+                        <a  id="back_btn">
+                           <b>Back</b>
                         </a>
 	                </li>
                 </ul>
@@ -60,12 +66,13 @@
 									<table class="table table-bordered table-hover course_table" id="course_table" style="width:100% !important"> 
 										<thead>
 											<tr>
-												<th>ID</th>
-												<th>Course Title</th>
-												<th>Duration </th>
-												<th class="hidden-xs">Publish Status</th>
-												<th class="hidden-xs">Course Status</th>
-												<th>Actions</th>
+												<th width="5%">ID</th>
+												<th width="35%">Course Title</th>
+												<th width="15%">Course Coordinator</th>
+												<th width="10">Duration </th>
+												<th width="10%" class="hidden-xs">Publish Status</th>
+												<th width="10%" class="hidden-xs">Course Status</th>
+												<th width="15%">Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -95,6 +102,12 @@
 										</div>
 									</div>
 									<div class="form-group">
+										<label class="control-label col-md-2 col-sm-2 col-xs-6">Course Code<span class="required">*</span></label>
+										<div class="col-md-10 col-sm-10 col-xs-10">
+											<input type="text" id="course_code" name="course_code" class="form-control col-lg-12"/>
+										</div>
+									</div>
+									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6">Course Description</label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
 											<textarea rows="4" cols="100" id="details" name="details" class="form-control col-lg-12"></textarea> 
@@ -102,7 +115,7 @@
 									</div>
 
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6">Duration (H)</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6">Duration</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<input type="text" id="duration" name="duration"  class="form-control col-lg-12"/>
 										</div>
@@ -149,20 +162,29 @@
 									</div>
 
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6">Course Teacher</label>
+										
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Course coordinator</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
-											<select name="course_teacher" id="course_teacher" class="form-control col-lg-12">
-												<option  selected="" disabled="" value="">Select Teacher</option>
-											</select>
-											
+											<input type="text" id="teacher_name" name="teacher_name" class="form-control col-lg-12"/>
 										</div>
+										<input type="hidden" name="course_teacher" id="course_teacher">
+									
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Discount Message</label>
 										<div class="col-md-4 col-sm-4 col-xs-4">
 											<input type="text" id="discount_message" name="discount_message" class="form-control col-lg-12"/>
 										</div>						
 									</div>
+									<div class="form-group">
+										
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Perticipants Limit</label>
+										<div class="col-md-4 col-sm-4 col-xs-6">
+											<input type="number" id="perticipants_limit" name="perticipants_limit" class="form-control col-lg-12"/>
+										</div>
+										
+															
+									</div>
 
-									@if($actions['publish_course_permisiion']==1)
+									@if($actions['publish_course_permisiion']>0)
 										<div style="display:none;" id="edit_course_status" class="form-group">
 											<label class="control-label col-md-2 col-sm-2 col-xs-6">Course Status</label>
 											<div class="col-md-4 col-sm-4 col-xs-6">
@@ -195,6 +217,7 @@
 								<div class="col-md-3 col-sm-3 col-xs-12"> 
 									<button type="submit" id="save_course" class="btn btn-success save">Save</button>                    
 									<button type="button" id="clear_button" class="btn btn-warning">Clear</button>                         
+									<button type="button" id="course_cancel_btn" class="btn btn-danger hidden">Cancel</button>                         
 								</div>
 								 <div class="col-md-7 col-sm-7 col-xs-12">
 									<div id="form_submit_error" class="text-center" style="display:none"></div>

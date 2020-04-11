@@ -16,6 +16,8 @@ use App\MessageMaster;
 use App\AppUserGroupMember;
 use App\AppUser;
 use App\MessageAttachment;
+use App\MessageCategory;
+
 
 class MessageController extends Controller
 {
@@ -70,7 +72,7 @@ class MessageController extends Controller
 
                 if ($request->message_edit_id == '') {
 
-                    $message_id = MessageMaster::select('message_id')->orderBy('id','desc')->first();
+                    $message_id = MessageMaster::select('message_id')->where('message_id', '!=',null)->orderBy('id','desc')->first();
                     
                     if ($message_id['message_id']=="") {
                         $message_id = 1;
@@ -80,26 +82,51 @@ class MessageController extends Controller
                     }
 
                     $app_user_group = $request->input('app_user_group');
+                    $app_users = $request->input('app_users');
 
                     if (isset($app_user_group)&& $app_user_group!="") {
                        
-                        foreach ($app_user_group as $row) {
+                        if(isset($app_users)&& $app_users!=""){
+                            foreach ($app_users as $j) {
+                                    $old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $j)->count();
+                                    if ($old_msg==0) {
+                                        $app_user_id = $j;
+                                        $column_value = [
+                                            'admin_message'=>$request->admin_message,
+                                            'admin_id'=>$admin_id,
+                                            'app_user_id'=>$app_user_id,
+                                            'message_id'=>$message_id,
+                                            'status'=>$is_active,
+                                            'message_category'=>$request->message_category,
+                                        ];
+                                        $response = MessageMaster::create($column_value);
+                                    }
+                                }
+                        }
+
+                        else{
+                            foreach ($app_user_group as $row) {
                             
-                            $app_user_id = AppUserGroupMember::select('app_user_id')
-                                            ->where('group_id',$row)
-                                            ->distinct('app_user_id')
-                                            ->get();
-                                            
-                            foreach ($app_user_id as $k) {
-                                $app_user_id = $k['app_user_id'];
-                                $column_value = [
-                                    'admin_message'=>$request->admin_message,
-                                    'admin_id'=>$admin_id,
-                                    'app_user_id'=>$app_user_id,
-                                    'message_id'=>$message_id,
-                                    'status'=>$is_active,
-                                ];
-                                $response = MessageMaster::create($column_value);
+                                $app_user_id = AppUserGroupMember::select('app_user_id')
+                                                ->where('group_id',$row)
+                                                ->distinct('app_user_id')
+                                                ->get();
+                                                
+                                foreach ($app_user_id as $k) {
+                                    $old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $k['app_user_id'])->count();
+                                    if ($old_msg==0) {
+                                        $app_user_id = $k['app_user_id'];
+                                        $column_value = [
+                                            'admin_message'=>$request->admin_message,
+                                            'admin_id'=>$admin_id,
+                                            'app_user_id'=>$app_user_id,
+                                            'message_id'=>$message_id,
+                                            'status'=>$is_active,
+                                            'message_category'=>$request->message_category,
+                                        ];
+                                        $response = MessageMaster::create($column_value);
+                                    }
+                                }
                             }
                         }
                         
@@ -114,7 +141,7 @@ class MessageController extends Controller
                             'app_user_id'=>$request->app_user_id,
                             'message_id'=>$message_id,
                             'status'=>$is_active,
-                       
+                            'message_category'=>$request->message_category,
                         ];
                         $response = MessageMaster::create($column_value);
                     }
@@ -149,11 +176,20 @@ class MessageController extends Controller
         $edit_permisiion    = $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
         $delete_permisiion  = $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
 
-        $message_list = MessageMaster::Select('id', 'message_id', 'admin_id', 'admin_message', 'app_user_id', 'is_seen', 'status')
+        $message_list = MessageMaster::Select('id', 'admin_message', 'app_user_id', 'is_seen', 'status', 'message_category')
                         ->orderBy('id','desc')
                         ->get();
+
         $return_arr = array();
-        foreach($message_list as $data){ 
+        foreach($message_list as $data){
+            $message_category = MessageCategory::select('category_name')->where('id',$data->message_category)->first();
+
+            $data['message_category'] = $message_category['category_name'];
+
+            $app_user_name = AppUser::select('name')->where('id', $data->app_user_id)->first();
+
+            $data['app_user_name'] = $app_user_name['name'];
+            
             $data['is_seen']=($data->is_seen == 1)?"<button class='btn btn-xs btn-success' disabled>Seen</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-seen</button>";       
             
             if ($data->status==0) {
@@ -202,18 +238,12 @@ class MessageController extends Controller
         //$app_user = AppUser::get();
         $app_user_info = DB::table('message_masters as mm')
                             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-                            ->select('apu.name as name','apu.id as app_user_id')
+                            ->where('is_group_msg', 0)
+                            ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
                             ->distinct('mm.app_user_id')
                             //->orderBy('mm.message_date_time', 'desc')
                             ->orderBy('mm.id', 'desc')
                             ->get();
-        // $message = DB::table('message_masters as mm')
-        //                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-        //                     ->where('mm.app_user_id',5)
-        //                     ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message')
-        //                     ->orderBy('mm.created_at')
-        //                     ->get();
-        
 
         return json_encode(array(
             "app_user_info"=>$app_user_info,
@@ -229,13 +259,14 @@ class MessageController extends Controller
         $message = DB::table('message_masters as mm')
                             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
+                            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                             ->where('mm.app_user_id',$app_user_id_load_msg)
-                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type')
+                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
                             ->orderBy('mm.message_date_time', 'desc')
                             ->limit($number_of_msg)
                             ->get();
 
-        $app_user_name = AppUser::select('name','id')
+        $app_user_name = AppUser::select('name', 'id', 'user_profile_image')
                                     ->where('id', $app_user_id_load_msg)
                                     ->first();
         
@@ -252,6 +283,8 @@ class MessageController extends Controller
         $search_app_user_name = $_POST['name'];
         $app_users = AppUser::select('id', 'name')
                     ->where('name','like', '%'.$search_app_user_name.'%')
+                    ->orwhere('contact_no','like', '%'.$search_app_user_name.'%')
+                    ->orwhere('email','like', '%'.$search_app_user_name.'%')
                     ->get();
         return json_encode($app_users);
     }
@@ -260,6 +293,7 @@ class MessageController extends Controller
     public function newMsgSent(Request $r){
         $app_user_id = $r->app_user_id;
         $admin_message = $r->admin_message;
+        $message_category = $r->message_category;
         $admin_id = Auth::user()->id;
         ## Image
         $attachment = $r->file('attachment');
@@ -268,6 +302,7 @@ class MessageController extends Controller
             $new_msg = new MessageMaster();
             $new_msg->admin_id = $admin_id;
             $new_msg->admin_message = $admin_message;
+            $new_msg->message_category = $message_category;
             $new_msg->app_user_id = $app_user_id;
             $new_msg->is_attachment = 1;
             $new_msg->save();
@@ -308,6 +343,7 @@ class MessageController extends Controller
             $new_msg->admin_id = $admin_id;
             $new_msg->admin_message = $admin_message;
             $new_msg->app_user_id = $app_user_id;
+            $new_msg->message_category = $message_category;
             $new_msg->save();
         }
         
@@ -316,11 +352,155 @@ class MessageController extends Controller
 
     }
 
+    public function getMessageCategory(){
+        $data = MessageCategory::select('id', 'category_name')->get();
+        return json_encode($data);
+    }
 
+    public function loadAppUserFromGroup(Request $r){
+        $group = $r->app_user_group;
+        $a = array();
+        foreach($group as $group){
+            // $data = AppUserGroupMember::select('app_user_id')->where('status',1)->whereIn('group_id',[$group])->get();
+            $data = DB::table('app_user_group_members as a')
+                    ->leftJoin('app_users as b', 'a.app_user_id', '=', 'b.id')
+                    ->select('a.app_user_id as app_user_id', 'b.name as name')
+                    ->where('a.status',1)
+                    ->whereIn('a.group_id',[$group])
+                    ->get();
+            $a[]=$data;
+        }
+        return json_encode($a);
+    }
+
+
+    public function groupMessageManagement(){
+        $data['page_title'] = $this->page_title;
+        $data['module_name']= "Messages";
+        $data['sub_module']= "Group Messages";
+        return view('message.group_message',$data);
+    }
     
-    
+
+    Public function loadAppUserGroup(){
+
+        $app_user_info = MessageCategory::select('category_name', 'id')->get();
+
+        // DB::table('message_masters as mm')
+        //                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+        //                     ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
+        //                     ->distinct('mm.app_user_id')
+        //                     //->orderBy('mm.message_date_time', 'desc')
+        //                     ->orderBy('mm.id', 'desc')
+        //                     ->get();
+
+        return json_encode(array(
+            "app_user_info"=>$app_user_info,
+            // "message"=>$message,
+        ));
+    }
+
+    ##Search APP Users Group
+    public function searchAppUsersGroup(){
+        $group_name = $_POST['group_name'];
+        $app_users = MessageCategory::select('id', 'category_name')
+                    ->where('category_name','like', '%'.$group_name.'%')
+                    ->get();
+        return json_encode($app_users);
+    }
 
 
+    public function newGroupMessageSent(Request $r){
+        $group_id = $r->group_id;
+        $admin_message = $r->admin_message;
+        //$message_category = $r->message_category;
+        $admin_id = Auth::user()->id;
+        ## Image
+        $attachment = $r->file('group_msg_attachment');
+
+        if($r->hasFile('group_msg_attachment')){
+            $new_msg = new MessageMaster();
+            $new_msg->admin_id = $admin_id;
+            $new_msg->admin_message = $admin_message;
+            $new_msg->message_category = $group_id;
+            $new_msg->is_group_msg = 1;
+            $new_msg->is_attachment = 1;
+            $new_msg->save();
+            $mm_id = $new_msg->id;
+
+
+            foreach ($attachment as $attachment) {
+                $attachment_name = rand().time().$attachment->getClientOriginalName();
+                $ext = strtoupper($attachment->getClientOriginalExtension());
+                echo $ext;
+                if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+                    $attachment_type = 1;
+                }
+                else if ($ext=="MP4" || $ext=="3GP") {
+                    $attachment_type = 2;
+                }
+                else if ($ext=="MP3") {
+                    $attachment_type = 3;
+                }
+                else{
+                    $attachment_type = 4;
+                }
+                //$attachment_full_name = $attachment_name.'.'.$ext;
+                $upload_path = 'assets/images/message/';
+                    
+                $success=$attachment->move($upload_path,$attachment_name);
+                ##Save image to the message attachment table
+                $msg_attachment = new MessageAttachment();
+                $msg_attachment->message_master_id = $mm_id;
+                $msg_attachment->admin_atachment = $attachment_name;
+                $msg_attachment->attachment_type = $attachment_type;
+                $msg_attachment->save();
+
+                
+            }
+        }
+        else{
+            $new_msg = new MessageMaster();
+            $new_msg->admin_id = $admin_id;
+            $new_msg->admin_message = $admin_message;
+            $new_msg->message_category = $group_id;
+            $new_msg->is_group_msg = 1;
+            $new_msg->save();
+        }
+        
+        
+//need to save notification for group user
+
+    }
+
+
+
+
+    public function loadGroupMessage(){
+        $app_user_id_load_msg = $_POST['app_user_id_load_msg'];
+        $number_of_msg = $_POST['msg_no'];
+        $message = DB::table('message_masters as mm')
+                            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+                            ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
+                            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+                            ->where('mm.message_category',$app_user_id_load_msg)
+                            ->where('mm.is_group_msg',1)
+                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
+                            ->orderBy('mm.message_date_time', 'desc')
+                            ->limit($number_of_msg)
+                            ->get();
+
+        $app_user_name = MessageCategory::select('category_name', 'id')
+                                    ->where('id', $app_user_id_load_msg)
+                                    ->first();
+        
+
+        return json_encode(array(
+            "message"=>$message,
+            "app_user_name"=>$app_user_name,
+            //"msg_date"=>$msg_date,
+        ));
+    }
 
 
 

@@ -7,6 +7,10 @@ Route::get('/auth',array('as'=>'Sign in', 'uses' =>'SystemAuthController@authLog
 Route::get('auth/login',array('as'=>'Sign in', 'uses' =>'SystemAuthController@authLogin'));
 Route::post('auth/post/login',array('as'=>'Sign in', 'uses' =>'SystemAuthController@authPostLogin'));
 
+##App User Message 
+Route::get('/message/app-user/{id}',array('as'=>'App User Message', 'uses' =>'AppUserController@appUserMessage'));
+Route::post('app-user-message-save',array('as'=>'App User Message Save', 'uses' =>'AppUserController@appUserMessageSave'));
+
 
 #ForgetPassword
 Route::get('auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'SystemAuthController@forgetPasswordAuthPage'));
@@ -162,8 +166,30 @@ Route::group(['middleware' => ['auth']], function () {
 	##Sent message to user
 	Route::post('/message/admin-message-sent-to-user',array('as'=>'Admin message Sent', 'uses' =>'MessageController@newMsgSent'));
 
+	Route::get('/report/course/get-course-title',array('as'=>'Get course Title', 'uses' =>'CoursesController@getCourseTitle'));
+	Route::post('/report/course/course-details',array('as'=>'Get course Title', 'uses' =>'CoursesController@getCourseDetailsReport'));
+	## App user Report
+	Route::get('/report/app-user',array('as'=>'App user report', 'uses' =>'AppUserController@appUserReport'));
+	Route::post('/report/app-user-auto-suggest',array('as'=>'App user name auto-suggest', 'uses' =>'AppUserController@appUserGroupNameAutoComplete'));
+	Route::post('/report/app-user-report',array('as'=>'Get App user Report', 'uses' =>'AppUserController@getAppUserReport'));
+	
+	Route::get('/message/view-app-user/{id}',array('as'=>'Get App user View', 'uses' =>'AppUserController@app_user_view'));
+	Route::get('/message/change-app-user-status/{id}',array('as'=>'Change App User Status', 'uses' =>'AppUserController@changeAppUserStatus'));
+	##Get Message Category
+	Route::get('/message/get-message-category',array('as'=>'Get Message Caategory', 'uses' =>'MessageController@getMessageCategory'));
+	##Load App User From Group
+	Route::post('/message/load-app-user-from-group',array('as'=>'Load App User From Group', 'uses' =>'MessageController@loadAppUserFromGroup'));
+	
+	Route::post('/course/teacher-name',array('as'=>'Load Teacher Name', 'uses' =>'CoursesController@loadTeacherName'));
+	
+	Route::get('/course/verify-payment/{id}',array('as'=>'Payment Varify', 'uses' =>'CoursesController@paymentVerify'));
 
+	Route::get('/message/load-app-user-group',array('as'=>'Load Message Group', 'uses' =>'MessageController@loadAppUserGroup'));
+	##Search App Users Group
+	Route::post('/message/search-app-users-group',array('as'=>'Search App Users Group', 'uses' =>'MessageController@searchAppUsersGroup'));
+	Route::post('/message/admin-message-sent-to-group',array('as'=>'Sent Group Message', 'uses' =>'MessageController@newGroupMessageSent'));
 
+	Route::post('/message/load-group-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadGroupMessage'));
 
 
 });
@@ -210,6 +236,8 @@ Route::group(['middleware' => ['permission']], function () {
     ## Siam Start
     Route::get('report/course-summary',array('as'=>'Course Summary Report' , 'action_id'=>'25', 'uses' =>'CoursesController@courseSummery'));
     Route::post('/report/course/get-course-summary',array('as'=>'Get Course Summary Report' , 'action_id'=>'25', 'uses' =>'CoursesController@getCourseSummery'));
+    Route::get('/report/course-details',array('as'=>'Get Course Details' , 'action_id'=>'25', 'uses' =>'CoursesController@getCourseDetails'));
+    Route::post('/report/course/course-name',array('as'=>'Get Course Name' , 'action_id'=>'25', 'uses' =>'CoursesController@getCourseNameAutoComplete'));
     ## Siam End
 
     /*--------Report End--------*/
@@ -332,8 +360,9 @@ Route::get('/settings/survey/survey-categories-edit/{id}',array('as'=>'Edit Surv
 	Route::get('/course/teacher/teacher-edit/{id}',array('as'=>'Teacher Update', 'action_id'=>'90', 'uses' =>'TeacherController@teacherEdit'));
 	Route::get('/course/teacher/teacher-delete/{id}',array('as'=>'Teacher Delete', 'action_id'=>'91', 'uses' =>'TeacherController@teacherDelete'));
 	/*--------------  Manage Teacher End  -------------*/
-
-
+	
+	/*--------------  Group Messaage  -------------*/
+	Route::get('messages/group-messages-management',array('as'=>'Manage Group Message', 'action_id'=>'94', 'uses' =>'MessageController@groupMessageManagement'));
 
 
 
