@@ -1,8 +1,8 @@
 @extends('frontend.auth.layout.login-master')
 @section('login-content')
-    
+
 	<div class="box-login">
-        <h5>Sign in</h5>
+        <h5>{{__('app.signin')}}<h5>
         <p>
             Please enter your email and password to log in.
         </p>
@@ -56,7 +56,7 @@
                 </div>
 				<div class="new-account">
 					Don't have an account yet?
-					<a href="{{url('app/auth/register')}}" class="register">
+					<a href="{{url('app/register')}}" class="register">
 						Create an account
 					</a>
 				</div>

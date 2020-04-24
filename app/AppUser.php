@@ -1,15 +1,17 @@
 <?php
-
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class AppUser extends Model
+class AppUser extends Authenticatable
 {
+	 
+	protected $guard = 'appUser';
     protected $table = 'app_users';
     
     protected $fillable = [
-        'name','nid_no','email','contact_no','status','address','password','remarks', 'user_profile_image',
+        'name','nid_no','email','contact_no','address','status','remarks', 'user_profile_image', 'user_type',
     ];
 	
 	/**
@@ -30,14 +32,8 @@ class AppUser extends Model
 
     public static function LogInStatusUpdate($status)
     {
-        if(\Auth::check()){
-            if($status=='login') {
-                $change_status=1;
-            } else {
-                $change_status=0;
-            }
-            $loginstatuschange = \App\AppUser::where('email',\Auth::customer()->email)->update(array('login_status'=>$change_status));
-            return $loginstatuschange;
-        }
+		/*$loginstatuschange = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email )->update(array('login_status'=>$change_status));
+		return $loginstatuschange;*/
+		return 1;        
     }
 }
