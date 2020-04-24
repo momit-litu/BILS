@@ -1,4 +1,23 @@
 <?php
+//-------------------------------------------------App------------------------------------------
+//fontend #Login
+Route::get('app/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
+Route::get('app/',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
+Route::get('app/auth',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
+Route::get('app/auth/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
+Route::post('app/auth/post/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authPostLogin'));
+
+Route::get('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegister'));
+Route::post('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegister'));
+
+#ForgetPassword
+Route::get('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'AppAuthController@forgetPasswordAuthPage'));
+Route::post('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'AppAuthController@authForgotPasswordConfirm'));
+Route::get('app/auth/forget/password/{user_id}/verify',array('as'=>'Forgot Password Verify' , 'uses' =>'AppAuthController@authSystemForgotPasswordVerification'));
+Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Password Submit' , 'uses' =>'AppAuthController@authSystemNewPasswordPost'));
+
+
+///-------------------------------------------------- admin --------------------------------------------------
 
 #Login
 Route::get('/login',array('as'=>'Sign in', 'uses' =>'SystemAuthController@authLogin'));
