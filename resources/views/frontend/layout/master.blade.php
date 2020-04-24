@@ -6,7 +6,7 @@
 <!--<![endif]-->
 <!-- start: HEAD -->
 <head>
-    <title>{{isset($page_title) ? $page_title : ''}} | {{$site_settings['short_name']}} </title>
+    <title>{{isset($page_title) ? $page_title : ''}} | BILS </title>
     <!-- start: META -->
     <meta charset="utf-8" />
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
@@ -41,7 +41,7 @@
     <!-- Form elements-->
 
     <link rel="stylesheet" href="{{asset('assets/plugins/DataTables/media/css/DT_bootstrap.css')}}" />
-
+	<link rel="stylesheet" href="{{asset('assets/plugins/css3-animation/animations.css')}}">
 
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/datepicker.css') }}">
@@ -76,13 +76,13 @@
 
 
 <!-- start: HEADER -->
-@include('layout.header')
+@include('frontend.layout.header')
 <!-- end: HEADER -->
 <!-- start: MAIN CONTAINER -->
 <div class="main-container">
     <div class="navbar-content">
         <!-- start: SIDEBAR -->
-        @include('layout.sidebar')
+        @include('frontend.layout.sidebar')
 		
         <!-- end: SIDEBAR -->
     </div>
@@ -91,7 +91,7 @@
         <!-- end: SPANEL CONFIGURATION MODAL FORM -->
         <div class="container">
             <!-- start: PAGE HEADER -->
-            @include('layout.breadcrumb')
+            @include('frontend.layout.breadcrumb')
             <!-- end: PAGE HEADER -->
             <!-- start: PAGE CONTENT -->
             @yield('content')
@@ -104,7 +104,7 @@
 <!-- start: FOOTER -->
 <div class="footer clearfix">
     <div class="footer-inner">
-        &copy; Copyright {{date('Y')}} .All Rights Reserved.Powered by <a href="https://technolife.ee/" target="_blank">TechnoLife.</a>
+        &copy; Copyright {{date('Y')}} .All Rights Reserved. Developed by <a href="https://mbrotherssolution.com" target="_blank">Mbrothers Solution.</a>
     </div>
     <div class="footer-items">
         <span class="go-top"><i class="clip-chevron-up"></i></span>
@@ -160,124 +160,6 @@
 </div>
 
 
-
-
-
-<!-- Profile Modal -->
-<div class="modal fade" id="profile_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-content">
-        <div class="modal-body">
-            <div id="">
-                <div class="title text-center">
-                    <h4 class="text-info">Profile View</h4>
-                </div>
-                <div class="done_registration ">                                
-                    <div class="doc_content">
-                        <div class="col-md-12">
-                            <div class="" style="text-align:left">
-                                <div class="byline">
-                                    <span id="profile_modal_body"></span>
-                                     <div class="">    
-                                        <div class="jumbotron" style="margin-bottom: 0px!important">
-                                          <div class="row">
-                                              <div class="col-md-3 col-xs-12 col-sm-6 col-lg-3">
-                                                <div class="thumbnail text-center photo_view_postion_b" >
-                                                  <div class="profile_image">
-                                                      
-                                                  </div>
-
-                                                </div>
-                                                <button id="status_btn" type="button" class="btn hide">Status</button>
-                                              </div>
-                                              <div class="col-md-9 col-xs-12 col-sm-6 col-lg-9">
-                                                  <div class="" style="border-bottom:1px solid black">
-                                                    <span id="name_div"></span>
-                                                    <p><div id="status_div"></div></p>
-                                                    <div id="group_div"></div></p>
-                                                  </div>
-                                                    <hr>
-                                                  <div class="col-md-6">  
-                                                  
-                                                    <p title="Phone"><span class="glyphicon glyphicon-earphone one" style="width:50px;"></span><span id="contact_div"></span></p>
-                                                    <p title="Email"><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span><span id="email_div"></span></p>
-                                                    
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                      <p title="NID NO"><span class="glyphicon glyphicon-credit-card one" style="width:50px;"></span><span id="nid_div"></span></p>
-                                                    <p title="Address"><span class="glyphicon glyphicon-map-marker one" style="width:50px;"></span><span id="address_div"></span></p>
-                                                  </div>
-
-
-
-                                                  
-                                              </div>
-                                            </div>
-                    <div class="row">
-                      <div class="row">
-                        <div class="col-md-12">
-                        <div class="form-group" style="border-bottom:1px solid black">
-                            <div id="remarks_div"></div>
-                        </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row"> 
-                     <div class="col-md-12">
-                        <div id="remarks_details">
-                            
-                        </div>
-                     </div>
-                     
-                    
-                    </div>
-                    
-                    {{-- <div class="row">
-                      <div class="form-group row">
-                        <div class="col-md-12">
-                            <div class="form-group" style="border-bottom:1px solid black">
-                                <h2>CAR INFO</h2>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-sm-4 col-xs-6 tital " >Brand:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                                <div class="col-sm-4 col-xs-6 tital " >Year:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                             </div>    
-                           <div class="col-md-6">
-                                <div class="col-sm-4 col-xs-6 tital " >Model:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                                <div class="col-sm-4 col-xs-6 tital " >Color:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                             </div>    
-                            
-                        </div>
-                      </div>
-                    </div> --}}
-                    
-                    
-                    
-                    
-                    
-                    
-                </div>
-            </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>                                  
-                </div>                          
-            </div>
-            
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-     
-   
-</div>
-{{-- End Profile Modal --}}
 
 
 
@@ -368,33 +250,14 @@
 {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
 <script src="{{ asset('assets/js/sweetalert.min.js')}}"></script>
 <script src="{{ asset('assets/js/jquery-ui.min.js')}}"></script>
+
+<script src="{{ asset('assets/js/ui-animation.js')}}"></script>
 @yield('JScript')
 <script>
-   /* // Enable pusher logging - don't include this in production
-    Pusher.logToConsole = true;
-    var pusher = new Pusher( '<?php echo config('notification.PUSHER_APP_KEY');?>',{
-        cluster: 'ap2',
-        forceTLS: true
-    });
-    var channel = pusher.subscribe('<?php echo config('notification.PUSHER_APP_CHANNEL');?>');
-    console.log('<?php echo config('notification.PUSHER_APP_CHANNEL');?>');
-    channel.bind('<?php echo isset(\Auth::user()->id) && \Auth::user()->user_type == 'partner' ? 'order-status:' .\Auth::user()->company_id : 'order-status';?>', function(data) {
-        // alert(JSON.stringify(data));
-        var notificationCount = $('.notificationCounter').attr('notificationCount');
-        var notificationCountTotal = parseInt(notificationCount) + 1;
-        $('.notificationCounter').attr('notificationCount', notificationCountTotal);
-        $('.notificationCounter').html(notificationCountTotal);
-        $('.notificationCountertext').html(' You have ' + notificationCountTotal + ' new notifications');
-        var html = '';
-        html+= '<li>' +
-            '<a href="javascript:void(0)">' +
-            '<span class="label label-primary" notify_id="'+ data.order_id +'"><i class="fa fa-user"></i></span>' +
-            '<span class="message">'+ data.message +'</span>' +
-            // '<span class="time"> 1 min</span>' +
-            '</a>' +
-            '</li>'
-        $('.notificationList ul').prepend(html);
-    });*/
+	jQuery(document).ready(function() {
+		Main.init();
+		Animation.init();
+	});
 </script>
 </body>
 <!-- end: BODY -->

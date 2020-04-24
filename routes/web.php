@@ -1,14 +1,34 @@
 <?php
 //-------------------------------------------------App------------------------------------------
 //fontend #Login
+
+
+Route::get('app/language/{lang}',function ($lang){
+    try {		
+        if (in_array($lang,['en','bn'])) {
+            Session::put('locale', $lang);
+            App::setLocale($lang);
+            return redirect()->back();
+        }
+        return redirect()->back();
+    } catch (\Exception $exception) {
+        return redirect()->back();
+    }
+});
+
+
+
+
 Route::get('app/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/auth',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/auth/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::post('app/auth/post/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authPostLogin'));
 
-Route::get('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegister'));
-Route::post('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegister'));
+Route::get('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegistration'));
+Route::post('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegistration'));
+Route::get('app/auth/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authPostRegistration'));
+Route::post('app/auth/post/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authPostRegistration'));
 
 #ForgetPassword
 Route::get('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'AppAuthController@forgetPasswordAuthPage'));
@@ -16,6 +36,14 @@ Route::post('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>
 Route::get('app/auth/forget/password/{user_id}/verify',array('as'=>'Forgot Password Verify' , 'uses' =>'AppAuthController@authSystemForgotPasswordVerification'));
 Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Password Submit' , 'uses' =>'AppAuthController@authSystemNewPasswordPost'));
 
+
+ Route::get('app/dashboard',array('as'=>'User Dashboard' , 'uses' =>'FrontEndController@index'));
+/*
+Route::group(['middleware'=>'appUser'], function() {
+    Route::get('app/dashboard',array('as'=>'User Dashboard' , 'uses' =>'FrontEndController@index'));
+});
+
+*/
 
 ///-------------------------------------------------- admin --------------------------------------------------
 

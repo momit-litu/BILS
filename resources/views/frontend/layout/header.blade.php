@@ -10,7 +10,7 @@
             <!-- start: LOGO -->
 
             <a class="navbar-brand" href="javascript:void(0)">			
-                <span class="text-shadow" style="color: #fff"> <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>  {{$site_settings['short_name']}}</span>
+                <span class="text-shadow" style="color: #fff"> <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>  BILS</span>
             </a>
             <!-- end: LOGO -->
         </div>
@@ -48,7 +48,7 @@
                         </li>
                     </ul>
                 </li>
-                <li class="dropdown current-user">
+         <!--       <li class="dropdown current-user">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         @if(\Auth::check())
                             @if((\Auth::user()->user_profile_image != ''))
@@ -89,7 +89,7 @@
                             @endif
                         </li>
                     </ul>
-                </li>
+                </li> -->
                 <!-- end: USER DROPDOWN -->
 
 
