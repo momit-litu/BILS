@@ -70,7 +70,7 @@
 						<div class="message_body">
 
 						</div>
-						
+
 
 					</ul>
 				</div>
@@ -81,6 +81,8 @@
 							<div style="width: 90%; float: left;">
 								<input type="hidden" name="group_id" id="group_id">
 								<div >
+                                    <p id="reply_msg" name="reply_msg"></p>
+                                    <input type="hidden" id="reply_msg_id" name="reply_msg_id">
 									<input style="width: 100%" type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
 								</div>
 							</div>
@@ -88,7 +90,8 @@
 								<label for="group_msg_attachment" class="custom-file-upload">
 									<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
 								</label>
-								<input multiple id="group_msg_attachment" name="group_msg_attachment[]" type="file"/>
+                                <input type="hidden" name="category_id" id="category_id">
+                                <input multiple id="group_msg_attachment" name="group_msg_attachment[]" type="file"/>
 								<button type="submit" class="submit" id="message_sent_to_group"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 							</div>
 						</form>
@@ -105,8 +108,14 @@
 						<p>{{ Auth::user()->name }}</p>
 					</div>
 				</div>
+                <div>
+                    <label for="inputState">Category</label>
+                    <select id="message_category_group" value="1" class="form-control">
 
+                    </select>
+                </div>
 				<div id="search">
+
 					<label for=""><i class="fa fa-search" aria-hidden="true"></i></label>
 					<input type="text" id="search_app_user_group" name="search_app_user_group" placeholder="Search Group...." />
 				</div>
@@ -115,12 +124,12 @@
 						<div id="app_user_group_show">
 
 						</div>
-						
+
 
 					</ul>
 				</div>
 				<div id="bottom-bar">
-				
+
 				</div>
 			</div>
 		</div>
@@ -137,7 +146,7 @@
 		var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 		var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 	</script>
-	
+
 	<script src="{{ asset('assets/js/bils/message/message.js')}}"></script>
 
 @endsection

@@ -1,6 +1,6 @@
 // All the user related js functions will be here
-$(document).ready(function () {	
-	
+$(document).ready(function () {
+
 	// for get site url
 	var url = $('.site_url').val();
 	var number_of_msg = 10;
@@ -17,44 +17,44 @@ $(document).ready(function () {
 						html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox"  name="app_user_group[]"  class="tableflat check_permission"  value="'+data["id"]+'"/> '+data["group_name"]+'</div>';
 					});
 					html += '</td></tr>';
-				html +='</table>';	
+				html +='</table>';
 			}
 			$('#app_user_group').html(html);
-			
+
 			$('#message_form').iCheck({
 					checkboxClass: 'icheckbox_flat-green',
 					radioClass: 'iradio_flat-green'
-			});									
-			
+			});
+
 			$('#message_form input#check-all').on('ifChecked', function () {
-				
+
 				$("#message_form .tableflat").iCheck('check');
 			});
 			$('#message_form input#check-all').on('ifUnchecked', function () {
-				
+
 				$("#message_form .tableflat").iCheck('uncheck');
 			});
-			
+
 		}
 	});
 
 	//Message Entry And update
-	$('#save_message ').click(function(event){		
+	$('#save_message ').click(function(event){
 		event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
-		
+
 		var formData = new FormData($('#message_form')[0]);
 		if($.trim($('#admin_message').val()) == ""){
-			success_or_error_msg('#form_submit_error','danger',"Please Insert Message","#admin_message");			
+			success_or_error_msg('#form_submit_error','danger',"Please Insert Message","#admin_message");
 		}
 		// if( $('#app_user_group').checked==true ){
-		// 	success_or_error_msg('#form_submit_error','danger',"Please Select App User Name Or app Urser group");			
+		// 	success_or_error_msg('#form_submit_error','danger',"Please Select App User Name Or app Urser group");
 		// }
-		
+
 		else{
 			$.ajax({
 				url: url+"/message/message-entry",
@@ -66,21 +66,21 @@ $(document).ready(function () {
 				processData:false,
 				success: function(data){
 					var response = JSON.parse(data);
-				
+
 					if(response['result'] == '0'){
-						var errors	= response['errors'];					
+						var errors	= response['errors'];
 						resultHtml = '<ul>';
 							$.each(errors,function (k,v) {
 							resultHtml += '<li>'+ v + '</li>';
 						});
 						resultHtml += '</ul>';
 						success_or_error_msg('#master_message_div',"danger",resultHtml);
-						
+
 						clear_form();
 					}
-					else{				
+					else{
 						success_or_error_msg('#master_message_div',"success","Save Successfully");
-						
+
 						message_table.ajax.reload();
 						clear_form();
 						$("#message_entry").html(' Add Message');
@@ -89,9 +89,9 @@ $(document).ready(function () {
 						$("#message_form .tableflat").iCheck('uncheck');
 					}
 					$(window).scrollTop();
-				 }	
+				 }
 			});
-		}	
+		}
 	});
 
 	//Publication Data Table
@@ -123,7 +123,7 @@ $(document).ready(function () {
 				$("#admin_user_view").modal();
 				$("#modal_title").html("Message View");
 				var message_info = "";
-			
+
 				$("#modal_body").html(message_info);
 			}
 		});
@@ -151,7 +151,7 @@ $(document).ready(function () {
 						message_table.ajax.reload();
 					}
 				});
-			} 
+			}
 			else {
 				swal("Your Data is safe..!", {
 				icon: "warning",
@@ -187,7 +187,7 @@ $(document).ready(function () {
 			success: function(response){
 				var response = JSON.parse(response);
 				var app_user = response['app_user_info'];
-				//Load App user who are chated 
+				//Load App user who are chated
 				if(!jQuery.isEmptyObject(app_user)){
 					var html = '<div class="msg_auto_load">';
 					//var active_chat_class = "active";
@@ -226,7 +226,7 @@ $(document).ready(function () {
 	loadAppUser();
 	$('.msg_auto_load').first().trigger('click');
 
-	loadMessage = function loadMessage(app_user_id, number_of_msg){//
+    loadMessage = function loadMessage(app_user_id, number_of_msg){//
 		$("#search_app_user").val("");
 		//alert('into loadmessage')
 		//event.preventDefault();
@@ -248,7 +248,7 @@ $(document).ready(function () {
 				async:false,
 			success: function(response){
 				var response = JSON.parse(response);
-				
+
 				var message = response['message'];
 				var app_user_name = response['app_user_name'];
 				var img_id="";
@@ -263,9 +263,9 @@ $(document).ready(function () {
 
 						if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
 							html += '<li class="sent_msg">';
-							
+
 							html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
-							
+
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
 								html += '<p>'+message["admin_message"]+'</p><br><br><br>';
 							}else{
@@ -293,7 +293,7 @@ $(document).ready(function () {
 									html += '<a href="'+msg_image_url+'/'+message["admin_atachment"]+'" download><p style="word-wrap: break-word;">'+message["admin_atachment"]+'</p></a>';
 								}
 							}
-							
+
 							html += '</li>';
 							if (message["category_name"]!=null && message["category_name"]!="") {
 								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:8px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
@@ -302,15 +302,15 @@ $(document).ready(function () {
 								mc = "";
 							}
 							html += '<span class="time_date_sent"> '+message["msg_date"]+' '+mc+'</span>';
-							
-							
+
+
 						}
 						else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
-							
+
 
 							html += '<li class="receive_msg">';
 							html += '<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />';
-							
+
 							if (message["app_user_message"]!=null && message["app_user_message"]!="") {
 								html += '<p>'+message["app_user_message"]+'</p>';
 							}
@@ -340,14 +340,14 @@ $(document).ready(function () {
 							}
 							html += '<span class="time_date">'+message["msg_date"]+'</span>';
 							html += '</li>';
-							
+
 							// 11:01 AM    |    June 9
-							
+
 						}
 						message_body = html+message_body;
-						
+
 					});
-					
+
 				}
 				loadAppUser();
 				$(".message_body").html(message_body);
@@ -359,7 +359,7 @@ $(document).ready(function () {
 				else{
 					$("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
 				}
-				
+
 				$("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load Old Message</button>');
 				$("#app_user_id").val(app_user_name['id']);
 				if (number_of_msg==10) {
@@ -373,9 +373,10 @@ $(document).ready(function () {
 			$("#modalIMG").modal();
 			$("#load_zoom_img").attr('src',image_src);
 		});
-	}
+        //window.setInterval(loadMessage(app_user_id, number_of_msg), 1000);
+    }
 
-	
+
 
 
 
@@ -395,7 +396,7 @@ $(document).ready(function () {
 				async:false,
 				success: function(data){
 					var app_users = JSON.parse(data);
-					
+
 					if(!jQuery.isEmptyObject(app_users)){
 						var html = "";
 						$.each(app_users, function(i,row){
@@ -409,14 +410,14 @@ $(document).ready(function () {
 							html+='</div>';
 							html+='</div>';
 							html+='</li>';
-							
+
 						});
 					}
 				$("#app_user_show").html(html);
 
-				}	
+				}
 			});
-		
+
 
 		}
 		else {
@@ -429,7 +430,7 @@ $(document).ready(function () {
 	});
 
 
-	
+
 
 	$("#message_sent_to_user").click(function(){
 		event.preventDefault();
@@ -442,11 +443,11 @@ $(document).ready(function () {
 	});
 
 	newMsgSent = function newMsgSent(){
-        	
-    	
+
+
 		var formData = new FormData($('#sent_message_to_user')[0]);
 		if(( $.trim($('#admin_message').val()) != "" || $.trim($('#attachment').val()) != "" ) && $.trim($('#app_user_id').val()) != ""){
-			
+
 			$.ajax({
 				url: url+"/message/admin-message-sent-to-user",
 				type:'POST',
@@ -461,7 +462,7 @@ $(document).ready(function () {
 					$('#admin_message').val("");
 					$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 					loadAppUser();
-				 }	
+				 }
 			});
 		}
 	}
@@ -473,24 +474,24 @@ $(document).ready(function () {
 		}
 	});
 
-	
-        
-      
-	
-
-		  
-		 
-
-
-			
-			  
-			  
 
 
 
 
 
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	limitIncrease = function limitIncrease(id){
 		number_of_msg = number_of_msg+10;
@@ -522,12 +523,12 @@ $(document).ready(function () {
 			});
 		},
 		minLength: 2,
-		select: function(event, ui) { 
+		select: function(event, ui) {
 			var id = ui.item.id;
-			
+
 			$(this).next().val(id);
 			$("#app_user_id").val(id);
-			
+
 		}
 	});
 
@@ -547,7 +548,7 @@ $(document).ready(function () {
 				$("#email_div").html(data['email']);
 				$("#nid_div").html(data['nid_no']);
 				$("#address_div").html(data['address']);
-				
+
 				$("#group_div").html('<b>Groups: </b><span class="badge badge-warning">'+groups[0]["group_name"]+'</span>');
 
 				if (data['remarks']!=null && data['remarks']!="") {
@@ -579,10 +580,10 @@ $(document).ready(function () {
 					$("#status_btn").html('In-active');
 				}
 
-				
+
 				//$("#status_btn").addClass(class_name);
 
-			}	
+			}
 		});
 	}
 
@@ -610,21 +611,22 @@ $(document).ready(function () {
 					option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
 				});
 				$("#message_category").append(option)
+                $('#message_category_group').html(option)
 			}
 		});
 
 	//App User Group Member
-	$('#load_app_user_from_group ').click(function(event){		
+	$('#load_app_user_from_group ').click(function(event){
 		event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
-		
+
 		var formData = new FormData($('#message_form')[0]);
-		
-		
+
+
 			$.ajax({
 				url: url+"/message/load-app-user-from-group",
 				type:'POST',
@@ -648,25 +650,26 @@ $(document).ready(function () {
 					$('.form').iCheck({
 						checkboxClass: 'icheckbox_flat-green',
 						radioClass: 'iradio_flat-green'
-					});	
+					});
 
 					$('.flat_radio').iCheck({
 						radioClass: 'iradio_flat-green'
 					});
-				 }	
+				 }
 			});
-		
+
 	});
 
 
 	loadAppUserGroup = function loadAppUserGroup(){
+	    //alert('sdfsdf')
 
 		$.ajax({
 			url: url+'/message/load-app-user-group',
 			success: function(response){
 				var response = JSON.parse(response);
 				var app_user = response['app_user_info'];
-				//Load App user who are chated 
+				//Load App user who are chated
 				if(!jQuery.isEmptyObject(app_user)){
 					var html = '<div class="msg_auto_load">';
 					//var active_chat_class = "active";
@@ -681,7 +684,7 @@ $(document).ready(function () {
 							html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
 						}
 						html+='<div class="meta">';
-						html+='<p class="name">'+row["category_name"]+'</p>';
+						html+='<p class="name">'+row["group_name"]+'</p>';
 						//html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
 						html+='</div>';
 						html+='</div>';
@@ -713,7 +716,7 @@ $(document).ready(function () {
 				async:false,
 				success: function(data){
 					var app_users = JSON.parse(data);
-					
+
 					if(!jQuery.isEmptyObject(app_users)){
 						var html = "";
 						$.each(app_users, function(i,row){
@@ -722,20 +725,18 @@ $(document).ready(function () {
 							//html+='<span class="contact-status busy"></span>';
 							html+='<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
 							html+='<div class="meta">';
-							html+='<p onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="name">'+row["category_name"]+'</p>';
+							html+='<p onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="name">'+row["group_name"]+'</p>';
 							//html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
 							html+='</div>';
 							html+='</div>';
 							html+='</li>';
-							
+
 						});
 					}
 				$("#app_user_group_show").html(html);
 
-				}	
+				}
 			});
-		
-
 		}
 		else {
 			loadAppUserGroup();
@@ -749,11 +750,11 @@ $(document).ready(function () {
 
 	//Group Message sent
 	newGroupMessageSent = function newGroupMessageSent(){
-    	
-    	
+
+        //alert('2')
 		var formData = new FormData($('#sent_message_to_group')[0]);
 		if(( $.trim($('#admin_message').val()) != "" || $.trim($('#group_msg_attachment').val()) != "" ) && $.trim($('#group_id').val()) != ""){
-			
+
 			$.ajax({
 				url: url+"/message/admin-message-sent-to-group",
 				type:'POST',
@@ -763,12 +764,13 @@ $(document).ready(function () {
 				contentType:false,
 				processData:false,
 				success: function(data){
+				    //alert(3)
 					$("#group_msg_attachment").val('');
 					loadGroupMessage($('#group_id').val(),number_of_msg);
 					$('#admin_message').val("");
 					$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 					loadAppUserGroup();
-				 }	
+				 }
 			});
 		}
 	}
@@ -780,7 +782,10 @@ $(document).ready(function () {
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
+		//alert('1')
 		newGroupMessageSent();
+        $('#reply_msg_id').val(null)
+        $('#reply_msg').html('')
 	});
 
 	$(window).on('keydown', function(e) {
@@ -790,8 +795,15 @@ $(document).ready(function () {
 		}
 	});
 
+	reply_message = (id, msg) =>{
+	    //alert(id)
+        $('#reply_msg_id').val(id)
+        $('#reply_msg').html(msg)
+    }
 
-	loadGroupMessage = function loadGroupMessage(app_user_id, number_of_msg){//
+
+
+	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg){//
 		$("#search_app_user_group").val("");
 		event.preventDefault();
 		$.ajaxSetup({
@@ -799,20 +811,26 @@ $(document).ready(function () {
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
-		var app_user_id_load_msg = app_user_id;
+		let group_id = user_group_id;
 		var msg_no = number_of_msg;
+		var msg_cat = $('#message_category_group').val();
 
 		$.ajax({
 			url: url+'/message/load-group-message',
 			type:'POST',
 			data:{
-				app_user_id_load_msg:app_user_id_load_msg,
-				msg_no:msg_no
+                group_id:group_id,
+				msg_no:msg_no,
+                category:msg_cat
 			},
 			async:false,
 			success: function(response){
-				var response = JSON.parse(response);
-				
+
+			    $('#category_id').val(msg_cat)
+                $('#group_id').val(group_id)
+
+                var response = JSON.parse(response);
+
 				var message = response['message'];
 				var app_user_name = response['app_user_name'];
 				var img_id="";
@@ -827,12 +845,20 @@ $(document).ready(function () {
 
 						if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
 							html += '<li class="sent_msg">';
-							
+
 							html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
-							
+
+							tem = '<li class="sent_msg"><ul><li style="margin:0px;padding:0px"><p>reply/</p></li><li style="margin:0px;padding:0px">\n' +
+                                '    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">\n' +
+                                '    <p> testing msg    <i onclick="reply_message(67,\'testing msg\')" style="font-size:16px" class="fa"></i></p><br><br><br>\n' +
+                                '    </li></ul></li>'
+
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
-								html += '<p>'+message["admin_message"]+'</p><br><br><br>';
-							}else{
+							    tem_msg = "'"+message['admin_message']+"'";
+							    html += '<p> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
+                                //html += "<p>"+message['admin_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
+
+                            }else{
 								html+="<br><br>";
 							}
 
@@ -856,7 +882,7 @@ $(document).ready(function () {
 									html += '<a href="'+msg_image_url+'/'+message["admin_atachment"]+'" download><p style="word-wrap: break-word;">'+message["admin_atachment"]+'</p></a>';
 								}
 							}
-							
+
 							html += '</li>';
 							if (message["category_name"]!=null && message["category_name"]!="") {
 								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:8px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
@@ -865,17 +891,19 @@ $(document).ready(function () {
 								mc = "";
 							}
 							html += '<span class="time_date_sent"> '+message["msg_date"]+' '+mc+'</span>';
-							
-							
+
+
 						}
 						else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
-							
+
 
 							html += '<li class="receive_msg">';
 							html += '<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />';
-							
+
 							if (message["app_user_message"]!=null && message["app_user_message"]!="") {
-								html += '<p>'+message["app_user_message"]+'</p>';
+                                tem_msg = "'"+message['app_user_message']+"'";
+
+                                html += "<p>"+message['app_user_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
 							}
 							if( (message["app_user_message"]!=null && message["app_user_message"]!="")&& (message["is_attachment_app_user"]==1) ){
 								html+="<br>";
@@ -903,14 +931,14 @@ $(document).ready(function () {
 							}
 							html += '<span class="time_date">'+message["msg_date"]+'</span>';
 							html += '</li>';
-							
+
 							// 11:01 AM    |    June 9
-							
+
 						}
 						message_body = html+message_body;
-						
+
 					});
-					
+
 				}
 				loadAppUserGroup();
 				$(".message_body").html(message_body);
@@ -922,9 +950,8 @@ $(document).ready(function () {
 				else{
 					$("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
 				}
-				
+
 				$("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load Old Message</button>');
-				$("#group_id").val(app_user_name['id']);
 				if (number_of_msg==10) {
 					$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 				}
@@ -943,16 +970,16 @@ $(document).ready(function () {
 
 
 
-	
-				
-					
-
-
-	
 
 
 
-	
+
+
+
+
+
+
+
 
 	//Clear form
 	$("#clear_button").on('click',function(){
@@ -963,25 +990,25 @@ $(document).ready(function () {
 	$('.form').iCheck({
 		checkboxClass: 'icheckbox_flat-green',
 		radioClass: 'iradio_flat-green'
-	});	
+	});
 
 	$('.flat_radio').iCheck({
 		radioClass: 'iradio_flat-green'
 	});
 
-		
-		
-	
 
 
 
 
 
 
-	
-	
+
+
+
+
+
 });
 
 
-  
+
 

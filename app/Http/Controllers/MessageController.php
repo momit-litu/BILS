@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\UserGroup;
 use Auth;
 use Validator;
 use Session;
@@ -61,19 +62,19 @@ class MessageController extends Controller
             $return['errors'] = $validation->errors();
             return json_encode($return);
         }
-        else{   
-            
+        else{
+
             try{
                 DB::beginTransaction();
                 $is_active = ($request->is_active=="")?"0":"1";
-                
+
                  $admin_id = Auth::user()->id;
-                
+
 
                 if ($request->message_edit_id == '') {
 
                     $message_id = MessageMaster::select('message_id')->where('message_id', '!=',null)->orderBy('id','desc')->first();
-                    
+
                     if ($message_id['message_id']=="") {
                         $message_id = 1;
                     }
@@ -85,7 +86,7 @@ class MessageController extends Controller
                     $app_users = $request->input('app_users');
 
                     if (isset($app_user_group)&& $app_user_group!="") {
-                       
+
                         if(isset($app_users)&& $app_users!=""){
                             foreach ($app_users as $j) {
                                     $old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $j)->count();
@@ -106,12 +107,12 @@ class MessageController extends Controller
 
                         else{
                             foreach ($app_user_group as $row) {
-                            
+
                                 $app_user_id = AppUserGroupMember::select('app_user_id')
                                                 ->where('group_id',$row)
                                                 ->distinct('app_user_id')
                                                 ->get();
-                                                
+
                                 foreach ($app_user_id as $k) {
                                     $old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $k['app_user_id'])->count();
                                     if ($old_msg==0) {
@@ -129,9 +130,9 @@ class MessageController extends Controller
                                 }
                             }
                         }
-                        
-                        
-                                            
+
+
+
                     }
 
                     else{
@@ -145,13 +146,13 @@ class MessageController extends Controller
                         ];
                         $response = MessageMaster::create($column_value);
                     }
-                    
+
 
                 }
                 // else if($request->message_edit_id != ''){
                 //     $data = User::find($request->id);
                 //     $data->update($column_value);
-                    
+
                 // }
                 DB::commit();
                 $return['result'] = "1";
@@ -163,7 +164,7 @@ class MessageController extends Controller
                 $return['errors'][] ="Faild to save";
                 return json_encode($return);
             }
-        }           
+        }
     }
 
 
@@ -189,9 +190,9 @@ class MessageController extends Controller
             $app_user_name = AppUser::select('name')->where('id', $data->app_user_id)->first();
 
             $data['app_user_name'] = $app_user_name['name'];
-            
-            $data['is_seen']=($data->is_seen == 1)?"<button class='btn btn-xs btn-success' disabled>Seen</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-seen</button>";       
-            
+
+            $data['is_seen']=($data->is_seen == 1)?"<button class='btn btn-xs btn-success' disabled>Seen</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-seen</button>";
+
             if ($data->status==0) {
                 $data['status'] = "<button class='btn btn-xs btn-warning' disabled>In-active</button>";
             }
@@ -201,7 +202,7 @@ class MessageController extends Controller
             else if($data->status==2){
                  $data['status'] = "<button class='btn btn-xs btn-danger' disabled>Deleted</button>";
             }
-            
+
             $data['actions']=" <button title='View' onclick='message_view(".$data->id.")' id='view_" . $data->id . "' class='btn btn-xs btn-primary' ><i class='clip-zoom-in'></i></button>";
 
             if($edit_permisiion>0){
@@ -234,7 +235,7 @@ class MessageController extends Controller
 
     ## Load app user for message
     public function loadAppUser(){
-        
+
         //$app_user = AppUser::get();
         $app_user_info = DB::table('message_masters as mm')
                             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
@@ -280,7 +281,7 @@ class MessageController extends Controller
         $app_user_name = AppUser::select('name', 'id', 'user_profile_image')
                                     ->where('id', $app_user_id_load_msg)
                                     ->first();
-        
+
 
         return json_encode(array(
             "message"=>$message,
@@ -337,7 +338,7 @@ class MessageController extends Controller
                 }
                 //$attachment_full_name = $attachment_name.'.'.$ext;
                 $upload_path = 'assets/images/message/';
-                    
+
                 $success=$attachment->move($upload_path,$attachment_name);
                 ##Save image to the message attachment table
                 $msg_attachment = new MessageAttachment();
@@ -346,7 +347,7 @@ class MessageController extends Controller
                 $msg_attachment->attachment_type = $attachment_type;
                 $msg_attachment->save();
 
-                
+
             }
         }
         else{
@@ -357,8 +358,8 @@ class MessageController extends Controller
             $new_msg->message_category = $message_category;
             $new_msg->save();
         }
-        
-        
+
+
 
 
     }
@@ -391,11 +392,11 @@ class MessageController extends Controller
         $data['sub_module']= "Group Messages";
         return view('message.group_message',$data);
     }
-    
+
 
     Public function loadAppUserGroup(){
 
-        $app_user_info = MessageCategory::select('category_name', 'id')->get();
+        $app_user_info = UserGroup::select('group_name', 'id')->get();
 
         // DB::table('message_masters as mm')
         //                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
@@ -414,7 +415,7 @@ class MessageController extends Controller
     ##Search APP Users Group
     public function searchAppUsersGroup(){
         $group_name = $_POST['group_name'];
-        $app_users = MessageCategory::select('id', 'category_name')
+        $app_users = UserGroup::select('id', 'group_name')
                     ->where('category_name','like', '%'.$group_name.'%')
                     ->get();
         return json_encode($app_users);
@@ -422,20 +423,28 @@ class MessageController extends Controller
 
 
     public function newGroupMessageSent(Request $r){
+	    //return $r->group_id;
         $group_id = $r->group_id;
+        $category_id = $r->category_id;
         $admin_message = $r->admin_message;
         //$message_category = $r->message_category;
         $admin_id = Auth::user()->id;
         ## Image
         $attachment = $r->file('group_msg_attachment');
+        $reply_to = null;
+        if(isset($r->reply_msg_id) && $r->reply_msg_id>0){
+            $reply_to = $r->reply_msg_id;
+        }
 
         if($r->hasFile('group_msg_attachment')){
             $new_msg = new MessageMaster();
             $new_msg->admin_id = $admin_id;
             $new_msg->admin_message = $admin_message;
-            $new_msg->message_category = $group_id;
+            $new_msg->message_category = $category_id;
+            $new_msg->group_id = $group_id;
             $new_msg->is_group_msg = 1;
             $new_msg->is_attachment = 1;
+            $new_msg->reply_to = $reply_to;
             $new_msg->save();
             $mm_id = $new_msg->id;
 
@@ -458,7 +467,7 @@ class MessageController extends Controller
                 }
                 //$attachment_full_name = $attachment_name.'.'.$ext;
                 $upload_path = 'assets/images/message/';
-                    
+
                 $success=$attachment->move($upload_path,$attachment_name);
                 ##Save image to the message attachment table
                 $msg_attachment = new MessageAttachment();
@@ -467,19 +476,21 @@ class MessageController extends Controller
                 $msg_attachment->attachment_type = $attachment_type;
                 $msg_attachment->save();
 
-                
+
             }
         }
         else{
             $new_msg = new MessageMaster();
             $new_msg->admin_id = $admin_id;
             $new_msg->admin_message = $admin_message;
-            $new_msg->message_category = $group_id;
+            $new_msg->message_category = $category_id;
+            $new_msg->group_id = $group_id;
             $new_msg->is_group_msg = 1;
+            $new_msg->reply_to = $reply_to;
             $new_msg->save();
         }
-        
-        
+
+
 //need to save notification for group user
 
     }
@@ -488,23 +499,39 @@ class MessageController extends Controller
 
 
     public function loadGroupMessage(){
-        $app_user_id_load_msg = $_POST['app_user_id_load_msg'];
+        $user_group = $_POST['group_id'];
         $number_of_msg = $_POST['msg_no'];
+        $category_id = 3;
+        if(isset($_POST['category'])){
+            $category_id = $_POST['category'];
+
+        }
         $message = DB::table('message_masters as mm')
                             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
-                            ->where('mm.message_category',$app_user_id_load_msg)
+                            ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
+                            ->where('mm.group_id',$user_group)
+                            ->where('mm.message_category',$category_id)
                             ->where('mm.is_group_msg',1)
                             ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
                             ->orderBy('mm.message_date_time', 'desc')
                             ->limit($number_of_msg)
                             ->get();
 
-        $app_user_name = MessageCategory::select('category_name', 'id')
-                                    ->where('id', $app_user_id_load_msg)
-                                    ->first();
-        
+        $app_user_name = DB::table('message_masters as mm')
+            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->where('mm.group_id',$user_group)
+            ->where('mm.is_group_msg',1)
+            ->select('mc.category_name as category_name', 'mm.message_category as id')
+            ->orderBy('mm.message_category', 'desc')
+            ->limit(1)
+            ->get();
+
+        //$app_user_name = MessageCategory::select('category_name', 'id')
+         //                           ->where('id', $user_group)
+           //                         ->first();
+
 
         return json_encode(array(
             "message"=>$message,
