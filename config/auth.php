@@ -41,9 +41,9 @@ return [
             'provider' => 'users',
         ],
 		
-		'customer'  => [
+		'appUser'  => [
           'driver'  => 'session',
-          'provider' => 'customers',
+          'provider' => 'appUsers',
         ],
 
         'api' => [
@@ -76,7 +76,7 @@ return [
             'model' => App\User::class,
         ],
 		
-        'customers' => [
+        'appUsers' => [
             'driver' => 'eloquent',
             'model' => App\AppUser::class,
         ],
@@ -108,8 +108,8 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-		'customers' => [
-            'provider' => 'customers',
+		'appUsers' => [
+            'provider' => 'appUsers',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

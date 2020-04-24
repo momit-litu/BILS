@@ -6,21 +6,27 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\AppUser;
 use App\System;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class AppAuthController extends Controller
 {
+	protected $redirectTo = '/app/dashboard';
     /**
      * Class constructor.
      * get current route name for page title.
      *
      */
     public function __construct(Request $request){
+		$this->middleware('guest')->except('logout');
+		$this->middleware('guest:appUser')->except('logout');
+		  
         $this->page_title = $request->route()->getName();
         $description = \Request::route()->getAction();
         $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
     }
+	
 
     /**
      * Show admin login page for admin
@@ -32,7 +38,7 @@ class AppAuthController extends Controller
      */
     public function authLogin()
     {
-        if (\Auth::check()) {
+        if (Auth::guard('appUser')->check()) {
             \App\User::LogInStatusUpdate("login");
            // return redirect('dashboard');
 
@@ -76,21 +82,23 @@ class AppAuthController extends Controller
             'password'=>$request->input('password'),
             'status'=> "1"
         ];
-
-        if (\Auth::attempt($credentials,$remember_me)) {
-            \Session::put('email', \Auth::user()->email);
-            \Session::put('last_login', Auth::user()->last_login);
+		//dd($credentials);
+        if (\Auth::guard('appUser')->attempt($credentials)) {
+			echo "IN";die;
+            \Session::put('email', Auth::guard('appUser')->user()->email);
+            \Session::put('last_login', Auth::guard('appUser')->user()->last_login);
 
             if (\Session::has('pre_login_url') ) {
                 $url = \Session::get('pre_login_url');
                 \Session::forget('pre_login_url');
                 return redirect($url);
             }else {	
-                \App\User::LogInStatusUpdate(1);
+                \App\AppUser::LogInStatusUpdate(1);
                 return redirect('dashboard');
             }
 
         } else {
+			echo "OUT";die;
             return redirect('auth/login')
                 ->with('errormessage',"Incorrect combinations.Please try again.");
         }
@@ -124,6 +132,23 @@ class AppAuthController extends Controller
         }
     }
 
+
+
+    public function authRegistration()
+    {
+        if (\Auth::check()) {
+            \App\User::LogInStatusUpdate("login");
+           // return redirect('dashboard');
+
+        } else {
+            $data['page_title'] = $this->page_title;
+			//dd($data);
+           // return view('frontend.auth.register',$data);
+			return view('frontend.auth.register',$data);
+        }
+    }
+
+
     /**
      * User Registration
      * checked validation, if failed redirect with message
@@ -132,7 +157,7 @@ class AppAuthController extends Controller
      * @param Request $request
      * @return Response
      */
-    public function authRegistration(Request $request)
+    public function authPostRegistration(Request $request)
     {
         $now = date('Y-m-d H:i:s');
         $v = \Validator::make($request->all(), [
