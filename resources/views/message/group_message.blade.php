@@ -45,6 +45,11 @@
 			box-shadow: 0 3px 9px rgba(0, 0, 0, 0.5);
 			background-clip: padding-box;
 		}
+        .replied_message_p {
+            margin:0px;
+            padding:1px;
+            color:gray;
+        }
 
 	</style>
 

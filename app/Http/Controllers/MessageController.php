@@ -519,6 +519,17 @@ class MessageController extends Controller
                             ->limit($number_of_msg)
                             ->get();
 
+        $replied = DB::table('message_masters as mm')
+                    ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
+                    ->where('mm.group_id',$user_group)
+                    ->where('mm.message_category',$category_id)
+                    ->where('mm.is_group_msg',1)
+                    ->where('mm.reply_to','>','0')
+                    ->select('mm.id as id','mmr.admin_message', 'mmr.app_user_message')
+                    ->orderBy('mm.id', 'desc')
+                    ->limit($number_of_msg)
+                    ->get();
+
         $app_user_name = DB::table('message_masters as mm')
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
             ->where('mm.group_id',$user_group)
@@ -532,10 +543,31 @@ class MessageController extends Controller
          //                           ->where('id', $user_group)
            //                         ->first();
 
+       // "'ifnull( mmr.admin_message, mmr.app_user_message)' in 'field list' (SQL: select `mm`.`id` as `id`, `IFNULL( mmr`.`admin_message, mmr`.`app_user_message)` as `message` from `message_masters` as `mm` left join `message_masters` as `mmr` on `mmr`.`id` = `mm`.`reply_to` where `mm`.`group_id` = 40 and `mm`.`message_category` = 3 and `mm`.`is_group_msg` = 1 and `mm`.`reply_to` > 0 order by `mm`.`id` desc limit 10)",
+
+        //$replied_msg = array();
+
+
+
+        foreach ($replied as $key=>$values){
+            //var_dump($values->admin_message);
+            if(!$values->admin_message){
+                $replied_msg[$values->id]=$values->app_user_message;
+            }
+            else{
+                $replied_msg[$values->id]=$values->admin_message;
+            }
+        }
+
+        foreach ($message as $key=>$item) {
+            if(isset($replied_msg[$item->id])){
+                $message[$key]->replied = $replied_msg[$item->id];            }
+        }
 
         return json_encode(array(
             "message"=>$message,
             "app_user_name"=>$app_user_name,
+            //"replied"=>$replied,
             //"msg_date"=>$msg_date,
         ));
     }

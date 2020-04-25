@@ -844,18 +844,20 @@ $(document).ready(function () {
 						html = "";
 
 						if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
-							html += '<li class="sent_msg">';
+                            if(message["replied"]){
+                                html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                            }
+						    html += '<li class="sent_msg">';
 
 							html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
 
-							tem = '<li class="sent_msg"><ul><li style="margin:0px;padding:0px"><p>reply/</p></li><li style="margin:0px;padding:0px">\n' +
-                                '    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">\n' +
-                                '    <p> testing msg    <i onclick="reply_message(67,\'testing msg\')" style="font-size:16px" class="fa"></i></p><br><br><br>\n' +
-                                '    </li></ul></li>'
 
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
 							    tem_msg = "'"+message['admin_message']+"'";
-							    html += '<p> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
+
+                                    html += '<p> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
+
+							    //html += '<p> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
                                 //html += "<p>"+message['admin_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
 
                             }else{
@@ -896,7 +898,9 @@ $(document).ready(function () {
 						}
 						else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
 
-
+                            if(message["replied"]){
+                                html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                            }
 							html += '<li class="receive_msg">';
 							html += '<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />';
 
