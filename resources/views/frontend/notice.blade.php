@@ -1,6 +1,6 @@
 @extends('frontend.layout.master')
 @section('content')
-	<div class="row load-content">
+	<div class="row">
 		<div class="col-sm-2 col-xs-6">
 			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('message')">
 				<i class="fa fa-envelope"></i>

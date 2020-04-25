@@ -36,8 +36,20 @@ Route::post('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>
 Route::get('app/auth/forget/password/{user_id}/verify',array('as'=>'Forgot Password Verify' , 'uses' =>'AppAuthController@authSystemForgotPasswordVerification'));
 Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Password Submit' , 'uses' =>'AppAuthController@authSystemNewPasswordPost'));
 
+// app will be app user auth middleware
+ Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
+ Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
+ Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
+ Route::get('app/detail-notice/{id}',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeDetail'));
+ Route::get('app/publication',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationList'));
+ Route::get('app/detail-publication/{id}',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationDetail'));
+ Route::get('app/notification',array('as'=>' Notification' , 'uses' =>'FrontEndController@notificationList'));  
+ 
+  
+ Route::get('app/course',array('as'=>' Course' , 'uses' =>'FrontEndController@courseList'));
+ Route::get('app/survey',array('as'=>' Survey' , 'uses' =>'FrontEndController@surveyList'));
 
- Route::get('app/dashboard',array('as'=>'User Dashboard' , 'uses' =>'FrontEndController@index'));
+
 /*
 Route::group(['middleware'=>'appUser'], function() {
     Route::get('app/dashboard',array('as'=>'User Dashboard' , 'uses' =>'FrontEndController@index'));

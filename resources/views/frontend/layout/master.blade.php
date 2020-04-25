@@ -30,6 +30,9 @@
     <link rel="stylesheet" href="{{ asset('assets/css/theme_navy.css') }}" type="text/css" id="skin_color">
     <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}" type="text/css" media="print"/>
     <!--[if IE 7]>
+	
+	
+	
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome-ie7.min.css') }}">
     <![endif]-->
     <!-- end: MAIN CSS -->
@@ -60,6 +63,7 @@
     <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
+	  <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <style type="text/css" media="screen">
         .jumbotron p {
             /*margin-bottom: 15px;*/
@@ -91,7 +95,7 @@
         <!-- end: SPANEL CONFIGURATION MODAL FORM -->
         <div class="container">
             <!-- start: PAGE HEADER -->
-            @include('frontend.layout.breadcrumb')
+			{{-- @include('frontend.layout.breadcrumb')--}}
             <!-- end: PAGE HEADER -->
             <!-- start: PAGE CONTENT -->
             @yield('content')
@@ -159,11 +163,143 @@
     </div>
 </div>
 
-
-
-
-
 <!-- end: FOOTER -->
+
+<!-- start: RIGHT SIDEBAR -->
+		<div id="page-sidebar">
+			<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i></a>
+			<div class="sidebar-wrapper">
+				<ul class="nav nav-tabs nav-justified" id="sidebar-tab">
+					<li class="active">
+						<a href="#users" role="tab" data-toggle="tab"><i class="fa fa-users"></i></a>
+					</li>
+					<li>
+						<a href="#favorites" role="tab" data-toggle="tab"><i class="fa fa-heart"></i></a>
+					</li>
+					<li>
+						<a href="#settings" role="tab" data-toggle="tab"><i class="fa fa-gear"></i></a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div class="tab-pane active" id="users">
+						<div class="users-list">
+							<h5 class="sidebar-title">On-line</h5>
+							<ul class="media-list">
+								<li class="media">
+									<a href="#">
+										<i class="fa fa-circle status-online"></i>
+										<img alt="..." src="assets/images/avatar-2.jpg" class="media-object">
+										<div class="media-body">
+											<h4 class="media-heading">Nicole Bell</h4>
+											<span> Content Designer </span>
+										</div>
+									</a>
+								</li>
+							</ul>
+							<h5 class="sidebar-title">Off-line</h5>
+							<ul class="media-list">
+								<li class="media">
+									<a href="#">
+										<img alt="..." src="assets/images/avatar-6.jpg" class="media-object">
+										<div class="media-body">
+											<h4 class="media-heading">Nicole Bell</h4>
+											<span> Content Designer </span>
+										</div>
+									</a>
+								</li>
+								
+							</ul>
+						</div>
+						<div class="user-chat">
+							<div class="sidebar-content">
+								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
+							</div>
+							<div class="user-chat-form sidebar-content">
+								<div class="input-group">
+									<input type="text" placeholder="Type a message here..." class="form-control">
+									<div class="input-group-btn">
+										<button class="btn btn-success" type="button">
+											<i class="fa fa-chevron-right"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+							<ol class="discussion sidebar-content">
+								<li class="other">
+									<div class="avatar">
+										<img src="assets/images/avatar-4.jpg" alt="">
+									</div>
+									<div class="messages">
+										<p>
+											Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+										</p>
+										<span class="time"> 51 min </span>
+									</div>
+								</li>
+								
+							</ol>
+						</div>
+					</div>
+					<div class="tab-pane" id="favorites">
+						<div class="users-list">
+							<h5 class="sidebar-title">Favorites</h5>
+							<ul class="media-list">
+								<li class="media">
+									<a href="#">
+										<img alt="..." src="assets/images/avatar-7.jpg" class="media-object">
+										<div class="media-body">
+											<h4 class="media-heading">Nicole Bell</h4>
+											<span> Content Designer </span>
+										</div>
+									</a>
+								</li>
+								
+							</ul>
+						</div>
+						<div class="user-chat">
+							<div class="sidebar-content">
+								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
+							</div>
+							<ol class="discussion sidebar-content">
+								<li class="other">
+									<div class="avatar">
+										<img src="assets/images/avatar-4.jpg" alt="">
+									</div>
+									<div class="messages">
+										<p>
+											Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+										</p>
+										<span class="time"> 51 min </span>
+									</div>
+								</li>
+								
+							</ol>
+						</div>
+					</div>
+					<div class="tab-pane" id="settings">
+						<h5 class="sidebar-title">General Settings</h5>
+						<ul class="media-list">
+							<li class="media">
+								<div class="checkbox sidebar-content">
+									<label>
+										<input type="checkbox" value="" class="green" checked="checked">
+										Enable Notifications
+									</label>
+								</div>
+							</li>
+		
+						</ul>
+						<div class="sidebar-content">
+							<button class="btn btn-success">
+								<i class="icon-settings"></i> Save Changes
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- end: RIGHT SIDEBAR -->
+
 <!-- start: MAIN JAVASCRIPTS -->
 <!--[if lt IE 9]>
 <script src="{{asset('assets/plugins/respond.min.js') }}"></script>
@@ -258,7 +394,70 @@
 		Main.init();
 		Animation.init();
 	});
-</script>
+
+// page name: message notice course survey publication notification
+    loadPage = function loadPage(pageName) {
+		// load a ajax loader
+		$.ajax({
+			type: "GET",
+			url:"{{ url('app/')}}/"+pageName,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+				$(".load-content").html(data);
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				console.log("XHR",xhr);
+				console.log("status",textStatus);
+				console.log("Error in",errorThrown);
+			}
+		});
+    }
+
+//function to open quick sidebar
+	var runQuickSideBar = function() {
+		$(".sb-toggle").on("click", function(e) {
+			if($(this).hasClass("open")) {
+				$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
+				$(".sb-toggle").removeClass("open")
+				$("#page-sidebar").css({
+					right: -$("#page-sidebar").outerWidth()
+				});
+			} else {
+				$(this).not(".sidebar-toggler ").find(".fa-outdent").removeClass("fa-outdent").addClass("fa-indent");
+				$(".sb-toggle").addClass("open")
+				$("#page-sidebar").css({
+					right: 0
+				});
+			}
+
+			e.preventDefault();
+		});
+		$("#page-sidebar .media a").on("click", function(e) {
+			//alert($("#page-sidebar").outerWidth())
+			$(this).closest(".tab-pane").css({
+				right: $("#page-sidebar").outerWidth()
+			});
+			e.preventDefault();
+		});
+		$("#page-sidebar .sidebar-back").on("click", function(e) {
+			$(this).closest(".tab-pane").css({
+				right: 0
+			});
+			e.preventDefault();
+		});
+		$('#page-sidebar .sidebar-wrapper').perfectScrollbar({
+			wheelSpeed: 50,
+			minScrollbarLength: 20,
+			suppressScrollX: true
+		});
+		$('#sidebar-tab a').on('shown.bs.tab', function (e) {
+		 
+		 $("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
+		});
+	};
+	</script>
 </body>
 <!-- end: BODY -->
 </html>
