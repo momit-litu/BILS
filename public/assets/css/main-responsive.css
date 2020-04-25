@@ -410,7 +410,7 @@
 	 Main content
 	 ***/
 	.main-content {
-		min-height: 760px;
+		min-height: 660px;
 	}
 
 }
@@ -432,7 +432,7 @@
     	margin-left: 0 !important;
 	}
 	.main-content > .container {
-		min-height: 760px;
+		min-height: 660px;
 	}
 	ul.main-navigation-menu > li.active > a .selected:before {
 		display: block;

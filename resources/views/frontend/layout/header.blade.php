@@ -48,6 +48,136 @@
                         </li>
                     </ul>
                 </li>
+				<!-- start: MESSAGE DROPDOWN -->
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown" href="#">
+						<i class="clip-bubble-3"></i>
+						<span class="badge"> 9</span>
+					</a>
+					<ul class="dropdown-menu posts">
+						<li>
+							<span class="dropdown-menu-title"> You have 9 messages</span>
+						</li>
+						<li>
+							<div class="drop-down-wrapper">
+								<ul>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-2.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Nicole Bell</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time"> Just Now</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-1.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Peter Clark</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">2 mins</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-3.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Steven Thompson</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">8 hrs</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-1.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Peter Clark</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">9 hrs</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-5.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Kenneth Ross</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">14 hrs</span>
+												</div>
+											</div>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+						<li class="view-all">
+							<a href="pages_messages.html">
+								See all messages <i class="fa fa-arrow-circle-o-right"></i>
+							</a>
+						</li>
+					</ul>
+				</li>
+				<li class="dropdown current-user">
+							<a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
+								<img src="assets/images/avatar-1-small.jpg" class="circle-img" alt="">
+								<span class="username">Peter Clark</span>
+								<i class="clip-chevron-down"></i>
+							</a>
+							<ul class="dropdown-menu">
+								<li>
+									<a href="pages_user_profile.html">
+										<i class="clip-user-2"></i>
+										&nbsp;My Profile
+									</a>
+								</li>
+								<li>
+									<a href="pages_calendar.html">
+										<i class="clip-calendar"></i>
+										&nbsp;My Calendar
+									</a>
+								<li>
+									<a href="pages_messages.html">
+										<i class="clip-bubble-4"></i>
+										&nbsp;My Messages (3)
+									</a>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="utility_lock_screen.html"><i class="clip-locked"></i>
+										&nbsp;Lock Screen </a>
+								</li>
+								<li>
+									<a href="login_example1.html">
+										<i class="clip-exit"></i>
+										&nbsp;Log Out
+									</a>
+								</li>
+							</ul>
+						</li>
          <!--       <li class="dropdown current-user">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         @if(\Auth::check())
@@ -91,10 +221,14 @@
                     </ul>
                 </li> -->
                 <!-- end: USER DROPDOWN -->
-
+				<li>
+					<a class="sb-toggle" href="#"><i class="fa fa-outdent"></i></a>
+				</li>
 
             </ul>
-            <!-- end: TOP NAVIGATION MENU -->
+				
+			
+			<!-- end: TOP NAVIGATION MENU -->
         </div>
     </div>
     <!-- end: TOP NAVIGATION CONTAINER -->

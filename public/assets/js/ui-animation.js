@@ -100,6 +100,7 @@ var Animation = function () {
                 $('#object').addClass("pullUp");
             });
         });
+		
         $('#pullDownBtn').click(function () {
             $(this).each(function () {
                 $('#object').removeClass();
