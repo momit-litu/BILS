@@ -154,11 +154,11 @@ var Main = function() {
 			suppressScrollX: true
 		});
 		$('#sidebar-tab a').on('shown.bs.tab', function (e) {
-		 
+
 		 $("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
 		});
 	};*/
-	
+
 	//function to activate the Popovers, if present
 	var runPopovers = function() {
 		if($(".popovers").length) {
@@ -767,4 +767,4 @@ var Main = function() {
 			//runQuickSideBar();
 		}
 	};
-}(); 
+}();

@@ -533,12 +533,15 @@ $(document).ready(function () {
 	});
 
 
-	showProfile = function showProfile(){
-		var id = $("#app_user_id").val();
+	showProfile = function showProfile(id){
+		$("#app_user_id").val();
+        $("#app_user_id_profile").val(id)
+        //alert(id)
 		$.ajax({
 			url: url+"/message/view-app-user/"+id,
 			success: function(response){
 				var response = JSON.parse(response);
+				console.log(response)
 				var data = response['data'];
 				var groups = response['groups'];
 
@@ -590,11 +593,12 @@ $(document).ready(function () {
 
 	//From profile status change
 	$("#status_btn").click(function(){
-		var id = $("#app_user_id").val();
-		$.ajax({
+		var id = $("#app_user_id").val() ? $("#app_user_id").val() : $("#app_user_id_profile").val()
+
+        $.ajax({
 			url: url+"/message/change-app-user-status/"+id,
 			success: function(response){
-				showProfile();
+				showProfile(id);
 			}
 		});
 	});
@@ -674,6 +678,9 @@ $(document).ready(function () {
 					var html = '<div class="msg_auto_load">';
 					//var active_chat_class = "active";
 					$.each(app_user, function(i,row){
+					    if($('#group_msg_group_id').val() == null){
+                            $('#group_msg_group_id').val(row["id"])
+                        }
 						html+='<li onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="contact ">';
 						html+='<div class="wrap">';
 						html+='<span class="contact-status online"></span>';
@@ -773,6 +780,7 @@ $(document).ready(function () {
 				 }
 			});
 		}
+        $('#edit_msg_id').val(null)
 	}
 
 	$("#message_sent_to_group").click(function(){
@@ -801,9 +809,24 @@ $(document).ready(function () {
         $('#reply_msg').html(msg)
     }
 
+    view_app_user = (id) =>{
+	    alert(id)
+    }
+
+    edit_message = (id, msg) =>{
+	    $('#edit_msg_id').val(id)
+        $('#admin_message').val(msg)
+
+    }
+
 
 
 	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg){//
+	    //alert(user_group_id)
+
+	    //var group_id = user_group_id;
+        $('#reply_msg_id').val(null)
+        $('#reply_msg').html('')
 		$("#search_app_user_group").val("");
 		event.preventDefault();
 		$.ajaxSetup({
@@ -840,23 +863,25 @@ $(document).ready(function () {
 				var message_body = "";
 				if(!jQuery.isEmptyObject(message)){
 
+
 					$.each(message, function(i,message){
-						html = "";
+                        $('#msg_group_name').html(message['category_name'])
+
+                        html = "";
 
 						if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
-							html += '<li class="sent_msg">';
+                            if(message["replied"]){
+                                html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                            }
+						    html += '<li class="sent_msg">';
 
 							html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
 
-							tem = '<li class="sent_msg"><ul><li style="margin:0px;padding:0px"><p>reply/</p></li><li style="margin:0px;padding:0px">\n' +
-                                '    <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="">\n' +
-                                '    <p> testing msg    <i onclick="reply_message(67,\'testing msg\')" style="font-size:16px" class="fa"></i></p><br><br><br>\n' +
-                                '    </li></ul></li>'
 
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
 							    tem_msg = "'"+message['admin_message']+"'";
-							    html += '<p> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
-                                //html += "<p>"+message['admin_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
+
+							    html += '<p onclick="edit_message('+message["id"]+','+tem_msg+')"> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
 
                             }else{
 								html+="<br><br>";
@@ -896,14 +921,19 @@ $(document).ready(function () {
 						}
 						else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
 
-
+                            if(message["replied"]){
+                                html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                            }
 							html += '<li class="receive_msg">';
-							html += '<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />';
+							html += '<img src="http://emilcarlsson.se/assets/mikeross.png" onclick = "showProfile('+message["app_user_id"]+')"  alt="" />';
 
 							if (message["app_user_message"]!=null && message["app_user_message"]!="") {
+                                //tem_msg = "'"+message['app_user_message']+"'";
                                 tem_msg = "'"+message['app_user_message']+"'";
 
-                                html += "<p>"+message['app_user_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
+                                html += '<p> '+message["app_user_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p>';
+
+                                //html += "<p>"+message['app_user_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
 							}
 							if( (message["app_user_message"]!=null && message["app_user_message"]!="")&& (message["is_attachment_app_user"]==1) ){
 								html+="<br>";
@@ -929,7 +959,7 @@ $(document).ready(function () {
 								}
 
 							}
-							html += '<span class="time_date">'+message["msg_date"]+'</span>';
+							html += '<span class="time_date">'+message["msg_date"]+'</span><br><br><br>';
 							html += '</li>';
 
 							// 11:01 AM    |    June 9
@@ -963,7 +993,14 @@ $(document).ready(function () {
 			$("#modalIMG").modal();
 			$("#load_zoom_img").attr('src',image_src);
 		});
-	}
+
+    }
+
+
+
+    //alert($('#group_msg_group_id').val())
+
+    setInterval(loadGroupMessage($('#group_msg_group_id').val(),10),1000)
 
 
 
@@ -976,12 +1013,7 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-	//Clear form
+    //Clear form
 	$("#clear_button").on('click',function(){
 		clear_form();
 	});
