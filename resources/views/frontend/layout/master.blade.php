@@ -136,11 +136,11 @@
 
 <!-- start: RIGHT SIDEBAR -->
 		<div id="page-sidebar">
-			<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i></a>
+			<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i>Menu</a>
 			<div class="sidebar-wrapper">
 				<ul class="nav nav-tabs nav-justified" id="sidebar-tab">
 					<li class="active">
-						<a href="#users" role="tab" data-toggle="tab"><i class="fa fa-users"></i></a>
+						<a href="#menus" role="tab" data-toggle="tab"><i class="fa fa-list"></i></a>
 					</li>
 					<li>
 						<a href="#favorites" role="tab" data-toggle="tab"><i class="fa fa-heart"></i></a>
@@ -150,68 +150,49 @@
 					</li>
 				</ul>
 				<div class="tab-content">
-					<div class="tab-pane active" id="users">
-						<div class="users-list">
-							<h5 class="sidebar-title">On-line</h5>
-							<ul class="media-list">
-								<li class="media">
-									<a href="#">
-										<i class="fa fa-circle status-online"></i>
-										<img alt="..." src="assets/images/avatar-2.jpg" class="media-object">
-										<div class="media-body">
-											<h4 class="media-heading">Nicole Bell</h4>
-											<span> Content Designer </span>
-										</div>
-									</a>
-								</li>
-							</ul>
-							<h5 class="sidebar-title">Off-line</h5>
-							<ul class="media-list">
-								<li class="media">
-									<a href="#">
-										<img alt="..." src="assets/images/avatar-6.jpg" class="media-object">
-										<div class="media-body">
-											<h4 class="media-heading">Nicole Bell</h4>
-											<span> Content Designer </span>
-										</div>
-									</a>
-								</li>
-								
-							</ul>
-						</div>
-						<div class="user-chat">
-							<div class="sidebar-content">
-								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
-							</div>
-							<div class="user-chat-form sidebar-content">
-								<div class="input-group">
-									<input type="text" placeholder="Type a message here..." class="form-control">
-									<div class="input-group-btn">
-										<button class="btn btn-success" type="button">
-											<i class="fa fa-chevron-right"></i>
-										</button>
-									</div>
-								</div>
-							</div>
-							<ol class="discussion sidebar-content">
-								<li class="other">
-									<div class="avatar">
-										<img src="assets/images/avatar-4.jpg" alt="">
-									</div>
-									<div class="messages">
-										<p>
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-										</p>
-										<span class="time"> 51 min </span>
-									</div>
-								</li>
-								
-							</ol>
-						</div>
+					<div class="tab-pane active" id="menus">
+						<ul class="activities">
+							<li>
+								<a class="activity" href="javascript:void(0)">
+									<i class="clip-bubbles-3 circle-icon circle-green"></i>
+									<span class="desc">Messages</span>
+								</a>
+							</li>
+							<li>
+								<a class="activity" href="javascript:void(0)">
+									<i class="clip-notification circle-icon circle-teal"></i>
+									<span class="desc">Notices</span>
+								</a>
+							</li>
+							<li>
+								<a class="activity" href="javascript:void(0)">
+									<i class="clip-file circle-icon circle-yellow"></i>
+									<span class="desc">Publications</span>
+								</a>
+							</li>
+							<li>
+								<a class="activity" href="javascript:void(0)">
+									<i class="clip-book circle-icon circle-purple"></i>
+									<span class="desc">Courses</span>
+								</a>
+							</li>
+							<li>
+								<a class="activity" href="javascript:void(0)">
+									<i class="clip-users-2 circle-icon circle-orange"></i>
+									<span class="desc">Surveys</span>
+								</a>
+							</li>
+							<li>
+								<a class="activity" href="javascript:void(0)">
+									<i class="clip-notification-2 circle-icon circle-bricky"></i>
+									<span class="desc">Notifications</span>
+								</a>
+							</li>
+						</ul>
 					</div>
 					<div class="tab-pane" id="favorites">
 						<div class="users-list">
-							<h5 class="sidebar-title">Favorites</h5>
+							<h5 class="sidebar-title">Pan2</h5>
 							<ul class="media-list">
 								<li class="media">
 									<a href="#">
@@ -246,7 +227,7 @@
 						</div>
 					</div>
 					<div class="tab-pane" id="settings">
-						<h5 class="sidebar-title">General Settings</h5>
+						<h5 class="sidebar-title">Pan3</h5>
 						<ul class="media-list">
 							<li class="media">
 								<div class="checkbox sidebar-content">
@@ -397,7 +378,6 @@
 		});
     }
 	$('.hometab').on('click', function (){
-		alert($(this).attr('id'))
 		page = $(this).attr('id');
 		loadPage(page)
 	})
