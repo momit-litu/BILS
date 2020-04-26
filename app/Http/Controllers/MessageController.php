@@ -583,6 +583,15 @@ class MessageController extends Controller
         ));
     }
 
+    public function newMessageLoad(){
+        $message = DB::table('message_masters as mm')
+            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->where('mm.is_seen',0)
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user')
+            ->get();
+    }
+
 
 
 

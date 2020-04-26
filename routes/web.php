@@ -251,6 +251,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/message/admin-group-message-seen/{groupId}/{categoryId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
 
 	Route::post('/message/load-group-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadGroupMessage'));
+    Route::get('/message/load-new-message',array('as'=>'New message', 'uses' =>'MessageController@newMessageLoad'));
 
 
 });
