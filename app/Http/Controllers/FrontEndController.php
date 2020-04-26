@@ -28,6 +28,15 @@ class FrontEndController extends Controller
         return view('frontend.dashboard', $data);
     }
 	
+	public function profileView()
+    {
+        $data['page_title'] = $this->page_title;
+		$data['module_name']= "Profile";		
+        return view('frontend.profile', $data);
+    }
+	
+	
+	
 	public function messageList()
     {
         $data['page_title'] = $this->page_title;
