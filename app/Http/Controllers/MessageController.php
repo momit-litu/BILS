@@ -499,6 +499,13 @@ class MessageController extends Controller
 
     }
 
+    public function newGroupMessageSeen($groupId, $categoryId){
+	    return MessageMaster::where([
+            ['group_id', $groupId],
+            ['message_category', $categoryId]])
+            ->whereNull('admin_message')
+            ->update(['is_seen'=> 1]);
+    }
 
 
 
