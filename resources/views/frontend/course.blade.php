@@ -1,57 +1,26 @@
-@extends('frontend.layout.master')
-@section('content')
-	<div class="row">
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('message')">
-				<i class="fa fa-envelope"></i>
-				Message <span class="badge badge-primary"> 4 </span>
-			</button>
+<div class="panel panel-default border-none">
+	<div class="panel-heading">
+		<i class=" fa fa-file-text "></i>
+		Course
+		<div class="panel-tools">			
+			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('course')">
+				<i class="fa fa-refresh"></i>
+			</a>
 		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('notice')"> 
-				<i class="fa fa-info-circle"></i>
-				Notice <span class="badge badge-default"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('course')">
-				<i class="fa fa-book"></i>
-				Course <span class="badge badge-danger"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('survey')">
-				<i class="fa fa-group"></i>
-				Survey <span class="badge badge-primary"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('publication')">
-				<i class="fa fa-file-text"></i>
-				Publication <span class="badge badge-warning"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('notification')">
-				<i class="fa fa-bell"></i>
-				Notification <span class="badge badge-primary"> 4 </span>
-			</button>
-		</div>
-		
 	</div>
-
-@endsection
-
-
-@section('JScript')
+	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
+		<div class="col-sm-12 page-error">
+			<h3>Under Construction</h3>
+		</div>
+	</div>
+</div>
 
 	
-	<script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
-	
-
-
-
-
-@endsection
+<script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
+<script>
+$(document).ready(function(){
+	alert("course")
+});
+</script>
 
 

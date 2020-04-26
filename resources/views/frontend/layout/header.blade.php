@@ -1,23 +1,22 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
     <!-- start: TOP NAVIGATION CONTAINER -->
     <div class="container">
-        <div class="navbar-header">
-            <!-- start: RESPONSIVE MENU TOGGLER -->
-            <button data-target=".navbar-collapse" data-toggle="collapse" class="navbar-toggle" type="button">
-                <span class="clip-list-2"></span>
-            </button>
-            <!-- end: RESPONSIVE MENU TOGGLER -->
-            <!-- start: LOGO -->
 
-            <a class="navbar-brand" href="javascript:void(0)">			
-                <span class="text-shadow" style="color: #fff"> <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>  BILS</span>
-            </a>
-            <!-- end: LOGO -->
-        </div>
         <div class="navbar-tools">
+			
             <!-- start: TOP NAVIGATION MENU -->
             <ul class="nav navbar-right">
                 <!-- start: NOTIFICATION DROPDOWN -->
+				<li class="dropdown">
+					<a class="" href="javascript:void(0)">			
+					<span class="text-shadow" style="color: #fff"> <i><!--<image src="{{ asset('assets/images/logo.jpg')}}" />--></i>  BILS</span>
+					</a>
+				</li>
+				<li class="dropdown">
+					<a data-toggle="dropdown" data-hover="dropdown" onCLick="loadPage('dashboard-content')" class="dropdown-toggle" data-close-others="true" href="#">
+                        <i class="clip-home"></i>                      
+                    </a>
+				</li>
                 <li class="dropdown">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-notification-2"></i>
@@ -226,8 +225,6 @@
 				</li>
 
             </ul>
-				
-			
 			<!-- end: TOP NAVIGATION MENU -->
         </div>
     </div>

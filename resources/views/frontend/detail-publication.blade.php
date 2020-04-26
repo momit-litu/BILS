@@ -1,57 +1,47 @@
-@extends('frontend.layout.master')
-@section('content')
-	<div class="row">
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('message')">
-				<i class="fa fa-envelope"></i>
-				Message <span class="badge badge-primary"> 4 </span>
-			</button>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<i class=" fa fa-file-text"></i>
+		Publication Details
+		<div class="panel-tools">
 		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('notice')"> 
-				<i class="fa fa-info-circle"></i>
-				Notice <span class="badge badge-default"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('course')">
-				<i class="fa fa-book"></i>
-				Course <span class="badge badge-danger"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('survey')">
-				<i class="fa fa-group"></i>
-				Survey <span class="badge badge-primary"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('publication')">
-				<i class="fa fa-file-text"></i>
-				Publication <span class="badge badge-warning"> 4 </span>
-			</button>
-		</div>
-		<div class="col-sm-2 col-xs-6">
-			<button class="btn btn-icon btn-block hometab" onclcik="loadPage('notification')">
-				<i class="fa fa-bell"></i>
-				Notification <span class="badge badge-primary"> 4 </span>
-			</button>
-		</div>
-		
 	</div>
+	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
+	
+		<div class="alert alert-block fade in justify-text">
+			<h4 class="alert-heading"><i class="clip-notification "></i> গভীর সমুদ্রে দুটি ট্রলারে ভাসমান বিভিন্ন বয়সের পাঁচ শতাধিক রোহিঙ্গাকে মানবিক কারণে দ্রুত বাংলাদেশে আশ্রয় দিতে বলছে জাতিসংঘ।</h4>
+			<p>
+				<a href="#" class="btn btn-green">
+					Download DOcumnet
+				</a>
+			</p>
+			<hr>
+			<p>
+				গভীর সমুদ্রে দুটি ট্রলারে ভাসমান বিভিন্ন বয়সের পাঁচ শতাধিক রোহিঙ্গাকে মানবিক কারণে দ্রুত বাংলাদেশে আশ্রয় দিতে বলছে জাতিসংঘ। জাতিসংঘের মানবাধিকারবিষয়ক হাইকমিশনার মিশেল বাশলেতে গতকাল শুক্রবার পররাষ্ট্রমন্ত্রী এ কে আব্দুল মোমেনকে লেখা চিঠিতে এ আহ্বান জানান।
 
-@endsection
+				জাতিসংঘের পাশাপাশি যুক্তরাষ্ট্রভিত্তিক মানবাধিকার সংগঠন হিউম্যান রাইটস ওয়াচও আজ শনিবার এক বিবৃতিতে সাগরে ভাসা পাঁচ শতাধিক রোহিঙ্গাকে আশ্রয় দিতে বাংলাদেশকে অনুরোধ জানিয়েছে।
 
+				মানব পাচারকারীদের প্রলোভনের ফাঁদে পা দিয়ে ওই রোহিঙ্গারা বেশ কিছুদিন আগে মালয়েশিয়ার পথে দুটি ট্রলারে যাত্রা করে। মালয়েশিয়ার কর্তৃপক্ষ এদের দেশটিতে প্রবেশ করতে না দেওয়ায় নিরুপায় হয়ে এরা সাগরে ভাসছে।
 
-@section('JScript')
+				কূটনৈতিক ও কক্সবাজারের স্থানীয় সূত্রগুলোতে খোঁজ নিয়ে জানা গেছে, রোহিঙ্গাদের বহনকারী ট্রলার দুটি গত বুধবার বাংলাদেশের জলসীমায় প্রবেশের চেষ্টা করে। কিন্তু আইনশৃঙ্খলা রক্ষাকারী বাহিনীর বাধার মুখে তা আর বাংলাদেশের জলসীমায় আসতে পারেনি। সর্বশেষ খবর অনুযায়ী ট্রলার দুটি বাংলাদেশের সেন্ট মার্টিনের কাছে মিয়ানমারের জলসীমার সিতার পাহাড়ের কাছাকাছি অবস্থান করছে।
+
+				অবশ্য বাংলাদেশের পররাষ্ট্রমন্ত্রী এ কে আব্দুল মোমেন গতকাল শুক্রবার গণমাধ্যমকে বলেছেন, দুটি নৌকায় প্রায় পাঁচ শ রোহিঙ্গা বঙ্গোপসাগর ও আন্দামানে ভাসছে। মালয়েশিয়া সরকার তাদের নেয়নি। ফলে এখন তারা বাংলাদেশে প্রবেশের চেষ্টা করছে। এদের গ্রহণ করার কোনো দায়বদ্ধতা বাংলাদেশের নেই। তাঁর মতে, তাদের সাহায্যের জন্য অন্য দেশও এগিয়ে আসতে পারে। তিনি প্রশ্ন রাখেন, এ অঞ্চলে অনেক দেশ আছে, শুধু বাংলাদেশের কাছে এদের নেওয়ার অনুরোধ আসে কেন?
+
+				আব্দুল মোমেন বলেন, সাগরে ভাসমান রোহিঙ্গারা বাংলাদেশের জলসীমায় নেই। গভীর সমুদ্রে রয়েছে। এক সপ্তাহ আগে চার শতাধিক রোহিঙ্গা নৌকা করে মালয়েশিয়া যেতে ব্যর্থ হয়ে ফিরলে বাংলাদেশ তাদের গ্রহণ করেছে।
+
+				গত শুক্রবার বাংলাদেশের পররাষ্ট্রমন্ত্রীকে লেখা চিঠিতে জাতিসংঘের মানবাধিকারবিষয়ক হাইকমিশনার সম্প্রতি কক্সবাজারে আশ্রয় নেওয়া শ চারেক রোহিঙ্গার প্রসঙ্গটিও উল্লেখ করেন। প্রায় দুই মাস সাগরে ভাসার পর তারা কক্সবাজারে নামে ট্রলার থেকে। ৭০ জনের বেশি মারা যায়। মূলত তাদের গন্তব্য ছিল মালয়েশিয়া। তবে মালয়েশিয়া সরকার সে দেশে তাদের প্রবেশে বাধা দিলে কক্সবাজারে ফিরে আসা ছাড়া ওই রোহিঙ্গাদের সামনে কোনো বিকল্প ছিল না।
+			</p>
+		</div>
+	</div>
+</div>
 
 	
-	<script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
-	
+<script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
+<script>
+$(document).ready(function(){
+	alert("NOtice details")
+});
+</script>
 
 
-
-
-@endsection
 
 

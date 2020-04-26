@@ -38,11 +38,12 @@ Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Passwor
 
 // app will be app user auth middleware
  Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
+ Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard')); 
  Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
  Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
- Route::get('app/detail-notice/{id}',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeDetail'));
+ Route::get('app/detail-notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeDetail'));
  Route::get('app/publication',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationList'));
- Route::get('app/detail-publication/{id}',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationDetail'));
+ Route::get('app/detail-publication',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationDetail'));
  Route::get('app/notification',array('as'=>' Notification' , 'uses' =>'FrontEndController@notificationList'));  
  
   
