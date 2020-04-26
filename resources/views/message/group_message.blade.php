@@ -62,9 +62,11 @@
 		<div id="frame">
 			<div class="content">
 				<div class="contact-profile">
-					<img id="app_user_image" src="" alt="" />
-					<p id="app_user_name"></p> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
-					<div class="social-media">
+					<!--img id="app_user_image" src="" alt="" /-->
+					<h4 class="text-capitalize" id="msg_group_name"></h4> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
+					<input type="hidden" id="app_user_id_profile">
+                    <input type="hidden" id="group_msg_group_id">
+                    <div class="social-media">
 						<div id="load_more_message">
 
 						</div>
@@ -88,6 +90,7 @@
 								<div >
                                     <p id="reply_msg" name="reply_msg"></p>
                                     <input type="hidden" id="reply_msg_id" name="reply_msg_id">
+                                    <input type="hidden" id="edit_msg_id" name="edit_msg_id">
 									<input style="width: 100%" type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
 								</div>
 							</div>
