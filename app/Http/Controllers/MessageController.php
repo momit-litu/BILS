@@ -423,6 +423,10 @@ class MessageController extends Controller
 
 
     public function newGroupMessageSent(Request $r){
+
+	    if(isset($r->edit_msg_id) && $r->edit_msg_id>0){
+	        return MessageMaster::where('id',$r->edit_msg_id)->update(['admin_message'=>$r->admin_message]);
+        }
 	    //return $r->group_id;
         $group_id = $r->group_id;
         $category_id = $r->category_id;
@@ -507,17 +511,28 @@ class MessageController extends Controller
 
         }
         $message = DB::table('message_masters as mm')
-                            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-                            ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
-                            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
-                            ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
-                            ->where('mm.group_id',$user_group)
-                            ->where('mm.message_category',$category_id)
-                            ->where('mm.is_group_msg',1)
-                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
-                            ->orderBy('mm.message_date_time', 'desc')
-                            ->limit($number_of_msg)
-                            ->get();
+                    ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+                    ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
+                    ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+                    ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
+                    ->where('mm.group_id',$user_group)
+                    ->where('mm.message_category',$category_id)
+                    ->where('mm.is_group_msg',1)
+                    ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
+                    ->orderBy('mm.message_date_time', 'desc')
+                    ->limit($number_of_msg)
+                    ->get();
+
+        $replied = DB::table('message_masters as mm')
+                    ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
+                    ->where('mm.group_id',$user_group)
+                    ->where('mm.message_category',$category_id)
+                    ->where('mm.is_group_msg',1)
+                    ->where('mm.reply_to','>','0')
+                    ->select('mm.id as id','mmr.admin_message', 'mmr.app_user_message')
+                    ->orderBy('mm.id', 'desc')
+                    ->limit($number_of_msg)
+                    ->get();
 
         $app_user_name = DB::table('message_masters as mm')
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
@@ -532,10 +547,31 @@ class MessageController extends Controller
          //                           ->where('id', $user_group)
            //                         ->first();
 
+       // "'ifnull( mmr.admin_message, mmr.app_user_message)' in 'field list' (SQL: select `mm`.`id` as `id`, `IFNULL( mmr`.`admin_message, mmr`.`app_user_message)` as `message` from `message_masters` as `mm` left join `message_masters` as `mmr` on `mmr`.`id` = `mm`.`reply_to` where `mm`.`group_id` = 40 and `mm`.`message_category` = 3 and `mm`.`is_group_msg` = 1 and `mm`.`reply_to` > 0 order by `mm`.`id` desc limit 10)",
+
+        //$replied_msg = array();
+
+
+
+        foreach ($replied as $key=>$values){
+            //var_dump($values->admin_message);
+            if(!$values->admin_message){
+                $replied_msg[$values->id]=$values->app_user_message;
+            }
+            else{
+                $replied_msg[$values->id]=$values->admin_message;
+            }
+        }
+
+        foreach ($message as $key=>$item) {
+            if(isset($replied_msg[$item->id])){
+                $message[$key]->replied = $replied_msg[$item->id];            }
+        }
 
         return json_encode(array(
             "message"=>$message,
             "app_user_name"=>$app_user_name,
+            //"replied"=>$replied,
             //"msg_date"=>$msg_date,
         ));
     }
