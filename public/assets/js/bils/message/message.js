@@ -819,6 +819,12 @@ $(document).ready(function () {
 
     }
 
+    set_time_out_fn = function set_time_out_fn(group_id){
+        setTimeout(function(){
+            loadGroupMessage(group_id,10);
+            set_time_out_fn();
+        }, 1000);
+    }
 
 
 	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg){//
@@ -828,7 +834,7 @@ $(document).ready(function () {
         $('#reply_msg_id').val(null)
         $('#reply_msg').html('')
 		$("#search_app_user_group").val("");
-		event.preventDefault();
+		//event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -994,14 +1000,15 @@ $(document).ready(function () {
 			$("#load_zoom_img").attr('src',image_src);
 		});
 
+        set_time_out_fn(user_group_id);
+
     }
 
 
 
     //alert($('#group_msg_group_id').val())
 
-    setInterval(loadGroupMessage($('#group_msg_group_id').val(),10),1000)
-
+    //setInterval(loadGroupMessage($('#group_msg_group_id').val(),10),1000)
 
 
 
