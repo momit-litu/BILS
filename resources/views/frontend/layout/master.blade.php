@@ -76,94 +76,63 @@
 </head>
 <!-- end: HEAD -->
 <!-- start: BODY -->
-<body>
 
+<body class="footer-fixed">
+		<!-- start: HEADER -->
+		@include('frontend.layout.header')
+		<!-- end: HEADER -->
+		<!-- start: MAIN CONTAINER -->
+		<div class="main-container">
+			<div class="navbar-content">
+				<!-- start: SIDEBAR -->
+				 @include('frontend.layout.sidebar')
+				<!-- end: SIDEBAR -->
+			</div>
+			<!-- start: PAGE -->
+			<div class="main-content">
+				<!-- start: PANEL CONFIGURATION MODAL FORM -->
+				<!--<div class="modal fade" id="panel-config" tabindex="-1" role="dialog" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+									&times;
+								</button>
+								<h4 class="modal-title">Panel Configuration</h4>
+							</div>
+							<div class="modal-body">
+								Here will be a configuration form
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-default" data-dismiss="modal">
+									Close
+								</button>
+								<button type="button" class="btn btn-primary">
+									Save changes
+								</button>
+							</div>
+						</div>
 
-<!-- start: HEADER -->
-@include('frontend.layout.header')
-<!-- end: HEADER -->
-<!-- start: MAIN CONTAINER -->
-<div class="main-container">
-    <div class="navbar-content">
-        <!-- start: SIDEBAR -->
-        @include('frontend.layout.sidebar')
-		
-        <!-- end: SIDEBAR -->
-    </div>
-    <!-- start: PAGE -->
-    <div class="main-content">
-        <!-- end: SPANEL CONFIGURATION MODAL FORM -->
-        <div class="container">
-            <!-- start: PAGE HEADER -->
-			{{-- @include('frontend.layout.breadcrumb')--}}
-            <!-- end: PAGE HEADER -->
-            <!-- start: PAGE CONTENT -->
-            @yield('content')
-            <!-- end: PAGE CONTENT-->
-        </div>
-    </div>
-    <!-- end: PAGE -->
-</div>
-<!-- end: MAIN CONTAINER -->
-<!-- start: FOOTER -->
-<div class="footer clearfix">
-    <div class="footer-inner">
-        &copy; Copyright {{date('Y')}} .All Rights Reserved. Developed by <a href="https://mbrotherssolution.com" target="_blank">Mbrothers Solution.</a>
-    </div>
-    <div class="footer-items">
-        <span class="go-top"><i class="clip-chevron-up"></i></span>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal fade" id="admin_user_view" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-content">
-        <div class="modal-body">
-            <div id="order-div">
-                <div class="title text-center">
-                    <h4 class="text-info" id="modal_title"></h4><hr>
-                </div>
-                <div class="done_registration ">                                
-                    <div class="doc_content">
-                        <div class="col-md-12">
-                            <div class="" style="text-align:left;">
-                                <div class="byline">
-                                    <span id="modal_body"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                                  
-                </div>                          
-            </div>
-            
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-    </div>
-     
-   
-</div>
-{{-- End Modal --}}
-
-
-
-
-<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document" style="width:100% !important;">
-        <div class="modal-content">
-            
-                <img id="load_zoom_img" src="" alt="" style="height: 410px;width: 100%;">
-            
-            <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-        </div>
-        </div>
-    </div>
-</div>
-
-<!-- end: FOOTER -->
+					</div>
+				</div>-->
+				<!-- /.modal -->
+				<!-- end: SPANEL CONFIGURATION MODAL FORM -->
+				<div class="container padding-left-0 padding-right-0">					
+					@yield('content')
+				</div>
+			</div>
+			<!-- end: PAGE -->
+		</div>
+		<!-- end: MAIN CONTAINER -->
+		<!-- start: FOOTER -->
+		<!--<div class="footer clearfix">
+			<div class="footer-inner">
+			</div>
+			<div class="footer-items">
+				<span class="go-top"><i class="clip-chevron-up"></i></span>
+			</div>
+		</div>-->
+		<!-- end: FOOTER -->
 
 <!-- start: RIGHT SIDEBAR -->
 		<div id="page-sidebar">
@@ -395,8 +364,20 @@
 		Animation.init();
 	});
 
+	loadpageFunctionality = function loadpageFunctionality(){
+
+		Main.init();
+		loadPage();	
+		$('.hometab').on('click', function (){
+			loadPage('message')
+		})
+		$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+90));
+	}	
+	
+
 // page name: message notice course survey publication notification
     loadPage = function loadPage(pageName) {
+		$('.navbar-toggle').trigger('click');
 		// load a ajax loader
 		$.ajax({
 			type: "GET",
@@ -405,7 +386,8 @@
 			contentType: false,
 			processData: false,
 			success: function (data) {
-				$(".load-content").html(data);
+				$("#load-content").html(data);
+				loadpageFunctionality();
 			},
 			error: function (xhr, textStatus, errorThrown) {
 				console.log("XHR",xhr);
@@ -414,10 +396,16 @@
 			}
 		});
     }
+	$('.hometab').on('click', function (){
+		alert($(this).attr('id'))
+		page = $(this).attr('id');
+		loadPage(page)
+	})
 
 //function to open quick sidebar
-	var runQuickSideBar = function() {
+
 		$(".sb-toggle").on("click", function(e) {
+
 			if($(this).hasClass("open")) {
 				$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
 				$(".sb-toggle").removeClass("open")
@@ -434,6 +422,8 @@
 
 			e.preventDefault();
 		});
+		
+		
 		$("#page-sidebar .media a").on("click", function(e) {
 			//alert($("#page-sidebar").outerWidth())
 			$(this).closest(".tab-pane").css({
@@ -456,7 +446,7 @@
 		 
 		 $("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
 		});
-	};
+
 	</script>
 </body>
 <!-- end: BODY -->

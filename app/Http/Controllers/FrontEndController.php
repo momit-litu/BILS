@@ -21,6 +21,13 @@ class FrontEndController extends Controller
         return view('frontend.index', $data);
     }
 	
+	public function dashboard()
+    {
+        $data['page_title'] = $this->page_title;
+		$data['module_name']= "Dashboard";		
+        return view('frontend.dashboard', $data);
+    }
+	
 	public function messageList()
     {
         $data['page_title'] = $this->page_title;
