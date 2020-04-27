@@ -30,7 +30,7 @@ return [
     'button-login' => 'Login',
     'login_page_title'=>'Login',
     'forget-password' =>'Forget Password',
-	'sign-up' =>'Sign Up eng',
+	'sign-up' =>'Sign Up bangla',
 	
 
 

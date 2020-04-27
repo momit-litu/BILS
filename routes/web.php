@@ -8,13 +8,17 @@ Route::get('app/language/{lang}',function ($lang){
         if (in_array($lang,['en','bn'])) {
             Session::put('locale', $lang);
             App::setLocale($lang);
-            return redirect()->back();
+           
+			$locale = App::getLocale();
+		   return redirect()->back();
         }
         return redirect()->back();
     } catch (\Exception $exception) {
         return redirect()->back();
     }
 });
+
+
 
 
 

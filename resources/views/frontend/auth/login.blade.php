@@ -2,7 +2,11 @@
 @section('login-content')
 
 	<div class="box-login">
-        <h5>{{__('app.signin')}}<h5>
+        <h5>{{__('auth.sign-up')}}<h5>
+		@lang('auth.sign-up')
+		@php
+		echo __('sign-up');
+		@endphp
         <p>
             Please enter your email and password to log in.
         </p>
