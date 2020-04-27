@@ -3,12 +3,8 @@
 
 	<div class="box-login">
         <h5>{{__('auth.sign-up')}}<h5>
-		@lang('auth.sign-up')
-		@php
-		echo __('sign-up');
-		@endphp
         <p>
-            Please enter your email and password to log in.
+            {{__('auth.signin_details')}}
         </p>
         <form class="form-login" action="{{ url('app/auth/post/login') }}" method="post">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -50,8 +46,6 @@
                         <i class="fa fa-lock"></i>
                         <a class="forgot" href="{{url('app/auth/forget/password')}}">I forgot my password</a>
                     </span>
-
-
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-success pull-right btn-squared">

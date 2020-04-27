@@ -20,7 +20,6 @@ return [
     'reg_page_desc' => 'Techno Life provides home automation, access control and integration services.',
     'field-name' => 'Name',
     'field-email' => 'Email',
-    'field-address' => 'Address',
     'field-password' => 'Password',
     'field-confirm_password' => 'Confirm Password',
     'button-next' => 'NEXT',
@@ -29,9 +28,10 @@ return [
     //LoginPage
     'button-login' => 'Login',
     'login_page_title'=>'Login',
+    'login_page_title'=>'Login',
     'forget-password' =>'Forget Password',
 	'sign-up' =>'Sign Up eng',
-	
+	'signin_details' => 'Please enter your email and password to log in.',
 
 
 
