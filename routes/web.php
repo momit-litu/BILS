@@ -38,6 +38,11 @@ Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Passwor
 
 // app will be app user auth middleware
  Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
+
+
+
+
+
  Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard'));
  Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
 
