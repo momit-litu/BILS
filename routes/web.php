@@ -39,6 +39,8 @@ Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Passwor
 // app will be app user auth middleware
  Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
  Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard'));
+ Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
+
  Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
  Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
  Route::get('app/detail-notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeDetail'));
@@ -248,8 +250,10 @@ Route::group(['middleware' => ['auth']], function () {
 	##Search App Users Group
 	Route::post('/message/search-app-users-group',array('as'=>'Search App Users Group', 'uses' =>'MessageController@searchAppUsersGroup'));
 	Route::post('/message/admin-message-sent-to-group',array('as'=>'Sent Group Message', 'uses' =>'MessageController@newGroupMessageSent'));
+    Route::get('/message/admin-group-message-seen/{groupId}/{categoryId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
 
 	Route::post('/message/load-group-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadGroupMessage'));
+    Route::get('/message/load-new-message',array('as'=>'New message', 'uses' =>'MessageController@newMessageLoad'));
 
 
 });
