@@ -819,16 +819,20 @@ $(document).ready(function () {
 
     }
 
+    set_time_out_fn = function set_time_out_fn(user_group_id, number_of_msg){
+        setTimeout(function(){
+            loadGroupMessage(user_group_id, number_of_msg);
+            set_time_out_fn(user_group_id, number_of_msg);
+        }, 100000);
+    }
 
 
-	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg){//
-	    //alert(user_group_id)
+	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg){
 
-	    //var group_id = user_group_id;
         $('#reply_msg_id').val(null)
         $('#reply_msg').html('')
 		$("#search_app_user_group").val("");
-		event.preventDefault();
+		//event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -994,14 +998,44 @@ $(document).ready(function () {
 			$("#load_zoom_img").attr('src',image_src);
 		});
 
+        set_time_out_fn(user_group_id, number_of_msg);
+
     }
+
+    $('#admin_message').click(function () {
+        //alert('ok')
+        group_id =$('#group_id').val()
+        category_id = $('#category_id').val()
+
+        //alert(category_id)
+        if(category_id>0 && group_id>0){
+            $.ajaxSetup({
+                headers:{
+                    'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url+"/message/admin-group-message-seen/"+group_id+"/"+category_id,
+                type:'GET',
+                async:false,
+                cache:false,
+                contentType:false,
+                processData:false,
+                success: function(data){
+                   // alert(3)
+
+                }
+            });
+
+        }
+
+    })
 
 
 
     //alert($('#group_msg_group_id').val())
 
-    setInterval(loadGroupMessage($('#group_msg_group_id').val(),10),1000)
-
+    //setInterval(loadGroupMessage($('#group_msg_group_id').val(),10),1000)
 
 
 

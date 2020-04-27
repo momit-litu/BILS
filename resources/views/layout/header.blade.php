@@ -9,7 +9,7 @@
             <!-- end: RESPONSIVE MENU TOGGLER -->
             <!-- start: LOGO -->
 
-            <a class="navbar-brand" href="javascript:void(0)">			
+            <a class="navbar-brand" href="javascript:void(0)">
                 <span class="text-shadow" style="color: #fff"> <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>  {{$site_settings['short_name']}}</span>
             </a>
             <!-- end: LOGO -->
@@ -37,7 +37,7 @@
                                             <span class="time"> 1 min</span>
                                         </a>
                                     </li>
-                                    
+
                                 </ul>
                             </div>
                         </li>
@@ -59,9 +59,9 @@
 							<span class="dropdown-menu-title"> You have 9 messages</span>
 						</li>
 						<li>
-							<div class="drop-down-wrapper">
+							<div class="drop-down-wrapper" id="message_header">
 								<ul>
-									<li>
+									<!--li>
 										<a href="javascript:;">
 											<div class="clearfix">
 												<div class="thread-image">
@@ -117,7 +117,7 @@
 											</div>
 										</a>
 									</li>
-									<li>
+									<li-->
 										<a href="javascript:;">
 											<div class="clearfix">
 												<div class="thread-image">
@@ -130,7 +130,7 @@
 												</div>
 											</div>
 										</a>
-									</li>
+									</li-->
 								</ul>
 							</div>
 						</li>
@@ -192,3 +192,11 @@
     </div>
     <!-- end: TOP NAVIGATION CONTAINER -->
 </div>
+
+
+@section('JScript')
+
+
+    <script src="{{ asset('assets/js/bils/header.js')}}"></script>
+
+@endsection
