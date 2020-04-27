@@ -41,32 +41,32 @@
 <!-- end: HEAD -->
 <!-- start: BODY -->
 <body class="login example1">
-<div class="btn-group pull right">
-
-	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-		<span class="caret"></span>
-	</button>
-	<ul class="dropdown-menu" role="menu">
-		<li>
-			<a href="{{url('/app/language/bn')}}">
-				EN
-			</a>
-		</li>
-		<li>
-			<a href="{{url('/app/language/bn')}}">
-				BN
-			</a>
-		</li>
-	</ul>
-</div>
-<div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-   <!--<div class="logo text-center" style="color: #fff">
+<div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3" style="margin:20px;">
+   <div class="logo text-center" style="color: #fff">
        <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>
 	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies</h5>
-    </div>-->
+    </div>
     <!-- start: LOGIN BOX -->
-
-    @yield('login-content')
+	<div class="box-login">
+		<div class="btn-group pull-right">
+			<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+				<span class="caret"></span>
+			</button>
+			<ul class="dropdown-menu" role="menu">
+				<li>
+					<a href="{{url('/app/language/bn')}}">
+						EN
+					</a>
+				</li>
+				<li>
+					<a href="{{url('/app/language/bn')}}">
+						BN
+					</a>
+				</li>
+			</ul>
+		</div>
+		@yield('login-content')
+	</div>
 
     <!-- end: LOGIN BOX -->
     <!-- start: FORGOT BOX -->

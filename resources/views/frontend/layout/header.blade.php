@@ -12,6 +12,7 @@
 					<span class="text-shadow" style="color: #fff"> <i><!--<image src="{{ asset('assets/images/logo.jpg')}}" />--></i>  BILS</span>
 					</a>
 				</li>
+				
 				<li class="dropdown">
 					<a data-toggle="dropdown" data-hover="dropdown" onCLick="loadPage('dashboard-content')" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-home"></i>                      
