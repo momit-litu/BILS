@@ -57,7 +57,6 @@
 
 @section('JScript')
 <script>
-alert(11)
 $('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+90));
 </script>
 	

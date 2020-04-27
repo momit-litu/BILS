@@ -136,7 +136,7 @@
 
 <!-- start: RIGHT SIDEBAR -->
 		<div id="page-sidebar">
-			<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i>Menu</a>
+			<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i></a>
 			<div class="sidebar-wrapper">
 				<ul class="nav nav-tabs nav-justified" id="sidebar-tab">
 					<li class="active">
@@ -153,37 +153,37 @@
 					<div class="tab-pane active" id="menus">
 						<ul class="activities">
 							<li>
-								<a class="activity" href="javascript:void(0)">
+								<a class="activity" href="javascript:void(0)" onClick="loadPage('message')">
 									<i class="clip-bubbles-3 circle-icon circle-green"></i>
 									<span class="desc">Messages</span>
 								</a>
 							</li>
 							<li>
-								<a class="activity" href="javascript:void(0)">
+								<a class="activity" href="javascript:void(0)" onClick="loadPage('notice')">
 									<i class="clip-notification circle-icon circle-teal"></i>
 									<span class="desc">Notices</span>
 								</a>
 							</li>
 							<li>
-								<a class="activity" href="javascript:void(0)">
+								<a class="activity" href="javascript:void(0)" onClick="loadPage('publication')">
 									<i class="clip-file circle-icon circle-yellow"></i>
 									<span class="desc">Publications</span>
 								</a>
 							</li>
 							<li>
-								<a class="activity" href="javascript:void(0)">
+								<a class="activity" href="javascript:void(0)" onClick="loadPage('course')">
 									<i class="clip-book circle-icon circle-purple"></i>
 									<span class="desc">Courses</span>
 								</a>
 							</li>
 							<li>
-								<a class="activity" href="javascript:void(0)">
+								<a class="activity" href="javascript:void(0)" onClick="loadPage('survey')">
 									<i class="clip-users-2 circle-icon circle-orange"></i>
 									<span class="desc">Surveys</span>
 								</a>
 							</li>
 							<li>
-								<a class="activity" href="javascript:void(0)">
+								<a class="activity" href="javascript:void(0)" onClick="loadPage('notification')">
 									<i class="clip-notification-2 circle-icon circle-bricky"></i>
 									<span class="desc">Notifications</span>
 								</a>
@@ -350,9 +350,19 @@
 		Main.init();
 		loadPage();	
 		$('.hometab').on('click', function (){
-			loadPage('message')
+			page = $(this).attr('id');
+			loadPage(page)
 		})
-		$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+90));
+			
+		if($(".sb-toggle").hasClass("open")) {
+			$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
+			$(".sb-toggle").removeClass("open")
+			$("#page-sidebar").css({
+				right: -$("#page-sidebar").outerWidth()
+			});
+		}
+		alert('before  height');
+		$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+100));
 	}	
 	
 
@@ -367,6 +377,7 @@
 			contentType: false,
 			processData: false,
 			success: function (data) {
+				alert('from loadpage')
 				$("#load-content").html(data);
 				loadpageFunctionality();
 			},
@@ -385,7 +396,6 @@
 //function to open quick sidebar
 
 		$(".sb-toggle").on("click", function(e) {
-
 			if($(this).hasClass("open")) {
 				$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
 				$(".sb-toggle").removeClass("open")
@@ -399,7 +409,6 @@
 					right: 0
 				});
 			}
-
 			e.preventDefault();
 		});
 		
@@ -422,9 +431,8 @@
 			minScrollbarLength: 20,
 			suppressScrollX: true
 		});
-		$('#sidebar-tab a').on('shown.bs.tab', function (e) {
-		 
-		 $("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
+		$('#sidebar-tab a').on('shown.bs.tab', function (e) {		 
+			$("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
 		});
 
 	</script>

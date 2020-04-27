@@ -41,7 +41,7 @@
                             </div>
                         </li>
                         <li class="view-all">
-                            <a href="{{url('/notification')}}" >
+                            <a onclick="loadPage('notification')"   href="javascript:void(0)">
                                 See all notifications <i class="fa fa-arrow-circle-o-right"></i>
                             </a>
                         </li>
@@ -134,7 +134,7 @@
 							</div>
 						</li>
 						<li class="view-all">
-							<a href="pages_messages.html">
+							<a onclick="loadPage('message')"   href="javascript:void(0)">
 								See all messages <i class="fa fa-arrow-circle-o-right"></i>
 							</a>
 						</li>
@@ -143,20 +143,20 @@
 				<li class="dropdown current-user">
 							<a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
 								<img src="assets/images/avatar-1-small.jpg" class="circle-img" alt="">
-								<span class="username">Peter Clark</span>
+								<span class="username">Momit</span>
 								<i class="clip-chevron-down"></i>
 							</a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="pages_user_profile.html">
+									<a class="profile" href="javascript:void(0)" onClick="loadPage('profile')">
 										<i class="clip-user-2"></i>
 										&nbsp;My Profile
 									</a>
 								</li>
 								<li>
 									<a href="pages_calendar.html">
-										<i class="clip-calendar"></i>
-										&nbsp;My Calendar
+										<i class="clip-book"></i>
+										&nbsp;My Courses
 									</a>
 								<li>
 									<a href="pages_messages.html">
@@ -165,10 +165,6 @@
 									</a>
 								</li>
 								<li class="divider"></li>
-								<li>
-									<a href="utility_lock_screen.html"><i class="clip-locked"></i>
-										&nbsp;Lock Screen </a>
-								</li>
 								<li>
 									<a href="login_example1.html">
 										<i class="clip-exit"></i>
