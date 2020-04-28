@@ -52,4 +52,6 @@ return [
 	"forget_password_detail"=>" Enter your e-mail address below to reset your password.",
 	"Back" => "Back",
 	"Submit" => "Submit",
+	
+
 ];

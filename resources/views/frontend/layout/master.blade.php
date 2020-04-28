@@ -155,37 +155,37 @@
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('message')">
 									<i class="clip-bubbles-3 circle-icon circle-green"></i>
-									<span class="desc">Messages</span>
+									<span class="desc">{{__('app.Messages')}} </span>
 								</a>
 							</li>
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('notice')">
-									<i class="clip-notification circle-icon circle-teal"></i>
-									<span class="desc">Notices</span>
+									<i class="clip-notification circle-icon "></i>
+									<span class="desc">{{__('app.Notices')}}  </span>
 								</a>
 							</li>
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('publication')">
 									<i class="clip-file circle-icon circle-yellow"></i>
-									<span class="desc">Publications</span>
+									<span class="desc">{{__('app.Publications')}}</span>
 								</a>
 							</li>
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('course')">
 									<i class="clip-book circle-icon circle-purple"></i>
-									<span class="desc">Courses</span>
+									<span class="desc">{{__('app.Courses')}}</span>
 								</a>
 							</li>
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('survey')">
 									<i class="clip-users-2 circle-icon circle-orange"></i>
-									<span class="desc">Surveys</span>
+									<span class="desc">{{__('app.Surveys')}}</span>
 								</a>
 							</li>
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('notification')">
 									<i class="clip-notification-2 circle-icon circle-bricky"></i>
-									<span class="desc">Notifications</span>
+									<span class="desc">{{__('app.Notifications')}}</span>
 								</a>
 							</li>
 						</ul>
@@ -198,32 +198,13 @@
 									<a href="#">
 										<img alt="..." src="assets/images/avatar-7.jpg" class="media-object">
 										<div class="media-body">
-											<h4 class="media-heading">Nicole Bell</h4>
-											<span> Content Designer </span>
+											<h4 class="media-heading">Momit</h4>
+											<span> Developer </span>
 										</div>
 									</a>
 								</li>
 								
 							</ul>
-						</div>
-						<div class="user-chat">
-							<div class="sidebar-content">
-								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
-							</div>
-							<ol class="discussion sidebar-content">
-								<li class="other">
-									<div class="avatar">
-										<img src="assets/images/avatar-4.jpg" alt="">
-									</div>
-									<div class="messages">
-										<p>
-											Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-										</p>
-										<span class="time"> 51 min </span>
-									</div>
-								</li>
-								
-							</ol>
 						</div>
 					</div>
 					<div class="tab-pane" id="settings">
@@ -348,7 +329,7 @@
 	loadpageFunctionality = function loadpageFunctionality(){
 
 		Main.init();
-		loadPage();	
+		//loadPage();	
 		$('.hometab').on('click', function (){
 			page = $(this).attr('id');
 			loadPage(page)
@@ -361,8 +342,8 @@
 				right: -$("#page-sidebar").outerWidth()
 			});
 		}
-		alert('before  height');
-		$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+100));
+		//alert('before  height');
+		
 	}	
 	
 
@@ -376,9 +357,31 @@
 			cache: false,
 			contentType: false,
 			processData: false,
+			beforeSend: function( xhr ) {
+				//$("#load-content").fadeOut('slow');
+				$('#load-content').block({
+					overlayCSS: {
+						backgroundColor: '#fff'
+					},
+					message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+					css: {
+						border: 'none',
+						color: '#333',
+						background: 'none'
+					}
+				});
+			},
 			success: function (data) {
-				alert('from loadpage')
 				$("#load-content").html(data);
+				if(pageName=='message'){
+					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+98));
+				}
+				else{
+					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+88));
+				}
+				$('#load-content').unblock();
+				$("#load-content").fadeIn('slow');
+				
 				loadpageFunctionality();
 			},
 			error: function (xhr, textStatus, errorThrown) {
