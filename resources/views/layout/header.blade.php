@@ -52,7 +52,7 @@
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown" href="#">
 						<i class="clip-bubble-3"></i>
-						<span class="badge"> 9</span>
+						<span class="badge" id="badge"> 0</span>
 					</a>
 					<ul class="dropdown-menu posts">
 						<li>
@@ -117,7 +117,7 @@
 											</div>
 										</a>
 									</li>
-									<li-->
+									<li>
 										<a href="javascript:;">
 											<div class="clearfix">
 												<div class="thread-image">
@@ -197,6 +197,6 @@
 @section('JScript')
 
 
-    <script src="{{ asset('assets/js/bils/header.js')}}"></script>
+    <script src="{{ asset('assets/js/bils/common.js')}}"></script>
 
 @endsection

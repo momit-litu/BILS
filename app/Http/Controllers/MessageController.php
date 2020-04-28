@@ -506,6 +506,13 @@ class MessageController extends Controller
             ->whereNull('admin_message')
             ->update(['is_seen'=> 1]);
     }
+    public function newMessageSeen($appUserId){
+        return MessageMaster::where([
+            ['app_user_id', $appUserId],
+            ['is_group_msg', 0]])
+            ->whereNull('admin_message')
+            ->update(['is_seen'=> 1]);
+    }
 
 
 
@@ -591,7 +598,7 @@ class MessageController extends Controller
             ->where('mm.is_seen',0)
             ->where('mm.is_group_msg',1)
             ->whereNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name', 'ug.group_name as group_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.message_category as category_id', 'mm.group_id as group_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name', 'ug.group_name as group_name')
             ->groupBy('mm.group_id', 'mm.message_category')
             ->orderBy('mm.created_at', 'desc')
             ->get();
@@ -602,7 +609,7 @@ class MessageController extends Controller
             ->where('mm.is_seen',0)
             ->where('mm.is_group_msg',0)
             ->whereNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','apu.name as app_user_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','apu.name as app_user_name')
             ->groupBy('mm.app_user_id')
             ->orderBy('mm.created_at', 'desc')
             ->get();

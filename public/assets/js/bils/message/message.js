@@ -5,6 +5,9 @@ $(document).ready(function () {
 	var url = $('.site_url').val();
 	var number_of_msg = 10;
 	var loaded = 1;
+
+
+
 	//Load App User Group Using Notice Controller
 	$.ajax({
 		url: url+'/notice/load-app-user-groups',
@@ -228,7 +231,6 @@ $(document).ready(function () {
 
     loadMessage = function loadMessage(app_user_id, number_of_msg){//
 		$("#search_app_user").val("");
-		//alert('into loadmessage')
 		//event.preventDefault();
 		$.ajaxSetup({
 			headers:{
@@ -536,7 +538,6 @@ $(document).ready(function () {
 	showProfile = function showProfile(id){
 		$("#app_user_id").val();
         $("#app_user_id_profile").val(id)
-        //alert(id)
 		$.ajax({
 			url: url+"/message/view-app-user/"+id,
 			success: function(response){
@@ -758,7 +759,6 @@ $(document).ready(function () {
 	//Group Message sent
 	newGroupMessageSent = function newGroupMessageSent(){
 
-        //alert('2')
 		var formData = new FormData($('#sent_message_to_group')[0]);
 		if(( $.trim($('#admin_message').val()) != "" || $.trim($('#group_msg_attachment').val()) != "" ) && $.trim($('#group_id').val()) != ""){
 
@@ -790,7 +790,6 @@ $(document).ready(function () {
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
-		//alert('1')
 		newGroupMessageSent();
         $('#reply_msg_id').val(null)
         $('#reply_msg').html('')
@@ -804,7 +803,7 @@ $(document).ready(function () {
 	});
 
 	reply_message = (id, msg) =>{
-	    //alert(id)
+
         $('#reply_msg_id').val(id)
         $('#reply_msg').html(msg)
     }
@@ -827,7 +826,8 @@ $(document).ready(function () {
     }
 
 
-	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg){
+	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg, user_category_id){
+	    alert('group')
 
         $('#reply_msg_id').val(null)
         $('#reply_msg').html('')
@@ -840,7 +840,12 @@ $(document).ready(function () {
 		});
 		let group_id = user_group_id;
 		var msg_no = number_of_msg;
-		var msg_cat = $('#message_category_group').val();
+		if(user_category_id){
+            var msg_cat = user_category_id;
+        }
+		else {
+            var msg_cat = $('#message_category_group').val();
+        }
 
 		$.ajax({
 			url: url+'/message/load-group-message',
@@ -1003,17 +1008,15 @@ $(document).ready(function () {
     }
 
     $('#admin_message').click(function () {
-        //alert('ok')
         group_id =$('#group_id').val()
         category_id = $('#category_id').val()
 
-        //alert(category_id)
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
         if(category_id>0 && group_id>0){
-            $.ajaxSetup({
-                headers:{
-                    'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-                }
-            });
             $.ajax({
                 url: url+"/message/admin-group-message-seen/"+group_id+"/"+category_id,
                 type:'GET',
@@ -1022,29 +1025,25 @@ $(document).ready(function () {
                 contentType:false,
                 processData:false,
                 success: function(data){
-                   // alert(3)
 
                 }
             });
+        }else if($('#app_user_id').val()>0){
+            $.ajax({
+                url: url+"/message/admin-message-seen/"+$('#app_user_id').val(),
+                type:'GET',
+                async:false,
+                cache:false,
+                contentType:false,
+                processData:false,
+                success: function(data){
+                    // alert(3)
 
+                }
+            });
         }
-
+        newMessages()
     })
-
-
-
-    //alert($('#group_msg_group_id').val())
-
-    //setInterval(loadGroupMessage($('#group_msg_group_id').val(),10),1000)
-
-
-
-
-
-
-
-
-
 
 
     //Clear form
@@ -1064,7 +1063,18 @@ $(document).ready(function () {
 
 
 
+    if(localStorage.getItem('app_user_id')){
+        loadMessage(localStorage.getItem('app_user_id'), number_of_msg)
+        localStorage.removeItem('app_user_id')
+    }
 
+    if(localStorage.getItem('group_id')){
+        $('#message_category_group').val(localStorage.getItem('category_id'))
+        loadGroupMessage(localStorage.getItem('group_id'), number_of_msg, localStorage.getItem('category_id'))
+        localStorage.removeItem('group_id')
+        localStorage.removeItem('category_id')
+
+    }
 
 
 
