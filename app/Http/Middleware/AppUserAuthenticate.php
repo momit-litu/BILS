@@ -1,16 +1,18 @@
 <?php
 
 namespace App\Http\Middleware;
+use App\Traits\HasPermission;
+use Closure;
 
-//use Illuminate\Auth\Middleware\Authenticate as Middleware;
-use Closure
-class AppUserAuthenticate extends Middleware
+class AppUserAuthenticate
 {
-    public function handle($request, Closure $next, $guard="appUser")
+    public function handle($request, Closure $next)
     {
-        if(!auth()->guard($guard)->check()) {
-            return redirect(route('appUser.login'));
+        if(!auth()->guard('appUser')->check()) {
+            //return redirect(route('app/login'));
+			return redirect('app/login');
         }
+		//dd($request);
         return $next($request);
     }
 }

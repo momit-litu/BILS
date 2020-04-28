@@ -1,22 +1,19 @@
 @extends('frontend.auth.layout.login-master')
 @section('login-content')
 
-	<div class="box-login">
-        <h5>{{__('app.signin')}}<h5>
+        <h4><strong>{{__('auth.sign-up')}}</strong></h4>
         <p>
-            Please enter your email and password to log in.
+            {{__('auth.signin_details')}}
         </p>
         <form class="form-login" action="{{ url('app/auth/post/login') }}" method="post">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             @if($errors->count() > 0 )
                 <div class="alert alert-danger btn-squared">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <h6>The following errors have occurred:</h6>
-                    <ul>
-                        @foreach( $errors->all() as $message )
-                            <li>{{ $message }}</li>
-                        @endforeach
-                    </ul>
+                    <h6>ERROR:</h6>
+					@foreach( $errors->all() as $message )
+						<p>{{ $message }}</p>
+					@endforeach
                 </div>
             @endif
             @if(Session::has('message'))
@@ -32,35 +29,33 @@
                 </div>
             @endif
             <div class="errorHandler alert alert-danger no-display btn-squared">
-                <i class="fa fa-remove-sign"></i> You have some form errors. Please check below.
+                <i class="fa fa-remove-sign"></i>{{__('auth.provide_correct_information')}}
             </div>
             <fieldset>
                 <div class="form-group">
                     <span class="input-icon">
-                        <input type="email" class="form-control" name="email" placeholder="Email">
+                        <input type="email" class="form-control" required  name="email" placeholder="{{__('auth.email')}}">
                         <i class="fa fa-user"></i> </span>
                 </div>
                 <div class="form-group form-actions">
                     <span class="input-icon">
-                        <input type="password" class="form-control password" name="password" placeholder="Password">
+                        <input type="password" class="form-control password" required name="password"  placeholder="{{__('auth.password')}}">
                         <i class="fa fa-lock"></i>
-                        <a class="forgot" href="{{url('app/auth/forget/password')}}">I forgot my password</a>
+                        <a class="forgot" href="{{url('app/auth/forget/password')}}">{{__('auth.i_forget_my_password')}} </a>
                     </span>
-
-
                 </div>
                 <div class="form-actions">
                     <button type="submit" class="btn btn-success pull-right btn-squared">
-                        Login <i class="fa fa-arrow-circle-right"></i>
+                        {{__('auth.Login')}}  <i class="fa fa-arrow-circle-right"></i>
                     </button>
                 </div>
 				<div class="new-account">
-					Don't have an account yet?
+				{{__('auth.dont_have_accout')}}
 					<a href="{{url('app/register')}}" class="register">
-						Create an account
+						{{__('auth.create_an_account')}} 
 					</a>
 				</div>
             </fieldset>
         </form>
-    </div>
+
 @endsection

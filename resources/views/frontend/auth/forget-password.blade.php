@@ -1,11 +1,10 @@
 @extends('frontend.auth.layout.login-master')
 @section('login-content')
 
-    <!-- start: FORGOT BOX -->
-    <div class="box-forgot" style="display: block;">
-        <h5>Forget Password?</h5>
+
+        <h5>{{__('auth.forget_password')}}</h5>
         <p>
-            Enter your e-mail address below to reset your password.
+           {{__('auth.forget_password_detail')}} 
         </p>
         <form class="form-forgot" action="{{url('app/auth/forget/password')}}" method="post">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
@@ -41,14 +40,14 @@
                 </div>
                 <div class="form-actions">
                     <a href="{{url('app/')}}" class="btn btn-light-grey go-back">
-                        <i class="fa fa-circle-arrow-left"></i> Back
+                        <i class="fa fa-circle-arrow-left"></i>  {{__('auth.Back')}} 
                     </a>
                     <button type="submit" class="btn btn-bricky pull-right">
-                        Submit <i class="fa fa-arrow-circle-right"></i>
+                         {{__('auth.Submit')}}  <i class="fa fa-arrow-circle-right"></i>
                     </button>
                 </div>
             </fieldset>
         </form>
-    </div>
+
     <!-- end: FORGOT BOX -->
 @endsection

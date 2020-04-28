@@ -79,7 +79,9 @@ return [
     | to any of the locales which will be supported by the application.
     |
     */
-
+	'useAcceptLanguageHeader' => false,
+	'hideDefaultLocaleInURL' => true,
+	
     'locale' => 'en',
 
     /*
@@ -93,7 +95,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'bn',
 
     /*
     |--------------------------------------------------------------------------

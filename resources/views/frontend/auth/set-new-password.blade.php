@@ -1,11 +1,11 @@
 @extends('auth.layout.login-master')
 @section('login-content')
-    <div class="box-login btn-squared">
-        <h3>Set New Password </h3>
+
+        <h4>Set New Password </h4>
         <p>
             Please set your new password.
         </p>
-        <form class="form-login" action="{{ url('auth/forget/password/'.$user_info->id.'/verify') }}" method="post">
+        <form class="form-login" action="{{ url('APP/auth/forget/password/'.$user_info->id.'/verify') }}" method="post">
             <input type="hidden" name="_token" value="{{csrf_token()}}">
             @if($errors->count() > 0 )
                 <div class="alert alert-danger btn-squared">
@@ -58,5 +58,4 @@
                 </div>
             </fieldset>
         </form>
-    </div>
 @endsection

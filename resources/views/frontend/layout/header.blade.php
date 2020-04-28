@@ -7,7 +7,7 @@
             <!-- start: TOP NAVIGATION MENU -->
             <ul class="nav navbar-right">
                 <!-- start: NOTIFICATION DROPDOWN -->
-				<li class="dropdown">
+				<li class="">
 					<a class="" href="javascript:void(0)">			
 					<span class="text-shadow" style="color: #fff"> <i><!--<image src="{{ asset('assets/images/logo.jpg')}}" />--></i>  BILS</span>
 					</a>
@@ -16,7 +16,27 @@
 					<a data-toggle="dropdown" data-hover="dropdown" onCLick="loadPage('dashboard-content')" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-home"></i>                      
                     </a>
+					
 				</li>
+				<!--
+				<li class="dropdown">
+                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
+						<span class="">EN</span>
+                        <i class="clip-chevron-down"></i>
+					</a>
+					<ul class="dropdown-menu">
+                       <li>
+							<a href="{{url('/app/language/en')}}">
+								EN
+							</a>
+						</li>
+                        <li>
+							<a href="{{url('/app/language/bn')}}">
+								BN
+							</a>
+						</li>
+					</ul>
+				</li>-->
                 <li class="dropdown">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-notification-2"></i>
@@ -42,7 +62,7 @@
                         </li>
                         <li class="view-all">
                             <a onclick="loadPage('notification')"   href="javascript:void(0)">
-                                See all notifications <i class="fa fa-arrow-circle-o-right"></i>
+                                {{__('app.See_all_notifications')}} <i class="fa fa-arrow-circle-o-right"></i>
                             </a>
                         </li>
                     </ul>
@@ -55,7 +75,7 @@
 					</a>
 					<ul class="dropdown-menu posts">
 						<li>
-							<span class="dropdown-menu-title"> You have 9 messages</span>
+							<span class="dropdown-menu-title">   {{__('app.You_have')}} <span id="total_unseen_message"> 9 </span> {{__('app.messages')}}</span>
 						</li>
 						<li>
 							<div class="drop-down-wrapper">
@@ -135,90 +155,67 @@
 						</li>
 						<li class="view-all">
 							<a onclick="loadPage('message')"   href="javascript:void(0)">
-								See all messages <i class="fa fa-arrow-circle-o-right"></i>
+								{{__('app.See_all_messages')}}   <i class="fa fa-arrow-circle-o-right"></i>
 							</a>
 						</li>
 					</ul>
 				</li>
+               
+                <!-- end: USER DROPDOWN -->
+				<li>
+					<a class="sb-toggle" href="#"><i class="fa fa-outdent"></i></a>
+				</li>
 				<li class="dropdown current-user">
-							<a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
-								<img src="assets/images/avatar-1-small.jpg" class="circle-img" alt="">
-								<span class="username">Momit</span>
-								<i class="clip-chevron-down"></i>
-							</a>
-							<ul class="dropdown-menu">
-								<li>
-									<a class="profile" href="javascript:void(0)" onClick="loadPage('profile')">
-										<i class="clip-user-2"></i>
-										&nbsp;My Profile
-									</a>
-								</li>
-								<li>
-									<a href="pages_calendar.html">
-										<i class="clip-book"></i>
-										&nbsp;My Courses
-									</a>
-								<li>
-									<a href="pages_messages.html">
-										<i class="clip-bubble-4"></i>
-										&nbsp;My Messages (3)
-									</a>
-								</li>
-								<li class="divider"></li>
-								<li>
-									<a href="login_example1.html">
-										<i class="clip-exit"></i>
-										&nbsp;Log Out
-									</a>
-								</li>
-							</ul>
-						</li>
-         <!--       <li class="dropdown current-user">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
-                        @if(\Auth::check())
-                            @if((\Auth::user()->user_profile_image != ''))
-                                <img width="30px" height="30px;" src="{{ asset('assets/images/user/admin') }}/{{ Auth::user()->user_profile_image }}" class="circle-img" >
+
+                        @if(\Auth::guard('appUser')->check())
+                            @if((\Auth::guard('appUser')->user()->user_profile_image != ''))
+                                <img width="30px" height="30px;" src="{{ asset('assets/images/user/admin') }}/{{ \Auth::guard('appUser')->user()->user_profile_image }}" class="circle-img" >
                             @else
                                 <img width="30px" height="30px;" src="{{asset('assets/images/user/admin/small/profile.png')}}" class="circle-img" >
                             @endif
-                            <span class="username">{{isset(\Auth::user()->name) ? \Auth::user()->name : ''}}</span>
+                            <span class="username">{{isset(\Auth::guard('appUser')->user()->name) ? \Auth::guard('appUser')->user()->name : ''}}</span>
                             <i class="clip-chevron-down"></i>
                         @endif
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            @if(\Auth::check())
+                            @if(\Auth::guard('appUser')->check())
 
-                                    <a href="{{url('/profile/my-profile')}}">
+                                   <a class="profile" href="javascript:void(0)" onClick="loadPage('profile')">
                                         <i class="clip-user-2"></i>
-                                        &nbsp;My Profile
+                                        &nbsp;   {{__('app.My_Profile')}} 
                                     </a>
                             @endif
 
                         </li>
                         <li class="divider"></li>
-                        {{-- <li>
-                            @if(\Auth::check())
-                                <a href="{{ url('my/profile?tab=change_password') }}">
+						<li>
+                            @if(\Auth::guard('appUser')->check())
+								<a class="profile" href="javascript:void(0)" onClick="loadPage('profile','tab=edit_profile')">
                                     <i class="fa fa-lock"></i>
-                                    &nbsp;Change Password
+                                    &nbsp; {{__('app.Edit_Profile')}}
                                 </a>
                             @endif
-                        </li> --}}
+                        </li>
                         <li>
-                            @if(\Auth::check())
-                                <a href="{{url('auth/logout',isset(\Auth::user()->email) ? \Auth::user()->email : '')}}">
+                            @if(\Auth::guard('appUser')->check())
+								<a class="profile" href="javascript:void(0)" onClick="loadPage('profile','tab=change_password')">
+                                    <i class="fa fa-lock"></i>
+                                    &nbsp;{{__('app.Change_Password')}} 
+                                </a>
+                            @endif
+                        </li>
+                        <li>
+                            @if(\Auth::guard('appUser')->check())
+                                <a href="{{url('app/auth/logout',isset(\Auth::guard('appUser')->user()->email) ? \Auth::guard('appUser')->user()->email : '')}}">
                                     <i class="clip-exit"></i>
-                                    &nbsp;Log Out
+                                    &nbsp;{{__('app.Log_Out')}} 
                                 </a>
                             @endif
                         </li>
                     </ul>
-                </li> -->
-                <!-- end: USER DROPDOWN -->
-				<li>
-					<a class="sb-toggle" href="#"><i class="fa fa-outdent"></i></a>
-				</li>
+                </li>
 
             </ul>
 			<!-- end: TOP NAVIGATION MENU -->
