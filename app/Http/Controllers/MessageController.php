@@ -38,6 +38,13 @@ class MessageController extends Controller
 		return view('message.all_messages',$data);
     }
 
+    public function categoryMessages(){
+        $data['page_title'] = $this->page_title;
+        $data['module_name']= "Messages";
+        $data['sub_module']= "All Messages";
+        return view('message.category_messages',$data);
+    }
+
     public function sentMessageManage(){
         $data['page_title'] = $this->page_title;
         $data['module_name']= "Messages";
@@ -299,6 +306,14 @@ class MessageController extends Controller
                     ->orwhere('email','like', '%'.$search_app_user_name.'%')
                     ->get();
         return json_encode($app_users);
+    }
+
+    public function searchMessageCategory($category){
+        $data = MessageCategory::select('id', 'category_name')
+            ->where('category_name','like', '%' . $category . '%')
+            ->get();
+        return json_encode($data);
+
     }
 
 

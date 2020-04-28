@@ -8,7 +8,7 @@ Route::get('app/language/{lang}',function ($lang){
         if (in_array($lang,['en','bn'])) {
             Session::put('locale', $lang);
             App::setLocale($lang);
-           
+
 			$locale = App::getLocale();
 		   return redirect()->back();
         }
@@ -39,7 +39,7 @@ Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Passwor
 Route::group(['middleware'=>'appUser'], function() {
 	Route::get('/',array('as'=>'Dashboard' , 'uses' =>'FrontEndController@index'));
     Route::get('app/auth/logout/{email}',array('as'=>'Logout' , 'uses' =>'FrontEndController@authLogout'));
-	
+
 	Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
 	Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard'));
 	Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
@@ -55,7 +55,7 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/course',array('as'=>' Course' , 'uses' =>'FrontEndController@courseList'));
 	Route::get('app/survey',array('as'=>' Survey' , 'uses' =>'FrontEndController@surveyList'));
 
-	
+
 });
 
 
@@ -127,6 +127,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     /*-------------- Messages Start-------------*/
+    Route::get('messages/category-messages-management',array('as'=>'All Messages Management', 'uses' =>'MessageController@categoryMessages'));
+
 	Route::get('messages/all-messages-management',array('as'=>'All Messages Management', 'uses' =>'MessageController@all_messages'));
 	Route::get('/message/sent-message-list',array('as'=>'Sent Message List', 'uses' =>'MessageController@messageList'));
 	Route::get('/message/message-view/{id}',array('as'=>'Sent Message View', 'uses' =>'MessageController@messageView'));
@@ -247,6 +249,8 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/load-app-user-group',array('as'=>'Load Message Group', 'uses' =>'MessageController@loadAppUserGroup'));
 	##Search App Users Group
 	Route::post('/message/search-app-users-group',array('as'=>'Search App Users Group', 'uses' =>'MessageController@searchAppUsersGroup'));
+	Route::get('/message/search-message_category/{key}',array('as'=>'Search App Users Group', 'uses' =>'MessageController@searchMessageCategory'));
+
 	Route::post('/message/admin-message-sent-to-group',array('as'=>'Sent Group Message', 'uses' =>'MessageController@newGroupMessageSent'));
     Route::get('/message/admin-group-message-seen/{groupId}/{categoryId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
     Route::get('/message/admin-message-seen/{appUserId}',array('as'=>'group message seen', 'uses' =>'MessageController@newMessageSeen'));

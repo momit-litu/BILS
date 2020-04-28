@@ -1077,6 +1077,76 @@ $(document).ready(function () {
     }
 
 
+    // Javascript for category message
+
+
+    loadCategoryMessage = () =>{
+
+    }
+
+    $.ajax({
+        url: url+"/message/get-message-category",
+        success: function(response){
+            var response = JSON.parse(response);
+            if(!jQuery.isEmptyObject(response)){
+                var html = '<div class="msg_auto_load">';
+                $.each(response, function(i,row){
+
+                    html+='<li onclick="loadCategoryMessage('+row["id"]+')" class="contact ">';
+                    html+='<div class="wrap">';
+                    html+='<span class="contact-status online"></span>';
+
+                    html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
+
+                    html+='<div class="meta">';
+                    html+='<p class="name">'+row["category_name"]+'</p>';
+                    //html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
+                    html+='</div>';
+                    html+='</div>';
+                    html+='</li>';
+                    html+='</div>';
+
+                });
+            }
+            $("#category_show").html(html);
+        }
+    });
+
+
+
+    $("#search_message_category").keyup(function(){
+
+        key = $('#search_message_category').val()
+        $.ajax({
+            url: url+"/message/search-message_category/"+key,
+            success: function(response){
+                var response = JSON.parse(response);
+                if(!jQuery.isEmptyObject(response)){
+                    var html = '<div class="msg_auto_load">';
+                    $.each(response, function(i,row){
+
+                        html+='<li onclick="loadCategoryMessage('+row["id"]+')" class="contact ">';
+                        html+='<div class="wrap">';
+                        html+='<span class="contact-status online"></span>';
+
+                        html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
+
+                        html+='<div class="meta">';
+                        html+='<p class="name">'+row["category_name"]+'</p>';
+                        //html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
+                        html+='</div>';
+                        html+='</div>';
+                        html+='</li>';
+                        html+='</div>';
+
+                    });
+                }
+                $("#category_show").html(html);
+            }
+        });
+    });
+
+
 
 
 
