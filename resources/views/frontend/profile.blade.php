@@ -6,23 +6,23 @@
 			
 		</div>
 	</div>
-	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
+	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel" style="margin:0">
 
 		<div class="tabbable">
-			<ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
+			<ul class="nav nav-tabs tab-padding tab-space-3" id="myTab4">
 				<li class="active">
 					<a data-toggle="tab" href="#panel_overview">
-						Overview
+						{{__('app.Overview')}} 
 					</a>
 				</li>
 				<li>
 					<a data-toggle="tab" href="#panel_edit_account">
-						Edit Account
+						{{__('app.Edit_Profile')}} 
 					</a>
 				</li>
 				<li>
 					<a data-toggle="tab" href="#panel_pass_change">
-						Change Password
+						{{__('app.Change_Password')}} 
 					</a>
 				</li>
 			</ul>

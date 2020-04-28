@@ -1,7 +1,7 @@
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class="clip-bubble-4"></i>
-		Message
+		{{__('app.Message')}}
 		<div class="panel-tools">
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="loadNewMessaeg()">
 				<i class="fa fa-refresh"></i>
@@ -9,7 +9,7 @@
 
 		</div>
 	</div>
-	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
+	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel" >
 		<ol class="discussion">
 			<li class="other">
 				<div class="avatar">

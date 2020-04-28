@@ -7,12 +7,29 @@ use Illuminate\Http\Request;
 class FrontEndController extends Controller
 {
     
-	 public function __construct(Request $request)
+	public function __construct(Request $request)
     {
         $this->page_title = $request->route()->getName();
         $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
     }
-
+   
+    public function authLogout($email) {
+		//echo $email;die;
+        if (\Auth::guard('appUser')->check()) {
+            $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+           // print_r($user_info); die();
+            if (!empty($user_info) && ($email==$user_info->email)) {
+				\App\AppUser::LogInStatusUpdate(0);
+                \Auth::guard('appUser')->logout();
+                \Session::flush();
+                return \Redirect::to('app/auth/login');
+            } else {
+                return \Redirect::to('app/auth/login');
+            }
+        } else {
+            return \Redirect::to('app/auth/login')->with('errormessage',"Error logout");
+        }
+    }
 	
 	public function index()
     {
@@ -35,8 +52,7 @@ class FrontEndController extends Controller
         return view('frontend.profile', $data);
     }
 	
-	
-	
+
 	public function messageList()
     {
         $data['page_title'] = $this->page_title;

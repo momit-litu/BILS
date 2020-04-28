@@ -39,7 +39,7 @@ class AppAuthController extends Controller
     public function authLogin()
     {
         if (Auth::guard('appUser')->check()) {
-            \App\User::LogInStatusUpdate("login");
+            \App\AppUser::LogInStatusUpdate(1);
            // return redirect('dashboard');
 
         } else {
@@ -82,12 +82,11 @@ class AppAuthController extends Controller
             'password'=>$request->input('password'),
             'status'=> "1"
         ];
-		//dd($credentials);
+		dd($credentials);
         if (\Auth::guard('appUser')->attempt($credentials)) {
-			echo "IN";die;
+		
             \Session::put('email', Auth::guard('appUser')->user()->email);
             \Session::put('last_login', Auth::guard('appUser')->user()->last_login);
-
             if (\Session::has('pre_login_url') ) {
                 $url = \Session::get('pre_login_url');
                 \Session::forget('pre_login_url');
@@ -98,9 +97,8 @@ class AppAuthController extends Controller
             }
 
         } else {
-			echo "OUT";die;
-            return redirect('auth/login')
-                ->with('errormessage',"Incorrect combinations.Please try again.");
+            return redirect('app/auth/login')
+                ->with('errormessage', __('auth.Incorrect_combinations') );
         }
     }
 
@@ -115,29 +113,27 @@ class AppAuthController extends Controller
      */
     public function authLogout($email)
     {
-		
-        if (\Auth::check()) {
-            $user_info = \App\User::where('email',\Auth::user()->email)->first();
+        if (\Auth::guard('appUser')->check()) {
+            $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
            // print_r($user_info); die();
             if (!empty($user_info) && ($email==$user_info->email)) {
-				\App\User::LogInStatusUpdate(0);
-                \Auth::logout();
+				\App\AppUser::LogInStatusUpdate(0);
+                \Auth::guard('appUser')->logout();
                 \Session::flush();
-                return \Redirect::to('auth/login');
+                return \Redirect::to('app/auth/login');
             } else {
-                return \Redirect::to('auth/login');
+                return \Redirect::to('app/auth/login');
             }
         } else {
-            return \Redirect::to('auth/login')->with('errormessage',"Error logout");
+            return \Redirect::to('app/auth/login')->with('errormessage',__('auth.Error_logout'));
         }
     }
 
 
-
     public function authRegistration()
     {
-        if (\Auth::check()) {
-            \App\User::LogInStatusUpdate("login");
+        if (\Auth::guard('appUser')->check()) {
+            \App\AppUser::LogInStatusUpdate(1);
            // return redirect('dashboard');
 
         } else {
@@ -166,32 +162,30 @@ class AppAuthController extends Controller
             'password' => 'required',
             'repeat_password' => 'required|in_array:password',
         ]);
+		//dd($v);
         if ($v->fails()) {
             return redirect()->back()->withErrors($v)->withInput();
         }
-        $slug=explode(' ', strtolower($request->input('name')));
-        $name_slug=implode('.', $slug);
+
         $registration=array(
             'name' => ucwords($request->input('name')),
-            'name_slug' => $name_slug,
-            'user_type' => 'normal_user',
-            'user_role' => 'normal_user',
             'user_profile_image' => '',
             'login_status' => 0,
-            'status' => 'active',
+            'status' => '1',
             'email' => $request->input('email'),
             'password' => bcrypt($request->input('password')),
             'created_at' => $now,
             'updated_at' => $now,
         );
+		//dd($registration);
         try {
             $registration = \DB::table('app_users')->insert($registration);
             if ($registration) {
-                return redirect('auth/login')->with('message',"You have successfully registered");
+                return redirect('app/auth/login')->with('message',__('auth.successfully_registered'));
             }
         } catch(\Exception $e) {
             $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();
-            return redirect('auth/login')->with('errormessage',"Duplicate email or something is wrong on user registration ! Please try again..");
+            return redirect('app/auth/reghister')->with('errormessage',__('auth.Registration_faild') );
         }
     }
 
@@ -205,8 +199,8 @@ class AppAuthController extends Controller
 
     public function forgetPasswordAuthPage()
     {
-        if (\Auth::check()) {
-            return redirect('auth/login')->with('errormessage', 'Whoops, looks like something went wrong!.');
+        if (\Auth::guard('appUser')->check()) {
+            return redirect('app/auth/login')->with('errormessage', __('auth.something_went_wrong') );
         } else {
             $data['page_title'] = $this->page_title;
             return view('frontend.auth.forget-password',$data);
@@ -223,7 +217,7 @@ class AppAuthController extends Controller
         $email = $request->input('email');
         $user_email= \App\User::where('email','=',$email)->first();
         if (!isset($user_email->id)) {
-            return redirect('auth/forget/password')->with('errormessage',"Sorry email does not match!");
+            return redirect('app/auth/forget/password')->with('errormessage',  __('auth.email_does_not_match') );
         }
 
 
@@ -231,12 +225,12 @@ class AppAuthController extends Controller
         $token = \App\System::RandomStringNum(16);
         \App\User::where('id',$user_email->id)->update(['remember_token'=>$token]);
 
-        $reset_url= url('auth/forget/password/'.$user_email->id.'/verify').'?token='.$token;
+        $reset_url= url('app/auth/forget/password/'.$user_email->id.'/verify').'?token='.$token;
 		echo $reset_url;die;
         //return \Redirect::to($reset_url);
 
         \App\System::ForgotPasswordEmail($user_email->id, $reset_url);
-        return redirect('auth/forget/password')->with('message',"Please check your mail !.");
+        return redirect('app/auth/forget/password')->with('message', __('auth.Please_check_your_mail') );
     }
 
     /**
@@ -257,7 +251,7 @@ class AppAuthController extends Controller
             $data['page_title'] = $this->page_title;
             return \View::make('frontend.auth.set-new-password',$data);
 
-        }else return redirect('auth/forget/password')->with('errormessage',"Sorry invalid token!");
+        }else return redirect('app/auth/forget/password')->with('errormessage', __('auth.Sorry_invalid_token') );
 
     }
 
@@ -291,11 +285,11 @@ class AppAuthController extends Controller
         try {
             $update_pass=\App\User::where('id', $user_id)->update($update_password);
             if($update_pass) {
-                return redirect('auth/login')->with('message',"Password updated successfully !");
+                return redirect('app/auth/login')->with('message',"Password updated successfully !");
             }
         } catch(\Exception $e) {
             $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();           
-            return redirect('auth/login')->with('errormessage',"Password update failed  !");
+            return redirect('app/auth/login')->with('errormessage', __('auth.Password_update_failed'));
         }
 
     }
@@ -312,7 +306,7 @@ class AppAuthController extends Controller
             $data['page_title'] = $this->page_title;
             return \View::make('partner.partner-set-new-password',$data);
 
-        }else return redirect('/')->with('errormessage',"Sorry invalid token!");
+        }else return redirect('/')->with('errormessage', __('auth.Sorry_invalid_token') );
 
     }
 
@@ -339,11 +333,11 @@ class AppAuthController extends Controller
             $update_pass=\App\User::where('id', $user_id)->update($update_password);
 
             if($update_pass) {
-                return redirect('auth/login')->with('message',"Password updated successfully !");
+                return redirect('app/auth/login')->with('message', __('auth.Password_updated_successfully_') );
             }
         } catch(\Exception $e) {
             $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();
-            return redirect('auth/login')->with('errormessage',"Password update failed  !");
+            return redirect('app/auth/login')->with('errormessage',  __('auth.Password_update_failed') );
         }
     }
 }
