@@ -83,7 +83,7 @@
                 </div>
                 <div class="message-input">
                     <div class="wrap">
-                        <form id="sent_message_to_group" name="sent_message_to_group" enctype="multipart/form-data" class="form form-horizontal form-label-left">
+                        <!--form id="sent_message_to_group" name="sent_message_to_group" enctype="multipart/form-data" class="form form-horizontal form-label-left">
                             @csrf
                             <div style="width: 90%; float: left;">
                                 <input type="hidden" name="group_id" id="group_id">
@@ -102,7 +102,7 @@
                                 <input multiple id="group_msg_attachment" name="group_msg_attachment[]" type="file"/>
                                 <button type="submit" class="submit" id="message_sent_to_group"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                             </div>
-                        </form>
+                        </form-->
                     </div>
                 </div>
             </div>
