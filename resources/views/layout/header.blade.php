@@ -9,7 +9,7 @@
             <!-- end: RESPONSIVE MENU TOGGLER -->
             <!-- start: LOGO -->
 
-            <a class="navbar-brand" href="javascript:void(0)">			
+            <a class="navbar-brand" href="javascript:void(0)">
                 <span class="text-shadow" style="color: #fff"> <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>  {{$site_settings['short_name']}}</span>
             </a>
             <!-- end: LOGO -->
@@ -37,90 +37,7 @@
                                             <span class="time"> 1 min</span>
                                         </a>
                                     </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-success"><i class="fa fa-comment"></i></span>
-                                            <span class="message"> New comment</span>
-                                            <span class="time"> 7 min</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-success"><i class="fa fa-comment"></i></span>
-                                            <span class="message"> New comment</span>
-                                            <span class="time"> 8 min</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-success"><i class="fa fa-comment"></i></span>
-                                            <span class="message"> New comment</span>
-                                            <span class="time"> 16 min</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-primary"><i class="fa fa-user"></i></span>
-                                            <span class="message"> New user registration</span>
-                                            <span class="time"> 36 min</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-warning"><i class="fa fa-shopping-cart"></i></span>
-                                            <span class="message"> 2 items sold</span>
-                                            <span class="time"> 1 hour</span>
-                                        </a>
-                                    </li>
-                                    <li class="warning">
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-danger"><i class="fa fa-user"></i></span>
-                                            <span class="message"> User deleted account</span>
-                                            <span class="time"> 2 hour</span>
-                                        </a>
-                                    </li>
-                                    <li class="warning">
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-danger"><i class="fa fa-shopping-cart"></i></span>
-                                            <span class="message"> Transaction was canceled</span>
-                                            <span class="time"> 6 hour</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-success"><i class="fa fa-comment"></i></span>
-                                            <span class="message"> New comment</span>
-                                            <span class="time"> yesterday</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-primary"><i class="fa fa-user"></i></span>
-                                            <span class="message"> New user registration</span>
-                                            <span class="time"> yesterday</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-primary"><i class="fa fa-user"></i></span>
-                                            <span class="message"> New user registration</span>
-                                            <span class="time"> yesterday</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-success"><i class="fa fa-comment"></i></span>
-                                            <span class="message"> New comment</span>
-                                            <span class="time"> yesterday</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-success"><i class="fa fa-comment"></i></span>
-                                            <span class="message"> New comment</span>
-                                            <span class="time"> yesterday</span>
-                                        </a>
-                                    </li>
+
                                 </ul>
                             </div>
                         </li>
@@ -131,11 +48,104 @@
                         </li>
                     </ul>
                 </li>
+				<!-- start: MESSAGE DROPDOWN -->
+				<li class="dropdown">
+					<a class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown" href="#">
+						<i class="clip-bubble-3"></i>
+						<span class="badge" id="badge"> 0</span>
+					</a>
+					<ul class="dropdown-menu posts">
+						<li>
+							<span class="dropdown-menu-title"> You have 9 messages</span>
+						</li>
+						<li>
+							<div class="drop-down-wrapper" id="message_header">
+								<ul>
+									<!--li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-2.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Nicole Bell</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time"> Just Now</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-1.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Peter Clark</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">2 mins</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-3.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Steven Thompson</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">8 hrs</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-1.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Peter Clark</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">9 hrs</span>
+												</div>
+											</div>
+										</a>
+									</li>
+									<li>
+										<a href="javascript:;">
+											<div class="clearfix">
+												<div class="thread-image">
+													<img alt="" src="assets/images/avatar-5.jpg">
+												</div>
+												<div class="thread-content">
+													<span class="author">Kenneth Ross</span>
+													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
+													<span class="time">14 hrs</span>
+												</div>
+											</div>
+										</a>
+									</li-->
+								</ul>
+							</div>
+						</li>
+						<li class="view-all">
+							<a href="pages_messages.html">
+								See all messages <i class="fa fa-arrow-circle-o-right"></i>
+							</a>
+						</li>
+					</ul>
+				</li>
                 <li class="dropdown current-user">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         @if(\Auth::check())
                             @if((\Auth::user()->user_profile_image != ''))
-                                <img width="30px" height="30px;" src="{{asset(\Auth::user()->user_profile_image)}}" class="circle-img" >
+                                <img width="30px" height="30px;" src="{{ asset('assets/images/user/admin') }}/{{ Auth::user()->user_profile_image }}" class="circle-img" >
                             @else
                                 <img width="30px" height="30px;" src="{{asset('assets/images/user/admin/small/profile.png')}}" class="circle-img" >
                             @endif
@@ -147,7 +157,7 @@
                         <li>
                             @if(\Auth::check())
 
-                                    <a href="{{url('/my/profile')}}">
+                                    <a href="{{url('/profile/my-profile')}}">
                                         <i class="clip-user-2"></i>
                                         &nbsp;My Profile
                                     </a>
@@ -155,14 +165,14 @@
 
                         </li>
                         <li class="divider"></li>
-                        <li>
+                        {{-- <li>
                             @if(\Auth::check())
                                 <a href="{{ url('my/profile?tab=change_password') }}">
                                     <i class="fa fa-lock"></i>
                                     &nbsp;Change Password
                                 </a>
                             @endif
-                        </li>
+                        </li> --}}
                         <li>
                             @if(\Auth::check())
                                 <a href="{{url('auth/logout',isset(\Auth::user()->email) ? \Auth::user()->email : '')}}">
@@ -182,3 +192,11 @@
     </div>
     <!-- end: TOP NAVIGATION CONTAINER -->
 </div>
+
+
+@section('JScript')
+
+
+    <script src="{{ asset('assets/js/bils/common.js')}}"></script>
+
+@endsection

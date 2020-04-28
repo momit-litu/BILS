@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-use App\Settings;
+use App\Setting;
 use App\Menu;
 use Illuminate\Support\ServiceProvider;
 
@@ -22,27 +22,24 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot(){
 		//get the settings data from DB and deliver to master layout
 		view()->composer('layout.master', function($view){
-			$site_settings = Settings::first();
+			$site_settings = Setting::first();
 			$view->with('site_settings',$site_settings);
 		});
 		
 		view()->composer('layout.sidebar', function($view){
-			$menus = Menu::where('parent_id',0)->get();
+			$menus = Menu::where('parent_id',0)->where('status',1)->orderBy('serial_no')->get();
 			$menu_n_submenu_array = array();
 			foreach($menus as $parent_menu){
-
-				$submenus = Menu::where('parent_id',$parent_menu['id'])->get();
+				$submenus = Menu::where('parent_id',$parent_menu['id'])->where('status',1)->orderBy('status','asc')->get();
 				if($submenus->count() >0){
 					$parent_menu['sub_menus'] = $submenus;
 				}
 				$menu_n_submenu_array[] = $parent_menu;
 			}
 			$view->with('menus',$menu_n_submenu_array);
-		});
-		
+		});		
     }
 }

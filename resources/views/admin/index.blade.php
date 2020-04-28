@@ -1,20 +1,29 @@
 @extends('layout.master')
 @section('content')
+	<!--MESSAGE-->
+	<div class="row ">
+		<div class="col-md-10 col-md-offset-1" id="master_message_div">
+		</div>
+	</div>
+	<!--END MESSAGE-->
+
     <!--PAGE CONTENT -->
     <div class="row ">
         <div class="col-sm-12">
             <div class="tabbable">
                 <ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">
                     <li class="active">
-                        <a data-toggle="tab" href="#user_list_div">
+                        <a id="admin_user_list_button" data-toggle="tab" href="#user_list_div">
                            <b> Admin User List</b>
                         </a>
                     </li>
-                    <li class="">
-                        <a data-toggle="tab" href="#entry_form_div">
-                           <b> Add Admin User</b>
-                        </a>
-                    </li>
+                    @if($actions['add_permisiion']>0)
+	                    <li class="">
+	                        <a data-toggle="tab" href="#entry_form_div" id="admin_user_add_button">
+	                           <b> Add Admin User</b>
+	                        </a>
+	                    </li>
+                    @endif
                 </ul>
                 <div class="tab-content">
                     <!-- PANEL FOR OVERVIEW-->
@@ -46,12 +55,13 @@
 									<table class="table table-bordered table-hover admin_user_table" id="admin_user_table" style="width:100% !important"> 
 										<thead>
 											<tr>
-												<th>Photo</th>
-												<th>User ID</th>
-												<th>Name</th>
-												<th>Email </th>
-												<th class="hidden-xs">Status</th>
-												<th>Actions</th>
+												<th width="10%">Photo</th>
+												<th width="5%">ID</th>
+												<th width="20%">Name</th>
+												<th width="20%">Email </th>
+												<th width="20%">Groups </th>
+												<th class="hidden-xs" width="10%">Status</th>
+												<th width="15%">Actions</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -67,12 +77,7 @@
                     <!-- PANEL FOR CHANGE PASSWORD -->
                     <div id="entry_form_div" class="tab-pane in">
                         <div class="row no-margin-row">
-                            <!--ERROR MESSAGE-->
-							<div class="row ">
-								<div class="col-md-12" id="master_message_div">
-								</div>
-							</div>
-							<!--END ERROR MESSAGE-->
+                            
 							
 							<form id="admin_user_form" name="admin_user_form" enctype="multipart/form-data" class="form form-horizontal form-label-left">
 								@csrf
@@ -123,36 +128,38 @@
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Is Active</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
-											<input type="checkbox" id="is_active" name="is_active" checked="checked" class="form-control col-lg-12"/>
+											<input type="checkbox" id="is_active" name="is_active" checked="checked" value="1" class="form-control col-lg-12"/>
 										</div>
 									</div>
 									<br/>
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6">Remarks</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6">Profile Details</label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
 											<textarea rows="2" cols="100" id="remarks" name="remarks" class="form-control col-lg-12"></textarea> 
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >User Group</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Select Group</label>
 										<div id="group_select" class="col-md-10 col-sm-10 col-xs-12"></div>
 									</div>
 									<div class="ln_solid"></div>
 								</div>
 								<div class="col-md-3">
-									<img src="src="{{ url('/') }}/audio/crow.ogg"
-									<?php //echo $activity_url ?>images/no_image.png" width="70%" height="70%" class="img-thumbnail" id="emp_img">
-									<input type="file" name="emp_image_upload" id="emp_image_upload"> 
+									<img src="src" width="70%" height="70%" class="img-thumbnail" id="emp_img">
+									<input type="file" name="user_profile_image" id="user_profile_image"> 
 								</div>
 								</div>
 								<div class="form-group">
+									<input type="hidden" name="id" id="id">
 								<label class="control-label col-md-2 col-sm-2 col-xs-6"></label>
-								<div class="col-md-3 col-sm-3 col-xs-12">
-									<input type="hidden" id="emp_id" name="emp_id" />    
-									<button type="submit" id="save_admin_info" class="btn btn-success">Save</button>                    
-									<button type="button" id="clear_button" class="btn btn-primary">Clear</button>                         
+								<div class="col-md-4 col-sm-4 col-xs-12">
+									
+									
+									<button type="submit" id="save_admin_info" class="btn btn-success save">Save</button>                    
+									<button type="button" id="clear_button" class="btn btn-warning">Clear</button>                        
+									<button type="button" id="cancle_admin_update" class="btn btn-danger hidden">Cancle</button>                        
 								</div>
-								 <div class="col-md-7 col-sm-7 col-xs-12">
+								 <div class="col-md-6 col-sm-6 col-xs-12">
 									<div id="form_submit_error" class="text-center" style="display:none"></div>
 								 </div>
 							</div>
@@ -166,14 +173,22 @@
     </div>
     </div>
     <!--END PAGE CONTENT-->
+
 @endsection
 
 
 @section('JScript')
-<script src="{{ asset('assets/js/bils/admin/user.js')}}"></script>
-<script>
-// save the state of the page in local storage
-</script>
+	<script>
+		var profile_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
+	</script>
+	
+	<script src="{{ asset('assets/js/bils/admin/user.js')}}"></script>
+	
+	<script>
+	// save the state of the page in local storage
+	</script>
+
+
 
 @endsection
 
