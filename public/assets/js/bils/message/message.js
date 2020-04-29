@@ -816,7 +816,7 @@ $(document).ready(function () {
     }
 
     view_app_user = (id) =>{
-	    alert(id)
+	    //alert(id)
     }
 
     edit_message = (id, msg) =>{
@@ -834,7 +834,6 @@ $(document).ready(function () {
 
 
 	loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg, user_category_id){
-	    alert('group')
 
         $('#reply_msg_id').val(null)
         $('#reply_msg').html('')
@@ -1087,9 +1086,178 @@ $(document).ready(function () {
     // Javascript for category message
 
 
-    loadCategoryMessage = () =>{
+    loadCategoryMessage = (user_category_id, number_of_msg) =>{
+        //alert('group')
+
+        $('#reply_msg_id').val(null)
+        $('#reply_msg').html('')
+        $("#search_app_user_group").val("");
+        //event.preventDefault();
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $.ajax({
+            url: url+'/message/load-category-message',
+            type:'POST',
+            data:{
+                category:user_category_id,
+                msg_no:number_of_msg,
+
+            },
+            async:false,
+            success: function(response){
+
+                $('#category_id').val(user_category_id)
+
+                var response = JSON.parse(response);
+
+                var message = response['message'];
+                var app_user_name = response['app_user_name'];
+                var img_id="";
+                var mc;
+                //Messages
+
+                var message_body = "";
+                if(!jQuery.isEmptyObject(message)){
+
+
+                    $.each(message, function(i,message){
+                        $('#msg_group_name').html(message['category_name'])
+
+                        html = "";
+
+                        if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
+                            if(message["replied"]){
+                                html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                            }
+                            html += '<li class="sent_msg">';
+
+                            html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
+
+
+                            if (message["admin_message"]!=null && message["admin_message"]!="") {
+                                tem_msg = "'"+message['admin_message']+"'";
+
+                                html += '<p onclick="edit_message('+message["id"]+','+tem_msg+')"> '+message["admin_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p><br><br><br>';
+
+                            }else{
+                                html+="<br><br>";
+                            }
+
+                            if(message["is_attachment"]==1){
+
+                                if(message["attachment_type"]==1){
+                                    //Image
+                                    html += '<img  class="zoomImg" style="height:150px !important; width:180px !important; border-top-left-radius: 25px !important; border-top-right-radius: 0px !important; border-bottom-left-radius: 20px !important; border-bottom-right-radius: 20px !important;" src="'+msg_image_url+'/'+message["admin_atachment"]+'" alt="">';
+                                    //onclick="zoomImg()"
+                                }
+                                else if(message["attachment_type"]==2){
+                                    //Video
+                                    html +='<video style="float:right" width="280" controls><source src="'+msg_image_url+'/'+message["admin_atachment"]+'" type="video/mp4"></video>';
+                                }
+                                else if(message["attachment_type"]==3){
+                                    //Audio
+                                    html +='<audio controls><source src="'+msg_image_url+'/'+message["admin_atachment"]+'" type="audio/mpeg"></audio>';
+                                }
+                                else{
+                                    //Other Files
+                                    html += '<a href="'+msg_image_url+'/'+message["admin_atachment"]+'" download><p style="word-wrap: break-word;">'+message["admin_atachment"]+'</p></a>';
+                                }
+                            }
+
+                            html += '</li>';
+                            if (message["category_name"]!=null && message["category_name"]!="") {
+                                mc = '<div class="btn btn-xs btn-info disabled" style="font-size:8px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
+                            }
+                            else{
+                                mc = "";
+                            }
+                            html += '<span class="time_date_sent"> '+message["msg_date"]+' '+mc+'</span>';
+
+
+                        }
+                        else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
+
+                            if(message["replied"]){
+                                html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                            }
+                            html += '<li class="receive_msg">';
+                            html += '<img src="http://emilcarlsson.se/assets/mikeross.png" onclick = "showProfile('+message["app_user_id"]+')"  alt="" />';
+
+                            if (message["app_user_message"]!=null && message["app_user_message"]!="") {
+                                //tem_msg = "'"+message['app_user_message']+"'";
+                                tem_msg = "'"+message['app_user_message']+"'";
+
+                                html += '<p> '+message["app_user_message"]+'    <i onclick="reply_message('+message["id"]+','+tem_msg+')" style="font-size:16px" class="fa">&#xf112;</i></p>';
+
+                                //html += "<p>"+message['app_user_message']+"    <i onclick='reply_message("+message['id']+","+tem_msg+")' style='font-size:16px' class='fa'>&#xf112;</i></p>";
+                            }
+                            if( (message["app_user_message"]!=null && message["app_user_message"]!="")&& (message["is_attachment_app_user"]==1) ){
+                                html+="<br>";
+                            }
+
+                            if(message["is_attachment_app_user"]==1){
+                                if(message["attachment_type"]==1){
+                                    //Image
+                                    html += '<img  class="zoomImg" style="height:150px !important; width:180px !important;border-top-left-radius: 25px !important; border-top-right-radius: 0px !important; border-bottom-left-radius: 20px !important; border-bottom-right-radius: 20px !important;" src="'+msg_image_url+'/'+message["app_user_attachment"]+'" alt="">';
+                                    //onclick="zoomImg()"
+                                }
+                                else if(message["attachment_type"]==2){
+                                    //Video
+                                    html +='<video style="float:right" width="280" controls><source src="'+msg_image_url+'/'+message["app_user_attachment"]+'" type="video/mp4"></video>';
+                                }
+                                else if(message["attachment_type"]==3){
+                                    //Audio
+                                    html +='<audio controls><source src="'+msg_image_url+'/'+message["app_user_attachment"]+'" type="audio/mpeg"></audio>';
+                                }
+                                else{
+                                    //Other Files
+                                    html += '<a href="'+msg_image_url+'/'+message["app_user_attachment"]+'" download><p style="word-wrap: break-word;">'+message["app_user_attachment"]+'</p></a>';
+                                }
+
+                            }
+                            html += '<span class="time_date">'+message["msg_date"]+'</span><br><br><br>';
+                            html += '</li>';
+
+                            // 11:01 AM    |    June 9
+
+                        }
+                        message_body = html+message_body;
+
+                    });
+
+                }
+                loadAppUserGroup();
+                $(".message_body").html(message_body);
+                $("#app_user_name").html(app_user_name['category_name']);
+
+                if (app_user_name['user_profile_image']!=null && app_user_name['user_profile_image']!="") {
+                    $("#app_user_image").attr('src', app_user_profile_url+"/"+app_user_name['user_profile_image']);
+                }
+                else{
+                    $("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
+                }
+
+                $("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load Old Message</button>');
+                if (number_of_msg==10) {
+                    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+                }
+            }
+        });
+
+        $(".zoomImg").click(function(){
+            var image_src = $(this).attr('src');
+            $("#modalIMG").modal();
+            $("#load_zoom_img").attr('src',image_src);
+        });
+
+        //set_time_out_fn(user_group_id, number_of_msg);
 
     }
+
 
     $.ajax({
         url: url+"/message/get-message-category",
@@ -1099,7 +1267,7 @@ $(document).ready(function () {
                 var html = '<div class="msg_auto_load">';
                 $.each(response, function(i,row){
 
-                    html+='<li onclick="loadCategoryMessage('+row["id"]+')" class="contact ">';
+                    html+='<li onclick="loadCategoryMessage('+row["id"]+','+number_of_msg+')" class="contact ">';
                     html+='<div class="wrap">';
                     html+='<span class="contact-status online"></span>';
 
@@ -1139,7 +1307,7 @@ $(document).ready(function () {
                         html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
 
                         html+='<div class="meta">';
-                        html+='<p class="name">'+row["category_name"]+'</p>';
+                        html+='<p class="name">'+row["category_name"]+','+number_of_msg+'</p>';
                         //html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
                         html+='</div>';
                         html+='</div>';
