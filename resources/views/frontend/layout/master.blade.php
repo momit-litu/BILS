@@ -326,7 +326,14 @@
 		Animation.init();
 	});
 
-	ajaxPreLoad = () =>{
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+    ajaxPreLoad = () =>{
         $('#load-content').block({
             overlayCSS: {
                 backgroundColor: '#fff'
@@ -443,6 +450,105 @@
 		});
 
 	</script>
+    <script>
+
+        //alert('as')
+        new_message_reload = () =>{
+            setTimeout(function(){
+                newMessages();
+                set_time_out_fn();
+            }, 100000);
+        }
+
+        newMessages =  () => {
+            $.ajax({
+                url: "{{ url('app/')}}/message_notification",
+                type:'GET',
+                async:false,
+                success: function(response){
+
+                    response = JSON.parse(response)
+                    //console.log(response)
+                    html = '';
+                    count = 0;
+                    $.each(response, function (key, value) {
+                        count++;
+                       // alert(value.admin_message)
+
+                        //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+                        html +='<li> ' +
+                            '       <a href="#">' +
+                            '           <div class="clearfix" onclick="viewMessage('+value.id+')">' +
+                            '               <div class="thread-image">' +
+                            '                   <img alt="" src="/assets/images/avatar-3.jpg"> ' +
+                            '               </div> ' +
+                            '               <div class="thread-content"> ' +
+                            '                   <span class="author">BILS</span> ' +
+                            '                   <span class="preview">'+value.admin_message+'</span> ' +
+                            '                   <span class="time">'+value.msg_date+'</span>' +
+                            '               </div> ' +
+                            '           </div>' +
+                            '        </a>' +
+                            '   </li>'
+
+                    })
+                    $('#app_message_badge').html(count)
+                    $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
+                    $('#app_header_new_message').html(html)
+                    //console.log(response)
+
+                }
+            })
+            new_message_reload()
+        }
+        newMessages();
+
+        new_notification_reload = () =>{
+            setTimeout(function(){
+                newNotifications();
+                set_time_out_fn();
+            }, 100000);
+        }
+
+        newNotifications =  () => {
+            $.ajax({
+                url: "{{ url('app/')}}/new_notifications",
+                type:'GET',
+                async:false,
+                success: function(response){
+
+                    response = JSON.parse(response)
+                    //console.log(response)
+                    html = '';
+                    count = 0;
+                    $.each(response, function (key, value) {
+                        count++;
+                        // alert(value.admin_message)
+
+                        //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+                        html +='<li> ' +
+                            '<a href="javascript:void(0)"> ' +
+                            '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
+                            '<span class="message"> '+value.title+'</span> ' +
+                            '<span class="time">'+value.msg_date+'</span> ' +
+                            '</a> ' +
+                            '</li>'
+
+                    })
+                    $('#app_notification_badge').html(count)
+                    $('#app_notification_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
+                    $('#app_header_new_notification').html(html)
+                    //console.log(response)
+
+                }
+            })
+            new_notification_reload()
+        }
+        newNotifications();
+
+    </script>
+
+
 </body>
 <!-- end: BODY -->
 </html>

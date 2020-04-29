@@ -3,20 +3,20 @@
     <div class="container">
 
         <div class="navbar-tools">
-			
+
             <!-- start: TOP NAVIGATION MENU -->
             <ul class="nav navbar-right">
                 <!-- start: NOTIFICATION DROPDOWN -->
 				<li class="">
-					<a class="" href="javascript:void(0)">			
+					<a class="" href="javascript:void(0)">
 					<span class="text-shadow" style="color: #fff"> <i><!--<image src="{{ asset('assets/images/logo.jpg')}}" />--></i>  BILS</span>
 					</a>
 				</li>
 				<li class="dropdown">
 					<a data-toggle="dropdown" data-hover="dropdown" onCLick="loadPage('dashboard-content')" class="dropdown-toggle" data-close-others="true" href="#">
-                        <i class="clip-home"></i>                      
+                        <i class="clip-home"></i>
                     </a>
-					
+
 				</li>
 				<!--
 				<li class="dropdown">
@@ -40,7 +40,7 @@
                 <li class="dropdown">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-notification-2"></i>
-                        <span class="badge notificationCounter" notificationCount="0">0</span>
+                        <span class="badge notificationCounter" notificationCount="0" id="app_notification_badge">0</span>
                     </a>
                     <ul class="dropdown-menu notifications">
                         <li>
@@ -48,15 +48,7 @@
                         </li>
                         <li>
                             <div class="drop-down-wrapper notificationList">
-                                <ul>
-                                    <li>
-                                        <a href="javascript:void(0)">
-                                            <span class="label label-primary"><i class="fa fa-user"></i></span>
-                                            <span class="message"> New user registration</span>
-                                            <span class="time"> 1 min</span>
-                                        </a>
-                                    </li>
-                                    
+                                <ul id="app_header_new_notification">
                                 </ul>
                             </div>
                         </li>
@@ -71,16 +63,16 @@
 				<li class="dropdown">
 					<a class="dropdown-toggle" data-close-others="true" data-hover="dropdown" data-toggle="dropdown" href="#">
 						<i class="clip-bubble-3"></i>
-						<span class="badge"> 9</span>
+						<span class="badge" id="app_message_badge"> 0</span>
 					</a>
 					<ul class="dropdown-menu posts">
 						<li>
-							<span class="dropdown-menu-title">   {{__('app.You_have')}} <span id="total_unseen_message"> 9 </span> {{__('app.messages')}}</span>
+							<span class="dropdown-menu-title" id="app_message_top_unread">   </span>
 						</li>
 						<li>
 							<div class="drop-down-wrapper">
-								<ul>
-									<li>
+								<ul id="app_header_new_message">
+									<!--li>
 										<a href="javascript:;">
 											<div class="clearfix">
 												<div class="thread-image">
@@ -152,7 +144,7 @@
 									</li>
 								</ul>
 							</div>
-						</li>
+						</li-->
 						<li class="view-all">
 							<a onclick="loadPage('message')"   href="javascript:void(0)">
 								{{__('app.See_all_messages')}}   <i class="fa fa-arrow-circle-o-right"></i>
@@ -160,7 +152,7 @@
 						</li>
 					</ul>
 				</li>
-               
+
                 <!-- end: USER DROPDOWN -->
 				<li>
 					<a class="sb-toggle" href="#"><i class="fa fa-outdent"></i></a>
@@ -184,7 +176,7 @@
 
                                    <a class="profile" href="javascript:void(0)" onClick="loadPage('profile')">
                                         <i class="clip-user-2"></i>
-                                        &nbsp;   {{__('app.My_Profile')}} 
+                                        &nbsp;   {{__('app.My_Profile')}}
                                     </a>
                             @endif
 
@@ -202,7 +194,7 @@
                             @if(\Auth::guard('appUser')->check())
 								<a class="profile" href="javascript:void(0)" onClick="loadPage('profile','tab=change_password')">
                                     <i class="fa fa-lock"></i>
-                                    &nbsp;{{__('app.Change_Password')}} 
+                                    &nbsp;{{__('app.Change_Password')}}
                                 </a>
                             @endif
                         </li>
@@ -210,7 +202,7 @@
                             @if(\Auth::guard('appUser')->check())
                                 <a href="{{url('app/auth/logout',isset(\Auth::guard('appUser')->user()->email) ? \Auth::guard('appUser')->user()->email : '')}}">
                                     <i class="clip-exit"></i>
-                                    &nbsp;{{__('app.Log_Out')}} 
+                                    &nbsp;{{__('app.Log_Out')}}
                                 </a>
                             @endif
                         </li>
@@ -223,3 +215,4 @@
     </div>
     <!-- end: TOP NAVIGATION CONTAINER -->
 </div>
+
