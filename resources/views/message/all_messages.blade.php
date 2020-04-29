@@ -86,21 +86,43 @@
 					<div class="wrap">
 						<form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
 							@csrf
-							<div style="width: 90%; float: left;">
+							
+							<div class="input-group">
+								<span class="input-group-btn dropup ">
+									<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
+										<select name="message_category" id="message_category" class="form-control">
+											<option disabled="" selected="" value="">Select Category</option>
+										</select>
+									</div>
+									<!-- Need to use this search field and autosuggest
+									
+									<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
+										<input type="text" placeholder="Search Category" id="form-field-9" class="form-control">
+									</div>-->
+									<!--					
+									<ul class="dropdown-menu">
+										<li>
+											<a href="#">
+												Category 1
+											</a>
+										</li>
+										<li>
+											<a href="#">
+												Category 2
+											</a>
+										</li>
+									</ul>-->
+								</span>
 								<input type="hidden" name="app_user_id" id="app_user_id">
-								<div >
-									<input style="width: 70%" type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
-								 	<select name="message_category" id="message_category" class="form-control" style="width: 30%;border: 0px solid #FFF !important;">
-								 		<option disabled="" selected="" value="">Select Category</option>
-								 	</select>
-								</div>
-							</div>
-							<div style="width: 10%; float: left;">
-								<label for="attachment" class="custom-file-upload">
+								<input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
+								<label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding border-radious-0">
 									<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
 								</label>
-								<input multiple id="attachment" name="attachment[]" type="file"/>
-								<button type="submit" class="submit" id="message_sent_to_user"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+								<input multiple id="attachment" name="attachment[]" type="file"/>								
+								<button class="btn btn-success border-radious-0" type="submit" class="submit" id="message_sent_to_user"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 							</div>
 						</form>
 					</div>
