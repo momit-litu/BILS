@@ -147,20 +147,87 @@
 
 
 <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
-    <div class="modal-dialog" role="document" style="width:100% !important;">
+
         <div class="modal-content">
-            
-                <img id="load_zoom_img" src="" alt="" style="height: 410px;width: 100%;">
+				
+                <img id="load_zoom_img" src="" alt="" style="width:100%; max-height:600px">
             
             <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
         </div>
-    </div>
+
 </div>
 
 
-
+<div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					&times;
+				</button>
+				<h4 class="modal-title">Responsive</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-6">
+						<h4>Some Input</h4>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+					</div>
+					<div class="col-md-6">
+						<h4>Some More Input</h4>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+						<p>
+							<input class="form-control" type="text">
+						</p>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" data-dismiss="modal" class="btn btn-light-grey">
+					Close
+				</button>
+				<button type="button" class="btn btn-blue">
+					Save changes
+				</button>
+			</div>
+		</div>
 
 
 <!-- Profile Modal -->

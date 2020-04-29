@@ -279,7 +279,10 @@ class MessageController extends Controller
                             ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                             ->where('mm.app_user_id',$app_user_id_load_msg)
-                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', DB::raw('group_concat( ma.admin_atachment) AS admin_atachment') , 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
+                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 
+							DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') , 
+							DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
+							'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
                             ->groupBy('id')
 							->orderBy('mm.message_date_time', 'desc')
                             ->limit($number_of_msg)
@@ -547,7 +550,11 @@ class MessageController extends Controller
                     ->where('mm.group_id',$user_group)
                     ->where('mm.message_category',$category_id)
                     ->where('mm.is_group_msg',1)
-                    ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
+                    ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 
+							'mm.admin_message as admin_message','mm.created_at as msg_date', 
+							DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') , 
+							DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
+							'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
                     ->orderBy('mm.message_date_time', 'desc')
                     ->limit($number_of_msg)
                     ->get();
@@ -618,7 +625,11 @@ class MessageController extends Controller
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
             ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
             ->where('mm.message_category',$category_id)
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'ma.admin_atachment as admin_atachment', 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 
+					'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 
+					DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') , 
+					DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
+					'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',  'mc.category_name as category_name')
             ->orderBy('mm.message_date_time', 'desc')
             ->limit($number_of_msg)
             ->get();
