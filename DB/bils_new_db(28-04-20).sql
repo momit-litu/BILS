@@ -29,20 +29,28 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `app_users` (
-  `id` int(11) NOT NULL,
-  `name` varchar(50) DEFAULT NULL,
-  `nid_no` varchar(20) DEFAULT NULL,
-  `contact_no` varchar(20) DEFAULT NULL,
-  `email` varchar(50) DEFAULT NULL,
-  `address` varchar(255) DEFAULT NULL,
-  `password` varchar(50) DEFAULT NULL,
-  `user_profile_image` varchar(50) DEFAULT NULL,
-  `remarks` text,
-  `status` tinyint(4) DEFAULT NULL COMMENT '0: In-active, 1:Active, 2: Deleted',
-  `user_type` int(2) NOT NULL DEFAULT '2' COMMENT '1: Admin user, 2: App User',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+	`id` INT(11) NOT NULL AUTO_INCREMENT,
+	`name` VARCHAR(50) NULL DEFAULT NULL,
+	`nid_no` VARCHAR(20) NULL DEFAULT NULL,
+	`contact_no` VARCHAR(20) NULL DEFAULT NULL,
+	`email` VARCHAR(50) NULL DEFAULT NULL,
+	`address` VARCHAR(255) NULL DEFAULT NULL,
+	`password` VARCHAR(255) NULL DEFAULT NULL,
+	`user_profile_image` VARCHAR(50) NULL DEFAULT NULL,
+	`remarks` TEXT NULL DEFAULT NULL,
+	`remember_token` VARCHAR(100) NULL DEFAULT NULL,
+	`login_status` INT(1) NULL DEFAULT NULL COMMENT '1:logged in, 0 not logged in',
+	`status` TINYINT(4) NULL DEFAULT NULL COMMENT '0: In-active, 1:Active, 2: Deleted',
+	`user_type` INT(2) NOT NULL DEFAULT 2 COMMENT '1: Admin user, 2: App User',
+	`created_at` TIMESTAMP NULL DEFAULT current_timestamp(),
+	`updated_at` TIMESTAMP NULL DEFAULT NULL ON UPDATE current_timestamp(),
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `email` (`email`)
+)
+COLLATE='utf8mb4_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=25
+;
 
 --
 -- Dumping data for table `app_users`
@@ -70,7 +78,7 @@ CREATE TABLE `app_user_group_members` (
   `status` tinyint(1) NOT NULL COMMENT '0 : no access, 1 : access',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `app_user_group_members`
@@ -118,7 +126,7 @@ CREATE TABLE `course_categories` (
   `status` tinyint(1) NOT NULL COMMENT '0: In-active, 1: Active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `course_categories`
@@ -158,7 +166,7 @@ CREATE TABLE `course_masters` (
   `updated_by` varchar(20) DEFAULT '',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `course_masters`
@@ -188,7 +196,7 @@ CREATE TABLE `course_perticipants` (
   `payment_status` tinyint(1) DEFAULT NULL COMMENT '0: Partial-paid, 1:Pais',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `course_perticipants`
@@ -308,7 +316,7 @@ CREATE TABLE `message_attachments` (
   `app_user_attachment` varchar(255) DEFAULT '',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `message_attachments`
@@ -332,7 +340,7 @@ CREATE TABLE `message_categories` (
   `status` tinyint(1) DEFAULT '0' COMMENT '0: In-active, 1: Active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `message_categories`
@@ -367,7 +375,7 @@ CREATE TABLE `message_masters` (
   `status` tinyint(1) DEFAULT NULL COMMENT '0: In-active, 1: Active, 2: Deleted',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `message_masters`
@@ -478,7 +486,7 @@ CREATE TABLE `notices` (
   `updated_by` varchar(20) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `notices`
@@ -501,7 +509,7 @@ CREATE TABLE `notice_categories` (
   `status` tinyint(1) NOT NULL COMMENT '0: In-active, 1: Active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- --------------------------------------------------------
 
@@ -522,7 +530,7 @@ CREATE TABLE `notifications` (
   `status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0: Un-seen, 1: Seen',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='m';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4  COMMENT='m';
 
 --
 -- Dumping data for table `notifications`
@@ -580,7 +588,7 @@ CREATE TABLE `publications` (
   `updated_by` varchar(20) DEFAULT '',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `publications`
@@ -602,7 +610,7 @@ CREATE TABLE `publication_categories` (
   `status` tinyint(1) DEFAULT '0' COMMENT '0: In-active, 1: Active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `publication_categories`
@@ -653,7 +661,7 @@ CREATE TABLE `survey_categories` (
   `status` tinyint(1) DEFAULT '0' COMMENT '0: In-active, 1: Active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_categories`
@@ -676,7 +684,7 @@ CREATE TABLE `survey_groups` (
   `status` tinyint(1) NOT NULL COMMENT '0: In-active, 1: Active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 -- --------------------------------------------------------
 
@@ -698,7 +706,7 @@ CREATE TABLE `survey_masters` (
   `updated_by` int(11) NOT NULL COMMENT 'Admin User ID',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_masters`
@@ -723,7 +731,7 @@ CREATE TABLE `survey_participants` (
   `survey_completed` tinyint(1) DEFAULT NULL COMMENT '0: Not-completed, 1: Completed',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_participants`
@@ -746,7 +754,7 @@ CREATE TABLE `survey_participant_answers` (
   `survey_question_id` int(11) NOT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_participant_answers`
@@ -785,7 +793,7 @@ CREATE TABLE `survey_participant_answer_options` (
   `answer` text,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_participant_answer_options`
@@ -832,7 +840,7 @@ CREATE TABLE `survey_questions` (
   `serial` int(11) DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_questions`
@@ -863,7 +871,7 @@ CREATE TABLE `survey_question_answer_options` (
   `answer_option` varchar(255) NOT NULL DEFAULT '0',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `survey_question_answer_options`
@@ -922,7 +930,7 @@ CREATE TABLE `teachers` (
   `user_profile_image` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `teachers`
@@ -987,7 +995,7 @@ CREATE TABLE `user_groups` (
   `status` int(11) NOT NULL COMMENT '1: Active, 0: In-active',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `user_groups`
@@ -1016,7 +1024,7 @@ CREATE TABLE `user_group_members` (
   `status` tinyint(1) DEFAULT NULL COMMENT '0 : no access, 1 : access',
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `user_group_members`

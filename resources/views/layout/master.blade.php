@@ -89,7 +89,7 @@
     <!-- start: PAGE -->
     <div class="main-content">
         <!-- end: SPANEL CONFIGURATION MODAL FORM -->
-        <div class="container">
+        <div class="container" style="min-height: 650px !important;">
             <!-- start: PAGE HEADER -->
             @include('layout.breadcrumb')
             <!-- end: PAGE HEADER -->

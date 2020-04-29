@@ -111,7 +111,7 @@
 						</li>
 					</ul>-->
 				</span>
-				<textarea id="message_input" class="form-control input-mask-date" placeholder="Type a message here..." rows="1"></textarea>
+				<input type="text" id="message_input" class="form-control input-mask-date" placeholder="Type a message here..."/>
 				<span class="input-group-btn ">
 					<span class="btn btn-file btn-blue btn-custom-side-padding border-radious-0" >
 						<i class="clip-attachment"></i>

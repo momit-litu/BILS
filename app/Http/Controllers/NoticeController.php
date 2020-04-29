@@ -18,23 +18,23 @@ use App\Traits\HasPermission;
 class NoticeController extends Controller
 {
 	use HasPermission;
-	
+
     public function __construct(Request $request)
     {
         $this->page_title = $request->route()->getName();
         $description = \Request::route()->getAction();
         $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
     }
-	
+
     public function noticeManagement(){
     	$data['page_title'] = $this->page_title;
 		$data['module_name']= "Notice";
-		$data['sub_module']= "";	
+		$data['sub_module']= "";
 		//action permissions
 		$admin_user_id 		   = Auth::user()->id;
 		$add_action_id 	   	   = 65;
 		$add_permisiion 	   = $this->PermissionHasOrNot($admin_user_id,$add_action_id );
-		$data['actions']['add_permisiion']= $add_permisiion;	
+		$data['actions']['add_permisiion']= $add_permisiion;
 
         return view('notice.notice_management', $data);
     }
@@ -45,7 +45,7 @@ class NoticeController extends Controller
     }
 
     //Notice Entry And Update
-    public function noticeEntry(Request $request){ 
+    public function noticeEntry(Request $request){
 		$rule = [
             'title' => 'Required|max:200',
             'details' => 'Required',
@@ -69,9 +69,9 @@ class NoticeController extends Controller
 			$notification_title = $request->title;
 			$message = $request->details;
 			/*----- For notification -----*/
-			
-			
-				
+
+
+
 			try{
 				DB::beginTransaction();
 				$status = ($request->is_active =="")?'0':'1';
@@ -81,31 +81,31 @@ class NoticeController extends Controller
 					$column_value = [
 						'title'=>$request->title,
 						'details'=>$request->details,
-						'status'=>$status,	
-						'notice_date'=>$request->notice_date,	
-						'expire_date'=>$request->expire_date,	
-						'created_by'=>$created_by,	
+						'status'=>$status,
+						'notice_date'=>$request->notice_date,
+						'expire_date'=>$request->expire_date,
+						'created_by'=>$created_by,
 					];
 					$response = Notice::create($column_value);
 					$notice_id = $response->id;
 					$view_url = 'notice/'.$notice_id;
 					## Insert Into Notification For Single App User
 					if (isset($app_user_id)&&isset($app_user_name)&&$app_user_id!=""&&$app_user_name!="") {
-						
+
 						$to_id = $app_user_id;
-						
-						
+
+
 						$column_value = [
 							'from_id'=>$from_id,
 							'from_user_type'=>$from_user_type,
-							'to_id'=>$to_id,	
-							'to_user_type'=>$to_user_type,	
-							'notification_title'=>$notification_title,	
+							'to_id'=>$to_id,
+							'to_user_type'=>$to_user_type,
+							'notification_title'=>$notification_title,
 							'message'=>$message,
-							'view_url'=>$view_url,	
+							'view_url'=>$view_url,
 						];
 						$response = Notification::create($column_value);
-						
+
 					}
 					if (isset($app_user_group)&& $app_user_group!="") {
 
@@ -120,11 +120,11 @@ class NoticeController extends Controller
 									$column_value = [
 										'from_id'=>$from_id,
 										'from_user_type'=>$from_user_type,
-										'to_id'=>$to_id,	
-										'to_user_type'=>$to_user_type,	
-										'notification_title'=>$notification_title,	
-										'message'=>$message,	
-										'view_url'=>$view_url,	
+										'to_id'=>$to_id,
+										'to_user_type'=>$to_user_type,
+										'notification_title'=>$notification_title,
+										'message'=>$message,
+										'view_url'=>$view_url,
 									];
 									$response = Notification::create($column_value);
 								}
@@ -144,17 +144,17 @@ class NoticeController extends Controller
 												->where('to_id', $k['app_user_id'])
 												->where('view_url', $view_url)
 												->count();
-									
+
 									if ($old_noti == 0) {
 										$to_id = $k['app_user_id'];
 										$column_value = [
 											'from_id'=>$from_id,
 											'from_user_type'=>$from_user_type,
-											'to_id'=>$to_id,	
-											'to_user_type'=>$to_user_type,	
-											'notification_title'=>$notification_title,	
-											'message'=>$message,	
-											'view_url'=>$view_url,	
+											'to_id'=>$to_id,
+											'to_user_type'=>$to_user_type,
+											'notification_title'=>$notification_title,
+											'message'=>$message,
+											'view_url'=>$view_url,
 										];
 										$response = Notification::create($column_value);
 									}
@@ -168,7 +168,7 @@ class NoticeController extends Controller
 
 
 
-						
+
 
 
 
@@ -219,9 +219,9 @@ class NoticeController extends Controller
 						->orderBy('id','desc')
 						->get();
 		$return_arr = array();
-		foreach($notice_list as $data){		
+		foreach($notice_list as $data){
 			$data['status']=($data->status == 1)?"<button class='btn btn-xs btn-success' disabled>Active</button>":"<button class='btn btn-xs btn-danger' disabled>In-active</button>";
-			
+
 			$data['actions']=" <button title='View' onclick='notice_view(".$data->id.")' id='view_" . $data->id . "' class='btn btn-xs btn-primary admin-user-view' ><i class='clip-zoom-in'></i></button>";
 
 			if($edit_permisiion>0){
@@ -257,7 +257,7 @@ class NoticeController extends Controller
 
 	 public function appUserNameAutoComplete(){
 		$name = $_REQUEST['term'];
-		
+
 		$data = AppUser::select('id', 'name', 'email', 'contact_no')
 				->where('name','like','%'.$name.'%')
 				->orwhere('email','like','%'.$name.'%')
@@ -269,7 +269,7 @@ class NoticeController extends Controller
             foreach ($data as $row) {
                 $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["email"].", ".$row["contact_no"].")" );
             }
-        } 
+        }
         else {
             $json[] = array('id' => "0",'label' => "Not Found !!!");
         }

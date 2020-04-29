@@ -30,15 +30,15 @@
     <link rel="stylesheet" href="{{ asset('assets/css/theme_navy.css') }}" type="text/css" id="skin_color">
     <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}" type="text/css" media="print"/>
     <!--[if IE 7]>
-	
-	
-	
+
+
+
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome-ie7.min.css') }}">
     <![endif]-->
     <!-- end: MAIN CSS -->
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
+
     <!--SweetalertCSS-->
     <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert/sweetalert2.min.css')}}" type="text/css" />
     <!-- Form elements-->
@@ -57,10 +57,10 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.jgrowl.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-ui.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.min.css') }}"/>
-    
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">-->
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
 	  <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
@@ -117,7 +117,7 @@
 				</div>-->
 				<!-- /.modal -->
 				<!-- end: SPANEL CONFIGURATION MODAL FORM -->
-				<div class="container padding-left-0 padding-right-0">					
+				<div class="container padding-left-0 padding-right-0">
 					@yield('content')
 				</div>
 			</div>
@@ -203,7 +203,7 @@
 										</div>
 									</a>
 								</li>
-								
+
 							</ul>
 						</div>
 					</div>
@@ -218,7 +218,7 @@
 									</label>
 								</div>
 							</li>
-		
+
 						</ul>
 						<div class="sidebar-content">
 							<button class="btn btn-success">
@@ -326,15 +326,29 @@
 		Animation.init();
 	});
 
+	ajaxPreLoad = () =>{
+        $('#load-content').block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            css: {
+                border: 'none',
+                color: '#333',
+                background: 'none'
+            }
+        });
+    }
+
 	loadpageFunctionality = function loadpageFunctionality(){
 
 		Main.init();
-		//loadPage();	
+		//loadPage();
 		$('.hometab').on('click', function (){
 			page = $(this).attr('id');
 			loadPage(page)
 		})
-			
+
 		if($(".sb-toggle").hasClass("open")) {
 			$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
 			$(".sb-toggle").removeClass("open")
@@ -343,9 +357,9 @@
 			});
 		}
 		//alert('before  height');
-		
-	}	
-	
+
+	}
+
 
 // page name: message notice course survey publication notification
     loadPage = function loadPage(pageName) {
@@ -358,18 +372,8 @@
 			contentType: false,
 			processData: false,
 			beforeSend: function( xhr ) {
+                ajaxPreLoad()
 				//$("#load-content").fadeOut('slow');
-				$('#load-content').block({
-					overlayCSS: {
-						backgroundColor: '#fff'
-					},
-					message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
-					css: {
-						border: 'none',
-						color: '#333',
-						background: 'none'
-					}
-				});
 			},
 			success: function (data) {
 				$("#load-content").html(data);
@@ -381,7 +385,7 @@
 				}
 				$('#load-content').unblock();
 				$("#load-content").fadeIn('slow');
-				
+
 				loadpageFunctionality();
 			},
 			error: function (xhr, textStatus, errorThrown) {
@@ -414,8 +418,8 @@
 			}
 			e.preventDefault();
 		});
-		
-		
+
+
 		$("#page-sidebar .media a").on("click", function(e) {
 			//alert($("#page-sidebar").outerWidth())
 			$(this).closest(".tab-pane").css({
@@ -434,7 +438,7 @@
 			minScrollbarLength: 20,
 			suppressScrollX: true
 		});
-		$('#sidebar-tab a').on('shown.bs.tab', function (e) {		 
+		$('#sidebar-tab a').on('shown.bs.tab', function (e) {
 			$("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
 		});
 

@@ -4907,3 +4907,7 @@ td.column-right {
 	transition: opacity 0.15s linear 0s !important;
 }
 .required{color:red !important; font-weight:bold}
+
+.margin-bottom-0{
+	margin-bottom:0;
+}

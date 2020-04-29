@@ -41,31 +41,31 @@
 <!-- end: HEAD -->
 <!-- start: BODY -->
 <body class="login example1">
-<div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3" style="margin:20px;">
-   <div class="logo text-center" style="color: #fff">
+<div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
+    <div class="logo text-center" style="color: #fff">
        <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>
-	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies</h5>
+	   <h3 class="text-shadow">Bangladesh Institute of Labour Studies</h3>
     </div>
     <!-- start: LOGIN BOX -->
 	<div class="box-login">
-		<div class="btn-group pull-right">
-			<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
-				<span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu">
-				<li>
-					<a href="{{url('/app/language/bn')}}">
-						EN
-					</a>
-				</li>
-				<li>
-					<a href="{{url('/app/language/bn')}}">
-						BN
-					</a>
-				</li>
-			</ul>
-		</div>
-		@yield('login-content')
+	<div class="btn-group pull-right">
+		<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li>
+				<a href="{{url('/app/language/bn')}}">
+					EN
+				</a>
+			</li>
+			<li>
+				<a href="{{url('/app/language/bn')}}">
+					BN
+				</a>
+			</li>
+		</ul>
+	</div>
+	@yield('login-content')
 	</div>
 
     <!-- end: LOGIN BOX -->
@@ -76,7 +76,7 @@
     <!-- end: REGISTER BOX -->
     <!-- start: COPYRIGHT -->
     <div class="copyright">
-        <span style="color: #fff; font-size:8px">&copy; Copyright {{date('Y')}} by BILS. Developed by Mbrothers Solution</span> 
+        <span style="color: #fff">&copy; Copyright {{date('Y')}} by BILS. Developed by</span> <a href="mbrotherssolution.com/" target="_blank">Mbrothers Solution</a>
     </div>
     <!-- end: COPYRIGHT -->
 </div>
