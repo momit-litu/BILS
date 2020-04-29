@@ -9,7 +9,6 @@
 		@if($errors->count() > 0 )
 			<div class="alert alert-danger btn-squared">
 				<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-				<h6>ERROR:</h6>
 				<ul>
 					@foreach( $errors->all() as $message )
 						<li>{{ $message }}</li>
