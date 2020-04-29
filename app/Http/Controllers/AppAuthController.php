@@ -82,20 +82,13 @@ class AppAuthController extends Controller
             'password'=>$request->input('password'),
             'status'=> "1"
         ];
-		dd($credentials);
+
         if (\Auth::guard('appUser')->attempt($credentials)) {
-		
+			
             \Session::put('email', Auth::guard('appUser')->user()->email);
             \Session::put('last_login', Auth::guard('appUser')->user()->last_login);
-            if (\Session::has('pre_login_url') ) {
-                $url = \Session::get('pre_login_url');
-                \Session::forget('pre_login_url');
-                return redirect($url);
-            }else {	
-                \App\AppUser::LogInStatusUpdate(1);
-                return redirect('dashboard');
-            }
-
+			$status_upadated = \App\AppUser::LogInStatusUpdate(1);
+			return redirect('app/dashboard');
         } else {
             return redirect('app/auth/login')
                 ->with('errormessage', __('auth.Incorrect_combinations') );
@@ -179,13 +172,14 @@ class AppAuthController extends Controller
         );
 		//dd($registration);
         try {
+			//echo "FUCK uu";die;
             $registration = \DB::table('app_users')->insert($registration);
             if ($registration) {
                 return redirect('app/auth/login')->with('message',__('auth.successfully_registered'));
             }
         } catch(\Exception $e) {
             $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();
-            return redirect('app/auth/reghister')->with('errormessage',__('auth.Registration_faild') );
+            return redirect('app/auth/register')->with('errormessage',__('auth.Registration_faild') );
         }
     }
 

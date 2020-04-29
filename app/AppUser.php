@@ -31,9 +31,9 @@ class AppUser extends Authenticatable
      */
 
     public static function LogInStatusUpdate($status)
-    {
+    {	
 		$loginstatuschange = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email )->update(array('login_status'=>$status));
 		return $loginstatuschange;
-		return 1;        
+		//return 1;        
     }
 }
