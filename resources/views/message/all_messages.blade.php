@@ -61,7 +61,6 @@
 					<a onclick="showProfile()" style="cursor:pointer; text-decoration: none;" id="app_user_name"></a>
 					<div class="social-media">
 						<div id="load_more_message">
-
 						</div>
 					</div>
 				</div>
@@ -70,16 +69,6 @@
 						<div class="message_body">
 
 						</div>
-						{{-- <li class="sent">
-						<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-						<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-						</li>
-
-						<li class="replies">
-						<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-						<p>When you're backed against the wall, break the god damn thing down.</p>
-						</li> --}}
-
 					</ul>
 				</div>
 				<div class="message-input">
@@ -92,29 +81,39 @@
 									<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
 										<span class="caret"></span>
 									</button>
-									<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
-										<select name="message_category" id="message_category" class="form-control">
+									<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">								
+										Category/Topic: &nbsp; <select name="message_category" id="message_category" style="min-width:150px">
 											<option disabled="" selected="" value="">Select Category</option>
 										</select>
+										<!--<div class="form-group">
+											<label for="form-field-select-3">
+												Select 2
+											</label>
+											<select id="form-field-select-3" class="form-control search-select">
+												<option value="">&nbsp;</option>
+												<option value="AL">Alabama</option>
+												<option value="AK">Alaska</option>
+												<option value="AZ">Arizona</option>
+												<option value="AR">Arkansas</option>
+												<option value="CA">California</option>
+												<option value="CO">Colorado</option>
+												<option value="CT">Connecticut</option>
+												<option value="DE">Delaware</option>
+												<option value="FL">Florida</option>
+												<option value="GA">Georgia</option>
+												<option value="HI">Hawaii</option>
+												<option value="ID">Idaho</option>
+												<option value="IL">Illinois</option>
+												<option value="IN">Indiana</option>
+												<option value="IA">Iowa</option>
+												<option value="KS">Kansas</option>
+												<option value="KY">Kentucky</option>
+												<option value="LA">Louisiana</option>
+												<option value="ME">Maine</option>
+												<option value="MD">Maryland</option>
+											</select>
+										</div>-->
 									</div>
-									<!-- Need to use this search field and autosuggest
-									
-									<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
-										<input type="text" placeholder="Search Category" id="form-field-9" class="form-control">
-									</div>-->
-									<!--					
-									<ul class="dropdown-menu">
-										<li>
-											<a href="#">
-												Category 1
-											</a>
-										</li>
-										<li>
-											<a href="#">
-												Category 2
-											</a>
-										</li>
-									</ul>-->
 								</span>
 								<input type="hidden" name="app_user_id" id="app_user_id">
 								<input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
@@ -204,6 +203,14 @@
 		var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 		var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 		var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
+		var admin_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
+		
+		$("select.search-select").select2({
+           /* placeholder: "Select a State",*/
+            allowClear: true
+        });
+    
+		
 	</script>
 	
 	<script src="{{ asset('assets/js/bils/message/message.js')}}"></script>
