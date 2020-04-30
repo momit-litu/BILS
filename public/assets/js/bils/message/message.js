@@ -197,13 +197,14 @@ $(document).ready(function () {
 					$.each(app_user, function(i,row){
 						html+='<li onclick="loadMessage('+row["app_user_id"]+','+number_of_msg+')" class="contact ">';
 						html+='<div class="wrap">';
-						html+='<span class="contact-status online"></span>';
+						
 						if (row["user_profile_image"]!=null && row["user_profile_image"]!="") {
 							html+='<img src="'+app_user_profile_url+'/'+row["user_profile_image"]+'" alt="" />';
 						}
 						else{
 							html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
 						}
+						
 						html+='<div class="meta">';
 						html+='<p class="name">'+row["name"]+'</p>';
 						//html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
@@ -264,7 +265,9 @@ $(document).ready(function () {
 						if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
 							html += '<li class="sent_msg">';
 
-							html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
+							if($.trim(message['admin_image']) == "null" || $.trim(message['admin_image']) == ""  ) admin_image = "no-user-image.png";
+							else  									 	admin_image = message['admin_image'];
+							html += '<img style="width:25px;height:25px; cursor:pointer" title="'+message['admin_name']+'" src="'+admin_image_url+"/"+admin_image+'" alt="" />';
 
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
 								html += '<p>'+message["admin_message"]+'</p><br><br><br>';
@@ -273,13 +276,22 @@ $(document).ready(function () {
 							}
 							if(message["is_attachment"]==1){
 								attachements = message["admin_atachment"].split(',');
+								var old_type = "";
 								for(var i=0; i<attachements.length; i++){
 									var att_type 		= (attachements[i].split("*"));
 									var attachment_type = att_type[1];
 									var attachment_name	= att_type[0];
+									line_break = "";
+									if(old_type !=  attachment_type){
+										old_type = attachment_type;
+									}
+									if(i!=0 && old_type !=  attachment_type){
+										line_break = "<br>";
+									}
+									
 									if(attachment_type==1){
 										//Image
-										html += '<img  class="zoomImg" style="height:80px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
+										html += line_break+'<img  class="zoomImg" style="height:80px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
 									 //onclick="zoomImg()"
 									}
 									else if(attachment_type==2){
@@ -307,8 +319,11 @@ $(document).ready(function () {
 						}
 						else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
 							html += '<li class="receive_msg">';
-							html += '<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />';
-
+							
+							if($.trim(message['user_profile_image']) == "null" || $.trim(message['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
+							else  									 	appuser_image = message['user_profile_image'];
+							html += '<img style="width:25px;height:25px;"  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
+							
 							if (message["app_user_message"]!=null && message["app_user_message"]!="") {
 								html += '<p>'+message["app_user_message"]+'</p>';
 							}
@@ -363,7 +378,7 @@ $(document).ready(function () {
 					$("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
 				}
 
-				$("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load Old Message</button>');
+				$("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
 				$("#app_user_id").val(app_user_name['id']);
 				if (number_of_msg==10) {
 					$(".messages").animate({ scrollTop: $(document).height() }, "fast");
@@ -384,7 +399,7 @@ $(document).ready(function () {
 
 
 	searchAppUsers = function searchAppUsers(){
-		event.preventDefault();
+		//event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -405,15 +420,15 @@ $(document).ready(function () {
 						$.each(app_users, function(i,row){
 							html+='<li class="contact">';
 							html+='<div class="wrap">';
-							//html+='<span class="contact-status busy"></span>';
-							html+='<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
+							if($.trim(row['user_profile_image']) == "null" || $.trim(row['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
+							else  				appuser_image = row['user_profile_image'];
+							html += '<img  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
 							html+='<div class="meta">';
 							html+='<p onclick="loadMessage('+row["id"]+','+number_of_msg+')" class="name">'+row["name"]+'</p>';
 							//html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
 							html+='</div>';
 							html+='</div>';
 							html+='</li>';
-
 						});
 					}
 				$("#app_user_show").html(html);
@@ -598,12 +613,20 @@ $(document).ready(function () {
 			url: url+"/message/get-message-category",
 			success: function(response){
 				var data = JSON.parse(response);
-				var option = "";
+				var option = '<option value="">&nbsp;</option>';
 				$.each(data, function(i,data){
 					option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
 				});
 				$("#message_category").append(option)
                 $('#message_category_group').html(option)
+				$("#message_category_group").select2({
+				    placeholder: "Categoty/Topic",
+					allowClear: true
+				});
+				$("#message_category").select2({
+				    placeholder: "Categoty/Topic",
+					allowClear: true
+				});
 			}
 		});
 
@@ -669,18 +692,10 @@ $(document).ready(function () {
 					    if($('#group_msg_group_id').val() == null){
                             $('#group_msg_group_id').val(row["id"])
                         }
-						html+='<li onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="contact ">';
+						html+='<li onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="contact border-bottom-message">';
 						html+='<div class="wrap">';
-						html+='<span class="contact-status online"></span>';
-						if (row["user_profile_image"]!=null && row["user_profile_image"]!="") {
-							html+='<img src="'+app_user_profile_url+'/'+row["user_profile_image"]+'" alt="" />';
-						}
-						else{
-							html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
-						}
 						html+='<div class="meta">';
-						html+='<p class="name">'+row["group_name"]+'</p>';
-						//html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
+						html+='<p class="name">'+row["group_name"]+'</p>';						
 						html+='</div>';
 						html+='</div>';
 						html+='</li>';
@@ -715,10 +730,9 @@ $(document).ready(function () {
 					if(!jQuery.isEmptyObject(app_users)){
 						var html = "";
 						$.each(app_users, function(i,row){
-							html+='<li class="contact">';
+							html+='<li class="contact border-bottom-message">';
 							html+='<div class="wrap">';
 							//html+='<span class="contact-status busy"></span>';
-							html+='<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
 							html+='<div class="meta">';
 							html+='<p onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="name">'+row["group_name"]+'</p>';
 							//html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
@@ -854,11 +868,8 @@ $(document).ready(function () {
 				var img_id="";
 				var mc;
 				//Messages
-
 				var message_body = "";
 				if(!jQuery.isEmptyObject(message)){
-
-
 					$.each(message, function(i,message){
                         $('#msg_group_name').html(message['category_name'])
 
@@ -870,8 +881,10 @@ $(document).ready(function () {
                             }
 						    html += '<li class="sent_msg">';
 
-							html += '<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />';
+							if($.trim(message['admin_image']) == "null" || $.trim(message['admin_image']) == ""  ) admin_image = "no-user-image.png";
+							else  									 	admin_image = message['admin_image'];
 
+							html += '<img style="width:25px;height:25px; cursor:pointer" title="'+message['admin_name']+'" src="'+admin_image_url+"/"+admin_image+'" alt="" />';
 
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
 							    tem_msg = "'"+message['admin_message']+"'";
@@ -986,7 +999,7 @@ $(document).ready(function () {
 					$("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
 				}
 
-				$("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load Old Message</button>');
+				$("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
 				if (number_of_msg==10) {
 					$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 				}
@@ -1242,7 +1255,7 @@ $(document).ready(function () {
                     $("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
                 }
 
-                $("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load Old Message</button>');
+                $("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
                 if (number_of_msg==10) {
                     $(".messages").animate({ scrollTop: $(document).height() }, "fast");
                 }
@@ -1270,7 +1283,7 @@ $(document).ready(function () {
 
                     html+='<li onclick="loadCategoryMessage('+row["id"]+','+number_of_msg+')" class="contact ">';
                     html+='<div class="wrap">';
-                    html+='<span class="contact-status online"></span>';
+                    
 
                     html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
 
@@ -1303,7 +1316,7 @@ $(document).ready(function () {
 
                         html+='<li onclick="loadCategoryMessage('+row["id"]+')" class="contact ">';
                         html+='<div class="wrap">';
-                        html+='<span class="contact-status online"></span>';
+                        
 
                         html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
 

@@ -57,34 +57,65 @@
 @endsection
 
 @section('content')
-
 	<div class="col-md-12" style="padding: 0;">
 		<div id="frame">
 			<div class="content">
 				<div class="contact-profile">
 					<!--img id="app_user_image" src="" alt="" /-->
-					<h4 class="text-capitalize" id="msg_group_name"></h4> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
+					<p style="font-weight:bold;	padding-left:5px;" id="msg_group_name"></p> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
 					<input type="hidden" id="app_user_id_profile">
                     <input type="hidden" id="group_msg_group_id">
-                    <div class="social-media">
+                    <div class="pull-right">
+						<div class=" padding-5" style="padding:0px  10px">
+							Category/Topic
+							<select class="" id="message_category_group" style="min-width:150px">
+							</select>
+						</div>
+					</div>
+					<div class="social-media pull-right">
 						<div id="load_more_message">
 
 						</div>
 					</div>
+					
 				</div>
 				<div class="messages">
 					<ul style="padding-left: 0;">
 						<div class="message_body">
 
 						</div>
-
-
 					</ul>
 				</div>
 				<div class="message-input">
 					<div class="wrap">
 						<form id="sent_message_to_group" name="sent_message_to_group" enctype="multipart/form-data" class="form form-horizontal form-label-left">
 							@csrf
+							<div class="input-group">
+							
+								<input type="hidden" name="group_id" id="group_id">
+								<input type="hidden" id="reply_msg_id" name="reply_msg_id">
+								<input type="hidden" id="edit_msg_id" name="edit_msg_id">
+								<p id="reply_msg" name="reply_msg"></p>
+								<span class="input-group-btn dropup ">
+									<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
+										<span class="caret"></span>
+									</button>
+									<div class="dropdown-menu dropdown-enduring dropdown-checkboxes"   >
+										Category/Topic: &nbsp; <select name="message_category" id="message_category" style="min-width:150px">
+											
+										</select>
+									</div>
+								</span>
+								<input type="hidden" name="app_user_id" id="app_user_id">
+								<input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
+								<label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding border-radious-0">
+									<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+								</label>
+								<input multiple id="group_msg_attachment" name="group_msg_attachment[]" type="file"/>								
+								<button class="btn btn-success border-radious-0" type="submit" class="submit" id="message_sent_to_group"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+							</div>
+							
+							<!--
 							<div style="width: 90%; float: left;">
 								<input type="hidden" name="group_id" id="group_id">
 								<div >
@@ -101,7 +132,7 @@
                                 <input type="hidden" name="category_id" id="category_id">
                                 <input multiple id="group_msg_attachment" name="group_msg_attachment[]" type="file"/>
 								<button type="submit" class="submit" id="message_sent_to_group"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-							</div>
+							</div>-->
 						</form>
 					</div>
 				</div>
@@ -117,10 +148,6 @@
 					</div>
 				</div>
                 <div>
-                    <label for="inputState">Category</label>
-                    <select id="message_category_group" value="1" class="form-control">
-
-                    </select>
                 </div>
 				<div id="search">
 
@@ -130,10 +157,7 @@
 				<div id="contacts">
 					<ul style="list-style-type: none; padding: 0;">
 						<div id="app_user_group_show">
-
 						</div>
-
-
 					</ul>
 				</div>
 				<div id="bottom-bar">
@@ -153,6 +177,7 @@
 		var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 		var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 		var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
+		var admin_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
 	</script>
 
 	<script src="{{ asset('assets/js/bils/message/message.js')}}"></script>
