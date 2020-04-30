@@ -4911,3 +4911,10 @@ td.column-right {
 .margin-bottom-0{
 	margin-bottom:0;
 }
+
+.padding-5{
+	padding:5px;
+}
+.margin-left-2{margin-left:2px !important;}
+.margin-right-2{margin-right:2px  !important;}
+
