@@ -128,5 +128,5 @@
 
 
     <script src="{{ asset('assets/js/bils/common.js')}}"></script>
-
+    <script src="{{ asset('assets/js/bils/header.js')}}"></script>
 @endsection
