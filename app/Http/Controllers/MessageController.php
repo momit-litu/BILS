@@ -269,17 +269,21 @@ class MessageController extends Controller
                             ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                             ->where('mm.app_user_id',$app_user_id_load_msg)
-                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', DB::raw('group_concat( ma.admin_atachment) AS admin_atachment') , 'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'ma.app_user_attachment as app_user_attachment', 'mc.category_name as category_name')
+                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 
+							DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') , 
+							DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
+							'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
                             ->groupBy('id')
 							->orderBy('mm.message_date_time', 'desc')
                             ->limit($number_of_msg)
                             ->toSql();die;*/
         $message = DB::table('message_masters as mm')
                             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+							->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
                             ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                             ->where('mm.app_user_id',$app_user_id_load_msg)
-                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 
+                            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date', 
 							DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') , 
 							DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
 							'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
@@ -303,7 +307,7 @@ class MessageController extends Controller
     ##Search APP Users
     public function searchAppUsers(){
         $search_app_user_name = $_POST['name'];
-        $app_users = AppUser::select('id', 'name')
+        $app_users = AppUser::select('id', 'name','user_profile_image')
                     ->where('name','like', '%'.$search_app_user_name.'%')
                     ->orwhere('contact_no','like', '%'.$search_app_user_name.'%')
                     ->orwhere('email','like', '%'.$search_app_user_name.'%')
@@ -434,7 +438,7 @@ class MessageController extends Controller
     public function searchAppUsersGroup(){
         $group_name = $_POST['group_name'];
         $app_users = UserGroup::select('id', 'group_name')
-                    ->where('category_name','like', '%'.$group_name.'%')
+                    ->where('group_name','like', '%'.$group_name.'%')
                     ->get();
         return json_encode($app_users);
     }
@@ -447,7 +451,7 @@ class MessageController extends Controller
         }
 	    //return $r->group_id;
         $group_id = $r->group_id;
-        $category_id = $r->category_id;
+        $category_id = $r->message_category;
         $admin_message = $r->admin_message;
         //$message_category = $r->message_category;
         $admin_id = Auth::user()->id;
@@ -544,13 +548,14 @@ class MessageController extends Controller
         }
         $message = DB::table('message_masters as mm')
                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+					->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
                     ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                     ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                     ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
                     ->where('mm.group_id',$user_group)
                     ->where('mm.message_category',$category_id)
                     ->where('mm.is_group_msg',1)
-                    ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 
+                    ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image',  'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 
 							'mm.admin_message as admin_message','mm.created_at as msg_date', 
 							DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') , 
 							DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,

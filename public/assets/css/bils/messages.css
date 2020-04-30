@@ -379,7 +379,7 @@ input[type="file"] {
 }
 #frame #sidepanel #contacts ul li.contact {
   position: relative;
-  padding: 10px 0 15px 0;
+  padding: 5px 0 5px 0;
   font-size: 0.9em;
   cursor: pointer;
 }
@@ -390,6 +390,9 @@ input[type="file"] {
 }
 #frame #sidepanel #contacts ul li.contact:hover {
   background: #506881;
+}
+#frame #sidepanel #contacts ul li.border-bottom-message{
+	border-bottom: 1px solid #636f7a !important;
 }
 #frame #sidepanel #contacts ul li.contact.active {
   background: #53677B;
@@ -428,8 +431,8 @@ input[type="file"] {
   background: #e74c3c;
 }
 #frame #sidepanel #contacts ul li.contact .wrap img {
-  width: 35px;
-  height: 35px !important;
+  width: 25px;
+  height: 25px !important;
   border-radius: 50%;
   float: left;
   margin-right: 10px;
@@ -684,3 +687,17 @@ input[type="file"] {
 #frame .content .message-input .wrap button:focus {
   outline: none;
 }
+
+.admin-image{
+	
+}
+
+.app-user-image{
+	width:40px !important;
+	height:40px !important;
+}
+
+.padding-5{
+	padding:5px;
+}
+
