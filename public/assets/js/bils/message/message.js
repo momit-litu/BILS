@@ -270,11 +270,12 @@ $(document).ready(function () {
 							html += '<img style="width:25px;height:25px; cursor:pointer" title="'+message['admin_name']+'" src="'+admin_image_url+"/"+admin_image+'" alt="" />';
 
 							if (message["admin_message"]!=null && message["admin_message"]!="") {
-								html += '<p>'+message["admin_message"]+'</p><br><br><br>';
+								html += '<p class="right">'+message["admin_message"]+'</p><br><br><br>';
 							}else{
-								html+="<br><br>";
+								html+="";
 							}
 							if(message["is_attachment"]==1){
+								html+="<div class='attachment_div'>";
 								attachements = message["admin_atachment"].split(',');
 								var old_type = "";
 								for(var i=0; i<attachements.length; i++){
@@ -296,26 +297,27 @@ $(document).ready(function () {
 									}
 									else if(attachment_type==2){
 										//Video
-										html +='<div class="row pull-right text-right"><video style="float:right" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+										html +='<div class="row pull-right text-right"><video style="float:right;margin-right:10px;" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
 									}
 									else if(attachment_type==3){
 										//Audio
-										html +='<div class="row pull-right text-right"><audio controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
+										html +='<div class="row pull-right text-right"><audio style="float:right;margin-right:10px;" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
 									}
 									else{
 										//Other Files
-										html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><p style="word-wrap: break-word;">'+message["admin_atachment"]+'</p></a>';
+										html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><p class="right" style="word-wrap: break-word;">'+message["admin_atachment"]+'</p></a>';
 									}
 								}
+								html+="</div>";
 							}
 							html += '</li>';
 							if (message["category_name"]!=null && message["category_name"]!="") {
-								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:8px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
+								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
 							}
 							else{
 								mc = "";
 							}
-							html += '<span class="time_date_sent"> '+message["msg_date"]+' '+mc+'</span>';
+							html += '<span class="time_date_sent">'+mc+' '+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage()" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage()" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
 						}
 						else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
 							html += '<li class="receive_msg">';
@@ -325,12 +327,13 @@ $(document).ready(function () {
 							html += '<img style="width:25px;height:25px;"  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
 							
 							if (message["app_user_message"]!=null && message["app_user_message"]!="") {
-								html += '<p>'+message["app_user_message"]+'</p>';
+								html += '<p class="left">'+message["app_user_message"]+'</p><br>';
 							}
 							if( (message["app_user_message"]!=null && message["app_user_message"]!="")&& (message["is_attachment_app_user"]==1) ){
-								html+="<br>";
+								html+="";
 							}
 							if(message["is_attachment_app_user"]==1){
+								html+="<div class='attachment_div' style=' display: inline-block;  padding:10px 15px 10px 40px;  max-width: 80%;  line-height: 130%;'>";
 								attachements = message["app_user_attachment"].split(',');
 								for(var i=0; i<attachements.length; i++){
 									var att_type 		= (attachements[i].split("*"));
@@ -344,19 +347,31 @@ $(document).ready(function () {
 									}
 									else if(message["attachment_type"]==2){
 										//Video
-										html +='<div class="row text-left"><video style="float:left" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+										html +='<div class="row text-left"><video style="float:left; margin-left:10px" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
 									}
 									else if(message["attachment_type"]==3){
 										//Audio
-										html +='<div class="row text-left"><audio style="float:left" width="280"  controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
+										html +='<div class="row text-left"><audio style="float:left; margin-left:10px" width="280"  controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
 									}
 									else{
 										//Other Files
-										html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><p style="word-wrap: break-word;">'+attachment_name+'</p></a>';
+										html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><p class="left" style="word-wrap: break-word;">'+attachment_name+'</p></a>';
 									}
 								}
+								html+="</div>";
 							}
-							html += '<span class="time_date">'+message["msg_date"]+'</span>';
+							
+							if (message["category_name"]!=null && message["category_name"]!="") {
+								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
+							}
+							else{
+								mc = "";
+							}
+							 
+							html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage()" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+' '+mc+'</span>';
+							
+							
+							
 							html += '</li>';
 
 							// 11:01 AM    |    June 9
@@ -923,7 +938,7 @@ $(document).ready(function () {
 
 							html += '</li>';
 							if (message["category_name"]!=null && message["category_name"]!="") {
-								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:8px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
+								mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
 							}
 							else{
 								mc = "";
@@ -1178,7 +1193,7 @@ $(document).ready(function () {
 
                             html += '</li>';
                             if (message["category_name"]!=null && message["category_name"]!="") {
-                                mc = '<div class="btn btn-xs btn-info disabled" style="font-size:8px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
+                                mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
                             }
                             else{
                                 mc = "";
