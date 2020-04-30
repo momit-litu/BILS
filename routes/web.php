@@ -46,6 +46,7 @@ Route::group(['middleware'=>'appUser'], function() {
 
 	Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
     Route::get('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
+    Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
     Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
 
 
@@ -228,7 +229,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/load-app-user',array('as'=>'Load App User', 'uses' =>'MessageController@loadAppUser'));
 	##Load Messages for one-to-one Chat
 	Route::post('/message/load-message',array('as'=>'Load Message', 'uses' =>'MessageController@loadMessage'));
-	##Search App Users
+    Route::get('/message/delete-message/{id}',array('as'=>'Load Message', 'uses' =>'MessageController@deleteMessage'));
+
+    ##Search App Users
 	Route::post('/message/search-app-users',array('as'=>'Search App Users', 'uses' =>'MessageController@searchAppUsers'));
 
 	##Sent message to user
