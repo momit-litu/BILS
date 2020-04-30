@@ -83,7 +83,7 @@
 					</p>
 				</div>
 			</li>
-			
+
 		</ol>
 	<div class="ps-scrollbar-x-rail" style="width: 323px; display: none; left: 0px; bottom: -263px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 266px; height: 460px; display: inherit; right: 3px;"><div class="ps-scrollbar-y" style="top: 169px; height: 291px;"></div></div></div>
 	<div class="col-sm-12 padding-left-0 padding-right-0">
@@ -93,11 +93,11 @@
 					<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
 						<span class="caret"></span>
 					</button>
-					
+
 					<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
 						<input type="text" placeholder="Search Category" id="form-field-9" class="form-control">
 					</div>
-					<!--					
+					<!--
 					<ul class="dropdown-menu">
 						<li>
 							<a href="#">
@@ -121,7 +121,7 @@
 				<span class="input-group-btn ">
 					<button class="btn btn-green border-radious-0" id="message_sent_button" type="button">
 						<i class="clip-paperplane "></i>
-					</button> 
+					</button>
 				</span>
 			</div>
 		</div>
@@ -130,7 +130,7 @@
 
 
 
-	
+
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
 $(document).ready(function(){
@@ -138,6 +138,43 @@ $(document).ready(function(){
 	$('#message_sent_button').on('click',function(){
 		alert("sent")
 	});
+
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+    loadMessage = function loadMessage(){//
+        //$("#search_app_user").val("");
+        //event.preventDefault();
+        alert('ok');
+
+        $.ajax({
+            url: "{{ url('app/')}}/load-message",
+            type:'get',
+            async:false,
+            success: function(response) {
+                console.log(response)
+                alert('ok')
+            }
+        });
+
+
+        $(".zoomImg").click(function(){
+            var image_src = $(this).attr('src');
+            $("#modalIMG").modal();
+            $("#load_zoom_img").attr('src',image_src);
+        });
+        //window.setInterval(loadMessage(app_user_id, number_of_msg), 1000);
+    }
+
+    loadMessage()
+
+
+
+
 });
 </script>
 

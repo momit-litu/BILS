@@ -210,6 +210,8 @@
                 </li>
 
             </ul>
+                </li>
+            </ul>
 			<!-- end: TOP NAVIGATION MENU -->
         </div>
     </div>

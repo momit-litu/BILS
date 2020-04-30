@@ -45,7 +45,8 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
 
 	Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
-    Route::get('app/message_notification',array('as'=>'Message' , 'uses' =>'FrontEndController@messageListNotification'));
+    Route::get('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
+    Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
 
 
     Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
