@@ -247,7 +247,7 @@ class MessageController extends Controller
 
         //$app_user = AppUser::get();
         $app_user_info = DB::table('message_masters as mm')
-                            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+                            ->rightJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->where('is_group_msg', 0)
                             ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
                             ->distinct('mm.app_user_id')
@@ -268,6 +268,7 @@ class MessageController extends Controller
 		$page_no 				= $_POST['page_no'];
 		$limit 					= $_POST['limit'];
 		$message_load_type		= $_POST['message_load_type'];
+		$last_appuser_message_id= $_POST['last_appuser_message_id'];
 		$start = ($page_no*$limit)-$limit;
 		$end   = $limit;
 
@@ -295,7 +296,7 @@ class MessageController extends Controller
                     ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
 					->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
                     ->where('mm.app_user_id',$app_user_id_load_msg)
-                    /*->where('mm.status','!=',0)*/
+                    ->where('mm.status','!=',0)
                     ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
@@ -315,7 +316,7 @@ class MessageController extends Controller
 				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
 				->where('mm.app_user_id',$app_user_id_load_msg)
 				->whereNotNull('mm.admin_message')
-				/*->where('mm.status','!=',0)*/
+				->where('mm.status','!=',0)
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
 				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
 				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
@@ -325,37 +326,29 @@ class MessageController extends Controller
 				->limit(1)
 				->get();
 		}
+		else if($last_appuser_message_id==4){
+			$message = DB::table('message_masters as mm')
+				->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+				->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
+				->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
+				->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
+				->where('mm.app_user_id',$app_user_id_load_msg)
+				->whereNotNull('mm.app_user_message')
+				->where('mm.status','!=',0)
+				->where('mm.id','>',$last_appuser_message_id)
+				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
+				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
+				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
+				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+				->groupBy('id')
+				->orderBy('mm.message_date_time', 'desc')
+				->get();
+		}
 		
-				//dd($message);
-        /*$replied = DB::table('message_masters as mm')
-            ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
-            ->where('mm.app_user_id',$app_user_id_load_msg)
-            ->where('mm.reply_to','>','0')
-            ->select('mm.id as id','mmr.admin_message', 'mmr.app_user_message')
-            ->orderBy('mm.id', 'desc')
-            ->limit($end)
-            ->get();
-
-        foreach ($replied as $key=>$values){
-            //var_dump($values->admin_message);
-            if(!$values->admin_message){
-                $replied_msg[$values->id]=$values->app_user_message;
-            }
-            else{
-                $replied_msg[$values->id]=$values->admin_message;
-            }
-        }
-
-        foreach ($message as $key=>$item) {
-            if(isset($replied_msg[$item->id])){
-                $message[$key]->replied = $replied_msg[$item->id];            }
-        }
-		*/
 
         return json_encode(array(
-            "message"=>$message,
-            /*"app_user_name"=>$app_user_name,*/
-            //"msg_date"=>$msg_date,
+            "message"=>$message
         ));
     }
 
@@ -386,8 +379,8 @@ class MessageController extends Controller
             $msg_cat = $r->category_id;
         }
         else{
-            $msg_cat = $r->message_category;
-
+            $msg_cat = $r->message_category;			
+		//edit_msg_id
         }
         if(isset($r->reply_msg_id)){
             $reply_to = $r->reply_msg_id;
@@ -400,66 +393,81 @@ class MessageController extends Controller
         $admin_id = Auth::user()->id;
         ## Image
         $attachment = $r->file('attachment');
+		if(isset($r->edit_msg_id) && $r->edit_msg_id>0){
+			MessageMaster::where('id',$r->edit_msg_id)->update(['admin_message'=>$admin_message]);
+			if($r->hasFile('attachment')){
+				foreach ($attachment as $attachment) {
+					$attachment_name = rand().time().$attachment->getClientOriginalName();
+					$ext = strtoupper($attachment->getClientOriginalExtension());
+					echo $ext;
+					if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+						$attachment_type = 1;
+					}
+					else if ($ext=="MP4" || $ext=="3GP") {
+						$attachment_type = 2;
+					}
+					else if ($ext=="MP3") {
+						$attachment_type = 3;
+					}
+					else{
+						$attachment_type = 4;
+					}
+					//$attachment_full_name = $attachment_name.'.'.$ext;
+					$upload_path = 'assets/images/message/';
 
-        if($r->hasFile('attachment')){
-            $new_msg = new MessageMaster();
-            $new_msg->admin_id = $admin_id;
-            $new_msg->admin_message = $admin_message;
-            $new_msg->message_category = $message_category;
-            $new_msg->app_user_id = $app_user_id;
-            $new_msg->reply_to = $reply_to;
-            $new_msg->is_attachment = 1;
-            $new_msg->save();
-            $mm_id = $new_msg->id;
+					$success=$attachment->move($upload_path,$attachment_name);
+					##Save image to the message attachment table
+					$msg_attachment = new MessageAttachment();
+					$msg_attachment->message_master_id = $r->edit_msg_id;
+					$msg_attachment->admin_atachment = $attachment_name;
+					$msg_attachment->attachment_type = $attachment_type;
+					$msg_attachment->save();
+				}
+			}
+			return 1;
+		}
+		else{
+			if($r->hasFile('attachment')){
+				$new_msg = new MessageMaster();
+				$new_msg->admin_id = $admin_id;
+				$new_msg->admin_message = $admin_message;
+				$new_msg->message_category = $message_category;
+				$new_msg->app_user_id = $app_user_id;
+				$new_msg->reply_to = $reply_to;
+				$new_msg->is_attachment = 1;
+				$new_msg->save();
+				$mm_id = $new_msg->id;
 
-            foreach ($attachment as $attachment) {
-                $attachment_name = rand().time().$attachment->getClientOriginalName();
-                $ext = strtoupper($attachment->getClientOriginalExtension());
-                echo $ext;
-                if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
-                    $attachment_type = 1;
-                }
-                else if ($ext=="MP4" || $ext=="3GP") {
-                    $attachment_type = 2;
-                }
-                else if ($ext=="MP3") {
-                    $attachment_type = 3;
-                }
-                else{
-                    $attachment_type = 4;
-                }
-                //$attachment_full_name = $attachment_name.'.'.$ext;
-                $upload_path = 'assets/images/message/';
+				foreach ($attachment as $attachment) {
+					$attachment_name = rand().time().$attachment->getClientOriginalName();
+					$ext = strtoupper($attachment->getClientOriginalExtension());
+					echo $ext;
+					if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+						$attachment_type = 1;
+					}
+					else if ($ext=="MP4" || $ext=="3GP") {
+						$attachment_type = 2;
+					}
+					else if ($ext=="MP3") {
+						$attachment_type = 3;
+					}
+					else{
+						$attachment_type = 4;
+					}
+					//$attachment_full_name = $attachment_name.'.'.$ext;
+					$upload_path = 'assets/images/message/';
 
-                $success=$attachment->move($upload_path,$attachment_name);
-                ##Save image to the message attachment table
-                $msg_attachment = new MessageAttachment();
-                $msg_attachment->message_master_id = $mm_id;
-                $msg_attachment->admin_atachment = $attachment_name;
-                $msg_attachment->attachment_type = $attachment_type;
-                $msg_attachment->save();
-
-
-            }
-        }
-        else{
-            if(isset($r->edit_msg_id) && $r->edit_msg_id>0){
-                MessageMaster::where('id',$r->edit_msg_id)->update(['admin_message'=>$admin_message]);
-                return 0;
-            }
-
-            $new_msg = new MessageMaster();
-            $new_msg->admin_id = $admin_id;
-            $new_msg->admin_message = $admin_message;
-            $new_msg->app_user_id = $app_user_id;
-            $new_msg->reply_to = $reply_to;
-            $new_msg->message_category = $message_category;
-            $new_msg->save();
-        }
-
-
-
-
+					$success=$attachment->move($upload_path,$attachment_name);
+					##Save image to the message attachment table
+					$msg_attachment = new MessageAttachment();
+					$msg_attachment->message_master_id = $mm_id;
+					$msg_attachment->admin_atachment = $attachment_name;
+					$msg_attachment->attachment_type = $attachment_type;
+					$msg_attachment->save();
+				}
+			}
+			return $mm_id;
+		}
     }
 
     public function deleteMessage($id){
