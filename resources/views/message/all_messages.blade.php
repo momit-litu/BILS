@@ -284,9 +284,9 @@
                             html = "";
                             if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
                                 if(message["reply_message"]){
-                                    html+='<li class="sent_msg" style="margin-bottom: -15px;padding-right: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
+                                    html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
                                 }
-                                html += '<li class="sent_msg">';
+                                html += '<li class="sent_msg " id="sent_message_id_'+message['id']+'">';
 
                                 if($.trim(message['admin_image']) == "null" || $.trim(message['admin_image']) == ""  ) admin_image = "no-user-image.png";
                                 else  									 	admin_image = message['admin_image'];
@@ -346,9 +346,9 @@
                             }
                             else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
                                 if(message["replied"]){
-                                    html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+									html+='<li class="receive_msg" style="margin-bottom: -15px;padding-left: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
                                 }
-                                html += '<li class="receive_msg">';
+                                html += '<li class="receive_msg" id="receive_message_id_'+message['id']+'">';
                                 if($.trim(message['user_profile_image']) == "null" || $.trim(message['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
                                 else  									 	appuser_image = message['user_profile_image'];
                                 html += '<img style="width:25px;height:25px;"  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
@@ -398,7 +398,6 @@
                                 html += '</li>';
 							}
                             message_body = html+message_body;
-							
                         });
                     }
                     //loadAppUser();
@@ -418,10 +417,11 @@
 						}
 						else if(message_load_type == 3){ // 3: get load more messages
 							//alert('1:add more all message')
+														
+							// need to specify the las message <li> and make the slide animation accoring to that li
+							$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 							var html_tag = $(".message_body");
 							html_tag.prepend(message_body);
-							// need to specify the las message <li> and make the slide animation accoring to that li
-							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
 							current_page_no++;	
 						}
 					}
@@ -483,17 +483,16 @@
                 type: 'GET',
                 async: false,
                 success: function (response) {
-                    //alert('done')
-                    loadMessageUser($('#app_user_id').val());
+					if($('#sent_message_id_'+id).prev().hasClass('reply')){
+						$('#sent_message_id_'+id).prev().remove();
+					}
+					$('#sent_message_id_'+id).next('span').remove();
+					$('#sent_message_id_'+id).remove();
+					
                     $('#admin_message').val("");
-                    //$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
-					// $(".messages").animate({ scrollTop: ($(".messages").height() - $(".messages li:last").height()) }, "fast");
-                   // loadAppUser();
                 }
             })
         }
-
-
 
 
         editMessage = (id, message) =>{
@@ -541,9 +540,6 @@
                 });
 
 
-            }
-            else {
-                loadAppUser();
             }
         }
 
@@ -627,7 +623,7 @@
                         loadMessages(2); // 2: last message only
                         $('#admin_message').val("");
                         //$(".messages").animate({ scrollTop:1800000 /*$(document).height()*/ }, "fast");
-                        loadAppUser();
+                        //loadAppUser();
                     }
                 });
             }

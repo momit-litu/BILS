@@ -247,7 +247,7 @@ class MessageController extends Controller
 
         //$app_user = AppUser::get();
         $app_user_info = DB::table('message_masters as mm')
-                            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+                            ->rightJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->where('is_group_msg', 0)
                             ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
                             ->distinct('mm.app_user_id')
@@ -295,7 +295,7 @@ class MessageController extends Controller
                     ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
 					->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
                     ->where('mm.app_user_id',$app_user_id_load_msg)
-                    /*->where('mm.status','!=',0)*/
+                    ->where('mm.status','!=',0)
                     ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
@@ -315,7 +315,7 @@ class MessageController extends Controller
 				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
 				->where('mm.app_user_id',$app_user_id_load_msg)
 				->whereNotNull('mm.admin_message')
-				/*->where('mm.status','!=',0)*/
+				->where('mm.status','!=',0)
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
 				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
 				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
@@ -325,37 +325,9 @@ class MessageController extends Controller
 				->limit(1)
 				->get();
 		}
-		
-				//dd($message);
-        /*$replied = DB::table('message_masters as mm')
-            ->leftJoin('message_masters as mmr', 'mmr.id','=','mm.reply_to')
-            ->where('mm.app_user_id',$app_user_id_load_msg)
-            ->where('mm.reply_to','>','0')
-            ->select('mm.id as id','mmr.admin_message', 'mmr.app_user_message')
-            ->orderBy('mm.id', 'desc')
-            ->limit($end)
-            ->get();
-
-        foreach ($replied as $key=>$values){
-            //var_dump($values->admin_message);
-            if(!$values->admin_message){
-                $replied_msg[$values->id]=$values->app_user_message;
-            }
-            else{
-                $replied_msg[$values->id]=$values->admin_message;
-            }
-        }
-
-        foreach ($message as $key=>$item) {
-            if(isset($replied_msg[$item->id])){
-                $message[$key]->replied = $replied_msg[$item->id];            }
-        }
-		*/
 
         return json_encode(array(
-            "message"=>$message,
-            /*"app_user_name"=>$app_user_name,*/
-            //"msg_date"=>$msg_date,
+            "message"=>$message
         ));
     }
 

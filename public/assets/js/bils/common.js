@@ -36,7 +36,6 @@ $(document).ready(function () {
     }
 
     set_notification_time_out_fn = () =>{
-		alert(1)
         setTimeout(function(){
             loadNotifications();
         }, 100000);
@@ -44,7 +43,6 @@ $(document).ready(function () {
 
 
     set_message_time_out_fn = () =>{
-		alert(2)
         setTimeout(function(){
             newMessages();
         }, 150000);
