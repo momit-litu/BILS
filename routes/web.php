@@ -49,6 +49,10 @@ Route::group(['middleware'=>'appUser'], function() {
     Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
     Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
 
+    Route::get('app/load-notice',array('as'=>'Notice' , 'uses' =>'FrontEndController@usernotice'));
+    Route::get('app/load-publications',array('as'=>'Notice' , 'uses' =>'FrontEndController@publications'));
+
+
 
     Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
 	Route::get('app/detail-notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeDetail'));

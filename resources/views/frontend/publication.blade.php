@@ -11,7 +11,7 @@
 			</div>
 		</form>
 		<div class="panel-tools">
-			
+
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('publication')">
 				<i class="fa fa-refresh"></i>
 			</a>
@@ -19,9 +19,9 @@
 	</div>
 	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
 		<div id="timeline" class="demo1">
-			<div class="timeline">
-				<ul class="columns">					
-					<li>
+			<div class="timeline" id="all_publication">
+				<ul class="columns" id="all_publications">
+					<!--li>
 						<div class="timeline_element">
 							<div class="timeline_title">
 								<span class="timeline_label">Publication Title 1</span><span class="timeline_date">16 December 2014</span>
@@ -66,7 +66,7 @@
 							</div>
 						</div>
 					</li>
-										<li>
+                    <li>
 						<div class="timeline_element">
 							<div class="timeline_title">
 								<span class="timeline_label">Publication Title 1</span><span class="timeline_date">16 December 2014</span>
@@ -80,7 +80,7 @@
 								</a>
 							</div>
 						</div>
-					</li>
+					</li-->
 				</ul>
 			</div>
 		</div>
@@ -89,12 +89,70 @@
 
 
 
-	
+
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
-$(document).ready(function(){
-	alert("Publications")
+$(document).ready( function(){
+        //alert("NOtice");
+
+
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+    loadPublication = function loadPublication(){//
+
+        $.ajax({
+            url: "{{ url('app/')}}/load-publications",
+            type:'get',
+            async:false,
+            success: function(response) {
+                var response = JSON.parse(response);
+                if(!jQuery.isEmptyObject(response)){
+                    html = "";
+                    noticeMonth = -1
+                    noticeYear = -1
+
+                    $.each(response, function(i,publication){
+                        date = new Date(publication['created_at']);
+                        year= date.getFullYear();
+                        month = date.getMonth();
+                        day = date.getDate();
+                        noticDate = new Date(year+'-'+month+'-'+day)
+                        noticDate = noticDate.toDateString()
+
+
+                        html+='<li> ' +
+                            '   <div class="timeline_element"> ' +
+                            '       <div class="timeline_title">' +
+                            '           <span class="timeline_label">'+publication["title"]+'</span><span class="timeline_date">'+noticDate+'</span> ' +
+                            '       </div> ' +
+                            '       <div class="content"> '+publication["details"]+'</div> ' +
+                            '       <div class="readmore"> ' +
+                            '           <a href="#" class="btn btn-info">' +
+                            '               Details <i class="fa fa-arrow-circle-right"></i> ' +
+                            '           </a> ' +
+                            '       </div> ' +
+                            '   </div> ' +
+                            '</li>'
+                    });
+
+                    //console.log(html)
+
+                    $('#all_publications').html(html)
+                }
+            }
+        });
+
+    }
+
+    loadPublication()
+
 });
+
 </script>
 
 

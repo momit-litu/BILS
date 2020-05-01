@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AppUser;
 use App\MessageAttachment;
+use App\Notice;
 use Illuminate\Http\Request;
 use App\MessageMaster;
 use App\MessageCategory;
@@ -102,6 +103,35 @@ class FrontEndController extends Controller
             ->orderBy('n.date_time', 'asc')
             ->get();
         return json_encode($Notifications);
+    }
+
+    public function usernotice(){
+	    //return 1;
+        $date = date('Y-m-d');
+        //return $date;
+        $notice = DB::table('notices as n')
+            ->where('n.expire_date','>=',$date)
+            ->select('n.id','n.title', 'n.details','n.created_at')
+            ->groupBy('n.id')
+            ->orderBy('n.created_at')
+            ->get();
+
+        return json_encode($notice);
+
+    }
+
+    public function publications(){
+        //return 1;
+        $date = date('Y-m-d');
+        //return $date;
+        $notice = DB::table('publications as p')
+            ->where('p.status',1)
+            ->select('p.id','p.publication_title as title', 'p.details','p.created_at', 'p.publication_type as type')
+            ->groupBy('p.id')
+            ->orderBy('p.created_at','desc')
+            ->get();
+
+        return json_encode($notice);
     }
 
     public function userMessage(){
