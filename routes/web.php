@@ -45,12 +45,15 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
 
 	Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
-    Route::get('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
+    Route::post('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
+    Route::get('app/delete-message/{id}',array('as'=>'Load Message', 'uses' =>'FrontEndController@deleteMessage'));
     Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
     Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
 
-    Route::get('app/load-notice',array('as'=>'Notice' , 'uses' =>'FrontEndController@usernotice'));
+    Route::get('app/load-notice',array('as'=>'Notice' , 'uses' =>'FrontEndController@userNotice'));
+    Route::get('app/load-notice-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userNoticeDetails'));
     Route::get('app/load-publications',array('as'=>'Notice' , 'uses' =>'FrontEndController@publications'));
+    Route::get('app/load-publications-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@publicationsDtails'));
 
 
 

@@ -151,6 +151,9 @@
 							</a>
 						</li>
 					</ul>
+                            </div>
+                        </li>
+                    </ul>
 				</li>
 
                 <!-- end: USER DROPDOWN -->
