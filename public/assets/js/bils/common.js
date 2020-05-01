@@ -1,5 +1,5 @@
 
-
+var number_of_msg = 10;
 
 // className: danger, success, info, primary, default, warning
 function success_or_error_msg(div_to_show, class_name, message, field_id){
@@ -35,12 +35,21 @@ $(document).ready(function () {
 
     }
 
-    set_message_time_out_fn = () =>{
+    set_notification_time_out_fn = () =>{
+		alert(1)
         setTimeout(function(){
-            newMessages();
-            set_time_out_fn(user_group_id, number_of_msg);
+            loadNotifications();
         }, 100000);
     }
+
+
+    set_message_time_out_fn = () =>{
+		alert(2)
+        setTimeout(function(){
+            newMessages();
+        }, 150000);
+    }
+
 
 
     newMessages = () =>{
@@ -90,13 +99,7 @@ $(document).ready(function () {
     }
     newMessages()
 
-    // Load notifications in admin header
-    set_notification_time_out_fn = () =>{
-        setTimeout(function(){
-            loadNotifications();
-            set_time_out_fn(user_group_id, number_of_msg);
-        }, 100000);
-    }
+
 
     loadNotifications = () =>{
         $.ajax({
@@ -133,9 +136,6 @@ $(document).ready(function () {
 
             }
         })
-
-
-
         set_notification_time_out_fn()
     }
     loadNotifications()
