@@ -379,7 +379,7 @@ $(document).ready(function () {
                 $("#course_edit_id").val(data['id']);
                 $("#course_code").val(data['course_code']);
                 $("#course_title").val(data['course_title']);
-                $("#details").val(data['details']);
+                $("#details").summernote('code',data['details']);
                 $("#duration").val(data['duration']);
                 $("#course_type").val(data['course_type']).change();
                 $("#appx_start_time").val(data['appx_start_time']);
@@ -543,6 +543,7 @@ $(document).ready(function () {
 
     //Clear form
     $("#clear_button").on('click',function(){
+		$('.summernote').summernote('code',"");
         clear_form();
     });
 

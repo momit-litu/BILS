@@ -36,6 +36,7 @@
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
+	
     <!--SweetalertCSS-->
     <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert/sweetalert2.min.css')}}" type="text/css" />
     <!-- Form elements-->
@@ -50,14 +51,14 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.jgrowl.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-ui.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.min.css') }}"/>
     
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
     <style type="text/css" media="screen">
@@ -382,7 +383,7 @@
 <script src="{{ asset('assets/js/ui-modals.js') }}"></script>
 
 <script src="{{ asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
+
 <!--sweetlertJs-->
 <script src="{{asset('assets/plugins/sweetalert/sweetalert2.min.js')}}"></script>
 
@@ -399,7 +400,7 @@
 <script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/commits.js') }}"></script>
 <script src="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.js') }}"></script>
-{{--<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>--}}
+<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
 <script src="{{ asset('assets/js/summernote.js') }}"></script>
 <script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('assets/plugins/ckeditor/adapters/jquery.js') }}"></script>

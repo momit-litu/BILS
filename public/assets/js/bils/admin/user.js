@@ -104,10 +104,12 @@ $(document).ready(function () {
 	
 	//Clear form
 	$("#clear_button").on('click',function(){
+		$('.summernote').summernote('code',"");
 		clear_form();
 	});	
 
 	$("#cancle_admin_update").click(function(){
+		$('.summernote').summernote('code',"");
 		clear_form();
 		$(".save").html('Save');
 		$("#admin_user_list_button").trigger('click');
@@ -144,7 +146,8 @@ $(document).ready(function () {
 				$("#contact_no").val(emp_data['contact_no']);
 				$("#email").val(emp_data['email']);
 				$("#address").val(emp_data['address']);
-				$("#remarks").val(emp_data['remarks']);
+				//$("#remarks").val(emp_data['remarks']);
+				$('#remarks').summernote('code',emp_data['remarks']);
 				$("#emp_img").attr("src", profile_image_url+"/"+emp_data["user_profile_image"]);
 				//$("#user_profile_image").val(emp_data['user_profile_image']);
 				//console.log(emp_data['user_profile_image']);

@@ -94,7 +94,7 @@
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6">Publication Details<span class="required">*</span></label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
-											<textarea id="details" name="details" class="form-control col-lg-12"></textarea> 
+											<textarea class="summernote form-control"  id="details" name="details" cols="10" rows="4"></textarea>
 										</div>
 									</div>
 									<div class="form-group">
@@ -125,7 +125,7 @@
 									</div>
 
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >App User Group</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" ></label>
 										<div class="col-md-10 col-sm-10 col-xs-6">
 											<div id="app_user_group">
 												
@@ -133,9 +133,10 @@
 										</div>
 									</div>
 									
-									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" ><button id="load_app_user_from_group" type="submit" class="btn btn-sm btn-info">Load App User</button></label>
+									<div class="form-group">	
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >&nbsp;</label>									
 										<div class="col-md-10 col-sm-10 col-xs-6">
+											<button id="load_app_user_from_group" type="submit" class="btn btn-sm btn-primary">Load App User</button>
 											<div id="app_user_group_members">
 												
 											</div>
