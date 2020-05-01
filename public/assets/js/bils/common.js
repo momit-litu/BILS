@@ -35,6 +35,13 @@ $(document).ready(function () {
 
     }
 
+    set_message_time_out_fn = () =>{
+        setTimeout(function(){
+            newMessages();
+            set_time_out_fn(user_group_id, number_of_msg);
+        }, 100000);
+    }
+
 
     newMessages = () =>{
         $.ajax({
@@ -73,13 +80,67 @@ $(document).ready(function () {
 
                 })
                 $('#badge').html(count)
+                $('#message_top_unread').html('You have total '+count+' unread message')
                 $('#message_header').html(html)
-                console.log(response)
+                //console.log(response)
 
             }
         })
+        set_message_time_out_fn()
     }
     newMessages()
+
+    // Load notifications in admin header
+    set_notification_time_out_fn = () =>{
+        setTimeout(function(){
+            loadNotifications();
+            set_time_out_fn(user_group_id, number_of_msg);
+        }, 100000);
+    }
+
+    loadNotifications = () =>{
+        $.ajax({
+            url: url+'/message/load-new-notifications',
+            type:'GET',
+            async:false,
+            success: function(response){
+                response = JSON.parse(response)
+
+
+                html = '';
+                count = 0;
+                $.each(response, function (key, value) {
+                    count++;
+                    if(value.group_name && value.category_name) {
+                        user = value.group_name + '(' + value.category_name + ')'
+                    }
+                    else {
+                        user = value.app_user_name
+                    }
+                    //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+                    html +=' <li> ' +
+                            '<a href="javascript:void(0)"> ' +
+                                '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
+                                '<span class="message"> '+value.details+'</span> ' +
+                                '<span class="time"> '+value.created_at+'</span> ' +
+                            '</a> ' +
+                            '</li>'
+
+                })
+                $('#notificationCount').html(count)
+                $('#notification_list').html(html)
+                //console.log(response)
+
+            }
+        })
+
+
+
+        set_notification_time_out_fn()
+    }
+    loadNotifications()
+
+
 
 
 

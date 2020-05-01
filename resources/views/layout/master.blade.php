@@ -55,7 +55,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.jgrowl.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-ui.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.min.css') }}"/>
-    
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
 
@@ -68,6 +68,8 @@
             /*font-weight: 200;*/
         }
     </style>
+    <script src="{{ asset('assets/js/bils/header.js')}}"></script>
+
     <link rel="shortcut icon" href="favicon.ico" />
     @yield('style')
 </head>
@@ -84,7 +86,7 @@
     <div class="navbar-content">
         <!-- start: SIDEBAR -->
         @include('layout.sidebar')
-		
+
         <!-- end: SIDEBAR -->
     </div>
     <!-- start: PAGE -->
@@ -122,7 +124,7 @@
                 <div class="title text-center">
                     <h4 class="text-info" id="modal_title"></h4><hr>
                 </div>
-                <div class="done_registration ">                                
+                <div class="done_registration ">
                     <div class="doc_content">
                         <div class="col-md-12">
                             <div class="" style="text-align:left;">
@@ -131,17 +133,17 @@
                                 </div>
                             </div>
                         </div>
-                    </div>                                  
-                </div>                          
+                    </div>
+                </div>
             </div>
-            
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
     </div>
-     
-   
+
+
 </div>
 {{-- End Modal --}}
 
@@ -151,9 +153,9 @@
 <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
 
         <div class="modal-content">
-				
+
                 <img id="load_zoom_img" src="" alt="" style="width:100%; max-height:600px">
-            
+
             <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
@@ -240,19 +242,19 @@
                 <div class="title text-center">
                     <h4 class="text-info">Profile View</h4>
                 </div>
-                <div class="done_registration ">                                
+                <div class="done_registration ">
                     <div class="doc_content">
                         <div class="col-md-12">
                             <div class="" style="text-align:left">
                                 <div class="byline">
                                     <span id="profile_modal_body"></span>
-                                     <div class="">    
+                                     <div class="">
                                         <div class="jumbotron" style="margin-bottom: 0px!important">
                                           <div class="row">
                                               <div class="col-md-3 col-xs-12 col-sm-6 col-lg-3">
                                                 <div class="thumbnail text-center photo_view_postion_b" >
                                                   <div class="profile_image">
-                                                      
+
                                                   </div>
 
                                                 </div>
@@ -265,11 +267,11 @@
                                                     <div id="group_div"></div></p>
                                                   </div>
                                                     <hr>
-                                                  <div class="col-md-6">  
-                                                  
+                                                  <div class="col-md-6">
+
                                                     <p title="Phone"><span class="glyphicon glyphicon-earphone one" style="width:50px;"></span><span id="contact_div"></span></p>
                                                     <p title="Email"><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span><span id="email_div"></span></p>
-                                                    
+
                                                   </div>
                                                   <div class="col-md-6">
                                                       <p title="NID NO"><span class="glyphicon glyphicon-credit-card one" style="width:50px;"></span><span id="nid_div"></span></p>
@@ -278,7 +280,7 @@
 
 
 
-                                                  
+
                                               </div>
                                             </div>
                     <div class="row">
@@ -290,16 +292,16 @@
                         </div>
                       </div>
                     </div>
-                    <div class="row"> 
+                    <div class="row">
                      <div class="col-md-12">
                         <div id="remarks_details">
-                            
+
                         </div>
                      </div>
-                     
-                    
+
+
                     </div>
-                    
+
                     {{-- <div class="row">
                       <div class="form-group row">
                         <div class="col-md-12">
@@ -311,40 +313,40 @@
                                 <div class="clearfix"></div><div class="bot-border"></div>
                                 <div class="col-sm-4 col-xs-6 tital " >Year:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
                                 <div class="clearfix"></div><div class="bot-border"></div>
-                             </div>    
+                             </div>
                            <div class="col-md-6">
                                 <div class="col-sm-4 col-xs-6 tital " >Model:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
                                 <div class="clearfix"></div><div class="bot-border"></div>
                                 <div class="col-sm-4 col-xs-6 tital " >Color:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
                                 <div class="clearfix"></div><div class="bot-border"></div>
-                             </div>    
-                            
+                             </div>
+
                         </div>
                       </div>
                     </div> --}}
-                    
-                    
-                    
-                    
-                    
-                    
+
+
+
+
+
+
                 </div>
             </div>
 
                                 </div>
                             </div>
                         </div>
-                    </div>                                  
-                </div>                          
+                    </div>
+                </div>
             </div>
-            
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
         </div>
     </div>
-     
-   
+
+
 </div>
 {{-- End Profile Modal --}}
 
@@ -419,6 +421,7 @@
 <script src="{{ asset('assets/js/jquery.poshytip.min.js')}}"></script>
 <script src="{{asset('/assets/js/pusher.min.js')}}"></script>
 <script src="{{ asset('assets/js/bils/common.js')}}"></script>
+
 {{--<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script--}}
 
 
