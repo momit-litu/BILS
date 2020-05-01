@@ -47,9 +47,9 @@
 		}
 
         .replied_message_p {
-            margin:0px;
-            padding:1px;
+			padding: 2px 15px !important;
             color:gray;
+			font-size:10px !important;
         }
 
 	</style>
@@ -71,17 +71,14 @@
 					</div>
 				</div>
 				<div class="messages">
-					<ul style="padding-left: 0;">
-						<div class="message_body">
-
-						</div>
+					<ul style="padding-left: 0;" class="message_body">
 					</ul>
 				</div>
-				<div class="message-input">
+				<div class="message-input" >
 					<div class="wrap">
 						<form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
 							@csrf
-                            <p id="reply_msg"></p>
+                            <p id="reply_msg" class="replied_message_p"></p>
                             <input type="hidden" id="edit_msg_id" name="edit_msg_id">
                             <div class="input-group">
 								<span class="input-group-btn dropup ">
@@ -210,7 +207,8 @@
 	<script>
 
         var url = $('.site_url').val();
-        var number_of_msg = 10;
+        var number_of_msg = 20;
+		var current_page_no = 1;
         var loaded = 1;
 
 		var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
@@ -224,34 +222,58 @@
         });
 
 
+		 ajaxPreLoad = () =>{
+			//alert("{{ asset('assets/images/loading.gif') }}")
+			$('.content').block({
+				overlayCSS: {
+					backgroundColor: '#fff'
+				},
+				message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+				css: {
+					border: 'none',
+					color: '#333',
+					background: 'none'
+				}
+			});
+		}
 
 
-        $('.msg_auto_load').first().trigger('click');
-
-        loadMessage = function loadMessage(app_user_id, number_of_msg){//
+		// message_load_type
+		// 1: all message dump first time
+		// 2: get last message which just entered by admin
+		// 3: get load more messages
+		// 4: get appusers latest message
+        loadMessages = function loadMessages(message_load_type){
             $("#search_app_user").val("");
-            //event.preventDefault();
+           // event.preventDefault();
             $.ajaxSetup({
                 headers:{
                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
                 }
             });
-            var app_user_id_load_msg = app_user_id;
-            var msg_no = number_of_msg;
-
-            $.ajax({
+			var app_user_id = $("#app_user_id").val();
+			// new appuser loaded
+			if(message_load_type == 1){
+				current_page_no =1;
+			}
+			
+			$.ajax({
                 url: url+'/message/load-message',
                 type:'POST',
                 data:{
-                    app_user_id_load_msg:app_user_id_load_msg,
-                    msg_no:msg_no
+                    app_user_id_load_msg:app_user_id,
+                    limit:number_of_msg,
+					page_no:current_page_no,
+					message_load_type:message_load_type
                 },
                 async:false,
+				beforeSend: function( xhr ) {
+					ajaxPreLoad()
+					//$("#load-content").fadeOut('slow');
+				},
                 success: function(response){
                     var response = JSON.parse(response);
-
                     var message = response['message'];
-                    var app_user_name = response['app_user_name'];
                     var img_id="";
                     var mc;
                     //Messages
@@ -261,8 +283,8 @@
                         $.each(message, function(i,message){
                             html = "";
                             if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
-                                if(message["replied"]){
-                                    html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
+                                if(message["reply_message"]){
+                                    html+='<li class="sent_msg" style="margin-bottom: -15px;padding-right: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
                                 }
                                 html += '<li class="sent_msg">';
 
@@ -320,7 +342,6 @@
                                 }
                                 tem_msg = "'"+message['admin_message']+"'";
 
-
                                 html += '<span class="time_date_sent">'+mc+' '+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
                             }
                             else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
@@ -328,7 +349,6 @@
                                     html+='<li class="sent_msg"><p class="replied_message_p" ">'+message['replied']+'</p></li>  ';
                                 }
                                 html += '<li class="receive_msg">';
-
                                 if($.trim(message['user_profile_image']) == "null" || $.trim(message['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
                                 else  									 	appuser_image = message['user_profile_image'];
                                 html += '<img style="width:25px;height:25px;"  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
@@ -367,46 +387,45 @@
                                     }
                                     html+="</div>";
                                 }
-
                                 if (message["category_name"]!=null && message["category_name"]!="") {
                                     mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
                                 }
                                 else{
                                     mc = "";
                                 }
-
                                 tem_msg = "'"+message['app_user_message']+"'";
-
                                 html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+' '+mc+'</span>';
-
-
-
                                 html += '</li>';
-
-                                // 11:01 AM    |    June 9
-
-                            }
+							}
                             message_body = html+message_body;
-
+							
                         });
-
                     }
-                    loadAppUser();
-                    $(".message_body").html(message_body);
-                    $("#app_user_name").html(app_user_name['name']);
-
-                    if (app_user_name['user_profile_image']!=null && app_user_name['user_profile_image']!="") {
-                        $("#app_user_image").attr('src', app_user_profile_url+"/"+app_user_name['user_profile_image']);
-                    }
-                    else{
-                        $("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
-                    }
-
-                    $("#load_more_message").html('<button onclick="limitIncrease('+app_user_name["id"]+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
-                    $("#app_user_id").val(app_user_name['id']);
-                    if (number_of_msg==10) {
-                        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-                    }
+                    //loadAppUser();
+					if(message_body != ""){
+						if(message_load_type == 1){ // 1: all message dump
+							//alert('1:change all message')
+							$(".message_body").html(message_body);
+							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+							current_page_no=2;							
+						}
+						else if(message_load_type == 2){ // 2: get last message which just entered by admin
+							//alert('1:add last mesage')
+							var html_tag = $(".message_body");
+							html_tag.append(message_body);
+							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+							
+						}
+						else if(message_load_type == 3){ // 3: get load more messages
+							//alert('1:add more all message')
+							var html_tag = $(".message_body");
+							html_tag.prepend(message_body);
+							// need to specify the las message <li> and make the slide animation accoring to that li
+							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+							current_page_no++;	
+						}
+					}
+					$('.content').unblock();
                 }
             });
 
@@ -415,11 +434,45 @@
                 $("#modalIMG").modal();
                 $("#load_zoom_img").attr('src',image_src);
             });
-            //window.setInterval(loadMessage(app_user_id, number_of_msg), 1000);
+			
+		}
+		
+        loadMessageUser = function loadMessageUser(app_user_id){
+            $("#search_app_user").val("");
+            //event.preventDefault();
+            $.ajaxSetup({
+                headers:{
+                    'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: url+"/message/view-app-user/"+app_user_id,
+                success: function(response){
+                    var response = JSON.parse(response);
+                    console.log(response)
+                    var data = response['data'];
+					
+					$("#app_user_name").html(data['name']);
+					$("#app_user_id").val(data['id']);
+					
+                    if (data['user_profile_image']!=null && data['user_profile_image']!="") {
+                        $("#app_user_image").attr('src', app_user_profile_url+"/"+data['user_profile_image']);
+                    }
+                    else{
+                        $("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
+                    }
+					
+                    $("#load_more_message").html('<button onclick="loadMessages(3);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
+					//alert('tesss')
+					loadMessages(1); // 1: all message dump
+
+                }
+            });            
+            //window.setInterval(loadMessageUser(app_user_id), 1000);
         }
+	
 
         replyMessage = (id, msg) =>{
-
             $('#reply_msg_id').val(id)
             $('#reply_msg').html(msg)
         }
@@ -431,13 +484,17 @@
                 async: false,
                 success: function (response) {
                     //alert('done')
-                    loadMessage($('#app_user_id').val(),number_of_msg);
+                    loadMessageUser($('#app_user_id').val());
                     $('#admin_message').val("");
-                    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-                    loadAppUser();
+                    //$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+					// $(".messages").animate({ scrollTop: ($(".messages").height() - $(".messages li:last").height()) }, "fast");
+                   // loadAppUser();
                 }
             })
         }
+
+
+
 
         editMessage = (id, message) =>{
             $('#edit_msg_id').val(id)
@@ -471,7 +528,7 @@
                                 else  				appuser_image = row['user_profile_image'];
                                 html += '<img  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
                                 html+='<div class="meta">';
-                                html+='<p onclick="loadMessage('+row["id"]+','+number_of_msg+')" class="name">'+row["name"]+'</p>';
+                                html+='<p onclick="loadMessageUser('+row["id"]+')" class="name">'+row["name"]+'</p>';
                                 //html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
                                 html+='</div>';
                                 html+='</div>';
@@ -506,7 +563,7 @@
                         var html = '<div class="msg_auto_load">';
                         //var active_chat_class = "active";
                         $.each(app_user, function(i,row){
-                            html+='<li onclick="loadMessage('+row["app_user_id"]+','+number_of_msg+')" class="contact ">';
+                            html+='<li onclick="loadMessageUser('+row["app_user_id"]+')" class="contact ">';
                             html+='<div class="wrap">';
 
                             if (row["user_profile_image"]!=null && row["user_profile_image"]!="") {
@@ -524,7 +581,6 @@
                             html+='</li>';
                             html+='</div>';
                             //active_chat_class = "";
-
                         });
                     }
                     $("#app_user_show").html(html);
@@ -552,10 +608,7 @@
         });
 
         newMsgSent = function newMsgSent(){
-
-
             var formData = new FormData($('#sent_message_to_user')[0]);
-
             if(( $.trim($('#admin_message').val()) != "" || $.trim($('#attachment').val()) != "" ) && $.trim($('#app_user_id').val()) != ""){
 
                 $.ajax({
@@ -571,16 +624,14 @@
                         $('#reply_msg_id').val(null)
                         $('#reply_msg').html(null)
                         $('#edit_msg_id').val(null)
-                        loadMessage($('#app_user_id').val(),number_of_msg);
+                        loadMessages(2); // 2: last message only
                         $('#admin_message').val("");
-                        $(".messages").animate({ scrollTop: $(document).height() }, "fast");
+                        //$(".messages").animate({ scrollTop:1800000 /*$(document).height()*/ }, "fast");
                         loadAppUser();
                     }
                 });
             }
-
-
-        }
+		}
 
         showProfile = function showProfile(){
             id = $("#app_user_id").val();
@@ -594,7 +645,7 @@
                     var groups = response['groups'];
 
                     $("#profile_modal").modal();
-                    $("#name_div").html('<h2>'+data['name']+'</h2>');
+                    $("#name_div").html('<h5>'+data['name']+'</h5>');
                     $("#contact_div").html(data['contact_no']);
                     $("#email_div").html(data['email']);
                     $("#nid_div").html(data['nid_no']);
@@ -603,7 +654,7 @@
                     $("#group_div").html('<b>Groups: </b><span class="badge badge-warning">'+groups[0]["group_name"]+'</span>');
 
                     if (data['remarks']!=null && data['remarks']!="") {
-                        $("#remarks_div").html('<h2>Profile Details</h2>');
+                        $("#remarks_div").html('<h5>Profile Details</h5>');
                         $("#remarks_details").html(data['remarks']);
                     }
 
@@ -671,6 +722,12 @@
             }
         });
 
+		$('#admin_message').on('keydown', function(e) {
+			if (e.which == 13) {
+				newMsgSent();
+				return false;
+			}
+		});
 
     </script>
 

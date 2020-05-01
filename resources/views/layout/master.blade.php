@@ -36,6 +36,7 @@
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
+	
     <!--SweetalertCSS-->
     <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert/sweetalert2.min.css')}}" type="text/css" />
     <!-- Form elements-->
@@ -50,14 +51,14 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.jgrowl.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-ui.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.min.css') }}"/>
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
-    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
     <style type="text/css" media="screen">
@@ -238,100 +239,41 @@
     <div class="modal-content">
         <div class="modal-body">
             <div id="">
-                <div class="title text-center">
-                    <h4 class="text-info">Profile View</h4>
-                </div>
                 <div class="done_registration ">
                     <div class="doc_content">
                         <div class="col-md-12">
                             <div class="" style="text-align:left">
                                 <div class="byline">
                                     <span id="profile_modal_body"></span>
-                                     <div class="">
-                                        <div class="jumbotron" style="margin-bottom: 0px!important">
-                                          <div class="row">
-                                              <div class="col-md-3 col-xs-12 col-sm-6 col-lg-3">
-                                                <div class="thumbnail text-center photo_view_postion_b" >
-                                                  <div class="profile_image">
-
-                                                  </div>
-
-                                                </div>
-                                                <button id="status_btn" type="button" class="btn hide">Status</button>
-                                              </div>
-                                              <div class="col-md-9 col-xs-12 col-sm-6 col-lg-9">
-                                                  <div class="" style="border-bottom:1px solid black">
-                                                    <span id="name_div"></span>
-                                                    <p><div id="status_div"></div></p>
-                                                    <div id="group_div"></div></p>
-                                                  </div>
-                                                    <hr>
-                                                  <div class="col-md-6">
-
-                                                    <p title="Phone"><span class="glyphicon glyphicon-earphone one" style="width:50px;"></span><span id="contact_div"></span></p>
-                                                    <p title="Email"><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span><span id="email_div"></span></p>
-
-                                                  </div>
-                                                  <div class="col-md-6">
-                                                      <p title="NID NO"><span class="glyphicon glyphicon-credit-card one" style="width:50px;"></span><span id="nid_div"></span></p>
-                                                    <p title="Address"><span class="glyphicon glyphicon-map-marker one" style="width:50px;"></span><span id="address_div"></span></p>
-                                                  </div>
-
-
-
-
-                                              </div>
-                                            </div>
-                    <div class="row">
-                      <div class="row">
-                        <div class="col-md-12">
-                        <div class="form-group" style="border-bottom:1px solid black">
-                            <div id="remarks_div"></div>
-                        </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="row">
-                     <div class="col-md-12">
-                        <div id="remarks_details">
-
-                        </div>
-                     </div>
-
-
-                    </div>
-
-                    {{-- <div class="row">
-                      <div class="form-group row">
-                        <div class="col-md-12">
-                            <div class="form-group" style="border-bottom:1px solid black">
-                                <h2>CAR INFO</h2>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="col-sm-4 col-xs-6 tital " >Brand:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                                <div class="col-sm-4 col-xs-6 tital " >Year:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                             </div>
-                           <div class="col-md-6">
-                                <div class="col-sm-4 col-xs-6 tital " >Model:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                                <div class="col-sm-4 col-xs-6 tital " >Color:</div><div class="col-sm-8 col-xs-6 contant_i">Prasad</div>
-                                <div class="clearfix"></div><div class="bot-border"></div>
-                             </div>
-
-                        </div>
-                      </div>
-                    </div> --}}
-
-
-
-
-
-
-                </div>
-            </div>
-
+										<div class="row">
+										  <div class="col-md-3 col-xs-12 col-sm-6 col-lg-3">
+											<div class="thumbnail text-center photo_view_postion_b" >
+											  <div class="profile_image"></div>
+											</div>
+											<button id="status_btn" type="button" class="btn hide">Status</button>
+										  </div>
+										  <div class="col-md-9 col-xs-12 col-sm-6 col-lg-9">
+												<span id="name_div"></span>
+												<p><div id="status_div"></div></p>
+												<div id="group_div"></div></p>
+												<hr>
+											  <div class="col-md-6">
+												<p title="Phone"><span class="glyphicon glyphicon-earphone one" style="width:50px;"></span><span id="contact_div"></span></p>
+												<p title="Email"><span class="glyphicon glyphicon-envelope one" style="width:50px;"></span><span id="email_div"></span></p>
+											  </div>
+											  <div class="col-md-6">
+												  <p title="NID NO"><span class="glyphicon glyphicon-credit-card one" style="width:50px;"></span><span id="nid_div"></span></p>
+												<p title="Address"><span class="glyphicon glyphicon-map-marker one" style="width:50px;"></span><span id="address_div"></span></p>
+											  </div>
+											  <div class="col-md-12">
+												<div class="form-group">
+													<div id="remarks_div"></div>
+													<hr>
+													<div id="remarks_details"></div>
+												</div>
+											</div>
+										  </div>
+									   </div>
                                 </div>
                             </div>
                         </div>
@@ -341,7 +283,8 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+		<div class="col-sm-12 text-right">
+            <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Close</button>
         </div>
     </div>
 
@@ -384,7 +327,7 @@
 <script src="{{ asset('assets/js/ui-modals.js') }}"></script>
 
 <script src="{{ asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
+
 <!--sweetlertJs-->
 <script src="{{asset('assets/plugins/sweetalert/sweetalert2.min.js')}}"></script>
 
@@ -401,7 +344,7 @@
 <script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/commits.js') }}"></script>
 <script src="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.js') }}"></script>
-{{--<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>--}}
+<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
 <script src="{{ asset('assets/js/summernote.js') }}"></script>
 <script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('assets/plugins/ckeditor/adapters/jquery.js') }}"></script>

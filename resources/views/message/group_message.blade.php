@@ -357,6 +357,23 @@
             }, 100000);
         }
 
+/*
+	    set_message_time_out_fn = () =>{
+			setTimeout(function(){
+				newMessages();
+				set_time_out_fn(user_group_id, number_of_msg);
+			}, 100000);
+		}
+
+		// Load notifications in admin header
+		set_notification_time_out_fn = () =>{
+			setTimeout(function(){
+				loadNotifications();
+				set_time_out_fn(user_group_id, number_of_msg);
+			}, 100000);
+		}
+
+*/
 
         loadGroupMessage = function loadGroupMessage(user_group_id, number_of_msg, user_category_id){
 

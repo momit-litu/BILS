@@ -110,7 +110,7 @@
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6">Course Description</label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
-											<textarea rows="4" cols="100" id="details" name="details" class="form-control col-lg-12"></textarea> 
+											<textarea class="summernote form-control"  id="details" name="details" cols="10" rows="4"></textarea>	
 										</div>
 									</div>
 
