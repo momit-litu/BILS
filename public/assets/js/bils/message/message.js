@@ -207,10 +207,6 @@ $(document).ready(function () {
 
 
 
-	limitIncrease = function limitIncrease(id){
-		number_of_msg = number_of_msg+10;
-		loadMessage(id,number_of_msg);
-	}
 
 	//autosuggest
 	$.ajaxSetup({

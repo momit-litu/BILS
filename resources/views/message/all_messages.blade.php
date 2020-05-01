@@ -482,6 +482,7 @@
 				newAppMessages();
 			}, 15000);
 		}
+		
 		newAppMessages = function newAppMessages(){
 			if($('.receive_msg:last').length>0){
 				last_app_user_message = $('.receive_msg:last').attr('id').split('_');
@@ -503,6 +504,7 @@
                 type: 'GET',
                 async: false,
                 success: function (response) {
+					// need to check whether removed or now
 					if($('#sent_message_id_'+id).prev().hasClass('reply')){
 						$('#sent_message_id_'+id).prev().remove();
 					}
@@ -610,7 +612,8 @@
                 }
             });
         }
-        loadAppUser();
+       
+ 	    loadAppUser();
 
 
         $("#message_sent_to_user").click(function(){
@@ -635,6 +638,7 @@
                     contentType:false,
                     processData:false,
                     success: function(data){
+						// need to confirmation 
 						if($('#edit_msg_id').val() != ""){
 							if(data == 1){
 								$('#sent_message_id_'+$('#edit_msg_id').val()+'>p').html($.trim($('#admin_message').val()));

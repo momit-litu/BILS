@@ -345,8 +345,7 @@ class MessageController extends Controller
 				->orderBy('mm.message_date_time', 'desc')
 				->get();
 		}
-		
-
+	
         return json_encode(array(
             "message"=>$message
         ));
