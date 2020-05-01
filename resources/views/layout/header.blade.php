@@ -21,7 +21,7 @@
                 <li class="dropdown">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-notification-2"></i>
-                        <span class="badge notificationCounter" notificationCount="0">0</span>
+                        <span class="badge notificationCounter" id="notificationCount">0</span>
                     </a>
                     <ul class="dropdown-menu notifications">
                         <li>
@@ -29,7 +29,7 @@
                         </li>
                         <li>
                             <div class="drop-down-wrapper notificationList">
-                                <ul>
+                                <ul id="notification_list">
                                     <li>
                                         <a href="javascript:void(0)">
                                             <span class="label label-primary"><i class="fa fa-user"></i></span>
@@ -56,81 +56,11 @@
 					</a>
 					<ul class="dropdown-menu posts">
 						<li>
-							<span class="dropdown-menu-title"> You have 9 messages</span>
+							<span class="dropdown-menu-title" id="message_top_unread"></span>
 						</li>
 						<li>
 							<div class="drop-down-wrapper" id="message_header">
 								<ul>
-									<!--li>
-										<a href="javascript:;">
-											<div class="clearfix">
-												<div class="thread-image">
-													<img alt="" src="assets/images/avatar-2.jpg">
-												</div>
-												<div class="thread-content">
-													<span class="author">Nicole Bell</span>
-													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
-													<span class="time"> Just Now</span>
-												</div>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-											<div class="clearfix">
-												<div class="thread-image">
-													<img alt="" src="assets/images/avatar-1.jpg">
-												</div>
-												<div class="thread-content">
-													<span class="author">Peter Clark</span>
-													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
-													<span class="time">2 mins</span>
-												</div>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-											<div class="clearfix">
-												<div class="thread-image">
-													<img alt="" src="assets/images/avatar-3.jpg">
-												</div>
-												<div class="thread-content">
-													<span class="author">Steven Thompson</span>
-													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
-													<span class="time">8 hrs</span>
-												</div>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-											<div class="clearfix">
-												<div class="thread-image">
-													<img alt="" src="assets/images/avatar-1.jpg">
-												</div>
-												<div class="thread-content">
-													<span class="author">Peter Clark</span>
-													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
-													<span class="time">9 hrs</span>
-												</div>
-											</div>
-										</a>
-									</li>
-									<li>
-										<a href="javascript:;">
-											<div class="clearfix">
-												<div class="thread-image">
-													<img alt="" src="assets/images/avatar-5.jpg">
-												</div>
-												<div class="thread-content">
-													<span class="author">Kenneth Ross</span>
-													<span class="preview">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</span>
-													<span class="time">14 hrs</span>
-												</div>
-											</div>
-										</a>
-									</li-->
 								</ul>
 							</div>
 						</li>
@@ -198,5 +128,5 @@
 
 
     <script src="{{ asset('assets/js/bils/common.js')}}"></script>
-
+    <script src="{{ asset('assets/js/bils/header.js')}}"></script>
 @endsection

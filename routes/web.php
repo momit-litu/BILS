@@ -45,11 +45,18 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
 
 	Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
-	Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
+    Route::get('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
+    Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
+    Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
+
+
+    Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
 	Route::get('app/detail-notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeDetail'));
 	Route::get('app/publication',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationList'));
 	Route::get('app/detail-publication',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationDetail'));
 	Route::get('app/notification',array('as'=>' Notification' , 'uses' =>'FrontEndController@notificationList'));
+    Route::get('app/new_notifications',array('as'=>'Notification' , 'uses' =>'FrontEndController@newNotification'));
+    Route::get('app/all_notifications',array('as'=>'Notification' , 'uses' =>'FrontEndController@allNotification'));
 
 
 	Route::get('app/course',array('as'=>' Course' , 'uses' =>'FrontEndController@courseList'));
@@ -222,7 +229,9 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/load-app-user',array('as'=>'Load App User', 'uses' =>'MessageController@loadAppUser'));
 	##Load Messages for one-to-one Chat
 	Route::post('/message/load-message',array('as'=>'Load Message', 'uses' =>'MessageController@loadMessage'));
-	##Search App Users
+    Route::get('/message/delete-message/{id}',array('as'=>'Load Message', 'uses' =>'MessageController@deleteMessage'));
+
+    ##Search App Users
 	Route::post('/message/search-app-users',array('as'=>'Search App Users', 'uses' =>'MessageController@searchAppUsers'));
 
 	##Sent message to user
@@ -258,7 +267,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::post('/message/load-group-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadGroupMessage'));
     Route::get('/message/load-new-message',array('as'=>'New message', 'uses' =>'MessageController@newMessageLoad'));
     Route::post('/message/load-category-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadCategoryMessage'));
-
+    Route::get('/message/load-new-notifications',array('as'=>'New message', 'uses' =>'NotificationController@newNotificationLoad'));
 
 });
 

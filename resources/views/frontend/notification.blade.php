@@ -10,8 +10,8 @@
 	</div>
 	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
 
-			<div id="accordion" class="panel-group accordion accordion-custom accordion-teal in" style="display:block !important">
-				<div class="panel panel-default">
+			<div id="allNotificationGrid" class="panel-group accordion accordion-custom accordion-teal in" style="display:block !important">
+				<!--div class="panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 						<a href="#faq_1_1" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed">
@@ -231,7 +231,7 @@
 					</div>
 					<div class="panel-collapse collapse" id="faq_1_4">
 						<div class="panel-body">
-							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                            body
 						</div>
 					</div>
 				</div>
@@ -249,7 +249,7 @@
 						</div>
 					</div>
 				</div>
-				<div class="panel panel-default">
+				<div-- class="panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 						<a href="#faq_1_6" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed">
@@ -262,19 +262,70 @@
 							Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
 						</div>
 					</div>
-				</div>
+				</div-->
 			</div>
 	</div>
 </div>
 
 
 
-	
+
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
 $(document).ready(function(){
 	//alert("NOtification");
-		
+
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    all_notification_reload = () =>{
+        setTimeout(function(){
+            loadAllNotifications();
+            set_time_out_fn();
+        }, 100000);
+    }
+
+    loadAllNotifications = () =>{
+        $.ajax({
+            url: "{{ url('app/')}}/all_notifications",
+            type:'GET',
+            async:false,
+            success: function(response){
+
+                response = JSON.parse(response)
+                //console.log(response)
+                html = '';
+                count = 0;
+                $.each(response, function (key, value) {
+                    count++;
+                    // alert(value.admin_message)
+
+                    //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+                    html +='<div class="panel panel-default"> ' +
+                        '       <div class="panel-heading"> ' +
+                        '           <h4 class="panel-title"> ' +
+                        '               <a href="#faq_1_4" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed"> ' +
+                        '                   <i class="icon-arrow"></i>' +
+                                            value.title +
+                        '                </a>' +
+                        '           </h4> ' +
+                        '       </div> ' +
+                        '       <div class="panel-collapse collapse" id="faq_1_4"> ' +
+                        '           <div class="panel-body">'+value.details+'</div> ' +
+                        '       </div> ' +
+                        '   </div>'
+
+                })
+                $('#allNotificationGrid').html(html)
+
+            }
+        })
+        all_notification_reload()
+    }
+    loadAllNotifications()
 });
 </script>
 
