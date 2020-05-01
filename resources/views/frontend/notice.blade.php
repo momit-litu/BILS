@@ -10,8 +10,8 @@
 	</div>
 	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
 		<div id="timeline" class="demo1">
-			<div class="timeline">
-				<div class="spine"></div>
+			<div class="timeline" id="all_notice">
+				<!--div class="spine"></div>
 				<div class="date_separator">
 					<span>NOVEMBER 2014</span>
 				</div>
@@ -50,7 +50,7 @@
 				<div class="date_separator">
 					<span>DECEMBER 2014</span>
 				</div>
-				<ul class="columns">
+				<ul-- class="columns">
 					<li>
 						<div class="timeline_element bricky">
 							<div class="timeline_title">
@@ -111,7 +111,7 @@
 							</div>
 						</div>
 					</li>
-				</ul>
+				</ul-->
 			</div>
 		</div>
 	</div>
@@ -120,8 +120,81 @@
 
 <script>
 $(document).ready( function(){
-	alert("NOtice");
+        //alert("NOtice");
+
+
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
+    loadNotice = function loadNotice(){//
+
+        $.ajax({
+            url: "{{ url('app/')}}/load-notice",
+            type:'get',
+            async:false,
+            success: function(response) {
+                var response = JSON.parse(response);
+                if(!jQuery.isEmptyObject(response)){
+                    html = "";
+                    noticeMonth = -1
+                    noticeYear = -1
+
+                    $.each(response, function(i,notice){
+                        date = new Date(notice['created_at']);
+                        year= date.getFullYear();
+                        month = date.getMonth();
+                        day = date.getDate();
+                        noticDate = new Date(year+'-'+month+'-'+day)
+                        noticDate = noticDate.toDateString()
+
+                        if(noticeMonth!=month || noticeYear!=year){
+                            noticeMonth = month
+                            noticeYear = year
+                            //newMonth = noticDate.getMonth()
+                            //console.log(newMonth)
+                            if(html!=''){
+                                html+='</ul>'
+                            }
+                            html+= '<div class="date_separator"> ' +
+                                '       <span>'+noticDate+'</span> ' +
+                                '   </div>' +
+                                '<ul class="columns">\n'
+                        }
+
+                        html+='<li>' +
+                            '   <div class="timeline_element teal">\n' +
+                            '     <div class="timeline_title">\n' +
+                            '       <span class="timeline_label">'+notice["title"]+'</span><span class="timeline_date">'+noticDate+'</span>\n' +
+                            '     </div>\n' +
+                            '     <div class="content">\n' + notice["details"]+
+                            '     </div>\n' +
+                            '     <div class="readmore">\n' +
+                            '       <a href="#" class="btn btn-dark-beige">\n' +
+                            '        Read More <i class="fa fa-arrow-circle-right"></i>\n' +
+                            '       </a>\n' +
+                            '     </div>\n' +
+                            '    </div>\n' +
+                            '  </li>'
+
+                    });
+
+                    html+='</ul>'
+
+                    $('#all_notice').html(html)
+                }
+            }
+        });
+
+    }
+
+    loadNotice()
+
 });
+
 </script>
 
 
