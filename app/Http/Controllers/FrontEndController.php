@@ -196,14 +196,14 @@ class FrontEndController extends Controller
             $new_msg->message_category = $message_category;
             $new_msg->app_user_id = $app_user_id;
             $new_msg->reply_to = $reply_to;
-            $new_msg->is_attachment = 1;
+            $new_msg->is_attachment_app_user = 1;
             $new_msg->save();
             $mm_id = $new_msg->id;
 
             foreach ($attachment as $attachment) {
                 $attachment_name = rand().time().$attachment->getClientOriginalName();
                 $ext = strtoupper($attachment->getClientOriginalExtension());
-                echo $ext;
+                //echo $ext;
                 if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
                     $attachment_type = 1;
                 }
@@ -223,7 +223,7 @@ class FrontEndController extends Controller
                 ##Save image to the message attachment table
                 $msg_attachment = new MessageAttachment();
                 $msg_attachment->message_master_id = $mm_id;
-                $msg_attachment->app_user_atachment = $attachment_name;
+                $msg_attachment->app_user_attachment = $attachment_name;
                 $msg_attachment->attachment_type = $attachment_type;
                 $msg_attachment->save();
 

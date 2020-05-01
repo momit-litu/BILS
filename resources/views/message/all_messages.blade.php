@@ -256,7 +256,7 @@
 			if(message_load_type == 1){
 				current_page_no =1;
 			}
-			
+
 			$.ajax({
                 url: url+'/message/load-message',
                 type:'POST',
@@ -367,6 +367,8 @@
                                         var attachment_type = att_type[1];
                                         var attachment_name	= att_type[0];
 
+                                        //alert(attachment_name)
+
                                         if(message["attachment_type"]==1){
                                             //Image
                                             html += '<img  class="zoomImg" style="height:80px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
@@ -398,7 +400,7 @@
                                 html += '</li>';
 							}
                             message_body = html+message_body;
-							
+
                         });
                     }
                     //loadAppUser();
@@ -407,14 +409,14 @@
 							//alert('1:change all message')
 							$(".message_body").html(message_body);
 							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
-							current_page_no=2;							
+							current_page_no=2;
 						}
 						else if(message_load_type == 2){ // 2: get last message which just entered by admin
 							//alert('1:add last mesage')
 							var html_tag = $(".message_body");
 							html_tag.append(message_body);
 							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
-							
+
 						}
 						else if(message_load_type == 3){ // 3: get load more messages
 							//alert('1:add more all message')
@@ -422,7 +424,7 @@
 							html_tag.prepend(message_body);
 							// need to specify the las message <li> and make the slide animation accoring to that li
 							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
-							current_page_no++;	
+							current_page_no++;
 						}
 					}
 					$('.content').unblock();
@@ -434,9 +436,9 @@
                 $("#modalIMG").modal();
                 $("#load_zoom_img").attr('src',image_src);
             });
-			
+
 		}
-		
+
         loadMessageUser = function loadMessageUser(app_user_id){
             $("#search_app_user").val("");
             //event.preventDefault();
@@ -451,26 +453,26 @@
                     var response = JSON.parse(response);
                     console.log(response)
                     var data = response['data'];
-					
+
 					$("#app_user_name").html(data['name']);
 					$("#app_user_id").val(data['id']);
-					
+
                     if (data['user_profile_image']!=null && data['user_profile_image']!="") {
                         $("#app_user_image").attr('src', app_user_profile_url+"/"+data['user_profile_image']);
                     }
                     else{
                         $("#app_user_image").attr('src', app_user_profile_url+"/no-user-image.png");
                     }
-					
+
                     $("#load_more_message").html('<button onclick="loadMessages(3);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
 					//alert('tesss')
 					loadMessages(1); // 1: all message dump
 
                 }
-            });            
+            });
             //window.setInterval(loadMessageUser(app_user_id), 1000);
         }
-	
+
 
         replyMessage = (id, msg) =>{
             $('#reply_msg_id').val(id)
