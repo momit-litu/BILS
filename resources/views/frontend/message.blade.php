@@ -11,7 +11,7 @@
 	</div>
 	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel" >
 		<ol class="discussion" id="message_body">
-			<!--li class="other">
+			<li class="other">
 				<div class="avatar">
 					<img alt="" src="assets/images/avatar-4.jpg">
 				</div>
@@ -82,12 +82,12 @@
 						Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
 					</p>
 				</div>
-			</li-->
-
+			</li>
 		</ol>
 	<div class="ps-scrollbar-x-rail" style="width: 323px; display: none; left: 0px; bottom: -263px;"><div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 266px; height: 460px; display: inherit; right: 3px;"><div class="ps-scrollbar-y" style="top: 169px; height: 291px;"></div></div></div>
 	<div class="col-sm-12 padding-left-0 padding-right-0">
 		<div class="chat-form ">
+		<form id="sent_message" name="sent_message" enctype="multipart/form-data">
 			<div class="input-group">
 				<span class="input-group-btn dropup ">
 					<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
@@ -111,30 +111,26 @@
 						</li>
 					</ul>-->
 				</span>
-                <form id="sent_message" name="sent_message" enctype="multipart/form-data" class="form form-horizontal form-label-left">
-                    <input type="text" id="message_input" name="message_input" class="form-control input-mask-date" placeholder="Type a message here..."/>
-                    <span class="input-group-btn ">
-                        <span class="btn btn-file btn-blue btn-custom-side-padding border-radious-0" >
-                            <i class="clip-attachment"></i>
-                            <input multiple="" id="attachment" name="attachment[]" type="file">
-                        </span>
-                    </span>
-                    <span class="input-group-btn ">
-                        <button class="btn btn-green border-radious-0" id="message_sent_button" type="button">
-                            <i class="clip-paperplane "></i>
-                        </button>
-                    </span>
-                </form>
-
+                
+				<input type="text" id="message_input" name="message_input" class="form-control input-mask-date" placeholder="Type a message here..."/>
+				<span class="input-group-btn ">
+					<span class="btn btn-file btn-blue btn-custom-side-padding border-radious-0" >
+						<i class="clip-attachment"></i>
+						<input multiple="" id="attachment" name="attachment[]" type="file">
+					</span>
+				</span>
+				<span class="input-group-btn ">
+					<button class="btn btn-green border-radious-0" id="message_sent_button" type="button">
+						<i class="clip-paperplane "></i>
+					</button>
+				</span>
 			</div>
+			 </form>
 		</div>
 	</div>
 </div>
 
 
-
-
-<script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
 $(document).ready(function(){
 
@@ -243,7 +239,7 @@ $(document).ready(function(){
         //window.setInterval(loadMessage(app_user_id, number_of_msg), 1000);
     }
 
-    loadMessage()
+  //  loadMessage()
 
 
 
