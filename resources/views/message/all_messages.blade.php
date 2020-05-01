@@ -210,6 +210,7 @@
         var number_of_msg = 20;
 		var current_page_no = 1;
         var loaded = 1;
+		var last_appuser_message_id = "";
 
 		var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 		var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
@@ -264,7 +265,8 @@
                     app_user_id_load_msg:app_user_id,
                     limit:number_of_msg,
 					page_no:current_page_no,
-					message_load_type:message_load_type
+					message_load_type:message_load_type,
+					last_appuser_message_id:last_appuser_message_id
                 },
                 async:false,
 				beforeSend: function( xhr ) {
@@ -346,7 +348,7 @@
                             }
                             else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
                                 if(message["replied"]){
-									html+='<li class="receive_msg" style="margin-bottom: -15px;padding-left: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
+									html+='<li class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
                                 }
                                 html += '<li class="receive_msg" id="receive_message_id_'+message['id']+'">';
                                 if($.trim(message['user_profile_image']) == "null" || $.trim(message['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
@@ -408,7 +410,9 @@
 							$(".messages").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
 							current_page_no=2;							
 						}
-						else if(message_load_type == 2){ // 2: get last message which just entered by admin
+						// 2: get last message which just entered by admin
+						// load appuser last message
+						else if(message_load_type == 2 || message_load_type == 4){ 			
 							//alert('1:add last mesage')
 							var html_tag = $(".message_body");
 							html_tag.append(message_body);
@@ -416,8 +420,7 @@
 							
 						}
 						else if(message_load_type == 3){ // 3: get load more messages
-							//alert('1:add more all message')
-														
+							//alert('1:add more all message')						
 							// need to specify the las message <li> and make the slide animation accoring to that li
 							$(".messages").animate({ scrollTop: $(document).height() }, "fast");
 							var html_tag = $(".message_body");
@@ -439,6 +442,8 @@
 		
         loadMessageUser = function loadMessageUser(app_user_id){
             $("#search_app_user").val("");
+			// change the last app users message 
+			last_appuser_message_id = "";
             //event.preventDefault();
             $.ajaxSetup({
                 headers:{
@@ -471,6 +476,21 @@
             //window.setInterval(loadMessageUser(app_user_id), 1000);
         }
 	
+
+		set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){
+			setTimeout(function(){
+				newAppMessages();
+			}, 15000);
+		}
+		newAppMessages = function newAppMessages(){
+			if($('.receive_msg:last').length>0){
+				last_app_user_message = $('.receive_msg:last').attr('id').split('_');
+				last_appuser_message_id = last_app_user_message;
+				loadMessages(4);
+			}
+			set_appmessage_time_out_fn();
+		}
+		newAppMessages();
 
         replyMessage = (id, msg) =>{
             $('#reply_msg_id').val(id)
@@ -606,7 +626,6 @@
         newMsgSent = function newMsgSent(){
             var formData = new FormData($('#sent_message_to_user')[0]);
             if(( $.trim($('#admin_message').val()) != "" || $.trim($('#attachment').val()) != "" ) && $.trim($('#app_user_id').val()) != ""){
-
                 $.ajax({
                     url: url+"/message/admin-message-sent-to-user",
                     type:'POST',
@@ -616,11 +635,18 @@
                     contentType:false,
                     processData:false,
                     success: function(data){
+						if($('#edit_msg_id').val() != ""){
+							if(data == 1){
+								$('#sent_message_id_'+$('#edit_msg_id').val()+'>p').html($.trim($('#admin_message').val()));
+							}
+						}
+						else{
+							 loadMessages(2); // 2: last message only
+						}
                         $("#attachment").val('');
                         $('#reply_msg_id').val(null)
                         $('#reply_msg').html(null)
                         $('#edit_msg_id').val(null)
-                        loadMessages(2); // 2: last message only
                         $('#admin_message').val("");
                         //$(".messages").animate({ scrollTop:1800000 /*$(document).height()*/ }, "fast");
                         //loadAppUser();
