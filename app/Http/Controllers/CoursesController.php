@@ -59,7 +59,7 @@ class CoursesController extends Controller
         $rule = [
             'course_title' => 'Required|max:100',
         ];
-
+		//dd($$request->all());
         $validation = Validator::make($request->all(), $rule);
         if ($validation->fails()) {
             $return['result'] = "0";

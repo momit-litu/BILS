@@ -134,12 +134,12 @@
 									<br/>
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6">Profile Details</label>
-										<div class="col-md-10 col-sm-10 col-xs-12">
-											<textarea rows="2" cols="100" id="remarks" name="remarks" class="form-control col-lg-12"></textarea> 
+										<div class="col-md-10 col-sm-10 col-xs-12"> 
+											<textarea class="summernote form-control"  id="remarks" name="remarks" cols="10" rows="4"></textarea>	
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Select Group</label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" ></label>
 										<div id="group_select" class="col-md-10 col-sm-10 col-xs-12"></div>
 									</div>
 									<div class="ln_solid"></div>

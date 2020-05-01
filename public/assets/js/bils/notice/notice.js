@@ -10,7 +10,7 @@ $(document).ready(function () {
 		success: function(response){
 			var data = JSON.parse(response);
 			if(!jQuery.isEmptyObject(data)){
-				var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-center" class="col-md-8 col-sm-8 col-xs-8" >App User Groups</th><th class="col-md-2 col-sm-2 col-xs-12"> <input type="checkbox" id="check-all" class="tableflat">Select All</th></tr></thead>';
+				var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left " class="col-md-8 col-sm-8 col-xs-8" >App User Groups</th><th class="col-md-2 col-sm-2 col-xs-12"> <input type="checkbox" id="check-all" class="tableflat">Select All</th></tr></thead>';
 					html += '<tr><td colspan="2">';
 					$.each(data, function(i,data){
 						html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox" name="app_user_group[]"  class="tableflat check_permission"  value="'+data["id"]+'"/> '+data["group_name"]+'</div>';
@@ -50,7 +50,7 @@ $(document).ready(function () {
 		if($.trim($('#title').val()) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Notice Title","#title");			
 		}
-		else if($.trim($('#details').val()) == ""){
+		else if($("#details").summernote('code') == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Notice Details","#details");			
 		}
 		else{
@@ -179,7 +179,7 @@ $(document).ready(function () {
 				$("#save_notice").html('Update');
 				$("#notice_edit_id").val(data['id']);
 				$("#title").val(data['title']);
-				$("#details").val(data['details']);
+				$("#details").summernote('code',data['details']);
 				$("#notice_date").val(data['notice_date']);
 				$("#expire_date").val(data['expire_date']);
 				(data['status']=='1')?$("#is_active").iCheck('check'):$("#is_active").iCheck('uncheck');
@@ -242,7 +242,7 @@ $(document).ready(function () {
 				processData:false,
 				success: function(data){
 					var response = JSON.parse(data);
-					var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-center" class="col-md-8 col-sm-8 col-xs-8" >App Users</th><th class="col-md-2 col-sm-2 col-xs-12"> </th></tr></thead>';
+					var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left" class="col-md-8 col-sm-8 col-xs-8" >App Users</th><th class="col-md-2 col-sm-2 col-xs-12"> </th></tr></thead>';
 					html += '<tr><td colspan="2">';
 					$.each(response, function(i,row){
 						$.each(row, function(j,k){
@@ -279,6 +279,7 @@ $(document).ready(function () {
 
 	//Clear form
 	$("#clear_button").on('click',function(){
+		$('.summernote').summernote('code',"");
 		clear_form();
 	});
 

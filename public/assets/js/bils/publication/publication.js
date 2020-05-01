@@ -25,7 +25,7 @@ $(document).ready(function () {
 		success: function(response){
 			var data = JSON.parse(response);
 			if(!jQuery.isEmptyObject(data)){
-				var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-center" class="col-md-8 col-sm-8 col-xs-8" >App User Groups</th><th class="col-md-2 col-sm-2 col-xs-12"> <input type="checkbox" id="check-all" class="tableflat">Select All</th></tr></thead>';
+				var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left" class="col-md-8 col-sm-8 col-xs-8" >App User Groups</th><th class="col-md-2 col-sm-2 col-xs-12"> <input type="checkbox" id="check-all" class="tableflat">Select All</th></tr></thead>';
 					html += '<tr><td colspan="2">';
 					$.each(data, function(i,data){
 						html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox" name="app_user_group[]"  class="tableflat check_permission"  value="'+data["id"]+'"/> '+data["group_name"]+'</div>';
@@ -65,7 +65,7 @@ $(document).ready(function () {
 		if($.trim($('#publication_title').val()) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Publication Title","#publication_title");			
 		}
-		else if($.trim($('#details').val()) == ""){
+		else if($("#details").summernote('code') == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Publication Details","#details");			
 		}
 		else{
@@ -184,7 +184,7 @@ $(document).ready(function () {
 				$("#save_publication").html('Update');
 				$("#publication_edit_id").val(data['id']);
 				$("#publication_title").val(data['publication_title']);
-				$("#details").val(data['details']);
+				$("#details").summernote('code',data['details']);
 				$("#authors").val(data['authors']);
 				$("#publication_type").val(data['publication_type']).change();
 				(data['status']=='1')?$("#is_active").iCheck('check'):$("#is_active").iCheck('uncheck');
@@ -255,6 +255,7 @@ $(document).ready(function () {
 
 	//Clear form
 	$("#clear_button").on('click',function(){
+		$('.summernote').summernote('code',"");
 		clear_form();
 	});
 

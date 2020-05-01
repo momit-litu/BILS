@@ -172,7 +172,8 @@ $(document).ready(function () {
 				$("#contact_no").val(app_user_info['contact_no']);
 				$("#email").val(app_user_info['email']);
 				$("#address").val(app_user_info['address']);
-				$("#remarks").val(app_user_info['remarks']);
+				//$("#remarks").val(app_user_info['remarks']);
+				$('#remarks').summernote('code',app_user_info['remarks']);
 				$("#app_user_img").attr("src", profile_image_url+"/"+app_user_info["user_profile_image"]);
 				(app_user_info['status']=='0')?$("#is_active").iCheck('uncheck'):$("#is_active").iCheck('check');
 				// console.log(user_group_member_details);
@@ -215,6 +216,7 @@ $(document).ready(function () {
 
 	/*-------- Cancle App Users Update Start --------*/
 	$("#cancle_app_user_update").click(function(){
+		$('#remarks').summernote('code',"");
 		clear_form();
 		$("#app_user_list_button").trigger('click');
 		$("#app_user_button").html('Add App User');
