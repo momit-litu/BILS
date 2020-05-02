@@ -46,6 +46,7 @@ Route::group(['middleware'=>'appUser'], function() {
 
 	Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
     Route::post('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
+	Route::get('app/message/get-message-category',array('as'=>'Get Message Caategory', 'uses' =>'FrontEndController@getMessageCategory'));
     Route::get('app/delete-message/{id}',array('as'=>'Load Message', 'uses' =>'FrontEndController@deleteMessage'));
     Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
     Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
@@ -86,6 +87,7 @@ Route::post('auth/post/login',array('as'=>'Sign in', 'uses' =>'SystemAuthControl
 ##App User Message
 Route::get('/message/app-user/{id}',array('as'=>'App User Message', 'uses' =>'AppUserController@appUserMessage'));
 Route::post('app-user-message-save',array('as'=>'App User Message Save', 'uses' =>'AppUserController@appUserMessageSave'));
+
 
 
 #ForgetPassword
@@ -254,7 +256,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/view-app-user/{id}',array('as'=>'Get App user View', 'uses' =>'AppUserController@app_user_view'));
 	Route::get('/message/change-app-user-status/{id}',array('as'=>'Change App User Status', 'uses' =>'AppUserController@changeAppUserStatus'));
 	##Get Message Category
-	Route::get('/message/get-message-category',array('as'=>'Get Message Caategory', 'uses' =>'MessageController@getMessageCategory'));
+	
 	##Load App User From Group
 	Route::post('/message/load-app-user-from-group',array('as'=>'Load App User From Group', 'uses' =>'MessageController@loadAppUserFromGroup'));
 

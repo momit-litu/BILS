@@ -165,7 +165,7 @@
 
                         @if(\Auth::guard('appUser')->check())
                             @if((\Auth::guard('appUser')->user()->user_profile_image != ''))
-                                <img width="30px" height="30px;" src="{{ asset('assets/images/user/admin') }}/{{ \Auth::guard('appUser')->user()->user_profile_image }}" class="circle-img" >
+                                <img width="30px" height="30px;" src="{{ asset('assets/images/user/app_user') }}/{{ \Auth::guard('appUser')->user()->user_profile_image }}" class="circle-img" >
                             @else
                                 <img width="30px" height="30px;" src="{{asset('assets/images/user/admin/small/profile.png')}}" class="circle-img" >
                             @endif

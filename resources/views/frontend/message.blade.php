@@ -1,4 +1,4 @@
-<div class="panel panel-default border-none">
+<div class="panel panel-default border-none" style='margin-bottom:0 !important'>
 	<div class="panel-heading">
 		<i class="clip-bubble-4"></i>
 		{{__('app.Message')}}
@@ -9,135 +9,28 @@
 
 		</div>
 	</div>
-        <div class="panel-body panel-scroll ps-container ps-active-y fixed-panel message_div" >
+		<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel message_div" >
             <ol class="discussion" id="message_body">
-                <!--li class="other">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-4.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                        <span class="time"> 51 min </span>
-                    </div>
-                </li>
-                <li class="self">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-1.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                        <span class="time"> 37 mins </span>
-                    </div>
-                </li>
-                <li class="other">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-3.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                    </div>
-                </li>
-                <li class="self">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-1.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                    </div>
-                </li>
-                <li class="other">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-4.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                    </div>
-                </li>
-
-
-
-
-                <li class="self">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-1.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                    </div>
-                </li>
-
-
-                <li class="other" id="receive_message_id_109">
-                    <div class="avatar">
-                        <img style="width:25px;height:25px;"  src="http://bils.test/assets/images/user/admin/1585081916.jpg" alt="" />
-                    </div>
-                    <div class="messages">
-                        <p class="left">saaskljdf</p>
-                    </div>
-                    <span class="time_date">
-                        <a href="javascript:void(0)" onclick="replyMessage(109,'saaskljdf')" class="margin-right-2 text-success">
-                            <i class="fa fa-mail-reply"></i>
-                         </a>2020-05-01 07:07:59
-                    </span>
-                </li>
-                <li class="other">
-                    <div class="avatar">
-                        <img alt="" src="assets/images/avatar-4.jpg">
-                    </div>
-                    <div class="messages">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
-                        </p>
-                    </div>
-
-                </li-->
-
             </ol>
-            <div class="ps-scrollbar-x-rail" style="width: 323px; display: none; left: 0px; bottom: -263px;">
-                <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
-            </div><div class="ps-scrollbar-y-rail" style="top: 266px; height: 460px; display: inherit; right: 3px;">
-                <div class="ps-scrollbar-y" style="top: 169px; height: 291px;"></div>
-            </div>
         </div>
         <div class="col-sm-12 padding-left-0 padding-right-0">
 		    <div class="chat-form ">
 			<form id="sent_message" name="sent_message" enctype="multipart/form-data" class="form form-horizontal form-label-left">
+			<p id="reply_msg" class="replied_message_p" style="height:15px; overload:hidden;">&nbsp;</p>
+            <input type="hidden" id="edit_msg_id" name="edit_msg_id">
+			<input type="hidden" id="reply_msg_id"  name="reply_msg_id">
 			<div class="input-group">
-				<span class="input-group-btn dropup ">
-					<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
-
-					<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
-						<input type="text" placeholder="Search Category" id="form-field-9" class="form-control">
-					</div>
-
-					<ul class="dropdown-menu">
-						<li>
-							<a href="#">
-								Category 1
-							</a>
-						</li>
-						<li>
-							<a href="#">
-								Category 2
-							</a>
-						</li>
-					</ul>
-				</span>
-				<input type="hidden" id="reply_msg_id">
+			<span class="input-group-btn dropup ">
+				<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding border-radious-0" data-toggle="dropdown">
+					<span class="caret"></span>
+				</button>
+				<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
+					Category/Topic: &nbsp; <select name="message_category" id="message_category" style="min-width:150px">
+						<option disabled="" selected="" value="">Select Category</option>
+					</select>
+				</div>
+			</span>
+				
 				<input type="text" id="message_input" name="message_input" class="form-control input-mask-date" placeholder="Type a message here..."/>
 				<span class="input-group-btn ">
 					<span class="btn btn-file btn-blue btn-custom-side-padding border-radious-0" >
@@ -164,42 +57,36 @@ $(document).ready(function(){
     var number_of_msg = 20;
     var current_page_no = 1;
     var loaded = 1;
-    var last_admin_message_id = "";
+    var last_admin_message_id = "0";
 
     var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
     var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
     var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
-    var admin_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
+    var image_url = "<?php echo asset('assets/images'); ?>";
+	$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
+	const container = document.querySelector('.fixed-panel');
 
-
-	$('#message_sent_button').on('click',function(){
-
-        var formData = new FormData($('#sent_message')[0]);
-
-        if(( $.trim($('#message_input').val()) != "" || $.trim($('#attachment').val()) != "" )){
-
-            $.ajax({
-                url: "{{ url('app/')}}/send-message",
-                type:'POST',
-                data:formData,
-                async:false,
-                cache:false,
-                contentType:false,
-                processData:false,
-                success: function(data){
-                    $("#attachment").val('');
-                    $('#reply_msg_id').val(null)
-                    //$('#reply_msg').html(null)
-                    //$('#edit_msg_id').val(null)
-                    loadMessages(2); // 2: last message only
-                    $('#message_input').val("");
-                    $(".messages").animate({ scrollTop: $(document).height() }, "fast");
-                    //loadAppUser();
-                }
-            });
-        }
-
-    });
+	
+	$.ajax({
+		url: "{{ url('app/')}}/message/get-message-category",
+		success: function(response){
+			var data = JSON.parse(response);
+			var option = '<option value="">&nbsp;</option>';
+			$.each(data, function(i,data){
+				option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
+			});
+			$("#message_category").append(option)
+			$('#message_category_group').html(option)
+			$("#message_category_group").select2({
+				placeholder: "Categoty/Topic",
+				allowClear: true
+			});
+			$("#message_category").select2({
+				placeholder: "Categoty/Topic",
+				allowClear: true
+			});
+		}
+	});
 
     $.ajaxSetup({
         headers:{
@@ -207,23 +94,21 @@ $(document).ready(function(){
         }
     });
 
-    removeMessage = (id, message)=>{
-        alert(1)
-        /*$.ajax({
+    removeMessage = function removeMessage(id, message){
+       $.ajax({
             url: "{{ url('app/')}}/delete-message/"+id,
             type: 'GET',
             async: false,
             success: function (response) {
-                //alert(2)
+                alert(2)
                 if($('#sent_message_id_'+id).prev().hasClass('reply')){
                     $('#sent_message_id_'+id).prev().remove();
                 }
-                $('#sent_message_id_'+id).next('span').remove();
                 $('#sent_message_id_'+id).remove();
 
-                $('#admin_message').val("");
+                $('#message_input').val("");
             }
-        })*/
+        })
     }
 
 
@@ -252,7 +137,7 @@ $(document).ready(function(){
             },
             async:false,
             beforeSend: function( xhr ) {
-                ajaxPreLoad()
+               // ajaxPreLoad()
                 //$("#load-content").fadeOut('slow');
             },
             success: function(response){
@@ -272,22 +157,21 @@ $(document).ready(function(){
                         if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null )  ){
                             //alert(message['id']+'user')
                             //html+='<li class="self">'
-                            if(message["reply_message"]){
-                                html+='<p class="reply replied_message_p" ">'+message['reply_message']+'</p> ';
-                            }
                             html += '<li class="self" id="sent_message_id_'+message['id']+'">';
-
+							 if(message["reply_message"]){
+                                html+='<p class="reply replied_message_p background-gray text-right" ">'+message['reply_message']+'</p> ';
+                            }
                             if($.trim(message['app_user_image']) == "null" || $.trim(message['app_user_image']) == ""  ) app_user_image = "no-user-image.png";
                             else  									 	app_user_image = message['app_user_image'];
-                            html += '<div class="avatar"><img style="width:25px;height:25px; cursor:pointer" title="" src="'+app_user_profile_url+'/'+app_user_image+'" alt="" /></div>';
-
+                            html += '<div class="avatar"><img style="width:25px;height:25px; cursor:pointer" title="" src="'+app_user_profile_url+'/{{ \Auth::guard('appUser')->user()->user_profile_image }}" alt="" /></div>';
+							html += '<div class="messages">';
                             if (message["app_user_message"]!=null && message["app_user_message"]!="") {
-                                html += '<div class="messages"><p">'+message["app_user_message"]+'</p></div>';
+                                html += '<p class="text-right ">'+message["app_user_message"]+'</p>';
                             }else{
                                 html+="";
                             }
-                            if(message["is_attachment"]==1){
-                                html+="<div class='attachment_div'>";
+                            if(message["is_attachment_app_user"]==1){
+                                html+="<div class='attachment_div text-right'>";
                                 attachements = message["app_user_attachment"].split(',');
                                 var old_type = "";
                                 for(var i=0; i<attachements.length; i++){
@@ -304,12 +188,12 @@ $(document).ready(function(){
 
                                     if(attachment_type==1){
                                         //Image
-                                        html += line_break+'<img  class="zoomImg" style="height:80px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
+                                        html += line_break+'<img  class="zoomImg" style="height:60px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
                                         //onclick="zoomImg()"
                                     }
                                     else if(attachment_type==2){
                                         //Video
-                                        html +='<div class="row pull-right text-right"><video style="float:right;margin-right:10px;" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+                                        html +='<div class="row pull-right text-right"><video style="float:right;margin-right:10px;" width="180" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
                                     }
                                     else if(attachment_type==3){
                                         //Audio
@@ -322,8 +206,7 @@ $(document).ready(function(){
                                 }
                                 html+="</div>";
                             }
-                            html+='</li>'
-
+							 html+='</div>'
                             if (message["category_name"]!=null && message["category_name"]!="") {
                                 mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
                             }
@@ -332,8 +215,9 @@ $(document).ready(function(){
                             }
                             tem_msg = "'"+message['app_user_message']+"'";
 
-                            html += '<span class="time_date_sent">'+mc+' '+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
-                        }
+                            html += '<span class="time_date_sent pull-left">'+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-5 margin-right-5 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-5 margin-right-5"><i class="fa fa-pencil"></i></a>'+mc+'</span>';
+							html+='</div>'
+						}
                         else if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
                             //alert(message['id']+'admin')
 
@@ -342,19 +226,18 @@ $(document).ready(function(){
                             if(message["replied"]){
                                 html+='<p class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></p>  ';
                             }
-                            html += '<li class="other" id="receive_message_id_'+message['id']+'">';
-                            if($.trim(message['admin_image']) == "null" || $.trim(message['admin_image']) == ""  ) admin_image = "no-user-image.png";
-                            else  									 	admin_image = message['admin_image'];
-                            html += '<div class="avatar"><img style="width:25px;height:25px;"  src="'+admin_image_url+'/'+admin_image+'" alt="" /></div>';
+                            html += '<li class="other receive_msg" id="receive_message_id_'+message['id']+'">';
 
+                            html += '<div class="avatar"><img style="width:25px;height:35px;"  src="'+image_url+'/logo.jpg" alt="" /></div>';
+							html += '<div class="messages">';
                             if (message["admin_message"]!=null && message["admin_message"]!="") {
-                                html += '<div class="messages"><p class="left">'+message["admin_message"]+'</p></div>';
+                                html += '<p class="left">'+message["admin_message"]+'</p>';
                             }
                             if( (message["admin_message"]!=null && message["admin_message"]!="")&& (message["is_attachment"]==1) ){
                                 html+="";
                             }
                             if(message["is_attachment"]==1){
-                                html+="<div class='attachment_div' style=' display: inline-block;  padding:10px 15px 10px 40px;  max-width: 80%;  line-height: 130%;'>";
+                                html+="<div class='attachment_div' style=' display: inline-block;  padding:5px'>";
                                 attachements = message["admin_atachment"].split(',');
                                 for(var i=0; i<attachements.length; i++){
                                     var att_type 		= (attachements[i].split("*"));
@@ -363,12 +246,12 @@ $(document).ready(function(){
 
                                     if(message["attachment_type"]==1){
                                         //Image
-                                        html += '<img  class="zoomImg" style="height:80px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
+                                        html += '<img  class="zoomImg" style="height:60px !important; width:auto !important;  border-radius:0; cursor:pointer" src="'+msg_image_url+'/'+attachment_name+'" alt="">';
                                         //onclick="zoomImg()"
                                     }
                                     else if(message["attachment_type"]==2){
                                         //Video
-                                        html +='<div class="row text-left"><video style="float:left; margin-left:10px" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+                                        html +='<div class="row text-left"><video style="float:left; margin-left:10px" width="180" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
                                     }
                                     else if(message["attachment_type"]==3){
                                         //Audio
@@ -380,8 +263,8 @@ $(document).ready(function(){
                                     }
                                 }
                                 html+="</div>";
-                            }
-                            html += '</li>';
+                            }							
+                            html+="</div>";
 
                             if (message["category_name"]!=null && message["category_name"]!="") {
                                 mc = '<div class="btn btn-xs btn-info disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
@@ -390,18 +273,20 @@ $(document).ready(function(){
                                 mc = "";
                             }
                             tem_msg = "'"+message['admin_message']+"'";
-                            html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+' '+mc+'</span>';
-                        }
+                            html += '<span class="time_date pull-right">'+mc+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-5 margin-left-5 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+'</span>';
+							html += '</li>';
+						}
 
                         //console.log(html)
                         message_body = html+message_body;
                     });
                 }
-                //loadAppUser();
+
                 if(message_body != ""){
                     if(message_load_type == 1){ // 1: all message dump
                         //alert('1:change all message')
                         $("#message_body").html(message_body);
+						container.scrollTop = 200000;
                         //$(".message_div").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
                         current_page_no=2;
                     }
@@ -411,50 +296,110 @@ $(document).ready(function(){
                         //alert('1:add last mesage')
                         var html_tag = $("#message_body");
                         html_tag.append(message_body);
-                        //$(".message_div").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+                        container.scrollTop = 200000;
 
                     }
                     else if(message_load_type == 3){ // 3: get load more messages
                         //alert('1:add more all message')
                         // need to specify the las message <li> and make the slide animation accoring to that li
-                        $(".message_div").animate({ scrollTop: $(document).height() }, "fast");
+						container.scrollTop = $(document).height();
+                        //$(".message_div").animate({ scrollTop: $(document).height() }, "fast");
                         var html_tag = $("#message_body");
                         html_tag.prepend(message_body);
                         current_page_no++;
                     }
+					
+					if($('.receive_msg:last').length>0){
+						last_admin_user_message = $('.receive_msg:last').attr('id').split('_');
+						last_admin_message_id = last_admin_user_message[3];		
+					}
                 }
-                $('.content').unblock();
+                //$('.content').unblock();
             }
         });
 
         $(".zoomImg").click(function(){
             var image_src = $(this).attr('src');
-            $("#modalIMG").modal();
-            $("#load_zoom_img").attr('src',image_src);
+          //  $("#modalIMG").modal();
+          //  $("#load_zoom_img").attr('src',image_src);
         });
 
-        removeMessage()
-
     }
+    loadMessages(1);
 
-<<<<<<< HEAD
-  //  loadMessage()
-=======
-    loadMessages(1)
+	$('#message_sent_button').on('click',function(){
+        var formData = new FormData($('#sent_message')[0]);
+        if(( $.trim($('#message_input').val()) != "" || $.trim($('#attachment').val()) != "" )){       
+		   $.ajax({
+                url: "{{ url('app/')}}/send-message",
+                type:'POST',
+                data:formData,
+                async:false,
+                cache:false,
+                contentType:false,
+                processData:false,
+                success: function(data){
+					// need to confirmation 
+					if($('#edit_msg_id').val() != ""){
+						if(data == 1){
+							$('#sent_message_id_'+$('#edit_msg_id').val()+'>p').html($.trim($('#message_input').val()));
+						}
+					}
+					else{
+						 loadMessages(2); // 2: last message only
+					}
+
+                    $("#attachment").val('');
+                    $('#reply_msg_id').val('')
+                    $('#reply_msg').html('')
+                    $('#edit_msg_id').val('')
+                    $('#message_input').val("");
+					container.scrollTop = 20000;
+                   // $(".message_div").animate({ scrollTop: 20000 }, "fast");
+                }
+            });
+        }
+    });
+
+	editMessage = function editMessage(id, message){
+		$('#edit_msg_id').val(id)
+		$('#message_input').val(message)
+	}
 
 
-    replyMessage = (id, msg) =>{
-        //alert('sdf')
+
+    replyMessage = function replyMessage(id, msg){
         $('#reply_msg_id').val(id)
-        $('#message_input').html(msg)
+		$('#reply_msg').html(msg)
     }
 
+	$('#message_input').on('keydown', function(e) {
+		//alert(e.which);
+		if (e.which == 13) {
+			$('#message_sent_button').trigger('click');
+			return false;
+		}
+	});
+	
+		set_adminmessage_time_out_fn = function set_adminmessage_time_out_fn(){
+		//alert('timeout');
+		setTimeout(function(){
+				newAdminMessages();
+			}, 15000);
+	}
 
->>>>>>> 8418398447e1f5fe15dc94ed651dbcdd4c4775e2
-
-
-
-
+	newAdminMessages = function newAdminMessages(){
+		//alert('newAdminMessages')
+		if($('.receive_msg:last').length>0){
+			last_admin_user_message = $('.receive_msg:last').attr('id').split('_');
+			last_admin_message_id = last_admin_user_message[3];	
+		}
+		loadMessages(4);
+		set_adminmessage_time_out_fn();
+	}
+	newAdminMessages();
+	
+	
 });
 </script>
 

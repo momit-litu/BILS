@@ -246,9 +246,17 @@ class MessageController extends Controller
     public function loadAppUser(){
 
         //$app_user = AppUser::get();
-        $app_user_info = DB::table('message_masters as mm')
+		/*echo DB::table('message_masters as mm')
                             ->rightJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->where('is_group_msg', 0)
+                            ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
+                            ->distinct('mm.app_user_id')
+                            //->orderBy('mm.message_date_time', 'desc')
+                            ->orderBy('mm.id', 'desc')
+							->toSql();die;*/
+        $app_user_info = DB::table('message_masters as mm')
+                            ->rightJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+                           // ->where('is_group_msg', 0)
                             ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
                             ->distinct('mm.app_user_id')
                             //->orderBy('mm.message_date_time', 'desc')
@@ -271,7 +279,7 @@ class MessageController extends Controller
 		$last_appuser_message_id= $_POST['last_appuser_message_id'];
 		$start = ($page_no*$limit)-$limit;
 		$end   = $limit;
-
+		$message = array();
 		/*echo DB::table('message_masters as mm')
                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                     ->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
@@ -326,7 +334,8 @@ class MessageController extends Controller
 				->limit(1)
 				->get();
 		}
-		else if($last_appuser_message_id==4){
+		else if($message_load_type==4){
+
 			$message = DB::table('message_masters as mm')
 				->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
 				->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
@@ -415,6 +424,7 @@ class MessageController extends Controller
 					$upload_path = 'assets/images/message/';
 
 					$success=$attachment->move($upload_path,$attachment_name);
+					if($success) MessageMaster::where('id',$r->edit_msg_id)->update(['is_attachment'=>1]);
 					##Save image to the message attachment table
 					$msg_attachment = new MessageAttachment();
 					$msg_attachment->message_master_id = $r->edit_msg_id;
@@ -426,17 +436,16 @@ class MessageController extends Controller
 			return 1;
 		}
 		else{
-			if($r->hasFile('attachment')){
-				$new_msg = new MessageMaster();
-				$new_msg->admin_id = $admin_id;
-				$new_msg->admin_message = $admin_message;
-				$new_msg->message_category = $message_category;
-				$new_msg->app_user_id = $app_user_id;
-				$new_msg->reply_to = $reply_to;
-				$new_msg->is_attachment = 1;
-				$new_msg->save();
-				$mm_id = $new_msg->id;
+			$new_msg = new MessageMaster();
+			$new_msg->admin_id = $admin_id;
+			$new_msg->admin_message = $admin_message;
+			$new_msg->message_category = $message_category;
+			$new_msg->app_user_id = $app_user_id;
+			$new_msg->reply_to = $reply_to;
+			$new_msg->save();
+			$mm_id = $new_msg->id;
 
+			if($r->hasFile('attachment')){
 				foreach ($attachment as $attachment) {
 					$attachment_name = rand().time().$attachment->getClientOriginalName();
 					$ext = strtoupper($attachment->getClientOriginalExtension());
@@ -457,6 +466,8 @@ class MessageController extends Controller
 					$upload_path = 'assets/images/message/';
 
 					$success=$attachment->move($upload_path,$attachment_name);
+					if($success) MessageMaster::where('id',$mm_id)->update(['is_attachment'=>1]);
+					
 					##Save image to the message attachment table
 					$msg_attachment = new MessageAttachment();
 					$msg_attachment->message_master_id = $mm_id;
@@ -777,6 +788,7 @@ class MessageController extends Controller
     }
 
     public function newMessageLoad(){
+		$newMessage = array();
         $groupMessage = DB::table('message_masters as mm')
             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
@@ -805,23 +817,20 @@ class MessageController extends Controller
         foreach ($groupMessage as $value){
             $newMessage[strtotime($value->msg_date)]=$value;
         }
-
-        usort($newMessage, function($a, $b)
-        {
-            if ($a == $b)
-                return (0);
-            return (($a < $b) ? -1 : 1);
-        });
+		if(!empty($newMessage)){
+			usort($newMessage, function($a, $b)
+			{
+				if ($a == $b)
+					return (0);
+				return (($a < $b) ? -1 : 1);
+			});
+		}
 
         //$message = (object) array_merge((array) $groupMessage, (array) $individualMessage);
 
         return json_encode($newMessage);
 
     }
-
-
-
-
 
 
 

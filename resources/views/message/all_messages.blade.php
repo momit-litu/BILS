@@ -89,34 +89,6 @@
 										Category/Topic: &nbsp; <select name="message_category" id="message_category" style="min-width:150px">
 											<option disabled="" selected="" value="">Select Category</option>
 										</select>
-                                        <!--<div class="form-group">
-                                            <label for="form-field-select-3">
-                                                Select 2
-                                            </label>
-                                            <select id="form-field-select-3" class="form-control search-select">
-                                                <option value="">&nbsp;</option>
-                                                <option value="AL">Alabama</option>
-                                                <option value="AK">Alaska</option>
-                                                <option value="AZ">Arizona</option>
-                                                <option value="AR">Arkansas</option>
-                                                <option value="CA">California</option>
-                                                <option value="CO">Colorado</option>
-                                                <option value="CT">Connecticut</option>
-                                                <option value="DE">Delaware</option>
-                                                <option value="FL">Florida</option>
-                                                <option value="GA">Georgia</option>
-                                                <option value="HI">Hawaii</option>
-                                                <option value="ID">Idaho</option>
-                                                <option value="IL">Illinois</option>
-                                                <option value="IN">Indiana</option>
-                                                <option value="IA">Iowa</option>
-                                                <option value="KS">Kansas</option>
-                                                <option value="KY">Kentucky</option>
-                                                <option value="LA">Louisiana</option>
-                                                <option value="ME">Maine</option>
-                                                <option value="MD">Maryland</option>
-                                            </select>
-                                        </div>-->
 									</div>
 								</span>
                                 <input type="hidden" name="app_user_id" id="app_user_id">
@@ -210,7 +182,7 @@
         var number_of_msg = 20;
         var current_page_no = 1;
         var loaded = 1;
-        var last_appuser_message_id = "";
+        var last_appuser_message_id = 0;
 
         var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
         var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
@@ -268,12 +240,13 @@
                     message_load_type:message_load_type,
                     last_appuser_message_id:last_appuser_message_id
                 },
-                async:false,
+                async:true,
                 beforeSend: function( xhr ) {
-                    ajaxPreLoad()
+                  //  ajaxPreLoad()
                     //$("#load-content").fadeOut('slow');
                 },
                 success: function(response){
+					//alert(1)
                     var response = JSON.parse(response);
                     var message = response['message'];
                     var img_id="";
@@ -282,6 +255,7 @@
 
                     var message_body = "";
                     if(!jQuery.isEmptyObject(message)){
+						//alert('yaaahh')
                         $.each(message, function(i,message){
                             html = "";
                             if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
@@ -402,6 +376,8 @@
                             message_body = html+message_body;
                         });
                     }
+					//alert(message_load_type);
+					//alert(message_body);
                     //loadAppUser();
                     if(message_body != ""){
                         if(message_load_type == 1){ // 1: all message dump
@@ -427,8 +403,20 @@
                             html_tag.prepend(message_body);
                             current_page_no++;
                         }
+						//alert($('.receive_msg:last').length)
+						if($('.receive_msg:last').length>0){
+							//alert('yes')
+							last_app_user_message = $('.receive_msg:last').attr('id').split('_');
+							last_appuser_message_id = last_app_user_message[3];	
+						}
                     }
-                    $('.content').unblock();
+					else{
+						if(message_load_type == 1){ 
+							// NO message yet, 
+                            $(".message_body").html("");
+                        }
+					}
+                   // $('.content').unblock();
                 }
             });
 
@@ -443,7 +431,7 @@
         loadMessageUser = function loadMessageUser(app_user_id){
             $("#search_app_user").val("");
             // change the last app users message
-            last_appuser_message_id = "";
+            last_appuser_message_id = 0;
             //event.preventDefault();
             $.ajaxSetup({
                 headers:{
@@ -480,15 +468,15 @@
 		set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){
 			setTimeout(function(){
 				newAppMessages();
-			}, 15000);
+			}, 5000);
 		}
 		
 		newAppMessages = function newAppMessages(){
 			if($('.receive_msg:last').length>0){
 				last_app_user_message = $('.receive_msg:last').attr('id').split('_');
-				last_appuser_message_id = last_app_user_message;
-				loadMessages(4);
+				last_appuser_message_id = last_app_user_message[3];	
 			}
+			loadMessages(4);
 			set_appmessage_time_out_fn();
 		}
 		newAppMessages();
@@ -537,7 +525,7 @@
                     url: url+"/message/search-app-users",
                     type:'POST',
                     data:{name:name},
-                    async:false,
+                    async:true,
                     success: function(data){
                         var app_users = JSON.parse(data);
 
@@ -650,9 +638,9 @@
 						}
 
                         $("#attachment").val('');
-                        $('#reply_msg_id').val(null)
-                        $('#reply_msg').html(null)
-                        $('#edit_msg_id').val(null)
+                        $('#reply_msg_id').val('')
+                        $('#reply_msg').html('')
+                        $('#edit_msg_id').val('')
                         $('#admin_message').val("");
                         //$(".messages").animate({ scrollTop:1800000 /*$(document).height()*/ }, "fast");
                         //loadAppUser();
