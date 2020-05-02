@@ -221,7 +221,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					&times;
 				</button>
-				
+
 			</div>
 			<div class="modal-body">
 				<div class="panel-body">
@@ -520,8 +520,6 @@
 				right: -$("#page-sidebar").outerWidth()
 			});
 		}
-		//alert('before  height');
-
 	}
 
 

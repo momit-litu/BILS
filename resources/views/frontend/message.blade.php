@@ -30,7 +30,7 @@
 					</select>
 				</div>
 			</span>
-				
+
 				<input type="text" id="message_input" name="message_input" class="form-control input-mask-date" placeholder="Type a message here..."/>
 				<span class="input-group-btn ">
 					<span class="btn btn-file btn-blue btn-custom-side-padding border-radious-0" >
@@ -66,7 +66,7 @@ $(document).ready(function(){
 	$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
 	const container = document.querySelector('.fixed-panel');
 
-	
+
 	$.ajax({
 		url: "{{ url('app/')}}/message/get-message-category",
 		success: function(response){
@@ -263,7 +263,7 @@ $(document).ready(function(){
                                     }
                                 }
                                 html+="</div>";
-                            }							
+                            }
                             html+="</div>";
 
                             if (message["category_name"]!=null && message["category_name"]!="") {
@@ -307,7 +307,7 @@ $(document).ready(function(){
                         var html_tag = $("#message_body");
                         html_tag.prepend(message_body);
                         current_page_no++;
-							
+
 							$('.panel-scroll').perfectScrollbar({
 								wheelSpeed: 50,
 								minScrollbarLength: 20,
@@ -315,12 +315,12 @@ $(document).ready(function(){
 							},{
 								'ps-y-reach-end':loadMoreMessages()
 							});
-							
+
                     }
-					
+
 					if($('.receive_msg:last').length>0){
 						last_admin_user_message = $('.receive_msg:last').attr('id').split('_');
-						last_admin_message_id = last_admin_user_message[3];		
+						last_admin_message_id = last_admin_user_message[3];
 					}
                 }
                 //$('.content').unblock();
@@ -338,7 +338,7 @@ $(document).ready(function(){
 
 	$('#message_sent_button').on('click',function(){
         var formData = new FormData($('#sent_message')[0]);
-        if(( $.trim($('#message_input').val()) != "" || $.trim($('#attachment').val()) != "" )){       
+        if(( $.trim($('#message_input').val()) != "" || $.trim($('#attachment').val()) != "" )){
 		   $.ajax({
                 url: "{{ url('app/')}}/send-message",
                 type:'POST',
@@ -348,7 +348,7 @@ $(document).ready(function(){
                 contentType:false,
                 processData:false,
                 success: function(data){
-					// need to confirmation 
+					// need to confirmation
 					if($('#edit_msg_id').val() != ""){
 						if(data == 1){
 							$('#sent_message_id_'+$('#edit_msg_id').val()+'>p').html($.trim($('#message_input').val()));
@@ -389,7 +389,7 @@ $(document).ready(function(){
 			return false;
 		}
 	});
-	
+
 		set_adminmessage_time_out_fn = function set_adminmessage_time_out_fn(){
 		//alert('timeout');
 		setTimeout(function(){
@@ -401,20 +401,20 @@ $(document).ready(function(){
 		//alert('newAdminMessages')
 		if($('.receive_msg:last').length>0){
 			last_admin_user_message = $('.receive_msg:last').attr('id').split('_');
-			last_admin_message_id = last_admin_user_message[3];	
+			last_admin_message_id = last_admin_user_message[3];
 		}
 		loadMessages(4);
 		set_adminmessage_time_out_fn();
 	}
 	newAdminMessages();
-	
-	
-	
+
+
+
 	function loadMoreMessages(){
-		alert(1)
+		//alert(1)
 		loadMessages(3);
 	}
-	
+
 	$('.panel-scroll').perfectScrollbar({
 		wheelSpeed: 50,
 		minScrollbarLength: 20,
@@ -422,7 +422,7 @@ $(document).ready(function(){
 	},{
 		'ps-y-reach-end':loadMoreMessages()
 	});
-	
+
 });
 </script>
 
