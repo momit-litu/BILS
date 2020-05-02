@@ -168,6 +168,12 @@ class FrontEndController extends Controller
         return json_encode($individualMessage);
     }
 
+    public  function messageView($id){
+        //return $id;
+        MessageMaster::where('id',$id)->update(['is_seen'=>1]);
+        return 1;
+    }
+
     public function newNotification(){
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $Notifications = DB::table('notifications as n')
@@ -189,6 +195,12 @@ class FrontEndController extends Controller
             ->orderBy('n.date_time', 'asc')
             ->get();
         return json_encode($Notifications);
+    }
+
+    public  function notificationView($id){
+	    Notification::where('id',$id)->update(['status'=>1]);
+	    $notification =  Notification::where('id',$id)->get();
+	    return json_encode($notification);
     }
 
     public function userNotice(){

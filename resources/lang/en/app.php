@@ -58,7 +58,7 @@ return [
 	'Password_did_not_match' => 'Password did not matched',
 	'Wrong_password' => 'Wrong Password',
 	'Password_change_successfully' => 'Password Change Successfully',
-	'Message' => 'Message',
+	'Close' => 'Close',
     'Message' => 'Message',
     'Message' => 'Message',
     'Message' => 'Message',
