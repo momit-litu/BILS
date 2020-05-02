@@ -91,31 +91,114 @@
 			<!-- start: PAGE -->
 			<div class="main-content">
 				<!-- start: PANEL CONFIGURATION MODAL FORM -->
-				<!--<div class="modal fade" id="panel-config" tabindex="-1" role="dialog" aria-hidden="true">
+
+                <div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+
+                    </div>
+                    <div class="modal-body">
+                        <div class="panel-body">
+                            <h4 class="modal-title" id="modal_title_content"></h4>
+                            <div id="modal_body_content">
+
+                            </div>
+
+                            <!--
+                            <dl>
+                                <dt>
+                                    Author
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Date:
+                                </dt>
+                                <dd>
+                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+                                </dd>
+                                <dd>
+                                    Donec id elit non mi porta gravida at eget metus.
+                                </dd>
+                                <dt>
+                                    Malesuada porta
+                                </dt>
+                                <dd>
+                                    Etiam porta sem malesuada magna mollis euismod.
+                                </dd>
+                            </dl>
+                            <h4> Horizontal description </h4>
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                                <dd>
+                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+                                </dd>
+                                <dd>
+                                    Donec id elit non mi porta gravida at eget metus.
+                                </dd>
+                                <dt>
+                                    Malesuada porta
+                                </dt>
+                                <dd>
+                                    Etiam porta sem malesuada magna mollis euismod.
+                                </dd>
+                                <dt>
+                                    Felis euismod semper eget lacinia
+                                </dt>
+                                <dd>
+                                    Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+                                </dd>
+                            </dl>
+                            -->
+
+                        </div>
+                    </div>
+                    <!--<div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn btn-light-grey">
+                    Close
+                    </button>
+                    <button type="button" class="btn btn-blue">
+                    Save changes
+                    </button>
+                    </div>-->
+                </div>
+
+
+                <!--
+				<div class="modal fade" id="dashboard_modal" tabindex="-1" role="dialog" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 									&times;
 								</button>
-								<h4 class="modal-title">Panel Configuration</h4>
+								<h4 class="modal-title" id="modal-title"></h4>
 							</div>
-							<div class="modal-body">
-								Here will be a configuration form
+							<div class="modal-body" id="modal-body">
 							</div>
 							<div class="modal-footer">
 								<button type="button" class="btn btn-default" data-dismiss="modal">
-									Close
+                                    {{__('app.Close')}}
 								</button>
-								<button type="button" class="btn btn-primary">
-									Save changes
-								</button>
+
 							</div>
 						</div>
 
 					</div>
-				</div>-->
-				<!-- /.modal -->
+				</div>
+				-->
+                <!-- /.modal -->
 				<!-- end: SPANEL CONFIGURATION MODAL FORM -->
 				<div class="container padding-left-0 padding-right-0" style="margin-bottom: 0px;">
 					@yield('content')
@@ -138,7 +221,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					&times;
 				</button>
-				
+
 			</div>
 			<div class="modal-body">
 				<div class="panel-body">
@@ -437,8 +520,6 @@
 				right: -$("#page-sidebar").outerWidth()
 			});
 		}
-		//alert('before  height');
-
 	}
 
 
@@ -525,13 +606,36 @@
 
 	</script>
     <script>
-
-        //alert('as')
         new_message_reload = () =>{
             setTimeout(function(){
                 newMessages();
-               // set_time_out_fn();
             }, 5000);
+        }
+
+
+        notificationView = (id) =>{
+            $.ajax({
+                url: "{{ url('app/')}}/notification_view/"+id,
+                type: 'GET',
+                async: true,
+                success: function (response) {
+                    response = JSON.parse(response)
+                    newNotifications();
+                    loadPage('notification')
+                }
+            })
+        }
+
+        messageView = (id) =>{
+            $.ajax({
+                url: "{{ url('app/')}}/message_view/"+id,
+                type: 'GET',
+                async: true,
+                success: function (response) {
+                    newMessages();
+                    loadPage('message')
+                }
+            })
         }
 
         newMessages =  () => {
@@ -542,15 +646,11 @@
                 success: function(response){
 
                     response = JSON.parse(response)
-                    //console.log(response)
                     html = '';
                     count = 0;
                     $.each(response, function (key, value) {
                         count++;
-                       // alert(value.admin_message)
-
-                        //alert(app_user_id+'>>'+group_id+'>>'+category_id)
-                        html +='<li> ' +
+                        html +='<li onclick="messageView('+value.id+')"> ' +
                             '       <a href="#">' +
                             '           <div class="clearfix" onclick="viewMessage('+value.id+')">' +
                             '               <div class="thread-image">' +
@@ -569,13 +669,11 @@
                     $('#app_message_badge').html(count)
                     $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_message').html(html)
-                    //console.log(response)
-
                 }
             })
             new_message_reload()
         }
-      //  newMessages();
+        newMessages();
 
         new_notification_reload = () =>{
             setTimeout(function(){
@@ -600,7 +698,7 @@
                         // alert(value.admin_message)
 
                         //alert(app_user_id+'>>'+group_id+'>>'+category_id)
-                        html +='<li> ' +
+                        html +='<li onclick="notificationView('+value.id+')"> ' +
                             '<a href="javascript:void(0)"> ' +
                             '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
                             '<span class="message"> '+value.title+'</span> ' +
@@ -618,9 +716,11 @@
             })
             new_notification_reload()
         }
-      //  newNotifications();
+        newNotifications();
 
     </script>
+
+
 
 
 </body>

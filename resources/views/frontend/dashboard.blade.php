@@ -14,11 +14,11 @@
 			<div class="col-sm-2 col-xs-6">
 				<button class="btn btn-icon btn-block hometab" id="message" onclcik="loadPage('message')">
 					<i class="fa fa-envelope"></i>
-					Message <span class="badge badge-primary"> 4 </span>
+					Message <span class="badge badge-primary" id="message_badge"> 4 </span>
 				</button>
 			</div>
 			<div class="col-sm-2 col-xs-6">
-				<button class="btn btn-icon btn-block hometab"  id="notice" onclcik="loadPage('notice')"> 
+				<button class="btn btn-icon btn-block hometab"  id="notice" onclcik="loadPage('notice')">
 					<i class="fa fa-info-circle"></i>
 					Notice <span class="badge badge-default"> 4 </span>
 				</button>

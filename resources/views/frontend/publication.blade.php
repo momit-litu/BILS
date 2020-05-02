@@ -1,3 +1,5 @@
+
+
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" fa fa-file-text "></i>
@@ -11,9 +13,12 @@
 			</div>
 		</form>
 		<div class="panel-tools">
-			<a href="#responsive" data-toggle="modal" class="demo btn btn-blue">
-																	View Demo
-																</a>
+            <!--
+            <a href="#responsive" data-toggle="modal" class="demo btn btn-blue">
+                View Demo
+            </a>
+            -->
+
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('publication')">
 				<i class="fa fa-refresh"></i>
 			</a>
@@ -83,6 +88,7 @@
 							</div>
 						</div>
 					</li-->
+
 				</ul>
 			</div>
 		</div>
@@ -103,6 +109,24 @@ $(document).ready( function(){
             'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
         }
     });
+
+
+    publicationDetails = (id) =>{
+        $.ajax({
+            url: "{{ url('app/')}}/load-publications-details/"+id,
+            type: 'get',
+            async: false,
+            success: function (response) {
+                //console.log(response)
+                response = JSON.parse(response)
+                $(' #modal_title_content').html(response[0]['title']);
+                $('#modal_body_content').html(response[0]['details'])
+                $('#responsive').modal()
+            }
+        })
+
+    }
+
 
 
     loadPublication = function loadPublication(){//
@@ -126,15 +150,18 @@ $(document).ready( function(){
                         noticDate = new Date(year+'-'+month+'-'+day)
                         noticDate = noticDate.toDateString()
 
+                        var details = publication["details"];
+                        var details = details.substring(0, 300)+'. . . . . . . .';
+
 
                         html+='<li> ' +
                             '   <div class="timeline_element"> ' +
                             '       <div class="timeline_title">' +
                             '           <span class="timeline_label">'+publication["title"]+'</span><span class="timeline_date">'+noticDate+'</span> ' +
                             '       </div> ' +
-                            '       <div class="content"> '+publication["details"]+'</div> ' +
+                            '       <div class="content"> '+details+'</div> ' +
                             '       <div class="readmore"> ' +
-                            '           <a href="#" class="btn btn-info">' +
+                            '           <a href="#" class="btn btn-info" onclick="publicationDetails('+publication["id"]+')">' +
                             '               Details <i class="fa fa-arrow-circle-right"></i> ' +
                             '           </a> ' +
                             '       </div> ' +

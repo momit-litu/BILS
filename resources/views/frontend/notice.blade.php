@@ -129,6 +129,22 @@ $(document).ready( function(){
         }
     });
 
+    noticeDetails = (id) =>{
+        $.ajax({
+            url: "{{ url('app/')}}/load-notice-details/"+id,
+            type: 'get',
+            async: false,
+            success: function (response) {
+                //console.log(response)
+                response = JSON.parse(response)
+                $(' #modal_title_content').html(response[0]['title']);
+                $('#modal_body_content').html(response[0]['details'])
+                $('#responsive').modal()
+            }
+        })
+
+    }
+
 
     loadNotice = function loadNotice(){//
 
@@ -164,16 +180,18 @@ $(document).ready( function(){
                                 '   </div>' +
                                 '<ul class="columns">\n'
                         }
+                        var details = notice["details"];
+                        var details = details.substring(0, 300)+'. . . . . . . .';
 
                         html+='<li>' +
                             '   <div class="timeline_element teal">\n' +
                             '     <div class="timeline_title">\n' +
                             '       <span class="timeline_label">'+notice["title"]+'</span><span class="timeline_date">'+noticDate+'</span>\n' +
                             '     </div>\n' +
-                            '     <div class="content">\n' + notice["details"]+
+                            '     <div class="content">\n' + details+
                             '     </div>\n' +
                             '     <div class="readmore">\n' +
-                            '       <a href="#" class="btn btn-dark-beige">\n' +
+                            '       <a href="#" class="btn btn-dark-beige" onclick="noticeDetails('+notice["id"]+')">\n' +
                             '        Read More <i class="fa fa-arrow-circle-right"></i>\n' +
                             '       </a>\n' +
                             '     </div>\n' +
