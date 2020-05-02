@@ -11,7 +11,9 @@
 			</div>
 		</form>
 		<div class="panel-tools">
-
+			<a href="#responsive" data-toggle="modal" class="demo btn btn-blue">
+													View Demo
+												</a>
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('publication')">
 				<i class="fa fa-refresh"></i>
 			</a>
