@@ -275,10 +275,10 @@
                 });
                 $("#message_category").append(option)
                 $('#message_category_group').html(option)
-                /*$("#message_category_group").select2({
+                $("#message_category_group").select2({
                     placeholder: "Categoty/Topic",
                     allowClear: true
-                });*/
+                });
                 $("#message_category").select2({
                     placeholder: "Categoty/Topic",
                     allowClear: true

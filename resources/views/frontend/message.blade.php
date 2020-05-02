@@ -54,7 +54,7 @@
 <script>
 $(document).ready(function(){
     //var url = $('.site_url').val();
-    var number_of_msg = 20;
+    var number_of_msg = 50;
     var current_page_no = 1;
     var loaded = 1;
     var last_admin_message_id = "0";
@@ -300,13 +300,22 @@ $(document).ready(function(){
 
                     }
                     else if(message_load_type == 3){ // 3: get load more messages
-                        //alert('1:add more all message')
+                        alert('3:add more all message');
                         // need to specify the las message <li> and make the slide animation accoring to that li
-						container.scrollTop = $(document).height();
+						//container.scrollTop = $(document).height();
                         //$(".message_div").animate({ scrollTop: $(document).height() }, "fast");
                         var html_tag = $("#message_body");
                         html_tag.prepend(message_body);
                         current_page_no++;
+							
+							$('.panel-scroll').perfectScrollbar({
+								wheelSpeed: 50,
+								minScrollbarLength: 20,
+								suppressScrollX: true
+							},{
+								'ps-y-reach-end':loadMoreMessages()
+							});
+							
                     }
 					
 					if($('.receive_msg:last').length>0){
@@ -399,6 +408,20 @@ $(document).ready(function(){
 	}
 	newAdminMessages();
 	
+	
+	
+	function loadMoreMessages(){
+		alert(1)
+		loadMessages(3);
+	}
+	
+	$('.panel-scroll').perfectScrollbar({
+		wheelSpeed: 50,
+		minScrollbarLength: 20,
+		suppressScrollX: true
+	},{
+		'ps-y-reach-end':loadMoreMessages()
+	});
 	
 });
 </script>
