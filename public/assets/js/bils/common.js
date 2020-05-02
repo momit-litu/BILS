@@ -38,23 +38,24 @@ $(document).ready(function () {
     set_notification_time_out_fn = () =>{
         setTimeout(function(){
             loadNotifications();
-        }, 100000);
+        }, 7000);
     }
 
 
-    set_message_time_out_fn = () =>{
+    set_message_time_out_fn = function set_message_time_out_fn(){
         setTimeout(function(){
             newMessages();
-        }, 150000);
+        }, 5000);
     }
 
 
 
     newMessages = () =>{
+		//alert(5555555);
         $.ajax({
             url: url+'/message/load-new-message',
             type:'GET',
-            async:false,
+            async:true,
             success: function(response){
                 response = JSON.parse(response)
 
@@ -103,7 +104,7 @@ $(document).ready(function () {
         $.ajax({
             url: url+'/message/load-new-notifications',
             type:'GET',
-            async:false,
+            async:true,
             success: function(response){
                 response = JSON.parse(response)
 

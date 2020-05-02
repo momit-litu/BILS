@@ -117,7 +117,7 @@
 				</div>-->
 				<!-- /.modal -->
 				<!-- end: SPANEL CONFIGURATION MODAL FORM -->
-				<div class="container padding-left-0 padding-right-0">
+				<div class="container padding-left-0 padding-right-0" style="margin-bottom: 0px;">
 					@yield('content')
 				</div>
 			</div>
@@ -298,7 +298,7 @@
 <script src="{{ asset('assets/js/jquery-editable-poshytip.min.js')}}"></script>
 <script src="{{ asset('assets/js/jquery.poshytip.min.js')}}"></script>
 <script src="{{asset('/assets/js/pusher.min.js')}}"></script>
-<script src="{{ asset('assets/js/bils/common.js')}}"></script>
+<!--<script src="{{ asset('assets/js/bils/common.js')}}"></script>-->
 {{--<script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script--}}
 
 
@@ -385,7 +385,7 @@
 			success: function (data) {
 				$("#load-content").html(data);
 				if(pageName=='message'){
-					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+98));
+					//$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
 				}
 				else{
 					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+88));
@@ -456,15 +456,15 @@
         new_message_reload = () =>{
             setTimeout(function(){
                 newMessages();
-                set_time_out_fn();
-            }, 100000);
+               // set_time_out_fn();
+            }, 5000);
         }
 
         newMessages =  () => {
             $.ajax({
                 url: "{{ url('app/')}}/message_notification",
                 type:'GET',
-                async:false,
+                async:true,
                 success: function(response){
 
                     response = JSON.parse(response)
@@ -501,20 +501,20 @@
             })
             new_message_reload()
         }
-        newMessages();
+      //  newMessages();
 
         new_notification_reload = () =>{
             setTimeout(function(){
                 newNotifications();
-                set_time_out_fn();
-            }, 100000);
+              //  set_time_out_fn();
+            }, 10000);
         }
 
         newNotifications =  () => {
             $.ajax({
                 url: "{{ url('app/')}}/new_notifications",
                 type:'GET',
-                async:false,
+                async:true,
                 success: function(response){
 
                     response = JSON.parse(response)
@@ -544,7 +544,7 @@
             })
             new_notification_reload()
         }
-        newNotifications();
+      //  newNotifications();
 
     </script>
 
