@@ -60,12 +60,98 @@ class FrontEndController extends Controller
         return view('frontend.profile', $data);
     }
 
+    public function updateProfile(Request $r){
+
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+
+        if($r->hasFile('profile_image_upload')){
+            if($user_info['user_profile_image']!=null || $user_info['user_profile_image']!=''){
+
+                //file delete code will be here
+            }
+            $attachment = $r->file('profile_image_upload');
+
+            //$attachment = $r->profile_image_upload;
+            $attachment_name = rand().time().$attachment->getClientOriginalName();
+            //return $attachment_name;
+
+            $upload_path = 'assets/images/user/app_user';
+
+            $success=$attachment->move($upload_path,$attachment_name);
+
+        }
+        else $attachment_name = $user_info['user_profile_image'];
+
+        $column_value = [
+            'name' => $r->name,
+            'email' => $r->email,
+            'contact_no' => $r->phone,
+            'nid_no' => $r->nid,
+            'address' => $r->address,
+            'user_profile_image' => $attachment_name,
+        ];
+
+        $update = AppUser::where('id',$user_info['id'])->update($column_value);
+        //$response = SurveyMaster::where('id','=',$request->survey_id)->update($column_value);
+        return $update;
+
+
+    }
+
+    public function updatePassword (Request $r){
+        //$password = bcrypt($r->old_password);
+
+        //return $password;
+        //$2y$10$qj1.MpDYAc6HUW4Wsut7GuCfHxk6WuZeyPcNOBUx85RgCNGnWxSX6
+        //$2y$10$8MyHkYCo7xSK1KhKZ6h7X.fPokXUXi4mQVsrLjISHEmRB94zfT8ci
+
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+
+        $v = \Validator::make($r->all(), [
+            'old_password' => 'required',
+        ]);
+        //dd($v);
+        if ($v->fails()) {
+            return 1;
+        }
+
+        //$remember_me = $request->has('remember_me') ? true : false;
+        $credentials = [
+            'email' => $user_info['email'],
+            'password'=>$r->input('old_password'),
+            'status'=> "1"
+        ];
+
+        if (\Auth::guard('appUser')->attempt($credentials)) {
+            //return 'good';
+            if($r->new_password != $r->retype_new_password){
+                return 1;
+            }
+            $columnValue=array(
+                'password' => bcrypt($r->input('new_password')),
+            );
+            $update = AppUser::where('id',$user_info['id'])->update($columnValue);
+            return 0;
+        }
+        else return 2;
+	}
+
+//$2y$10$8MyHkYCo7xSK1KhKZ6h7X.fPokXUXi4mQVsrLjISHEmRB94zfT8ci
+//$2y$10$B.vLI3JouOxI.shQyQoVIOXbnTAU/pMpNWhCwx6MXHSeOxmxe0xFa
+
 
 	public function messageList()
     {
         $data['page_title'] = $this->page_title;
 		$data['module_name']= "";
         return view('frontend.message', $data);
+    }
+
+    public function profileInfo(){
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+        return(json_encode($user_info));
     }
 
     public  function messageListNotification(){
@@ -234,8 +320,8 @@ class FrontEndController extends Controller
         MessageMaster::where('id',$id)->update(['status'=>0]);
         return 1;
     }
-	
-	
+
+
     public function getMessageCategory(){
         $data = MessageCategory::select('id', 'category_name')->get();
         return json_encode($data);
@@ -289,7 +375,7 @@ class FrontEndController extends Controller
 					$upload_path = 'assets/images/message/';
 
 					$success=$attachment->move($upload_path,$attachment_name);
-					
+
 					if($success) MessageMaster::where('id',$r->edit_msg_id)->update(['is_attachment_app_user'=>1]);
 					##Save image to the message attachment table
 					$msg_attachment = new MessageAttachment();
@@ -311,7 +397,7 @@ class FrontEndController extends Controller
 
 			$new_msg->save();
 			$mm_id = $new_msg->id;
-			
+
 			if($r->hasFile('attachment')){
 				foreach ($attachment as $attachment) {
 					$attachment_name = rand().time().$attachment->getClientOriginalName();
@@ -398,8 +484,8 @@ class FrontEndController extends Controller
 		$data['module_name']= "Survey";
         return view('frontend.survey', $data);
     }
-	
-	
+
+
 
 
 }

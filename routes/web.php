@@ -43,8 +43,12 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
 	Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard'));
 	Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
+    Route::get('app/profile_info',array('as'=>' Profile Info' , 'uses' =>'FrontEndController@profileInfo'));
+    Route::post('app/update_profile',array('as'=>'Update Profile' , 'uses' =>'FrontEndController@updateProfile'));
+    Route::post('app/update_password',array('as'=>' Update Password' , 'uses' =>'FrontEndController@updatePassword'));
 
-	Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
+
+    Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
     Route::post('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
 	Route::get('app/message/get-message-category',array('as'=>'Get Message Caategory', 'uses' =>'FrontEndController@getMessageCategory'));
     Route::get('app/delete-message/{id}',array('as'=>'Load Message', 'uses' =>'FrontEndController@deleteMessage'));
@@ -256,7 +260,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/view-app-user/{id}',array('as'=>'Get App user View', 'uses' =>'AppUserController@app_user_view'));
 	Route::get('/message/change-app-user-status/{id}',array('as'=>'Change App User Status', 'uses' =>'AppUserController@changeAppUserStatus'));
 	##Get Message Category
-	
+
 	##Load App User From Group
 	Route::post('/message/load-app-user-from-group',array('as'=>'Load App User From Group', 'uses' =>'MessageController@loadAppUserFromGroup'));
 
