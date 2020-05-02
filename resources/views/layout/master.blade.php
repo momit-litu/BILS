@@ -287,9 +287,8 @@
             <button type="button" class="btn btn-danger pull-right" data-dismiss="modal">Close</button>
         </div>
     </div>
-
-
 </div>
+
 {{-- End Profile Modal --}}
 
 

@@ -7,6 +7,23 @@ $(document).ready(function () {
 	var loaded = 1;
 
 
+	//load message categories
+        $.ajax({
+            url: url+"/message/get-message-category",
+            success: function(response){
+                var data = JSON.parse(response);
+                var option = '<option value="">&nbsp;</option>';
+                $.each(data, function(i,data){
+                    option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
+                });
+                $("#message_category").append(option)
+                $("#message_category").select2({
+                    placeholder: "Categoty/Topic",
+                    allowClear: true
+                });
+            }
+        });
+
 
 	//Load App User Group Using Notice Controller
 	$.ajax({
@@ -51,7 +68,7 @@ $(document).ready(function () {
 		});
 
 		var formData = new FormData($('#message_form')[0]);
-		if($.trim($('#admin_message').val()) == ""){
+		if($.trim( $("#admin_message").summernote('code')) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Message","#admin_message");
 		}
 		// if( $('#app_user_group').checked==true ){
@@ -162,7 +179,8 @@ $(document).ready(function () {
 			}
 		});
 	}
-
+	// need the edit message 
+	// add $("#details").summernote('code',data['details']);
 	//Publication Edit
 	/*edit_publication = function edit_publication(id){
 		var edit_id = id;
@@ -328,37 +346,36 @@ $(document).ready(function () {
 
 		var formData = new FormData($('#message_form')[0]);
 
+		$.ajax({
+			url: url+"/message/load-app-user-from-group",
+			type:'POST',
+			data:formData,
+			async:false,
+			cache:false,
+			contentType:false,
+			processData:false,
+			success: function(data){
+				var response = JSON.parse(data);
+				var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left" class="col-md-8 col-sm-8 col-xs-8" >App Users</th><th class="col-md-2 col-sm-2 col-xs-12"> </th></tr></thead>';
+				html += '<tr><td colspan="2">';
+				$.each(response, function(i,row){
+					$.each(row, function(j,k){
+						html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox"  name="app_users[]"  class=""  value="'+k["app_user_id"]+'"/> '+k["name"]+'</div>';
+					});
+				});
+				html += '</td></tr>';
+				html +='</table>';
+				$("#app_user_group_members").html(html);
+				$('.form').iCheck({
+					checkboxClass: 'icheckbox_flat-green',
+					radioClass: 'iradio_flat-green'
+				});
 
-			$.ajax({
-				url: url+"/message/load-app-user-from-group",
-				type:'POST',
-				data:formData,
-				async:false,
-				cache:false,
-				contentType:false,
-				processData:false,
-				success: function(data){
-					var response = JSON.parse(data);
-					var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left" class="col-md-8 col-sm-8 col-xs-8" >App Users</th><th class="col-md-2 col-sm-2 col-xs-12"> </th></tr></thead>';
-					html += '<tr><td colspan="2">';
-					$.each(response, function(i,row){
-						$.each(row, function(j,k){
-							html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox"  name="app_users[]"  class=""  value="'+k["app_user_id"]+'"/> '+k["name"]+'</div>';
-						});
-					});
-					html += '</td></tr>';
-					html +='</table>';
-					$("#app_user_group_members").html(html);
-					$('.form').iCheck({
-						checkboxClass: 'icheckbox_flat-green',
-						radioClass: 'iradio_flat-green'
-					});
-
-					$('.flat_radio').iCheck({
-						radioClass: 'iradio_flat-green'
-					});
-				 }
-			});
+				$('.flat_radio').iCheck({
+					radioClass: 'iradio_flat-green'
+				});
+			 }
+		});
 
 	});
 
@@ -368,6 +385,7 @@ $(document).ready(function () {
 
     //Clear form
 	$("#clear_button").on('click',function(){
+		$('.summernote').summernote('code',"");
 		clear_form();
 	});
 

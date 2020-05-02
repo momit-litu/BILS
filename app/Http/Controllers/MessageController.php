@@ -112,7 +112,6 @@ class MessageController extends Controller
                         }
                         else{
                             foreach ($app_user_group as $row) {
-
                                 $app_user_id = AppUserGroupMember::select('app_user_id')
                                                 ->where('group_id',$row)
                                                 ->distinct('app_user_id')
@@ -135,9 +134,6 @@ class MessageController extends Controller
                                 }
                             }
                         }
-
-
-
                     }
 
                     else{
@@ -183,11 +179,16 @@ class MessageController extends Controller
         $delete_permisiion  = $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
 
 		/*echo MessageMaster::Select('id', 'admin_message', 'app_user_id', 'is_seen', 'status', 'message_category')
-                        ->orderBy('id','desc')
+						->distinct('message_id')
+						->whereNotNull('message_id')
+                        ->orderBy('message_id','desc')
                         ->toSql();die;*/
 
         $message_list = MessageMaster::Select('id', 'admin_message', 'app_user_id', 'is_seen', 'status', 'message_category')
-                        ->orderBy('id','desc')
+						->distinct('message_id')
+						->whereNotNull('message_id')
+                        ->orderBy('message_id','desc')
+						->groupBy('message_id')
                         ->get();
 
         $return_arr = array();
