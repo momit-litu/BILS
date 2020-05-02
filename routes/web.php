@@ -144,7 +144,7 @@ Route::group(['middleware' => ['auth']], function () {
 
     /*-------------- Messages Start-------------*/
     Route::get('messages/category-messages-management',array('as'=>'All Messages Management', 'uses' =>'MessageController@categoryMessages'));
-
+	Route::get('message/get-message-category',array('as'=>'Get Message Caategory', 'uses' =>'MessageController@getMessageCategory'));
 	Route::get('messages/all-messages-management',array('as'=>'All Messages Management', 'uses' =>'MessageController@all_messages'));
 	Route::get('/message/sent-message-list',array('as'=>'Sent Message List', 'uses' =>'MessageController@messageList'));
 	Route::get('/message/message-view/{id}',array('as'=>'Sent Message View', 'uses' =>'MessageController@messageView'));

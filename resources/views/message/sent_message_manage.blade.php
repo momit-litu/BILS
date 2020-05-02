@@ -87,7 +87,7 @@
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6">Megssage<span class="required">*</span></label>
 										<div class="col-md-10 col-sm-10 col-xs-12">
-											<textarea id="admin_message" name="admin_message" class="form-control col-lg-12"></textarea> 
+											<textarea class="summernote form-control"  id="admin_message" name="admin_message" cols="10" rows="4"></textarea>
 										</div>
 									</div>
 									
@@ -101,7 +101,6 @@
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<select name="message_category" id="message_category" class="form-control">
 												<option disabled="" selected="" value="">Select Message Category</option>
-												option
 											</select>
 										</div>
 									</div>
