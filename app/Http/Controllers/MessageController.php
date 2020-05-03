@@ -282,20 +282,24 @@ class MessageController extends Controller
 		$end   = $limit;
 		$message = array();
 		/*echo DB::table('message_masters as mm')
-                    ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-                    ->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
-                    ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
-                    ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
-                    ->where('mm.app_user_id',$app_user_id_load_msg)
-
-                    ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
-                    DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
-                    DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
-                    ->groupBy('id')
-                    ->orderBy('mm.message_date_time', 'desc')
-					->offset($start)
-                    ->limit($end)
+				->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+				->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
+				->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
+				->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
+				->where('mm.app_user_id',$app_user_id_load_msg)
+				->where(function ($query) {
+					$query->whereNotNull('mm.app_user_message')
+					->orWhere('mm.is_attachment_app_user', '>', 0);	
+				})
+				->where('mm.status','!=',0)
+				->where('mm.id','>',$last_appuser_message_id)
+				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
+				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
+				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
+				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+				->groupBy('id')
+				->orderBy('mm.message_date_time', 'desc')
                             ->toSql();die;*/
         if($message_load_type ==1 || $message_load_type ==3){
 			$message = DB::table('message_masters as mm')
@@ -324,7 +328,10 @@ class MessageController extends Controller
 				->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
 				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
 				->where('mm.app_user_id',$app_user_id_load_msg)
-				->whereNotNull('mm.admin_message')
+				->where(function ($query) {
+					$query->whereNotNull('mm.admin_message')
+					->orWhere('mm.is_attachment', '>', 0);	
+				})
 				->where('mm.status','!=',0)
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
 				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
@@ -336,7 +343,6 @@ class MessageController extends Controller
 				->get();
 		}
 		else if($message_load_type==4){
-
 			$message = DB::table('message_masters as mm')
 				->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
 				->leftJoin('users as u', 'mm.admin_id', '=', 'u.id')
@@ -344,7 +350,10 @@ class MessageController extends Controller
 				->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
 				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
 				->where('mm.app_user_id',$app_user_id_load_msg)
-				->whereNotNull('mm.app_user_message')
+				->where(function ($query) {
+					$query->whereNotNull('mm.app_user_message')
+					->orWhere('mm.is_attachment_app_user', '>', 0);	
+				})
 				->where('mm.status','!=',0)
 				->where('mm.id','>',$last_appuser_message_id)
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',

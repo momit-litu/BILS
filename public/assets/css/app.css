@@ -92,8 +92,12 @@ body{
 	padding: 2px 15px !important;
 	font-size:10px !important;
 	margin-bottom:-2px;
-	margin-right: 62px;
+	margin-right: 37px;
 }
 .background-gray{
 	background-color:#e5e5ea;;
+}
+.thread-image{
+	width:20px !important;
+	height:25px !important;
 }

@@ -159,9 +159,9 @@ $(document).ready(function(){
                             //html+='<li class="self">'
                             html += '<li class="self" id="sent_message_id_'+message['id']+'">';
 							 if(message["reply_message"]){
-                                html+='<p class="reply replied_message_p background-gray text-right" ">'+message['reply_message']+'</p> ';
+                                html+='<div class="reply replied_message_p background-gray text-right" ">'+message['reply_message']+'</div> ';
                             }
-                            if($.trim(message['app_user_image']) == "null" || $.trim(message['app_user_image']) == ""  ) app_user_image = "no-user-image.png";
+                            if($.trim(message['app_user_image']) == null || $.trim(message['app_user_image']) == ""  ) app_user_image = "no-user-image.png";
                             else  									 	app_user_image = message['app_user_image'];
                             html += '<div class="avatar"><img style="width:25px;height:25px; cursor:pointer" title="" src="'+app_user_profile_url+'/{{ \Auth::guard('appUser')->user()->user_profile_image }}" alt="" /></div>';
 							html += '<div class="messages">';
@@ -213,7 +213,8 @@ $(document).ready(function(){
                             else{
                                 mc = "";
                             }
-                            tem_msg = "'"+message['app_user_message']+"'";
+                            if (message["app_user_message"]!=null && message["app_user_message"]!="") 	tem_msg = "'"+message['app_user_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
+							else      tem_msg = "";
 
                             html += '<span class="time_date_sent pull-left">'+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-5 margin-right-5 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-5 margin-right-5"><i class="fa fa-pencil"></i></a>'+mc+'</span>';
 							html+='</div>'
@@ -231,7 +232,7 @@ $(document).ready(function(){
                             html += '<div class="avatar"><img style="width:25px;height:35px;"  src="'+image_url+'/logo.jpg" alt="" /></div>';
 							html += '<div class="messages">';
                             if (message["admin_message"]!=null && message["admin_message"]!="") {
-                                html += '<p class="left">'+message["admin_message"]+'</p>';
+                                html += '<div class="left">'+message["admin_message"]+'</div>';
                             }
                             if( (message["admin_message"]!=null && message["admin_message"]!="")&& (message["is_attachment"]==1) ){
                                 html+="";
@@ -272,7 +273,8 @@ $(document).ready(function(){
                             else{
                                 mc = "";
                             }
-                            tem_msg = "'"+message['admin_message']+"'";
+                            if (message["admin_message"]!=null && message["admin_message"]!="") 	tem_msg = "'"+message['admin_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
+						    else      tem_msg = "";
                             html += '<span class="time_date pull-right">'+mc+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-5 margin-left-5 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+'</span>';
 							html += '</li>';
 						}
