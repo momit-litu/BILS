@@ -24,7 +24,7 @@ $(document).ready(function () {
         if(group_id){
             //alert(group_id)
             $.ajax({
-                url: url+"/message/admin-group-message-seen/"+group_id+"/"+category_id,
+                url: url+"/message/admin-group-message-seen/"+group_id,
                 type: 'GET',
                 async: true,
                 success: function (response) {
@@ -83,8 +83,10 @@ $(document).ready(function () {
                 count = 0;
                 $.each(response, function (key, value) {
                     count++;
-                    if(value.group_name && value.category_name) {
-                        user = value.group_name + '(' + value.category_name + ')'
+                    //alert(value.group_name)
+                    if(value.group_name) {
+                        //alert(1)
+                        user = value.app_user_name+' ('+value.group_name+')'
                     }
                     else {
                         user = value.app_user_name

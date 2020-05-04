@@ -216,6 +216,8 @@
         // 2: get last message which just entered by admin
         // 3: get load more messages
         // 4: get appusers latest message
+
+        //done
         loadMessages = function loadMessages(message_load_type){
             $("#search_app_user").val("");
             // event.preventDefault();
@@ -317,7 +319,7 @@
                                 else{
                                     mc = "";
                                 }
-                                
+
 								if (message["admin_message"]!=null && message["admin_message"]!="") 	tem_msg = "'"+message['admin_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
 								else      tem_msg = "";
                                 html += '<span class="time_date_sent">'+mc+' '+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
@@ -411,12 +413,12 @@
 						if($('.receive_msg:last').length>0){
 							//alert('yes')
 							last_app_user_message = $('.receive_msg:last').attr('id').split('_');
-							last_appuser_message_id = last_app_user_message[3];	
+							last_appuser_message_id = last_app_user_message[3];
 						}
                     }
 					else{
-						if(message_load_type == 1){ 
-							// NO message yet, 
+						if(message_load_type == 1){
+							// NO message yet,
                             $(".message_body").html("");
                         }
 					}
@@ -468,28 +470,33 @@
             //window.setInterval(loadMessageUser(app_user_id), 1000);
         }
 
+        if(localStorage.getItem('app_user_id')){
+            loadMessageUser(localStorage.getItem('app_user_id'))
+            localStorage.removeItem('app_user_id')
+        }
 
 		set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){
 			setTimeout(function(){
 				newAppMessages();
 			}, 5000);
 		}
-		
+
 		newAppMessages = function newAppMessages(){
 			if($('.receive_msg:last').length>0){
 				last_app_user_message = $('.receive_msg:last').attr('id').split('_');
-				last_appuser_message_id = last_app_user_message[3];	
+				last_appuser_message_id = last_app_user_message[3];
 			}
 			loadMessages(4);
 			set_appmessage_time_out_fn();
 		}
 		newAppMessages();
 
+        //done
         replyMessage = (id, msg) =>{
             $('#reply_msg_id').val(id)
             $('#reply_msg').html(msg)
         }
-
+        //done
         removeMessage = (id, message)=>{
             $.ajax({
                 url: url + '/message/delete-message/'+id,
@@ -502,14 +509,14 @@
 					}
 					$('#sent_message_id_'+id).next('span').remove();
 					$('#sent_message_id_'+id).remove();
-					
+
 
                     $('#admin_message').val("");
                 }
             })
         }
 
-
+        //done
         editMessage = (id, message) =>{
             $('#edit_msg_id').val(id)
             $('#admin_message').val(message)
@@ -605,10 +612,11 @@
                 }
             });
         }
-       
+
  	    loadAppUser();
 
 
+        //done
         $("#message_sent_to_user").click(function(){
             event.preventDefault();
             $.ajaxSetup({
@@ -619,6 +627,7 @@
             newMsgSent();
         });
 
+       //done
         newMsgSent = function newMsgSent(){
             var formData = new FormData($('#sent_message_to_user')[0]);
             if(( $.trim($('#admin_message').val()) != "" || $.trim($('#attachment').val()) != "" ) && $.trim($('#app_user_id').val()) != ""){
@@ -631,7 +640,7 @@
                     contentType:false,
                     processData:false,
                     success: function(data){
-						// need to confirmation 
+						// need to confirmation
 						if($('#edit_msg_id').val() != ""){
 							if(data == 1){
 								$('#sent_message_id_'+$('#edit_msg_id').val()+'>p').html($.trim($('#admin_message').val()));
@@ -653,6 +662,7 @@
             }
         }
 
+        //done
         showProfile = function showProfile(){
             id = $("#app_user_id").val();
             //$("#app_user_id_profile").val(id)

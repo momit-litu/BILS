@@ -281,7 +281,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/search-message_category/{key}',array('as'=>'Search App Users Group', 'uses' =>'MessageController@searchMessageCategory'));
 
 	Route::post('/message/admin-message-sent-to-group',array('as'=>'Sent Group Message', 'uses' =>'MessageController@newGroupMessageSent'));
-    Route::get('/message/admin-group-message-seen/{groupId}/{categoryId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
+    Route::get('/message/admin-group-message-seen/{groupId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
     Route::get('/message/admin-message-seen/{appUserId}',array('as'=>'group message seen', 'uses' =>'MessageController@newMessageSeen'));
 
 
