@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notification;
 use DB;
 
 
@@ -21,5 +22,11 @@ class NotificationController extends Controller
             ->get();
 
         return json_encode($notifications);
+    }
+
+    public function viewNotification($id){
+        Notification::where('id',$id)->update(['status'=>1]);
+        $notification =  Notification::where('id',$id)->get();
+        return json_encode($notification);
     }
 }

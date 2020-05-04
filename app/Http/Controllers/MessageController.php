@@ -290,7 +290,7 @@ class MessageController extends Controller
 				->where('mm.app_user_id',$app_user_id_load_msg)
 				->where(function ($query) {
 					$query->whereNotNull('mm.app_user_message')
-					->orWhere('mm.is_attachment_app_user', '>', 0);	
+					->orWhere('mm.is_attachment_app_user', '>', 0);
 				})
 				->where('mm.status','!=',0)
 				->where('mm.id','>',$last_appuser_message_id)
@@ -330,7 +330,7 @@ class MessageController extends Controller
 				->where('mm.app_user_id',$app_user_id_load_msg)
 				->where(function ($query) {
 					$query->whereNotNull('mm.admin_message')
-					->orWhere('mm.is_attachment', '>', 0);	
+					->orWhere('mm.is_attachment', '>', 0);
 				})
 				->where('mm.status','!=',0)
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
@@ -352,7 +352,7 @@ class MessageController extends Controller
 				->where('mm.app_user_id',$app_user_id_load_msg)
 				->where(function ($query) {
 					$query->whereNotNull('mm.app_user_message')
-					->orWhere('mm.is_attachment_app_user', '>', 0);	
+					->orWhere('mm.is_attachment_app_user', '>', 0);
 				})
 				->where('mm.status','!=',0)
 				->where('mm.id','>',$last_appuser_message_id)
@@ -364,7 +364,7 @@ class MessageController extends Controller
 				->orderBy('mm.message_date_time', 'desc')
 				->get();
 		}
-	
+
         return json_encode(array(
             "message"=>$message
         ));
@@ -397,7 +397,7 @@ class MessageController extends Controller
             $msg_cat = $r->category_id;
         }
         else{
-            $msg_cat = $r->message_category;			
+            $msg_cat = $r->message_category;
 		//edit_msg_id
         }
         if(isset($r->reply_msg_id)){
@@ -477,7 +477,7 @@ class MessageController extends Controller
 
 					$success=$attachment->move($upload_path,$attachment_name);
 					if($success) MessageMaster::where('id',$mm_id)->update(['is_attachment'=>1]);
-					
+
 					##Save image to the message attachment table
 					$msg_attachment = new MessageAttachment();
 					$msg_attachment->message_master_id = $mm_id;
@@ -637,6 +637,7 @@ class MessageController extends Controller
             ->whereNull('admin_message')
             ->update(['is_seen'=> 1]);
     }
+
     public function newMessageSeen($appUserId){
         return MessageMaster::where([
             ['app_user_id', $appUserId],
