@@ -201,10 +201,7 @@
             });
         }
 
-        if(localStorage.getItem('group_id')){
-            loadGroupMessage(1,localStorage.getItem('group_id'))
-            localStorage.removeItem('group_id')
-        }
+
 
 
 
@@ -679,6 +676,11 @@
             setTimeout(function(){
                 newAppMessages();
             }, 5000);
+        }
+
+        if(localStorage.getItem('group_id')){
+            loadGroupMessage(1,localStorage.getItem('group_id'))
+            localStorage.removeItem('group_id')
         }
 
         newAppMessages = function newAppMessages(){

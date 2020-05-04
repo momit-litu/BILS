@@ -92,51 +92,44 @@ class MessageController extends Controller
                     $app_user_group = $request->input('app_user_group');
                     $app_users = $request->input('app_users');
 
-                    if (isset($app_user_group)&& $app_user_group!="") {
-                        if(isset($app_users)&& $app_users!=""){
-                            foreach ($app_users as $j) {
-								$old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $j)->count();
-								if ($old_msg==0) {
-									$app_user_id = $j;
-									$column_value = [
-										'admin_message'=>$request->admin_message,
-										'admin_id'=>$admin_id,
-										'app_user_id'=>$app_user_id,
-										'message_id'=>$message_id,
-										'status'=>$is_active,
-										'message_category'=>$request->message_category,
-									];
-									$response = MessageMaster::create($column_value);
-								}
-							}
-                        }
-                        else{
-                            foreach ($app_user_group as $row) {
-                                $app_user_id = AppUserGroupMember::select('app_user_id')
-                                                ->where('group_id',$row)
-                                                ->distinct('app_user_id')
-                                                ->get();
-
-                                foreach ($app_user_id as $k) {
-                                    $old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $k['app_user_id'])->count();
-                                    if ($old_msg==0) {
-                                        $app_user_id = $k['app_user_id'];
-                                        $column_value = [
-                                            'admin_message'=>$request->admin_message,
-                                            'admin_id'=>$admin_id,
-                                            'app_user_id'=>$app_user_id,
-                                            'message_id'=>$message_id,
-                                            'status'=>$is_active,
-                                            'message_category'=>$request->message_category,
-                                        ];
-                                        $response = MessageMaster::create($column_value);
-                                    }
-                                }
+                    //return json_encode($app_users);
+                    if(isset($app_users)&& $app_users!="" && $app_users!=null ){
+                        var_dump (json_encode($app_users));
+                        foreach ($app_users as $j) {
+                            $old_msg = MessageMaster::select('id')->where('message_id', $message_id)->where('app_user_id', $j)->count();
+                            if ($old_msg==0) {
+                                $app_user_id = $j;
+                                $column_value = [
+                                    'admin_message'=>$request->admin_message,
+                                    'admin_id'=>$admin_id,
+                                    'app_user_id'=>$app_user_id,
+                                    'message_id'=>$message_id,
+                                    'status'=>$is_active,
+                                    'message_category'=>$request->message_category,
+                                ];
+                                $response = MessageMaster::create($column_value);
                             }
                         }
                     }
+                    else if (isset($app_user_group)&& $app_user_group!="") {
 
-                    else{
+                        foreach ($app_user_group as $row) {
+
+                                $column_value = [
+                                    'admin_message'=>$request->admin_message,
+                                    'admin_id'=>$admin_id,
+                                    'group_id'=>$row,
+                                    'is_group_msg'=>1,
+                                    'message_id'=>$message_id,
+                                    'status'=>$is_active,
+                                    'message_category'=>$request->message_category,
+                                ];
+                                $response = MessageMaster::create($column_value);
+
+                            }
+                    }
+
+                    if(isset($request->app_user_id)){
                         $column_value = [
                             'admin_message'=>$request->admin_message,
                             'admin_id'=>$admin_id,

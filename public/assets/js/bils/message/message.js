@@ -95,14 +95,16 @@ $(document).ready(function () {
 						});
 						resultHtml += '</ul>';
 						success_or_error_msg('#master_message_div',"danger",resultHtml);
+                        //location.reload();
 
 						clear_form();
 					}
 					else{
 						success_or_error_msg('#master_message_div',"success","Save Successfully");
-
+                        $('#message_form').trigger("reset");
 						message_table.ajax.reload();
-						clear_form();
+                        location.reload();
+                        clear_form();
 						$("#message_entry").html(' Add Message');
 						$(".save").html('Save');
 						$("#message_list").trigger('click');
