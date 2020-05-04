@@ -281,13 +281,20 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('/message/search-message_category/{key}',array('as'=>'Search App Users Group', 'uses' =>'MessageController@searchMessageCategory'));
 
 	Route::post('/message/admin-message-sent-to-group',array('as'=>'Sent Group Message', 'uses' =>'MessageController@newGroupMessageSent'));
-    Route::get('/message/admin-group-message-seen/{groupId}/{categoryId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
+    Route::get('/message/admin-group-message-seen/{groupId}',array('as'=>'group message seen', 'uses' =>'MessageController@newGroupMessageSeen'));
     Route::get('/message/admin-message-seen/{appUserId}',array('as'=>'group message seen', 'uses' =>'MessageController@newMessageSeen'));
 
-	Route::post('/message/load-group-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadGroupMessage'));
+
+
+    Route::post('/message/load-group-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadGroupMessage'));
     Route::get('/message/load-new-message',array('as'=>'New message', 'uses' =>'MessageController@newMessageLoad'));
     Route::post('/message/load-category-message',array('as'=>'Load Group Message', 'uses' =>'MessageController@loadCategoryMessage'));
-    Route::get('/message/load-new-notifications',array('as'=>'New message', 'uses' =>'NotificationController@newNotificationLoad'));
+    Route::get('/message/message_view/{id}',array('as'=>'Message status change', 'uses' =>'MessageController@viewMessage'));
+
+
+
+    Route::get('/notification/load-new-notifications',array('as'=>'New notifications', 'uses' =>'NotificationController@newNotificationLoad'));
+    Route::get('/notification/notification_view/{id}',array('as'=>'Notification status change', 'uses' =>'NotificationController@viewNotification'));
 
 });
 

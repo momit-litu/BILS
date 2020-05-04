@@ -20,14 +20,33 @@ $(document).ready(function () {
 
 
     viewMessage = (app_user_id, group_id, category_id) =>{
-        //alert(url)
-        // alert(app_user_id+'>>'+group_id+'>>'+category_id)
 
         if(group_id){
+            //alert(group_id)
+            $.ajax({
+                url: url+"/message/admin-group-message-seen/"+group_id,
+                type: 'GET',
+                async: true,
+                success: function (response) {
+                    response = JSON.parse(response)
+                    newNotifications();
+                    //loadPage('notification')
+                }
+            })
             localStorage.setItem('group_id', group_id);
             localStorage.setItem('category_id', category_id);
             window.location.href =url+'/messages/group-messages-management';
         }else{
+            $.ajax({
+                url: url+"/message/admin-message-seen/"+app_user_id,
+                type: 'GET',
+                async: true,
+                success: function (response) {
+                    response = JSON.parse(response)
+                    newNotifications();
+                    //loadPage('notification')
+                }
+            })
             localStorage.setItem('app_user_id', app_user_id);
             window.location.href =url+'/messages/all-messages-management';
 
@@ -64,13 +83,20 @@ $(document).ready(function () {
                 count = 0;
                 $.each(response, function (key, value) {
                     count++;
-                    if(value.group_name && value.category_name) {
-                        user = value.group_name + '(' + value.category_name + ')'
+                    //alert(value.group_name)
+                    if(value.group_name) {
+                        //alert(1)
+                        user = value.app_user_name+' ('+value.group_name+')'
                     }
                     else {
                         user = value.app_user_name
                     }
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+                    if(value.app_user_message==null){
+                        message = 'Attachment'
+                    }
+                    else message = value.app_user_message
+
                     html +='<li> ' +
                         '       <a href="#">' +
                         '           <div class="clearfix" onclick="viewMessage('+value.app_user_id+','+ value.group_id+','+value.category_id+')">' +
@@ -79,7 +105,7 @@ $(document).ready(function () {
                         '               </div> ' +
                         '               <div class="thread-content"> ' +
                         '                   <span class="author">'+user+'</span> ' +
-                        '                   <span class="preview">'+value.app_user_message+'</span> ' +
+                        '                   <span class="preview">'+message+'</span> ' +
                         '                   <span class="time">'+value.msg_date+'</span>' +
                         '               </div> ' +
                         '           </div>' +
@@ -98,11 +124,24 @@ $(document).ready(function () {
     }
     newMessages()
 
+    view_notification = (id) =>{
+        $.ajax({
+            url: url+"/notification/notification_view/"+id,
+            type: 'GET',
+            async: true,
+            success: function (response) {
+                response = JSON.parse(response)
+                newNotifications();
+                //loadPage('notification')
+            }
+        })
+    }
+
 
 
     loadNotifications = () =>{
         $.ajax({
-            url: url+'/message/load-new-notifications',
+            url: url+'/notification/load-new-notifications',
             type:'GET',
             async:true,
             success: function(response){
@@ -120,10 +159,11 @@ $(document).ready(function () {
                         user = value.app_user_name
                     }
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+
                     html +=' <li> ' +
-                            '<a href="javascript:void(0)"> ' +
+                            '<a href="javascript:void(0)" onclick="view_notification('+value.id+')"> ' +
                                 '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
-                                '<span class="message"> '+value.details+'</span> ' +
+                                '<span class="message"> '+value.notification+'</span> ' +
                                 '<span class="time"> '+value.created_at+'</span> ' +
                             '</a> ' +
                             '</li>'
