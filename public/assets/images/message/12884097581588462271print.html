@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bar Code</title>
+<style>
+html{
+	font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+	font-size: 10px;
+	font-weight: 700;
+}
+
+.col-12{
+	width:100%;
+}
+.col-6{
+	width:49%;
+	float:left;
+	margin-right:1%;
+}
+.header{
+	width:100%;
+}
+.header-background{
+	background-color:#2B8E50;
+}
+.body-background{
+	background-color:#33A55D;
+}
+.footer-background{
+	background-color:#2B8E50;
+}
+.col-25-p{
+	width:25%;
+}
+.col-50-p{
+	width:50%;
+}
+
+.col-2{
+	width:40%;
+	float:left;
+	padding:2px;
+}
+.col-8{
+	width:18%;
+	float:left;
+	padding:2px;
+}
+.text-center{
+	text-align:center;
+}
+.center-design{
+	border: 2px solid #fff;
+	padding:3px;
+	border-radius: 30px;
+	width:100%;
+	text-align:center;
+}
+.white-border{
+	width:100%;
+	border:1px solid #fff;
+}
+.main-body{
+	color:#fff;
+}
+
+.col-75-p{
+	width:75%;
+}
+.col-70-p{
+	width:70%;
+}
+.col-5-p{
+	width:5%;
+}
+.line-text{padding-left:10px;}
+.col-35-p{
+	width:35%;
+}
+.col-60-p{
+	width:60%;
+}
+.col-30-p{
+	width:30%;
+}
+.col-65-p{
+	width:65%;
+}
+</style>
+</head>
+<body>
+
+<div class="col-12">
+	<div class="col-6">
+		<div class="header header-background">
+			<table border='0' style="width:100%" >
+				<tr class="header">
+					<td class="col-25-p">
+						<img src='govt.png' class='img-responsive' width='80px' align='left'>
+					</td>
+					<td class="col-50-p">
+						<div class='center-design'>
+							<div style='border: 1px solid #fff;background-color: #fff;border-radius: 30px; text-align:center'>
+								<h3 style='font-size: 18px;font-weight: bold; color:red; margin: 0; '>E Helth Card</h3>
+							</div>
+						</div>
+					</td>
+					<td class="col-25-p">
+						<img src='ssf.png' class='img-responsive' width='80px' align='right'>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="white-border"></div>
+		<div class="header body-background">
+			<table border='0' style="width:100%" >
+				<tr class="header main-body">
+					<td class="col-75-p" style="padding:10px 5px 5px 5px" >
+						<table border='0' style="width:100%" >
+							<tr class="header">
+								<td class="col-25-p line-text">Name</td>
+								<td class="col-5-p">:</td>
+								<td class="col-70-p">Moynul Hasan</td>
+							</tr>
+							<tr class="header">
+								<td class="col-25-p line-text">Father</td>
+								<td class="col-5-p">:</td>
+								<td class="col-70-p">Moynul Hasan</td>
+							</tr>
+							<tr class="header">
+								<td class="col-25-p line-text">Mother</td>
+								<td class="col-5-p">:</td>
+								<td class="col-70-p">Moynul Hasan</td>
+							</tr>
+							<tr class="header">
+								<td class="col-25-p line-text"> DOB</td>
+								<td class="col-5-p">:</td>
+								<td class="col-70-p">22-02-1098</td>
+							</tr>
+							<tr class="header">
+								<td class="col-25-p line-text"> Card No </td>
+								<td class="col-5-p">:</td>
+								<td class="col-70-p">201800001</td>
+							</tr>
+						</table>
+					</td>
+					<td class="col-25-p">
+						<div style='text-align:center'>
+							<img src='no-image-user.png' style='background-color:#fff; width:70px; height: auto; border-radius: 2px;border: 2px solid #fff;height: auto;'>
+							<br>
+							<img src='barcode.php?text=201800001' alt='testing' class='img-responsive' style='height: 30px;margin-top: 2px;'>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="white-border"></div>
+		<div class="header footer-background">
+			<table border='0' style="width:100%" >
+				<tr class="header main-body">
+					<td class="col-75-p" style="padding:2px 5px" >
+						<table border='0' style="width:100%" >
+							<tr class="header">
+								<td class="col-30-p line-text">Institute Code</td>
+								<td class="col-5-p">:</td>
+								<td class="col-65-p">Moynul Hasan</td>
+							</tr>
+							<tr class="header">
+								<td class="col-30-p line-text">Institute Name</td>
+								<td class="col-5-p">:</td>
+								<td class="col-65-p">Moynul Hasan</td>
+							</tr>
+							<tr class="header">
+								<td class="col-30-p line-text"></td>
+								<td class="col-5-p"></td>
+								<td class="col-65-p" style="text-align:right">Issue Date : 14-03-2020</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="col-6">
+		2nd card
+	</div>
+</div>
+</body>
+</html>

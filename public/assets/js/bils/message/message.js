@@ -68,7 +68,7 @@ $(document).ready(function () {
 		});
 
 		var formData = new FormData($('#message_form')[0]);
-		if($.trim( $("#admin_message").summernote('code')) == ""){
+		if($.trim( $("#admin_message").val()) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Message","#admin_message");
 		}
 		// if( $('#app_user_group').checked==true ){
@@ -180,7 +180,7 @@ $(document).ready(function () {
 		});
 	}
 	// need the edit message 
-	// add $("#details").summernote('code',data['details']);
+
 	//Publication Edit
 	/*edit_publication = function edit_publication(id){
 		var edit_id = id;

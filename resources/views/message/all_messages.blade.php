@@ -258,9 +258,9 @@
 						//alert('yaaahh')
                         $.each(message, function(i,message){
                             html = "";
-                            if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
+                            if( ($.trim(message["admin_id"]) != 'null' && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
                                 if(message["reply_message"]){
-                                    html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
+                                    html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
                                 }
                                 html += '<li class="sent_msg " id="sent_message_id_'+message['id']+'">';
 
@@ -269,7 +269,8 @@
                                 html += '<img style="width:25px;height:25px; cursor:pointer" title="'+message['admin_name']+'" src="'+admin_image_url+'/'+admin_image+'" alt="" />';
 
                                 if (message["admin_message"]!=null && message["admin_message"]!="") {
-                                    html += '<p class="right">'+message["admin_message"]+'</p><br><br><br>';
+									//alert('<div class="right p_div">'+message["admin_message"]+'</div>')
+                                    html += '<div class="right p_div">'+message["admin_message"]+'</div><br><br><br>';
                                 }else{
                                     html+="";
                                 }
@@ -304,7 +305,7 @@
                                         }
                                         else{
                                             //Other Files
-                                            html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><p class="right" style="word-wrap: break-word;">'+message["admin_atachment"]+'</p></a>';
+                                            html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><div class="right p_div"  style="text-decoration:underline">'+attachment_name+'</div></a>';
                                         }
                                     }
                                     html+="</div>";
@@ -316,13 +317,14 @@
                                 else{
                                     mc = "";
                                 }
-                                tem_msg = "'"+message['admin_message']+"'";
-
+                                
+								if (message["admin_message"]!=null && message["admin_message"]!="") 	tem_msg = "'"+message['admin_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
+								else      tem_msg = "";
                                 html += '<span class="time_date_sent">'+mc+' '+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
                             }
                             else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
                                 if(message["replied"]){
-                                    html+='<li class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><p class="replied_message_p" ">'+message['reply_message']+'</p></li>  ';
+                                    html+='<li class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
                                 }
                                 html += '<li class="receive_msg" id="receive_message_id_'+message['id']+'">';
                                 if($.trim(message['user_profile_image']) == "null" || $.trim(message['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
@@ -330,13 +332,13 @@
                                 html += '<img style="width:25px;height:25px;"  src="'+app_user_profile_url+"/"+appuser_image+'" alt="" />';
 
                                 if (message["app_user_message"]!=null && message["app_user_message"]!="") {
-                                    html += '<p class="left">'+message["app_user_message"]+'</p><br>';
+                                    html += '<div class="left p_div">'+message["app_user_message"]+'</div><br>';
                                 }
                                 if( (message["app_user_message"]!=null && message["app_user_message"]!="")&& (message["is_attachment_app_user"]==1) ){
                                     html+="";
                                 }
                                 if(message["is_attachment_app_user"]==1){
-                                    html+="<div class='attachment_div' style=' display: inline-block;  padding:10px 15px 10px 40px;  max-width: 80%;  line-height: 130%;'>";
+                                    html+="<div class='attachment_div' style=' display: inline-block;  padding:10px 15px 10px 0px;  max-width: 80%;  line-height: 130%;'>";
                                     attachements = message["app_user_attachment"].split(',');
                                     for(var i=0; i<attachements.length; i++){
                                         var att_type 		= (attachements[i].split("*"));
@@ -358,7 +360,7 @@
                                         }
                                         else{
                                             //Other Files
-                                            html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><p class="left" style="word-wrap: break-word;">'+attachment_name+'</p></a>';
+                                            html += '<a href="'+msg_image_url+'/'+attachment_name+'" download><div class="left p_div" style="text-decoration:underline">'+attachment_name+'</div></a>';
                                         }
                                     }
                                     html+="</div>";
@@ -369,8 +371,10 @@
                                 else{
                                     mc = "";
                                 }
-                                tem_msg = "'"+message['app_user_message']+"'";
-                                html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+' '+mc+'</span>';
+
+								if (message["app_user_message"]!=null && message["app_user_message"]!="") 	tem_msg = "'"+message['app_user_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
+								else      tem_msg = "";
+							   html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+' '+mc+'</span>';
                                 html += '</li>';
                             }
                             message_body = html+message_body;

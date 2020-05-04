@@ -613,7 +613,7 @@ input[type="file"] {
 	cursor:pointer;
   margin: 6px 8px 0 0;
 }
-#frame .content .messages ul li.receive_msg p {
+#frame .content .messages ul li.receive_msg div.p_div {
 	cursor:pointer;
   background: #435f7a;
   color: #f5f5f5;
@@ -622,23 +622,28 @@ input[type="file"] {
   float: right;
   margin: 6px 0 0 8px;
 }
-#frame .content .messages ul li.sent_msg p {
+/*#frame .content .messages ul li.sent_msg p {
+  background: #f5f5f5;
+  float: right;
+}*/
+#frame .content .messages ul li.sent_msg div.p_div {
   background: #f5f5f5;
   float: right;
 }
+
 #frame .content .messages ul li img {
   width: 22px;
   border-radius: 50%;
   float: left;
 }
-#frame .content .messages ul li p {
+#frame .content .messages ul li  div.p_div {
   display: inline-block;
   padding: 10px 15px;
   border-radius: 20px;
   max-width: 80%;
   line-height: 130%;
 }
-#frame .content .messages ul li p.right  {
+#frame .content .messages ul li div.right  {
   display: inline-block;
   padding: 10px 15px;
   border-radius: 20px;
@@ -646,7 +651,7 @@ input[type="file"] {
   line-height: 130%;
   border-top-right-radius: 0px;
 }
-#frame .content .messages ul li p.left {
+#frame .content .messages ul li div.left {
   display: inline-block;
   padding: 10px 15px;
   border-radius: 20px;

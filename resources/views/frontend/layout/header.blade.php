@@ -72,6 +72,7 @@
 						<li>
 							<div class="drop-down-wrapper">
 								<ul id="app_header_new_message">
+									
 									<!--li>
 										<a href="javascript:;">
 											<div class="clearfix">

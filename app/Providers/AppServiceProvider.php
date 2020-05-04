@@ -40,6 +40,8 @@ class AppServiceProvider extends ServiceProvider
 				$menu_n_submenu_array[] = $parent_menu;
 			}
 			$view->with('menus',$menu_n_submenu_array);
-		});		
+		});	
+		// to disable laravel debugar
+		 \Debugbar::disable();
     }
 }

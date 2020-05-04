@@ -654,10 +654,9 @@
                             '       <a href="#">' +
                             '           <div class="clearfix" onclick="viewMessage('+value.id+')">' +
                             '               <div class="thread-image">' +
-                            '                   <img alt="" src="/assets/images/avatar-3.jpg"> ' +
+                            '                   <img style="width:20px; height:25px" alt="" src="/assets/images/logo.jpg"> ' +
                             '               </div> ' +
                             '               <div class="thread-content"> ' +
-                            '                   <span class="author">BILS</span> ' +
                             '                   <span class="preview">'+value.admin_message+'</span> ' +
                             '                   <span class="time">'+value.msg_date+'</span>' +
                             '               </div> ' +
@@ -671,7 +670,7 @@
                     $('#app_header_new_message').html(html)
                 }
             })
-            new_message_reload()
+            //new_message_reload()
         }
         newMessages();
 
@@ -714,7 +713,7 @@
 
                 }
             })
-            new_notification_reload()
+            //new_notification_reload()
         }
         newNotifications();
 
