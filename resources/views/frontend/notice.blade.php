@@ -119,8 +119,8 @@
 
 
 <script>
-$(document).ready( function(){
         //alert("NOtice");
+    var attachment_url = "<?php echo asset('assets/attachment/notice'); ?>";
 
 
     $.ajaxSetup({
@@ -136,9 +136,19 @@ $(document).ready( function(){
             async: false,
             success: function (response) {
                 //console.log(response)
+
                 response = JSON.parse(response)
+                let p = '<p style="text-align:right"> '+response[0]["notice_date"]+'</p> '
+
+                let attachment = '';
+
+                if(response[0]['attachment']){
+                    //attachment = attachment_url+'/'+response[0]['attachment'];
+                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><p class="left" style="word-wrap: break-word;">'+response[0]["attachment"]+'</p></a>'
+                }
+                //alert(p)
                 $(' #modal_title_content').html(response[0]['title']);
-                $('#modal_body_content').html(response[0]['details'])
+                $('#modal_body_content').html(p+' '+response[0]['details']+' '+attachment)
                 $('#responsive').modal()
             }
         })
@@ -211,7 +221,6 @@ $(document).ready( function(){
 
     loadNotice()
 
-});
 
 </script>
 

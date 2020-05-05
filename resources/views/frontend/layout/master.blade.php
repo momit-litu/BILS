@@ -77,7 +77,20 @@
 <!-- end: HEAD -->
 <!-- start: BODY -->
 
+
+
 <body class="footer-fixed">
+<audio id="myAudio">
+    <source src="{{ asset('assets/tone/eventually.mp3')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/tone/eventually.m4r')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/eventually.ogg')}}" type="audio/mpeg">
+</audio>
+
+<audio id="myNotificationAudio">
+    <source src="{{ asset('assets/tone/inflicted.mp3')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/tone/inflicted.m4r')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/inflicted.ogg')}}" type="audio/mpeg">
+</audio>
 		<!-- start: HEADER -->
 		@include('frontend.layout.header')
 		<!-- end: HEADER -->
@@ -606,11 +619,6 @@
 
 	</script>
     <script>
-        new_message_reload = () =>{
-            setTimeout(function(){
-                newMessages();
-            }, 5000);
-        }
 
 
         notificationView = (id) =>{
@@ -638,6 +646,13 @@
             })
         }
 
+        new_message_reload = () =>{
+            setTimeout(function(){
+                newMessages();
+            }, 5000);
+        }
+
+
         newMessages =  () => {
             $.ajax({
                 url: "{{ url('app/')}}/message_notification",
@@ -648,7 +663,9 @@
                     response = JSON.parse(response)
                     html = '';
                     count = 0;
+                    lastMessageNotificationId = 0;
                     $.each(response, function (key, value) {
+                        lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id :lastMessageNotificationId;
                         count++;
                         html +='<li onclick="messageView('+value.id+')"> ' +
                             '       <a href="#">' +
@@ -665,19 +682,38 @@
                             '   </li>'
 
                     })
+                    if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
+                       // alert(2)
+                        //document.getElementById("myAudio").play();
+                        $('#myAudio').trigger("play")
+                        localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+                    }else  if(lastMessageNotificationId>0) {
+                        //alert('message-1')
+                        if(!localStorage.getItem('lastMessageNotificationId')) {
+                            //alert(3)
+                            $('#myAudio').trigger("play")
+
+                           // document.getElementById("myAudio").play();
+                        }
+
+                        localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+                    }
                     $('#app_message_badge').html(count)
                     $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_message').html(html)
                 }
             })
-            //new_message_reload()
+            new_message_reload()
         }
+
+        //alert($('#myAudio').length)
+        //document.getElementById("myAudio").play();
         newMessages();
 
         new_notification_reload = () =>{
             setTimeout(function(){
                 newNotifications();
-              //  set_time_out_fn();
+              //  new_notification_reload();
             }, 10000);
         }
 
@@ -687,16 +723,13 @@
                 type:'GET',
                 async:true,
                 success: function(response){
-
                     response = JSON.parse(response)
-                    //console.log(response)
                     html = '';
                     count = 0;
+                    notificationId = 0;
                     $.each(response, function (key, value) {
+                        notificationId = notificationId<value.id ? value.id : notificationId;
                         count++;
-                        // alert(value.admin_message)
-
-                        //alert(app_user_id+'>>'+group_id+'>>'+category_id)
                         html +='<li onclick="notificationView('+value.id+')"> ' +
                             '<a href="javascript:void(0)"> ' +
                             '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
@@ -704,8 +737,17 @@
                             '<span class="time">'+value.msg_date+'</span> ' +
                             '</a> ' +
                             '</li>'
-
                     })
+                    if(localStorage.getItem('lastNotificationId')<notificationId){
+                        $('#lastMessageNotificationId').trigger("play")
+                        localStorage.setItem('lastNotificationId',notificationId)
+                    }else  if(notificationId>0) {
+                        if(!localStorage.getItem('lastNotificationId')){
+                            $('#lastMessageNotificationId').trigger("play")
+                        }
+                        localStorage.setItem('lastNotificationId',notificationId)
+                    }
+
                     $('#app_notification_badge').html(count)
                     $('#app_notification_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_notification').html(html)
@@ -713,7 +755,7 @@
 
                 }
             })
-            //new_notification_reload()
+            new_notification_reload()
         }
         newNotifications();
 
@@ -723,5 +765,7 @@
 
 
 </body>
+
+
 <!-- end: BODY -->
 </html>

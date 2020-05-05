@@ -1,6 +1,6 @@
 @extends('layout.master')
 @section('style')
-	
+
 @endsection
 @section('content')
 	<!--MESSAGE-->
@@ -55,7 +55,7 @@
 									</div>
 								</div>
 								<div class="panel-body">
-									<table class="table table-bordered table-hover message_table" id="message_table" style="width:100% !important"> 
+									<table class="table table-bordered table-hover message_table" id="message_table" style="width:100% !important">
 										<thead>
 											<tr>
 												<th>Admin Message </th>
@@ -68,14 +68,14 @@
 										</thead>
 										<tbody>
 										</tbody>
-									</table> 
+									</table>
 								</div>
 							</div>
 							<!-- END Categoreis -->
                         </div>
                     </div>
                     <!--END PANEL FOR OVERVIEW -->
-                   
+
                     <!-- PANEL FOR CHANGE PASSWORD -->
                     <div id="entry_form_div" class="tab-pane in">
                         <div class="row no-margin-row">
@@ -90,12 +90,12 @@
 											<textarea class=" form-control"  id="admin_message" name="admin_message" cols="10" rows="4"></textarea>
 										</div>
 									</div>
-									
+
 
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Attachment</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
-											<input type="file" id="attachment" name="attachment" class="form-control col-lg-12"/>
+                                            <input multiple id="attachment" name="attachment[]" type="file"/>
 										</div>
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Message Category</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
@@ -123,35 +123,35 @@
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >App User Group</label>
 										<div class="col-md-10 col-sm-10 col-xs-6">
 											<div id="app_user_group">
-												
+
 											</div>
 										</div>
 									</div>
-									
-									<div class="form-group">	
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >&nbsp;</label>									
+
+									<div class="form-group">
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >&nbsp;</label>
 										<div class="col-md-10 col-sm-10 col-xs-6">
 											<button id="load_app_user_from_group" type="submit" class="btn btn-sm btn-primary">Load App User</button>
 											<div id="app_user_group_members">
-												
+
 											</div>
 										</div>
 									</div>
 
 								</div>
-								
+
 								</div>
 								<div class="form-group">
 								<label class="control-label col-md-2 col-sm-2 col-xs-6"></label>
-								<div class="col-md-3 col-sm-3 col-xs-12"> 
-									<button type="submit" id="save_message" class="btn btn-success save">Save</button>                    
-									<button type="button" id="clear_button" class="btn btn-warning">Clear</button>                         
+								<div class="col-md-3 col-sm-3 col-xs-12">
+									<button type="submit" id="save_message" class="btn btn-success save">Save</button>
+									<button type="button" id="clear_button" class="btn btn-warning">Clear</button>
 								</div>
 								 <div class="col-md-7 col-sm-7 col-xs-12">
 									<div id="form_submit_error" class="text-center" style="display:none"></div>
 								 </div>
 							</div>
-							</form>		
+							</form>
                         </div>
                     </div>
                     <!-- END PANEL FOR CHANGE PASSWORD -->
@@ -166,7 +166,7 @@
 
 
 @section('JScript')
-	
+
 	<script>
 		var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 		var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
@@ -174,7 +174,7 @@
 	</script>
 
 	<script src="{{ asset('assets/js/bils/message/message.js')}}"></script>
-	
+
 {{-- <script src=" {{ asset('ckeditor/ckeditor.js') }} "></script>
 	<script>
     	CKEDITOR.replace( 'details' );

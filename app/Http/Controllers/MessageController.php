@@ -70,6 +70,8 @@ class MessageController extends Controller
             return json_encode($return);
         }
         else{
+            $attachment = $request->file('attachment');
+
 
             try{
                 DB::beginTransaction();
@@ -108,6 +110,37 @@ class MessageController extends Controller
                                     'message_category'=>$request->message_category,
                                 ];
                                 $response = MessageMaster::create($column_value);
+                                if($request->hasFile('attachment')){
+                                    foreach ($attachment as $attachment) {
+                                        $attachment_name = rand().time().$attachment->getClientOriginalName();
+                                        $ext = strtoupper($attachment->getClientOriginalExtension());
+                                        echo $ext;
+                                        if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+                                            $attachment_type = 1;
+                                        }
+                                        else if ($ext=="MP4" || $ext=="3GP") {
+                                            $attachment_type = 2;
+                                        }
+                                        else if ($ext=="MP3") {
+                                            $attachment_type = 3;
+                                        }
+                                        else{
+                                            $attachment_type = 4;
+                                        }
+                                        //$attachment_full_name = $attachment_name.'.'.$ext;
+                                        $upload_path = 'assets/images/message/';
+
+                                        $success=$attachment->move($upload_path,$attachment_name);
+                                        if($success) MessageMaster::where('id',$request->edit_msg_id)->update(['is_attachment'=>1]);
+                                        ##Save image to the message attachment table
+                                        $msg_attachment = new MessageAttachment();
+                                        $msg_attachment->message_master_id = $response['id'];
+                                        $msg_attachment->admin_atachment = $attachment_name;
+                                        $msg_attachment->attachment_type = $attachment_type;
+                                        $msg_attachment->save();
+                                    }
+                                }
+
                             }
                         }
                     }
@@ -125,8 +158,39 @@ class MessageController extends Controller
                                     'message_category'=>$request->message_category,
                                 ];
                                 $response = MessageMaster::create($column_value);
+                            if($request->hasFile('attachment')){
+                                foreach ($attachment as $attachment) {
+                                    $attachment_name = rand().time().$attachment->getClientOriginalName();
+                                    $ext = strtoupper($attachment->getClientOriginalExtension());
+                                    echo $ext;
+                                    if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+                                        $attachment_type = 1;
+                                    }
+                                    else if ($ext=="MP4" || $ext=="3GP") {
+                                        $attachment_type = 2;
+                                    }
+                                    else if ($ext=="MP3") {
+                                        $attachment_type = 3;
+                                    }
+                                    else{
+                                        $attachment_type = 4;
+                                    }
+                                    //$attachment_full_name = $attachment_name.'.'.$ext;
+                                    $upload_path = 'assets/images/message/';
 
+                                    $success=$attachment->move($upload_path,$attachment_name);
+                                    if($success) MessageMaster::where('id',$request->edit_msg_id)->update(['is_attachment'=>1]);
+                                    ##Save image to the message attachment table
+                                    $msg_attachment = new MessageAttachment();
+                                    $msg_attachment->message_master_id = $response['id'];
+                                    $msg_attachment->admin_atachment = $attachment_name;
+                                    $msg_attachment->attachment_type = $attachment_type;
+                                    $msg_attachment->save();
+                                }
                             }
+
+
+                        }
                     }
 
                     if(isset($request->app_user_id)){
@@ -139,6 +203,37 @@ class MessageController extends Controller
                             'message_category'=>$request->message_category,
                         ];
                         $response = MessageMaster::create($column_value);
+                        if($request->hasFile('attachment')){
+                            foreach ($attachment as $attachment) {
+                                $attachment_name = rand().time().$attachment->getClientOriginalName();
+                                $ext = strtoupper($attachment->getClientOriginalExtension());
+                                echo $ext;
+                                if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
+                                    $attachment_type = 1;
+                                }
+                                else if ($ext=="MP4" || $ext=="3GP") {
+                                    $attachment_type = 2;
+                                }
+                                else if ($ext=="MP3") {
+                                    $attachment_type = 3;
+                                }
+                                else{
+                                    $attachment_type = 4;
+                                }
+                                //$attachment_full_name = $attachment_name.'.'.$ext;
+                                $upload_path = 'assets/images/message/';
+
+                                $success=$attachment->move($upload_path,$attachment_name);
+                                if($success) MessageMaster::where('id',$request->edit_msg_id)->update(['is_attachment'=>1]);
+                                ##Save image to the message attachment table
+                                $msg_attachment = new MessageAttachment();
+                                $msg_attachment->message_master_id = $response['id'];
+                                $msg_attachment->admin_atachment = $attachment_name;
+                                $msg_attachment->attachment_type = $attachment_type;
+                                $msg_attachment->save();
+                            }
+                        }
+
                     }
 
 
@@ -522,6 +617,14 @@ class MessageController extends Controller
 
         $app_user_info = UserGroup::select('group_name', 'id')->get();
 
+        $user_groups = DB::table('user_groups as ug')
+            ->leftJoin('message_masters as mm', 'ug.id','=','ug.group_name', 'mm.created_at')
+            ->select('ug.id','ug.group_name')
+            ->where('ug.status','1')
+            ->orderBy('mm.created_at')
+            ->groupBy('ug.id')
+            ->get();
+
         // DB::table('message_masters as mm')
         //                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
         //                     ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
@@ -531,7 +634,7 @@ class MessageController extends Controller
         //                     ->get();
 
         return json_encode(array(
-            "app_user_info"=>$app_user_info,
+            "app_user_info"=>$user_groups,
             // "message"=>$message,
         ));
     }
@@ -662,12 +765,13 @@ class MessageController extends Controller
                 ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                 ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                 ->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
+                ->leftJoin('user_groups as ug', 'mm.group_id','=','ug.id')
                 ->where('mm.group_id',$group_id)
                 ->where('mm.status','!=',0)
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.name as app_user_name' , 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','ug.group_name')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->offset($start)
@@ -681,6 +785,7 @@ class MessageController extends Controller
                 ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                 ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                 ->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
+                ->leftJoin('user_groups as ug', 'mm.group_id','=','ug.id')
                 ->where('mm.group_id',$group_id)
                 ->where(function ($query) {
                     $query->whereNotNull('mm.admin_message')
@@ -690,7 +795,7 @@ class MessageController extends Controller
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id','apu.name as app_user_name' , 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','ug.group_name')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->limit(1)
@@ -703,6 +808,7 @@ class MessageController extends Controller
                 ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                 ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                 ->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
+                ->leftJoin('user_groups as ug', 'mm.group_id','=','ug.id')
                 ->where('mm.group_id',$group_id)
                 ->where(function ($query) {
                     $query->whereNotNull('mm.app_user_message')
@@ -713,7 +819,7 @@ class MessageController extends Controller
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.name as app_user_name' ,'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','ug.group_name')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->get();
@@ -775,7 +881,7 @@ class MessageController extends Controller
             ->where('mm.is_seen',0)
             ->where('mm.is_group_msg',1)
             ->whereNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.message_category as category_id', 'mm.group_id as group_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name', 'ug.group_name as group_name','apu.name as app_user_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.message_category as category_id', 'mm.group_id as group_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name', 'ug.group_name as group_name','apu.name as app_user_name', 'apu.user_profile_image')
             ->groupBy('mm.group_id', 'mm.message_category')
             ->orderBy('mm.created_at', 'desc')
             ->get();
@@ -786,7 +892,7 @@ class MessageController extends Controller
             ->where('mm.is_seen',0)
             ->where('mm.is_group_msg',0)
             ->whereNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','apu.name as app_user_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','apu.name as app_user_name','apu.user_profile_image')
             ->groupBy('mm.app_user_id')
             ->orderBy('mm.created_at', 'desc')
             ->get();

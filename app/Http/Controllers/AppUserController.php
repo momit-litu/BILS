@@ -19,7 +19,7 @@ use App\Traits\HasPermission;
 class AppUserController extends Controller
 {
 	use HasPermission;
-	
+
 	public function __construct(Request $request)
     {
         $this->page_title = $request->route()->getName();
@@ -76,8 +76,8 @@ class AppUserController extends Controller
 					$return['errors'][] = $request->email." is already exists";
 					return json_encode($return);
 				}
-			}		
-			
+			}
+
 			try{
 				DB::beginTransaction();
 				$password = ($request->password =="")?md5('1234'):md5($request->password);
@@ -85,12 +85,12 @@ class AppUserController extends Controller
 				# Image
 				$app_user_image = $request->file('app_user_image_upload');
 				if (isset($app_user_image)) {
-					
+
 					$image_name = time();
 					$ext = $app_user_image->getClientOriginalExtension();
 					$image_full_name = $image_name.'.'.$ext;
 					$upload_path = 'assets/images/user/app_user/';
-					
+
 					$success=$app_user_image->move($upload_path,$image_full_name);
 
 					$column_value = [
@@ -118,13 +118,13 @@ class AppUserController extends Controller
 				];
 			}
 
-				
+
 				#Entry
 				if ($request->app_user_edit_id == '') {
 					$response = AppUser::create($column_value);
 					$app_user_id = $response->id;
 					$group = $request->input('group');
-					
+
 					$app_user_group = UserGroup::select('id')->where('type',2)->get();
 					foreach ($app_user_group as $app_user_group ) {
 						$data_for_group_entry = new AppUserGroupMember();
@@ -138,7 +138,7 @@ class AppUserController extends Controller
 							$a=	DB::table('app_user_group_members')->where('app_user_id',$app_user_id)->where('group_id',$group)->update(['status'=>1]);
 						}
 					}
-					
+
 				}
 				#Update
 				else if($request->app_user_edit_id != ''){
@@ -157,7 +157,7 @@ class AppUserController extends Controller
 								$is_available_group = AppUserGroupMember::Select('group_id')
 													->where('group_id',$group)
 													->first();
-													 
+
 								if ($is_available_group['group_id']==$group) {
 								 	$group_member_details = DB::table('app_user_group_members')
 													->where('app_user_id',$request->app_user_edit_id)
@@ -170,12 +170,12 @@ class AppUserController extends Controller
 									$data_for_group_entry->app_user_id=$request->app_user_edit_id;
 									$data_for_group_entry->status=$status;
 									$data_for_group_entry->save();
-								 } 
-								
+								 }
+
 							}
 						}
 					}
-					
+
 				}
 				DB::commit();
 				$return['result'] = "1";
@@ -200,7 +200,7 @@ class AppUserController extends Controller
 		$delete_action_id 	= 10;
 		$edit_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
 		$delete_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
-    	$app_user_details = AppUser::Select('id',  'name',  'email', 'status')->orderBy('id', 'desc')->get();		
+    	$app_user_details = AppUser::Select('id',  'name',  'email', 'status')->orderBy('id', 'desc')->get();
 		$return_arr = array();
 		foreach($app_user_details as $user){
 
@@ -210,12 +210,12 @@ class AppUserController extends Controller
 					->where('augm.app_user_id', $user->id)
 					->where('augm.status', 1)
 					->get();
-			$user['groups_name'] = $groups[0]->group_name;	
-			
+			$user['groups_name'] = $groups[0]->group_name;
+
 
 			if($user->status == 0){
 				$user['status']="<button class='btn btn-xs btn-warning' disabled>In-active</button>";
-			}		
+			}
 			else if($user->status == 1){
 				$user['status']="<button class='btn btn-xs btn-success' disabled>Active</button>";
 			}
@@ -322,7 +322,7 @@ class AppUserController extends Controller
 			if ($delete_permisiion>0) {
 				$app_user_group_list['actions'] .=" <button title='Delete' onclick='admin_group_delete(".$app_user_group_list->id.")' id='delete_" . $app_user_group_list->id . "' class='btn btn-xs btn-danger'><i class='clip-remove'></i></button>";
 			}
-			
+
 			$return_arr[] = $app_user_group_list;
 		}
 		return json_encode(array('data'=>$return_arr));
@@ -337,6 +337,16 @@ class AppUserController extends Controller
 			->where('status','1')
 			->where('type','2')
 			->get();
+
+        /*$user_groups = DB::table('user_group as ug')
+                    ->leftJoin('message_master as mm', 'ug.id','=','mm.group_id', 'mm.created_at')
+                    ->select('ug.id','ug.group_name')
+                    ->where('ug.status','1')
+                    ->groupBy('ug.id')
+                    ->orderBy('mm.created_at')
+                    ->get();
+        */
+
 		return json_encode(array('data'=>$user_groups));
     }
     /*----- Get App User Group List End -----*/
@@ -366,11 +376,11 @@ class AppUserController extends Controller
 			$app_user_msg_save->is_attachment_app_user = 1;
 			$app_user_msg_save->save();
 			$mm_id = $app_user_msg_save->id;
-			
+
             foreach ($attachment as $attachment) {
                 $attachment_name = rand().time().$attachment->getClientOriginalName();
                 $ext = strtoupper($attachment->getClientOriginalExtension());
-               
+
                 if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
                     $attachment_type = 1;
                 }
@@ -385,7 +395,7 @@ class AppUserController extends Controller
                 }
                 //$attachment_full_name = $attachment_name.'.'.$ext;
                 $upload_path = 'assets/images/message/';
-                    
+
                 $success=$attachment->move($upload_path,$attachment_name);
                 ##Save image to the message attachment table
                 $msg_attachment = new MessageAttachment();
@@ -418,7 +428,7 @@ class AppUserController extends Controller
 
     public function appUserNameAutoComplete(){
 		$name = $_REQUEST['term'];
-		
+
 		$data = AppUser::select('id', 'name', 'email', 'contact_no')
 				->where('name','like','%'.$name.'%')
 				->orwhere('email','like','%'.$name.'%')
@@ -430,14 +440,14 @@ class AppUserController extends Controller
             foreach ($data as $row) {
                 $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["email"].", ".$row["contact_no"].")" );
             }
-        } 
+        }
         else {
             $json[] = array('id' => "0",'label' => "Not Found !!!");
         }
 		return json_encode($json);
 	}
 
-	
+
 
 	public function changeAppUserStatus($id){
 		$data = AppUser::where('id', $id)->first();
@@ -447,13 +457,13 @@ class AppUserController extends Controller
 		else if ($data->status==0) {
 			AppUser::where('id', $id)->update(['status'=>1]);
 		}
-		
+
 	}
 
 
 	public function appUserGroupNameAutoComplete(){
 		$name = $_REQUEST['term'];
-		
+
 		$data = UserGroup::select('id', 'group_name')
 				->where('group_name','like','%'.$name.'%')
 				->where('type',2)
@@ -464,7 +474,7 @@ class AppUserController extends Controller
             foreach ($data as $row) {
                 $json[] = array('id' => $row["id"],'label' => $row["group_name"]);
             }
-        } 
+        }
         else {
             $json[] = array('id' => "0",'label' => "Not Found !!!");
         }
@@ -485,7 +495,7 @@ class AppUserController extends Controller
 	// 		'group_name'=>$group_name,
 	// 	));
 	// }
-   
+
    	public function getAppUserReport(Request $r){
 		if ($r->app_user_group_id_id!="" && $r->search_criteria!="") {
 			if($r->search_criteria=="0" || $r->search_criteria=="1" ){
@@ -532,10 +542,10 @@ class AppUserController extends Controller
 			else{
 				$app_users = "";
 			}
-			
+
 		}
 
-		
+
 
 
 		return json_encode($app_users);
@@ -553,5 +563,5 @@ class AppUserController extends Controller
 
 
 
-    
+
 }

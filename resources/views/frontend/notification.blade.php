@@ -272,7 +272,6 @@
 
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
-$(document).ready(function(){
 	//alert("NOtification");
 
     $.ajaxSetup({
@@ -326,7 +325,6 @@ $(document).ready(function(){
         all_notification_reload()
     }
     loadAllNotifications()
-});
 </script>
 
 
