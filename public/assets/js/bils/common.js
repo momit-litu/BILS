@@ -1,3 +1,8 @@
+var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
+var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
+var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
+var admin_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
+
 
 var number_of_msg = 10;
 
@@ -81,7 +86,10 @@ $(document).ready(function () {
 
                 html = '';
                 count = 0;
+                lastMessageNotificationId = 0
                 $.each(response, function (key, value) {
+
+                    lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id : lastMessageNotificationId;
                     count++;
                     //alert(value.group_name)
                     if(value.group_name) {
@@ -93,15 +101,17 @@ $(document).ready(function () {
                     }
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
                     if(value.app_user_message==null){
-                        message = 'Attachment'
+                        message = 'You have a new Attachment'
                     }
-                    else message = value.app_user_message
+                    else {
+                        message = (value.app_user_message).substr(0, 40)+'. . .'
+                    }
 
                     html +='<li> ' +
                         '       <a href="#">' +
                         '           <div class="clearfix" onclick="viewMessage('+value.app_user_id+','+ value.group_id+','+value.category_id+')">' +
                         '               <div class="thread-image">' +
-                        '                   <img alt="" src="'+url+'/assets/images/avatar-3.jpg"> ' +
+                        '                   <img alt="" src="'+url+'/assets/images/user/app_user/'+value.user_profile_image+'" style="height: 50px; width: 40px"> ' +
                         '               </div> ' +
                         '               <div class="thread-content"> ' +
                         '                   <span class="author">'+user+'</span> ' +
@@ -113,6 +123,18 @@ $(document).ready(function () {
                         '   </li>'
 
                 })
+
+                if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
+                    document.getElementById("myAudio").play();
+                    localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+                }else  if(lastMessageNotificationId>0) {
+                    if(!localStorage.getItem('lastMessageNotificationId')) {
+                        document.getElementById("myAudio").play();
+                    }
+
+                    localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+                }
+
                 $('#badge').html(count)
                 $('#message_top_unread').html('You have total '+count+' unread message')
                 $('#message_header').html(html)
@@ -150,7 +172,9 @@ $(document).ready(function () {
 
                 html = '';
                 count = 0;
+                notificationId = 0;
                 $.each(response, function (key, value) {
+                    notificationId = notificationId<value.id? value.id : notificationId
                     count++;
                     if(value.group_name && value.category_name) {
                         user = value.group_name + '(' + value.category_name + ')'
@@ -159,6 +183,7 @@ $(document).ready(function () {
                         user = value.app_user_name
                     }
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+                    //image = ' <img alt="" src="'+url+'/assets/images/user/app_user/'+value.user_profile_image+'" style="height: 50px; width: 40px"> ' +
 
                     html +=' <li> ' +
                             '<a href="javascript:void(0)" onclick="view_notification('+value.id+')"> ' +
@@ -169,6 +194,18 @@ $(document).ready(function () {
                             '</li>'
 
                 })
+
+                if(localStorage.getItem('lastNotificationId')<notificationId){
+                    document.getElementById("lastMessageNotificationId").play();
+                    localStorage.setItem('lastNotificationId',notificationId)
+                }else  if(notificationId>0) {
+                    if(!localStorage.getItem('lastNotificationId')){
+                        document.getElementById("lastMessageNotificationId").play();
+                    }
+
+                    localStorage.setItem('lastNotificationId',notificationId)
+                }
+
                 $('#notificationCount').html(count)
                 $('#notification_list').html(html)
                 //console.log(response)

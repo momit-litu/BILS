@@ -61,6 +61,8 @@
 		<div id="frame">
 			<div class="content">
 				<div class="contact-profile">
+                    <img id="admin_image" src="" alt="" />
+                    <!--a onclick="" style="cursor:pointer; text-decoration: none;" id="group_name"></a-->
 					<!--img id="app_user_image" src="" alt="" /-->
 					<p style="font-weight:bold;	padding-left:5px;" id="msg_group_name"></p> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
 					<input type="hidden" id="app_user_id_profile">
@@ -507,6 +509,8 @@
                     var message_body = "";
                     if(!jQuery.isEmptyObject(message)){
                         $.each(message, function(i,message){
+                            group_name_ = message.group_name
+
                             html = "";
                             if( ($.trim(message["admin_id"]) != 'null' && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
                                 if(message["reply_message"]){
@@ -630,6 +634,9 @@
                         });
                     }
 
+                    $('#msg_group_name').html(group_name_)
+                    $('#admin_image').attr('src',admin_image_url+'/'+admin_image)
+
                     //console.log(message_body)
                     if(message_body != ""){
                         if(message_load_type == 1){ // 1: all message dump
@@ -670,6 +677,12 @@
                     // $('.content').unblock();
                 }
             })
+
+            $(".zoomImg").click(function(){
+                var image_src = $(this).attr('src');
+                $("#modalIMG").modal();
+                $("#load_zoom_img").attr('src',image_src);
+            });
         }
 
         set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){

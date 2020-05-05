@@ -62,8 +62,8 @@
         <div id="frame">
             <div class="content">
                 <div class="contact-profile">
-                    <!--img id="app_user_image" src="" alt="" /-->
-                    <h4 class="text-capitalize" id="msg_group_name"></h4> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
+                    <img id="admin_image" src="" alt="">
+                    <a href="#" class="text-capitalize" id="msg_category_name"></a> {{-- onclick="showProfile()" style="cursor:pointer; text-decoration: none;" --}}
                     <input type="hidden" id="app_user_id_profile">
                     <input type="hidden" id="group_msg_group_id">
                     <div class="social-media">
@@ -220,6 +220,9 @@
 
         loadCategoryMessage = (message_load_type, category_id) => {
 
+            $("#load_more_message").html('<button onclick="loadCategoryMessage(3,'+category_id+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
+
+
             $("#search_app_user").val("");
             $('#category_id').val(category_id)
             // event.preventDefault();
@@ -257,9 +260,12 @@
                     var mc;
                     //Messages
 
+
                     var message_body = "";
                     if (!jQuery.isEmptyObject(message)) {
                         $.each(message, function (i, message) {
+                            category_name_ = message['category_name']
+
                             html = "";
                             if (($.trim(message["admin_id"]) != 'null' && message["admin_id"] != "") && ((message["admin_message"] != null && message["admin_message"] != "") || (message["is_attachment"] != "" && message["is_attachment"] != null))) {
                                 if (message["reply_message"]) {
@@ -374,6 +380,9 @@
                         });
                     }
 
+                    $('#msg_category_name').html(category_name_)
+                    $('#admin_image').attr('src',admin_image_url+'/'+admin_image)
+
                     //console.log(message_body)
                     if (message_body != "") {
                         if (message_load_type == 1) { // 1: all message dump
@@ -403,6 +412,16 @@
                             last_app_user_message = $('.receive_msg:last').attr('id').split('_');
                             last_appuser_message_id = last_app_user_message[3];
                         }
+
+                        //this code should be after the ajax call but there it is not wording
+                        $(".zoomImg").click(function(){
+                            alert(1)
+                            var image_src = $(this).attr('src');
+                            $("#modalIMG").modal();
+                            $("#load_zoom_img").attr('src',image_src);
+                        });
+                        //
+
                     } else {
                         if (message_load_type == 1) {
                             // NO message yet,
@@ -412,6 +431,9 @@
                     // $('.content').unblock();
                 }
             })
+
+
+
         }
 
 

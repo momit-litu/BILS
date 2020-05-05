@@ -36,7 +36,7 @@
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('assets/plugins/bootstrap-modal/css/bootstrap-modal.css') }}" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
-	
+
     <!--SweetalertCSS-->
     <link rel="stylesheet" href="{{asset('assets/plugins/sweetalert/sweetalert2.min.css')}}" type="text/css" />
     <!-- Form elements-->
@@ -99,7 +99,7 @@
             <!-- start: PAGE CONTENT -->
             @yield('content')
             <!-- end: PAGE CONTENT-->
-			
+
         </div>
     </div>
     <!-- end: PAGE -->
@@ -409,6 +409,19 @@
         $('.notificationList ul').prepend(html);
     });*/
 </script>
+</div>
 </body>
+<audio id="myAudio">
+    <source src="{{ asset('assets/tone/eventually.mp3')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/tone/eventually.m4r')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/eventually.ogg')}}" type="audio/mpeg">
+</audio>
+
+<audio id="myNotificationAudio">
+    <source src="{{ asset('assets/tone/inflicted.mp3')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/tone/inflicted.m4r')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/inflicted.ogg')}}" type="audio/mpeg">
+</audio>
+
 <!-- end: BODY -->
 </html>
