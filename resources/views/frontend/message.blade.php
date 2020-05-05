@@ -52,7 +52,6 @@
 
 
 <script>
-$(document).ready(function(){
     //var url = $('.site_url').val();
     var number_of_msg = 50;
     var current_page_no = 1;
@@ -425,7 +424,6 @@ $(document).ready(function(){
 		'ps-y-reach-end':loadMoreMessages()
 	});
 
-});
 </script>
 
 

@@ -119,7 +119,6 @@
 
 
 <script>
-$(document).ready( function(){
         //alert("NOtice");
     var attachment_url = "<?php echo asset('assets/attachment/notice'); ?>";
 
@@ -222,7 +221,6 @@ $(document).ready( function(){
 
     loadNotice()
 
-});
 
 </script>
 

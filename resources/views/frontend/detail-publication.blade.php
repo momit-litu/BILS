@@ -6,7 +6,7 @@
 		</div>
 	</div>
 	<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel">
-	
+
 		<div class="alert alert-block fade in justify-text">
 			<h4 class="alert-heading"><i class="clip-notification "></i> গভীর সমুদ্রে দুটি ট্রলারে ভাসমান বিভিন্ন বয়সের পাঁচ শতাধিক রোহিঙ্গাকে মানবিক কারণে দ্রুত বাংলাদেশে আশ্রয় দিতে বলছে জাতিসংঘ।</h4>
 			<p>
@@ -34,12 +34,10 @@
 	</div>
 </div>
 
-	
+
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
-$(document).ready(function(){
 	alert("NOtice details")
-});
 </script>
 
 

@@ -364,7 +364,6 @@
 </div>
 
 <script>
-    $(document).ready(function(){
         //alert("Profile");
 
 
@@ -486,7 +485,6 @@
 
         })
 
-    });
 </script>
 
 

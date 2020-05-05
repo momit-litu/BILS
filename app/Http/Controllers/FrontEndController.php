@@ -260,7 +260,7 @@ class FrontEndController extends Controller
     public function publicationsDtails($id){
         $publication = DB::table('publications as p')
             ->where('p.id',$id)
-            ->select('p.id','p.publication_title as title', 'p.details','p.created_at', 'p.publication_type as type')
+            ->select('p.id','p.publication_title as title', 'p.details','p.publication_type','p.authors','p.attachment','p.created_at', 'p.publication_type as type')
             ->get();
 
         return json_encode($publication);

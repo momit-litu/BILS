@@ -13,12 +13,6 @@
 			</div>
 		</form>
 		<div class="panel-tools">
-            <!--
-            <a href="#responsive" data-toggle="modal" class="demo btn btn-blue">
-                View Demo
-            </a>
-            -->
-
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('publication')">
 				<i class="fa fa-refresh"></i>
 			</a>
@@ -28,66 +22,6 @@
 		<div id="timeline" class="demo1">
 			<div class="timeline" id="all_publication">
 				<ul class="columns" id="all_publications">
-					<!--li>
-						<div class="timeline_element">
-							<div class="timeline_title">
-								<span class="timeline_label">Publication Title 1</span><span class="timeline_date">16 December 2014</span>
-							</div>
-							<div class="content">
-								<b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-							</div>
-							<div class="readmore">
-								<a href="#" class="btn btn-info">
-									Details <i class="fa fa-arrow-circle-right"></i>
-								</a>
-							</div>
-						</div>
-					</li>
-										<li>
-						<div class="timeline_element">
-							<div class="timeline_title">
-								<span class="timeline_label">Publication Title 1</span><span class="timeline_date">16 December 2014</span>
-							</div>
-							<div class="content">
-								<b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-							</div>
-							<div class="readmore">
-								<a href="#" class="btn btn-info">
-									Details <i class="fa fa-arrow-circle-right"></i>
-								</a>
-							</div>
-						</div>
-					</li>
-										<li>
-						<div class="timeline_element">
-							<div class="timeline_title">
-								<span class="timeline_label">Publication Title 1</span><span class="timeline_date">16 December 2014</span>
-							</div>
-							<div class="content">
-								<b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-							</div>
-							<div class="readmore">
-								<a href="#" class="btn btn-info">
-									Details <i class="fa fa-arrow-circle-right"></i>
-								</a>
-							</div>
-						</div>
-					</li>
-                    <li>
-						<div class="timeline_element">
-							<div class="timeline_title">
-								<span class="timeline_label">Publication Title 1</span><span class="timeline_date">16 December 2014</span>
-							</div>
-							<div class="content">
-								<b>Lorem Ipsum</b> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
-							</div>
-							<div class="readmore">
-								<a href="#" class="btn btn-info">
-									Details <i class="fa fa-arrow-circle-right"></i>
-								</a>
-							</div>
-						</div>
-					</li-->
 
 				</ul>
 			</div>
@@ -100,8 +34,8 @@
 
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
-$(document).ready( function(){
         //alert("NOtice");
+    var attachment_url = "<?php echo asset('assets/attachment/publications'); ?>";
 
 
     $.ajaxSetup({
@@ -119,8 +53,17 @@ $(document).ready( function(){
             success: function (response) {
                 //console.log(response)
                 response = JSON.parse(response)
+                let  p = '<span><p style="text-align:left">'+response[0]['authors']+'<b style="float:right"> '+response[0]["publication_type"]+'</b> </p></span>'
+
+                let attachment = '';
+
+                if(response[0]['attachment']){
+                    //attachment = attachment_url+'/'+response[0]['attachment'];
+                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><p class="left" style="word-wrap: break-word;">'+response[0]["attachment"]+'</p></a>'
+                }
+
                 $(' #modal_title_content').html(response[0]['title']);
-                $('#modal_body_content').html(response[0]['details'])
+                $('#modal_body_content').html(p+' '+response[0]['details']+' '+attachment)
                 $('#responsive').modal()
             }
         })
@@ -180,7 +123,6 @@ $(document).ready( function(){
 
     loadPublication()
 
-});
 
 </script>
 
