@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\AppUserGroupMember;
+use App\UserGroup;
+use App\UserGroupMember;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\AppUser;
@@ -9,6 +12,8 @@ use App\System;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
+
+use DB;
 
 class AppAuthController extends Controller
 {
@@ -21,12 +26,12 @@ class AppAuthController extends Controller
     public function __construct(Request $request){
 		$this->middleware('guest')->except('logout');
 		$this->middleware('guest:appUser')->except('logout');
-		  
+
         $this->page_title = $request->route()->getName();
         $description = \Request::route()->getAction();
         $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
     }
-	
+
 
     /**
      * Show admin login page for admin
@@ -72,7 +77,7 @@ class AppAuthController extends Controller
             'email' => 'required|email',
             'password' => 'required',
         ]);
-		
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
@@ -84,7 +89,7 @@ class AppAuthController extends Controller
         ];
 
         if (\Auth::guard('appUser')->attempt($credentials)) {
-			
+
             \Session::put('email', Auth::guard('appUser')->user()->email);
             \Session::put('last_login', Auth::guard('appUser')->user()->last_login);
 			$status_upadated = \App\AppUser::LogInStatusUpdate(1);
@@ -160,7 +165,7 @@ class AppAuthController extends Controller
             return redirect()->back()->withErrors($v)->withInput();
         }
 
-        $registration=array(
+        $registrationData=array(
             'name' => ucwords($request->input('name')),
             'user_profile_image' => '',
             'login_status' => 0,
@@ -172,13 +177,39 @@ class AppAuthController extends Controller
         );
 		//dd($registration);
         try {
-			//echo "FUCK uu";die;
-            $registration = \DB::table('app_users')->insert($registration);
+
+            DB::beginTransaction();
+            $registration = new AppUser();
+            $registration -> name = ucwords($request->input('name'));
+            $registration -> user_profile_image = '';
+            $registration -> login_status = 0;
+            $registration -> status = '1';
+            $registration -> email = $request->input('email');
+            $registration -> password = bcrypt($request->input('password'));
+            $registration -> created_at = $now;
+            $registration -> updated_at = $now;
+            $registration ->save();
+
+            //$registration = \DB::table('app_users')->insert($registration);
             if ($registration) {
+                //echo json_encode($registration);
+                $userGroup = UserGroup::where('type',2)->get();
+                foreach ($userGroup as $group){
+                    $userGroupMember = new AppUserGroupMember();
+                    $userGroupMember->app_user_id = $registration['id'];
+                    $userGroupMember->group_id = $group['id'];
+                    $userGroupMember->status = 0;
+                    $userGroupMember->save();
+                    //echo 2;
+
+                }
+                DB::commit();
                 return redirect('app/auth/login')->with('message',__('auth.successfully_registered'));
             }
         } catch(\Exception $e) {
+            DB::rollback();
             $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();
+            return json_encode($message);
             return redirect('app/auth/register')->with('errormessage',__('auth.Registration_faild') );
         }
     }
@@ -282,7 +313,7 @@ class AppAuthController extends Controller
                 return redirect('app/auth/login')->with('message',"Password updated successfully !");
             }
         } catch(\Exception $e) {
-            $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();           
+            $message = "Message : ".$e->getMessage().", File : ".$e->getFile().", Line : ".$e->getLine();
             return redirect('app/auth/login')->with('errormessage', __('auth.Password_update_failed'));
         }
 

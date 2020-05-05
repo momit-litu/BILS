@@ -155,11 +155,20 @@ class FrontEndController extends Controller
     }
 
     public  function messageListNotification(){
-        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $individualMessage = DB::table('message_masters as mm')
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->leftJoin('app_user_group_members as apgm', 'mm.group_id','=','apgm.group_id')
             ->where('mm.is_seen',0)
-            ->where('mm.app_user_id',$user_info['id'])
+            ->where(function ($query) {
+                $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+                $query->where('mm.app_user_id', $user_info['id'])
+                    ->orWhere(function ($query) {
+                        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+                        $query->where('apgm.app_user_id', $user_info['id'])
+                            ->Where('apgm.status','=', 1);
+                    });
+            })
             ->whereNotNull('admin_message')
             ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
             ->groupBy('mm.id')
@@ -170,7 +179,14 @@ class FrontEndController extends Controller
 
     public  function messageView($id){
         //return $id;
-        MessageMaster::where('id',$id)->update(['is_seen'=>1]);
+        $messageSeen = MessageMaster::where('id',$id)->get();
+        if($messageSeen[0]['is_group_msg']==0){
+            MessageMaster::where([['app_user_id',$messageSeen[0]['app_user_id']],['is_group_msg',0]])
+                ->update(['is_seen'=>1]);
+        }else{
+            MessageMaster::where([['app_user_id',$messageSeen[0]['app_user_id']],['group_id',$messageSeen[0]['group_id']]])
+                ->update(['is_seen'=>1]);
+        }
         return 1;
     }
 
@@ -221,7 +237,7 @@ class FrontEndController extends Controller
     public function userNoticeDetails($id){
         $notice = DB::table('notices as n')
             ->where('n.id',$id)
-            ->select('n.id','n.title', 'n.details','n.created_at')
+            ->select('n.id','n.title', 'n.details','n.notice_date','n.attachment','n.created_at')
             ->get();
 
         return json_encode($notice);
@@ -292,7 +308,7 @@ class FrontEndController extends Controller
                 ->where('mm.app_user_id',$app_user_id_load_msg)
 				->where(function ($query) {
 					$query->whereNotNull('mm.app_user_message')
-					->orWhere('mm.is_attachment_app_user', '>', 0);	
+					->orWhere('mm.is_attachment_app_user', '>', 0);
 				})
                 ->where('mm.status','!=',0)
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
@@ -314,7 +330,7 @@ class FrontEndController extends Controller
 				->where('mm.app_user_id',$app_user_id_load_msg)
 				->where(function ($query) {
 					$query->whereNotNull('mm.admin_message')
-					->orWhere('mm.is_attachment', '>', 0);	
+					->orWhere('mm.is_attachment', '>', 0);
 				})
 				->where('mm.status','!=',0)
 				->where('mm.id','>',$last_admin_message_id)
