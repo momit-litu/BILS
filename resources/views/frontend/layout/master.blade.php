@@ -759,10 +759,15 @@
                     $.each(response, function (key, value) {
                         notificationId = notificationId<value.id ? value.id : notificationId;
                         count++;
+                        if(value.module_id==7) title = 'A New Course published '
+                        else if(value.module_id==37) title = 'A New Notice published '
+                        else if(value.module_id==38) title = 'A New Publication published '
+                        else title = value.title
+
                         html +='<li onclick="notificationView('+value.id+')"> ' +
                             '<a href="javascript:void(0)"> ' +
                           //  '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
-                            '<span class="message"> '+value.title+'</span> ' +
+                            '<span class="message"> '+title+'</span> ' +
                             '<span class="time">'+value.msg_date+'</span> ' +
                             '</a> ' +
                             '</li>'
