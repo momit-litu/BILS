@@ -574,7 +574,7 @@
                         localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
                     }
                     $('#app_message_badge').html(count)
-                    $('#message_badge').html(count)
+                    $('.message_badge').html(count)
                     $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_message').html(html)
                 }
@@ -625,7 +625,7 @@
                     }
 
                     $('#app_notification_badge').html(count)
-                    $('#notification_badge').html(count)
+                    $('.notification_badge').html(count)
                     $('#app_notification_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_notification').html(html)
                     //console.log(response)
@@ -647,16 +647,16 @@
                     $.each(response,function (key, data) {
                         //console.log(data)
                         if(data['module_id']==7){
-                            $('#course_badge').html(data['number'])
+                            $('.course_badge').html(data['number'])
                         }
                         if(data['module_id']==38){
-                            $('#publication_badge').html(data['number'])
+                            $('.publication_badge').html(data['number'])
                         }
                         if(data['module_id']==37){
-                            $('#notice_badge').html(data['number'])
+                            $('.notice_badge').html(data['number'])
                         }
                         if(data['module_id']==6){
-                            $('#survey_badge').html(data['number'])
+                            $('.survey_badge').html(data['number'])
                         }
                     })
                 }

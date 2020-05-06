@@ -59,11 +59,11 @@
 
                 if(response[0]['attachment']){
                     //attachment = attachment_url+'/'+response[0]['attachment'];
-                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><p class="left" style="word-wrap: break-word;">'+response[0]["attachment"]+'</p></a>'
+                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment"></i></a>'
                 }
 
-                $(' #modal_title_content').html(response[0]['title']);
-                $('#modal_body_content').html(p+' '+response[0]['details']+' '+attachment)
+                $(' #modal_title_content').html(response[0]['title'] +''+attachment);
+                $('#modal_body_content').html(p+'<hr> '+response[0]['details'])
                 $('#responsive').modal()
             }
         })
