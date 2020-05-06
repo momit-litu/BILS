@@ -239,11 +239,15 @@ class FrontEndController extends Controller
             ->where('n.id',$id)
             ->select('n.id','n.title', 'n.details','n.notice_date','n.attachment','n.created_at')
             ->get();
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+        Notification::where([['to_id',$user_info['id']],['module_id',37],['module_reference_id',$notice[0]->id]])->update(['status'=>1]);
 
         return json_encode($notice);
     }
 
     public function publications(){
+
         //return 1;
         $date = date('Y-m-d');
         //return $date;
@@ -254,6 +258,7 @@ class FrontEndController extends Controller
             ->orderBy('p.created_at','desc')
             ->get();
 
+
         return json_encode($publication);
     }
 
@@ -262,6 +267,11 @@ class FrontEndController extends Controller
             ->where('p.id',$id)
             ->select('p.id','p.publication_title as title', 'p.details','p.publication_type','p.authors','p.attachment','p.created_at', 'p.publication_type as type')
             ->get();
+
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+        Notification::where([['to_id',$user_info['id']],['module_id',38],['module_reference_id',$publication[0]->id]])->update(['status'=>1]);
+
 
         return json_encode($publication);
     }
@@ -517,6 +527,22 @@ class FrontEndController extends Controller
         $data['page_title'] = $this->page_title;
 		$data['module_name']= "Survey";
         return view('frontend.survey', $data);
+    }
+
+    public function badgeCount(){
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+
+        $count = DB::table('notifications as n')
+            ->leftJoin('menus as m', 'm.id', '=','n.module_id')
+            ->select('n.module_id',
+                DB::raw('COUNT(n.id) as number'))
+            ->where('n.to_id','=',$user_info['id'])
+            ->where('n.status','=',0)
+            ->groupBy('n.module_id')
+            ->orderBy('n.module_id')
+            ->get();
+        return json_encode($count);
     }
 
 
