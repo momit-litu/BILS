@@ -456,7 +456,8 @@ var Main = function() {
 		};
 	};
 	//Search Input function
-	var runSearchInput = function() {
+	/*var runSearchInput = function() {
+		//alert(11)
 		var search_input = $('.sidebar-search input');
 		var search_button = $('.sidebar-search button');
 		var search_form = $('.sidebar-search');
@@ -481,6 +482,7 @@ var Main = function() {
 			}
 		});
 		search_button.on('click', function() {
+			alert('clicked')
 			if($(search_input).is(':hidden')) {
 				$(search_input).addClass('open').css({
 					width: 0,
@@ -502,7 +504,7 @@ var Main = function() {
 				$(search_input).focus();
 			return false;
 		});
-	};
+	};*/
 	//Set of functions for Style Selector
 	var runStyleSelector = function() {
 		$('.style-toggle').on('click', function() {
@@ -746,7 +748,7 @@ var Main = function() {
 			runWIndowResize();
 			runInit();
 			runStyleSelector();
-			runSearchInput();
+		//	runSearchInput();
 			runElementsPosition();
 			runToDoAction();
 			runNavigationToggler();

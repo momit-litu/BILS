@@ -213,16 +213,20 @@
 					</div>
 					<div class="tab-pane" id="favorites">
 						<div class="users-list">
-							<ul class="media-list">
+							<ul class="media-list">								
+								<h5 class="media-heading padding-10">Interested Course</h5>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
 
 								<li class="media">
-									<h4 class="media-heading"></h4>
-									<span>
 									<a class="activity" href="javascript:void(0)">
-										<span class="desc">Course No #1234 <br>You added a new event to the calendar. new event to the calendar</span>
+										<span class="desc">You added a new event to the calendar.</span>
 									</a>
-									</span>
 								</li>
+								<h5 class="media-heading padding-10">Registered Course</h5>
 								<li class="media">
 									<a class="activity" href="javascript:void(0)">
 										<span class="desc">You added a new event to the calendar.</span>
@@ -230,7 +234,13 @@
 								</li>
 								<li class="media">
 									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar. new event to the calendar</span>
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
+								<h5 class="media-heading padding-10">Completed Course</h5>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
 									</a>
 								</li>
 								<li class="media">
@@ -244,28 +254,169 @@
 							<div class="sidebar-content">
 								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
 								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
+									<h4> Vertical description </h4>
+									<dl>
+										<dt>
+											Description lists
+										</dt>
+										<dd>
+											A description list is perfect for defining terms.
+										</dd>
+										<dt>
+											Euismod
+										</dt>
+										<dd>
+											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+										</dd>
+										<dd>
+											Donec id elit non mi porta gravida at eget metus.
+										</dd>
+										<dt>
+											Malesuada porta
+										</dt>
+										<dd>
+											Etiam porta sem malesuada magna mollis euismod.
+										</dd>
+									</dl>
+									<h4> Horizontal description </h4>
+									<dl class="dl-horizontal">
+										<dt>
+											Description lists
+										</dt>
+										<dd>
+											A description list is perfect for defining terms.
+										</dd>
+										<dt>
+											Euismod
+										</dt>
+										<dd>
+											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+										</dd>
+										<dd>
+											Donec id elit non mi porta gravida at eget metus.
+										</dd>
+										<dt>
+											Malesuada porta
+										</dt>
+										<dd>
+											Etiam porta sem malesuada magna mollis euismod.
+										</dd>
+										<dt>
+											Felis euismod semper eget lacinia
+										</dt>
+										<dd>
+											Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+										</dd>
+									</dl>
 								</div>
 							</div>
 
 						</div>
 					</div>
-					<div class="tab-pane" id="settings">
-						<h5 class="sidebar-title">Pan3</h5>
-						<ul class="media-list">
-							<li class="media">
-								<div class="checkbox sidebar-content">
-									<label>
-										<input type="checkbox" value="" class="green" checked="checked">
-										Enable Notifications
-									</label>
-								</div>
-							</li>
+						<div class="tab-pane" id="settings">
+						<div class="users-list">
+							<ul class="media-list">								
+								<h5 class="media-heading padding-10">Open Survey</h5>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
 
-						</ul>
-						<div class="sidebar-content">
-							<button class="btn btn-success">
-								<i class="icon-settings"></i> Save Changes
-							</button>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
+								<h5 class="media-heading padding-10">Completed Survey</h5>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
+								<li class="media">
+									<a class="activity" href="javascript:void(0)">
+										<span class="desc">You added a new event to the calendar.</span>
+									</a>
+								</li>
+							</ul>
+							<div class="sidebar-content">
+								<button class="btn btn-success">
+									<i class="icon-settings"></i> Save Changes
+								</button>
+							</div>
+						</div>
+						<div class="user-chat">
+							<div class="sidebar-content">
+								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
+								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
+									<h4> Vertical description </h4>
+									<dl>
+										<dt>
+											Description lists
+										</dt>
+										<dd>
+											A description list is perfect for defining terms.
+										</dd>
+										<dt>
+											Euismod
+										</dt>
+										<dd>
+											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+										</dd>
+										<dd>
+											Donec id elit non mi porta gravida at eget metus.
+										</dd>
+										<dt>
+											Malesuada porta
+										</dt>
+										<dd>
+											Etiam porta sem malesuada magna mollis euismod.
+										</dd>
+									</dl>
+									<h4> Horizontal description </h4>
+									<dl class="dl-horizontal">
+										<dt>
+											Description lists
+										</dt>
+										<dd>
+											A description list is perfect for defining terms.
+										</dd>
+										<dt>
+											Euismod
+										</dt>
+										<dd>
+											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+										</dd>
+										<dd>
+											Donec id elit non mi porta gravida at eget metus.
+										</dd>
+										<dt>
+											Malesuada porta
+										</dt>
+										<dd>
+											Etiam porta sem malesuada magna mollis euismod.
+										</dd>
+										<dt>
+											Felis euismod semper eget lacinia
+										</dt>
+										<dd>
+											Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+										</dd>
+									</dl>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
@@ -427,6 +578,8 @@
 
 
 				$("#load-content").html(data);
+				
+				
 				if(pageName=='message'){
 					//$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
 				}
