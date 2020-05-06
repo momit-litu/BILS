@@ -22,6 +22,7 @@
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
 	//alert("NOtification");
+    page = 1
 
     $.ajaxSetup({
         headers:{
@@ -46,17 +47,18 @@
         })
     }
 
-    loadAllNotifications = () =>{
+    loadAllNotifications = (type) =>{
         $.ajax({
-            url: "{{ url('app/')}}/all_notifications",
+            url: "{{ url('app/')}}/all_notifications/"+page,
             type:'GET',
             async:false,
             success: function(response){
 
                 response = JSON.parse(response)
                 //console.log(response)
-                html = '';
+                loadMore = '<button onclick="loadAllNotifications(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
                 count = 0;
+                html = ''
                 $.each(response, function (key, value) {
                     count++;
                     // alert(value.admin_message)
@@ -78,11 +80,18 @@
                         '   </div>'
 
                 })
-                $('#allNotificationGrid').html(html)
+                if(type==2){
+                    $('#allNotificationGrid').append(html)
+                }
+                else{
+                    $('#allNotificationGrid').html(loadMore+' '+html)
+                }
 
             }
+
         })
-        all_notification_reload()
+        page++;
+        all_notification_reload(1)
     }
     loadAllNotifications()
 </script>
