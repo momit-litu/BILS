@@ -195,7 +195,7 @@ class FrontEndController extends Controller
         $Notifications = DB::table('notifications as n')
             ->where('n.status',0)
             ->where('n.to_id',$user_info['id'])
-            ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.created_at as msg_date')
+            ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.created_at as msg_date','n.module_id')
             ->groupBy('n.id')
             ->orderBy('n.created_at', 'desc')
             ->get();
