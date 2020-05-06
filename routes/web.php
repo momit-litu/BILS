@@ -82,6 +82,11 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/survey',array('as'=>' Survey' , 'uses' =>'FrontEndController@surveyList'));
 
 
+    Route::get('app/badge_count',array('as'=>' Badge Count' , 'uses' =>'FrontEndController@badgeCount'));
+
+
+
+
 });
 
 

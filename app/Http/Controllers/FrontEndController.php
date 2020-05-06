@@ -519,6 +519,21 @@ class FrontEndController extends Controller
         return view('frontend.survey', $data);
     }
 
+    public function badgeCount(){
+        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+
+        $count = DB::table('notifications as n')
+            ->leftJoin('menus as m', 'm.id', '=','n.module_id')
+            ->select('n.module_id',
+                DB::raw('COUNT(n.id) as number'))
+            ->where('n.to_id','=',$user_info['id'])
+            ->groupBy('n.module_id')
+            ->orderBy('n.module_id')
+            ->get();
+        return json_encode($count);
+    }
+
 
 
 

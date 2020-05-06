@@ -119,99 +119,11 @@
 
                             </div>
 
-                            <!--
-                            <dl>
-                                <dt>
-                                    Author
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Date:
-                                </dt>
-                                <dd>
-                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-                                </dd>
-                                <dd>
-                                    Donec id elit non mi porta gravida at eget metus.
-                                </dd>
-                                <dt>
-                                    Malesuada porta
-                                </dt>
-                                <dd>
-                                    Etiam porta sem malesuada magna mollis euismod.
-                                </dd>
-                            </dl>
-                            <h4> Horizontal description </h4>
-                            <dl class="dl-horizontal">
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                                <dd>
-                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-                                </dd>
-                                <dd>
-                                    Donec id elit non mi porta gravida at eget metus.
-                                </dd>
-                                <dt>
-                                    Malesuada porta
-                                </dt>
-                                <dd>
-                                    Etiam porta sem malesuada magna mollis euismod.
-                                </dd>
-                                <dt>
-                                    Felis euismod semper eget lacinia
-                                </dt>
-                                <dd>
-                                    Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-                                </dd>
-                            </dl>
-                            -->
-
                         </div>
                     </div>
-                    <!--<div class="modal-footer">
-                    <button type="button" data-dismiss="modal" class="btn btn-light-grey">
-                    Close
-                    </button>
-                    <button type="button" class="btn btn-blue">
-                    Save changes
-                    </button>
-                    </div>-->
+
                 </div>
 
-
-                <!--
-				<div class="modal fade" id="dashboard_modal" tabindex="-1" role="dialog" aria-hidden="true">
-					<div class="modal-dialog">
-						<div class="modal-content">
-							<div class="modal-header">
-								<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-									&times;
-								</button>
-								<h4 class="modal-title" id="modal-title"></h4>
-							</div>
-							<div class="modal-body" id="modal-body">
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-default" data-dismiss="modal">
-                                    {{__('app.Close')}}
-								</button>
-
-							</div>
-						</div>
-
-					</div>
-				</div>
-				-->
-                <!-- /.modal -->
 				<!-- end: SPANEL CONFIGURATION MODAL FORM -->
 				<div class="container padding-left-0 padding-right-0" style="margin-bottom: 0px;">
 					@yield('content')
@@ -239,70 +151,8 @@
 			</div>
 			<div class="modal-body">
 				<div class="panel-body">
-					<h4 class="modal-title">Publication Title</h4>
-					<dl>
-						<dt>
-							Author
-						</dt>
-						<dd>
-							A description list is perfect for defining terms.
-						</dd>
-						<dt>
-							Date:
-						</dt>
-						<dd>
-							Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-						</dd>
-						<dd>
-							Donec id elit non mi porta gravida at eget metus.
-						</dd>
-						<dt>
-							Malesuada porta
-						</dt>
-						<dd>
-							Etiam porta sem malesuada magna mollis euismod.
-						</dd>
-					</dl>
-					<h4> Horizontal description </h4>
-					<dl class="dl-horizontal">
-						<dt>
-							Description lists
-						</dt>
-						<dd>
-							A description list is perfect for defining terms.
-						</dd>
-						<dt>
-							Euismod
-						</dt>
-						<dd>
-							Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-						</dd>
-						<dd>
-							Donec id elit non mi porta gravida at eget metus.
-						</dd>
-						<dt>
-							Malesuada porta
-						</dt>
-						<dd>
-							Etiam porta sem malesuada magna mollis euismod.
-						</dd>
-						<dt>
-							Felis euismod semper eget lacinia
-						</dt>
-						<dd>
-							Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-						</dd>
-					</dl>
 				</div>
 			</div>
-			<!--<div class="modal-footer">
-				<button type="button" data-dismiss="modal" class="btn btn-light-grey">
-					Close
-				</button>
-				<button type="button" class="btn btn-blue">
-					Save changes
-				</button>
-			</div>-->
 		</div>
 
 <!-- start: RIGHT SIDEBAR -->
@@ -364,7 +214,7 @@
 					<div class="tab-pane" id="favorites">
 						<div class="users-list">
 							<ul class="media-list">
-								
+
 								<li class="media">
 									<h4 class="media-heading"></h4>
 									<span>
@@ -394,63 +244,9 @@
 							<div class="sidebar-content">
 								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
 								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
-									<h4> Vertical description </h4>
-									<dl>
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-										<dd>
-											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-										</dd>
-										<dd>
-											Donec id elit non mi porta gravida at eget metus.
-										</dd>
-										<dt>
-											Malesuada porta
-										</dt>
-										<dd>
-											Etiam porta sem malesuada magna mollis euismod.
-										</dd>
-									</dl>
-									<h4> Horizontal description </h4>
-									<dl class="dl-horizontal">
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-										<dd>
-											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-										</dd>
-										<dd>
-											Donec id elit non mi porta gravida at eget metus.
-										</dd>
-										<dt>
-											Malesuada porta
-										</dt>
-										<dd>
-											Etiam porta sem malesuada magna mollis euismod.
-										</dd>
-										<dt>
-											Felis euismod semper eget lacinia
-										</dt>
-										<dd>
-											Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-										</dd>
-									</dl>
 								</div>
 							</div>
-							
+
 						</div>
 					</div>
 					<div class="tab-pane" id="settings">
@@ -620,7 +416,7 @@
 				//$("#load-content").fadeOut('slow');
 			},
 			success: function (data) {
-				
+
 				if($(".sb-toggle").hasClass("open")) {
 					$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
 					$(".sb-toggle").removeClass("open")
@@ -628,8 +424,8 @@
 						right: -$("#page-sidebar").outerWidth()
 					});
 				}
-				
-				
+
+
 				$("#load-content").html(data);
 				if(pageName=='message'){
 					//$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
@@ -778,6 +574,7 @@
                         localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
                     }
                     $('#app_message_badge').html(count)
+                    $('#message_badge').html(count)
                     $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_message').html(html)
                 }
@@ -828,6 +625,7 @@
                     }
 
                     $('#app_notification_badge').html(count)
+                    $('#notification_badge').html(count)
                     $('#app_notification_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
                     $('#app_header_new_notification').html(html)
                     //console.log(response)
@@ -838,7 +636,39 @@
         }
         newNotifications();
 
+        badgeCountLoad = () =>{
+            $.ajax({
+                url: "{{ url('app/')}}/badge_count",
+                type: 'GET',
+                async: true,
+                success: function (response) {
+                    //console.log(response)
+                    response = JSON.parse(response)
+                    $.each(response,function (key, data) {
+                        //console.log(data)
+                        if(data['module_id']==7){
+                            $('#course_badge').html(data['number'])
+                        }
+                        if(data['module_id']==38){
+                            $('#publication_badge').html(data['number'])
+                        }
+                        if(data['module_id']==37){
+                            $('#notice_badge').html(data['number'])
+                        }
+                        if(data['module_id']==6){
+                            $('#survey_badge').html(data['number'])
+                        }
+                    })
+                }
+            })
+        }
+        badgeCountLoad()
+
+        //alert($('#message_badge').html())
+
     </script>
+
+
 
 
 
