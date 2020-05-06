@@ -6,7 +6,8 @@ body{
 }
 
 .hometab{
-	font-size:16px;
+	font-size:14px;
+	font-weight:bold;
 }
 .main-container {
     margin-top: 50px;
@@ -100,4 +101,24 @@ body{
 .thread-image{
 	width:20px !important;
 	height:25px !important;
+}
+.navbar-tools{
+	padding-bottom: 2px;
+	padding-top: 2px;
+}
+.navbar-tools > ul > li > a {
+    font-size: 18px;
+    line-height: 26px;
+}
+.footer {
+	padding-top: 2px;
+	padding-bottom: 3px;
+}
+.fa-home{
+	font-size: 32px;
+	color: #114177;
+	margin-bottom:5px;
+}
+#page-sidebar .sidebar-wrapper .nav-tabs li a{
+	font-weight:bold;
 }
