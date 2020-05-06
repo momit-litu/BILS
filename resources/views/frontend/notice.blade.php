@@ -121,7 +121,7 @@
 <script>
         //alert("NOtice");
     var attachment_url = "<?php echo asset('assets/attachment/notice'); ?>";
-
+    page =1;
 
     $.ajaxSetup({
         headers:{
@@ -156,10 +156,10 @@
     }
 
 
-    loadNotice = function loadNotice(){//
+    loadNotice = function loadNotice(type){//
 
         $.ajax({
-            url: "{{ url('app/')}}/load-notice",
+            url: "{{ url('app/')}}/load-notice/"+page,
             type:'get',
             async:false,
             success: function(response) {
@@ -168,6 +168,8 @@
                     html = "";
                     noticeMonth = -1
                     noticeYear = -1
+                    loadMore = '<button onclick="loadNotice(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
+
 
                     $.each(response, function(i,notice){
                         date = new Date(notice['created_at']);
@@ -212,14 +214,22 @@
 
                     html+='</ul>'
 
-                    $('#all_notice').html(html)
+                    if(type==2){
+                        $('#all_notice').append(html)
+                    }
+                    else{
+                        $('#all_notice').html(loadMore+' '+html)
+                    }
+                    page ++ ;
+
+                    //$('#all_notice').html(html)
                 }
             }
         });
 
     }
 
-    loadNotice()
+    loadNotice(1)
 
 
 </script>

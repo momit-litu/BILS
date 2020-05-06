@@ -34,6 +34,7 @@
 
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
+    page =1;
         //alert("NOtice");
     var attachment_url = "<?php echo asset('assets/attachment/publications'); ?>";
 
@@ -72,10 +73,11 @@
 
 
 
-    loadPublication = function loadPublication(){//
+    loadPublication = function loadPublication(type){//
+        alert(page)
 
         $.ajax({
-            url: "{{ url('app/')}}/load-publications",
+            url: "{{ url('app/')}}/load-publications/"+page,
             type:'get',
             async:false,
             success: function(response) {
@@ -84,6 +86,8 @@
                     html = "";
                     noticeMonth = -1
                     noticeYear = -1
+                    loadMore = '<button onclick="loadPublication(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
+
 
                     $.each(response, function(i,publication){
                         date = new Date(publication['created_at']);
@@ -113,15 +117,22 @@
                     });
 
                     //console.log(html)
+                    if(type==2){
+                        $('#all_publications').append(html)
+                    }
+                    else{
+                        $('#all_publications').html(loadMore+' '+html)
+                    }
+                    page ++ ;
 
-                    $('#all_publications').html(html)
+                    //$('#all_publications').html(html)
                 }
             }
         });
 
     }
 
-    loadPublication()
+    loadPublication(1)
 
 
 </script>

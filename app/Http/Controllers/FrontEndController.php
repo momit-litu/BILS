@@ -202,13 +202,20 @@ class FrontEndController extends Controller
         return json_encode($Notifications);
     }
 
-    public function allNotification(){
+    public function allNotification($page){
+        $page_no 				= $page;
+        $limit 					= 20;
+        $start = ($page_no*$limit)-$limit;
+        $end   = $limit;
+
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $Notifications = DB::table('notifications as n')
             ->where('n.to_id',$user_info['id'])
             ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.date_time as msg_date', 'n.view_url as url')
             ->groupBy('n.id')
             ->orderBy('n.date_time', 'asc')
+            ->offset($start)
+            ->limit($end)
             ->get();
         return json_encode($Notifications);
     }
@@ -219,8 +226,11 @@ class FrontEndController extends Controller
 	    return json_encode($notification);
     }
 
-    public function userNotice(){
-	    //return 1;
+    public function userNotice( $page){
+        $page_no 				= $page;
+        $limit 					= 5;
+        $start = ($page_no*$limit)-$limit;
+        $end   = $limit;
         $date = date('Y-m-d');
         //return $date;
         $notice = DB::table('notices as n')
@@ -228,6 +238,8 @@ class FrontEndController extends Controller
             ->select('n.id','n.title', 'n.details','n.created_at')
             ->groupBy('n.id')
             ->orderBy('n.created_at')
+            ->offset($start)
+            ->limit($end)
             ->get();
 
         return json_encode($notice);
@@ -246,8 +258,11 @@ class FrontEndController extends Controller
         return json_encode($notice);
     }
 
-    public function publications(){
-
+    public function publications( $page){
+        $page_no 				= $page;
+        $limit 					= 5;
+        $start = ($page_no*$limit)-$limit;
+        $end   = $limit;
         //return 1;
         $date = date('Y-m-d');
         //return $date;
@@ -256,6 +271,8 @@ class FrontEndController extends Controller
             ->select('p.id','p.publication_title as title', 'p.details','p.created_at', 'p.publication_type as type')
             ->groupBy('p.id')
             ->orderBy('p.created_at','desc')
+            ->offset($start)
+            ->limit($end)
             ->get();
 
 

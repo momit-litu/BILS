@@ -62,9 +62,9 @@ Route::group(['middleware'=>'appUser'], function() {
 
 
 
-    Route::get('app/load-notice',array('as'=>'Notice' , 'uses' =>'FrontEndController@userNotice'));
+    Route::get('app/load-notice/{page}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userNotice'));
     Route::get('app/load-notice-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userNoticeDetails'));
-    Route::get('app/load-publications',array('as'=>'Notice' , 'uses' =>'FrontEndController@publications'));
+    Route::get('app/load-publications/{page}',array('as'=>'Notice' , 'uses' =>'FrontEndController@publications'));
     Route::get('app/load-publications-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@publicationsDtails'));
 
 
@@ -75,7 +75,7 @@ Route::group(['middleware'=>'appUser'], function() {
 	Route::get('app/detail-publication',array('as'=>' Publication' , 'uses' =>'FrontEndController@publicationDetail'));
 	Route::get('app/notification',array('as'=>' Notification' , 'uses' =>'FrontEndController@notificationList'));
     Route::get('app/new_notifications',array('as'=>'Notification' , 'uses' =>'FrontEndController@newNotification'));
-    Route::get('app/all_notifications',array('as'=>'Notification' , 'uses' =>'FrontEndController@allNotification'));
+    Route::get('app/all_notifications/{page}',array('as'=>'Notification' , 'uses' =>'FrontEndController@allNotification'));
 
 
 	Route::get('app/course',array('as'=>' Course' , 'uses' =>'FrontEndController@courseList'));
