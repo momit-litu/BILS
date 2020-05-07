@@ -523,7 +523,7 @@
 
         new_message_reload = () =>{
             setTimeout(function(){
-                newMessages();
+                //newMessages();
             }, 5000);
         }
 
@@ -541,8 +541,12 @@
                     lastMessageNotificationId = 0;
                     $.each(response, function (key, value) {
                         lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id :lastMessageNotificationId;
-                        count++;
-                        html +='<li onclick="messageView('+value.id+')"> ' +
+                        count = value.is_seen==0 ? count+1 :count;
+                        if(value.is_seen==0){
+                            style = 'style = "background:#DBDAD8"'
+                        }else style = ''
+
+                        html +='<li onclick="messageView('+value.id+')" '+style+'> ' +
                             '       <a href="#">' +
                             '           <div class="clearfix" onclick="viewMessage('+value.id+')">' +
                             '               <div class="thread-image">' +
@@ -605,13 +609,16 @@
                     notificationId = 0;
                     $.each(response, function (key, value) {
                         notificationId = notificationId<value.id ? value.id : notificationId;
-                        count++;
+                        count = value.status==0 ? count+1 :count;
+                        if(value.status==0){
+                            style = 'style = "background:#DBDAD8"'
+                        }else style = ''
                         if(value.module_id==7) title = 'A New Course published '
                         else if(value.module_id==37) title = 'A New Notice published '
                         else if(value.module_id==38) title = 'A New Publication published '
                         else title = value.title
 
-                        html +='<li onclick="notificationView('+value.id+')"> ' +
+                        html +='<li onclick="notificationView('+value.id+')" '+style+'> ' +
                             '<a href="javascript:void(0)"> ' +
                           //  '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
                             '<span class="message"> '+title+'</span> ' +

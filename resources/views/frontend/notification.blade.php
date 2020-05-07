@@ -30,14 +30,9 @@
         }
     });
 
-    all_notification_reload = () =>{
-        setTimeout(function(){
-            loadAllNotifications();
-            set_time_out_fn();
-        }, 100000);
-    }
 
     notificationView = (id) =>{
+        //$('#'+id).css('style','color=gray')
         $.ajax({
             url: "{{ url('app/')}}/notification_view/"+id,
             type: 'GET',
@@ -61,14 +56,22 @@
                 html = ''
                 $.each(response, function (key, value) {
                     count++;
+
+                    if(value.status == 0 ){
+                        //style = 'style="background: #F5DED9"'
+                        style = 'style = "color:red"'
+
+                    }else{
+                        style = ''
+                    }
                     // alert(value.admin_message)
 
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
                     details = value.details==null ? "" : value.details
-                    html +='<div class="panel panel-default"> ' +
+                    html +='<div class="panel panel-default" > ' +
                         '       <div class="panel-heading"> ' +
                         '           <h4 class="panel-title"> ' +
-                        '               <a href="#faq_1_4'+value.id+'" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed" onclick="notificationView('+value.id+')"> ' +
+                        '               <a href="#faq_1_4'+value.id+'" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed" id="'+value.id+'" onclick="notificationView('+value.id+')" '+style+'> ' +
                         '                   <i class="icon-arrow"></i>' +
                                             value.title +
                         '                </a>' +
@@ -91,7 +94,7 @@
 
         })
         page++;
-        all_notification_reload(1)
+       // all_notification_reload(1)
     }
     loadAllNotifications()
 </script>

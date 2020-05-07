@@ -158,7 +158,7 @@ class FrontEndController extends Controller
         $individualMessage = DB::table('message_masters as mm')
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
             ->leftJoin('app_user_group_members as apgm', 'mm.group_id','=','apgm.group_id')
-            ->where('mm.is_seen',0)
+            //->where('mm.is_seen',0)
             ->where(function ($query) {
                 $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
 
@@ -170,9 +170,11 @@ class FrontEndController extends Controller
                     });
             })
             ->whereNotNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.is_seen','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
             ->groupBy('mm.id')
-            ->orderBy('mm.created_at', 'desc')
+            ->orderBy('mm.is_seen', 'asc')
+            ->offset(1)
+            ->limit(10)
             ->get();
         return json_encode($individualMessage);
     }
@@ -193,11 +195,13 @@ class FrontEndController extends Controller
     public function newNotification(){
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $Notifications = DB::table('notifications as n')
-            ->where('n.status',0)
+            //->where('n.status',0)
             ->where('n.to_id',$user_info['id'])
-            ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.created_at as msg_date','n.module_id')
+            ->select('n.id as id', 'n.notification_title as title', 'n.message as details','n.status', 'n.created_at as msg_date','n.module_id')
             ->groupBy('n.id')
-            ->orderBy('n.created_at', 'desc')
+            ->orderBy('n.status', 'asc')
+            ->offset(1)
+            ->limit(10)
             ->get();
         return json_encode($Notifications);
     }
@@ -211,7 +215,7 @@ class FrontEndController extends Controller
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $Notifications = DB::table('notifications as n')
             ->where('n.to_id',$user_info['id'])
-            ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.date_time as msg_date', 'n.view_url as url')
+            ->select('n.id as id', 'n.notification_title as title', 'n.status','n.message as details', 'n.date_time as msg_date', 'n.view_url as url')
             ->groupBy('n.id')
             ->orderBy('n.date_time', 'asc')
             ->offset($start)
