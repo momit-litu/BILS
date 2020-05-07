@@ -27,10 +27,11 @@ return [
 
 
     //LoginPage
-    'button-login' => 'Login',
+    'button-login' => 'Login BN',
     'login_page_title'=>'Login',
     'forget-password' =>'Forget Password',
 	'sign-up' =>'Sign Up bangla',
+	
 	
 
 
