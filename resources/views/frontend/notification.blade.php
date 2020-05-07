@@ -33,7 +33,7 @@
     all_notification_reload = () =>{
         setTimeout(function(){
             loadAllNotifications();
-            set_time_out_fn();
+           // set_time_out_fn();
         }, 100000);
     }
 

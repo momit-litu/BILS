@@ -122,3 +122,27 @@ body{
 #page-sidebar .sidebar-wrapper .nav-tabs li a{
 	font-weight:bold;
 }
+.padding-10{
+	padding:20px 10px 0px 10px;
+}
+.font-weight-bold{
+	font-weight:bold;
+}
+div.timeline_element div.timeline_title {
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #fff !important;
+    font-weight: bold;
+}
+div.timeline_element div.timeline_title span.timeline_date {
+     font-size: 10px;
+}
+.sidebar-search {
+	margin: -8px 20px 0 0 !important;
+}
+.other{
+	margin-right:45px;
+}
+.self{
+	margin-left:45px;
+}

@@ -134,6 +134,56 @@
 
     loadPublication(1)
 
+		// -----------------------------------SEARCH----------------------------------------
+
+		//alert(11)
+		var search_input = $('.sidebar-search input');
+		var search_button = $('.sidebar-search button');
+		var search_form = $('.sidebar-search');
+		search_input.attr('data-default', $(search_input).outerWidth()).focus(function() {
+			$(this).animate({
+				width: 200
+			}, 200);
+		}).blur(function() {
+			if($(this).val() == "") {
+				if($(this).hasClass('open')) {
+					$(this).animate({
+						width: 0,
+						opacity: 0
+					}, 200, function() {
+						$(this).hide();
+					});
+				} else {
+					$(this).animate({
+						width: $(this).attr('data-default')
+					}, 200);
+				}
+			}
+		});
+		search_button.on('click', function() {
+			alert('fff')
+			if($(search_input).is(':hidden')) {
+				$(search_input).addClass('open').css({
+					width: 0,
+					opacity: 0
+				}).show().animate({
+					width: 200,
+					opacity: 1
+				}, 200).focus();
+			} else if($(search_input).hasClass('open') && $(search_input).val() == '') {
+				$(search_input).removeClass('open').animate({
+					width: 0,
+					opacity: 0
+				}, 200, function() {
+					$(this).hide();
+				});
+			} else if($(search_input).val() != '') {
+				return;
+			} else
+				$(search_input).focus();
+			return false;
+		});
+	// -----------------------------------SEARCH----------------------------------------
 
 </script>
 

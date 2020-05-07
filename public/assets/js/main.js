@@ -256,9 +256,8 @@ var Main = function() {
 			$(this).parents(".panel").remove();
 			e.preventDefault();
 		});
-		$('.panel-tools .panel-refresh').on('click', function(e) {
+		/*$('.panel-tools .panel-refresh').on('click', function(e) {
 			var el = $(this).parents(".panel");
-			alert('hddere')
 			el.block({
 				overlayCSS: {
 					backgroundColor: '#fff'
@@ -274,7 +273,7 @@ var Main = function() {
 				el.unblock();
 			}, 1000);
 			e.preventDefault();
-		});
+		});*/
 		$('.panel-tools .panel-collapse').on('click', function(e) {
 			e.preventDefault();
 			var el = jQuery(this).parent().closest(".panel").children(".panel-body");
@@ -456,7 +455,8 @@ var Main = function() {
 		};
 	};
 	//Search Input function
-	var runSearchInput = function() {
+	/*var runSearchInput = function() {
+		//alert(11)
 		var search_input = $('.sidebar-search input');
 		var search_button = $('.sidebar-search button');
 		var search_form = $('.sidebar-search');
@@ -481,6 +481,7 @@ var Main = function() {
 			}
 		});
 		search_button.on('click', function() {
+			alert('clicked')
 			if($(search_input).is(':hidden')) {
 				$(search_input).addClass('open').css({
 					width: 0,
@@ -502,7 +503,7 @@ var Main = function() {
 				$(search_input).focus();
 			return false;
 		});
-	};
+	};*/
 	//Set of functions for Style Selector
 	var runStyleSelector = function() {
 		$('.style-toggle').on('click', function() {
@@ -746,7 +747,7 @@ var Main = function() {
 			runWIndowResize();
 			runInit();
 			runStyleSelector();
-			runSearchInput();
+		//	runSearchInput();
 			runElementsPosition();
 			runToDoAction();
 			runNavigationToggler();
