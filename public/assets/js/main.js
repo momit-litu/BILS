@@ -256,9 +256,8 @@ var Main = function() {
 			$(this).parents(".panel").remove();
 			e.preventDefault();
 		});
-		$('.panel-tools .panel-refresh').on('click', function(e) {
+		/*$('.panel-tools .panel-refresh').on('click', function(e) {
 			var el = $(this).parents(".panel");
-			alert('hddere')
 			el.block({
 				overlayCSS: {
 					backgroundColor: '#fff'
@@ -274,7 +273,7 @@ var Main = function() {
 				el.unblock();
 			}, 1000);
 			e.preventDefault();
-		});
+		});*/
 		$('.panel-tools .panel-collapse').on('click', function(e) {
 			e.preventDefault();
 			var el = jQuery(this).parent().closest(".panel").children(".panel-body");

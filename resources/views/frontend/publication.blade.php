@@ -134,7 +134,7 @@
 
     loadPublication(1)
 
-
+		// -----------------------------------SEARCH----------------------------------------
 
 		//alert(11)
 		var search_input = $('.sidebar-search input');
@@ -183,6 +183,7 @@
 				$(search_input).focus();
 			return false;
 		});
+	// -----------------------------------SEARCH----------------------------------------
 
 </script>
 

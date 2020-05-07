@@ -107,10 +107,10 @@
 
                 <div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        <button type="button" class="btn btn-danger btn-xs pull-right" data-dismiss="modal" aria-hidden="true">
                             &times;
                         </button>
-
+						&nbsp;&nbsp;<br>
                     </div>
                     <div class="modal-body">
                         <div class="panel-body">
@@ -710,18 +710,14 @@
                             '   </li>'
 
                     })
+					
                     if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
-                       // alert(2)
-                        //document.getElementById("myAudio").play();
-                        $('#myAudio').trigger("play")
+                        document.getElementById("myAudio").play();
                         localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
                     }else  if(lastMessageNotificationId>0) {
                         //alert('message-1')
                         if(!localStorage.getItem('lastMessageNotificationId')) {
-                            //alert(3)
-                            $('#myAudio').trigger("play")
-
-                           // document.getElementById("myAudio").play();
+                             document.getElementById("myAudio").play();
                         }
 
                         localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
@@ -774,10 +770,13 @@
                     })
                     if(localStorage.getItem('lastNotificationId')<notificationId){
                         $('#lastMessageNotificationId').trigger("play")
+						//document.getElementById("myAudio").play();
+						
                         localStorage.setItem('lastNotificationId',notificationId)
                     }else  if(notificationId>0) {
                         if(!localStorage.getItem('lastNotificationId')){
                             $('#lastMessageNotificationId').trigger("play")
+							//document.getElementById("myAudio").play();
                         }
                         localStorage.setItem('lastNotificationId',notificationId)
                     }

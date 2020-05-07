@@ -45,7 +45,7 @@ class AppAuthController extends Controller
     {
         if (Auth::guard('appUser')->check()) {
             \App\AppUser::LogInStatusUpdate(1);
-           // return redirect('dashboard');
+            return redirect('dashboard');
 
         } else {
             $data['page_title'] = $this->page_title;
@@ -73,6 +73,11 @@ class AppAuthController extends Controller
      */
     public function authPostLogin(Request $request)
     {
+		 if (Auth::guard('appUser')->check()) {
+            \App\AppUser::LogInStatusUpdate(1);
+            return redirect('dashboard');
+
+        }
         $validator = \Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',

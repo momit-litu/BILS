@@ -287,7 +287,7 @@
                     if(message_load_type == 1){ // 1: all message dump
                         //alert('1:change all message')
                         $("#message_body").html(message_body);
-						container.scrollTop = 200000;
+						//container.scrollTop = 200000;
                         //$(".message_div").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
                         current_page_no=2;
                     }
@@ -391,7 +391,7 @@
 		}
 	});
 
-		set_adminmessage_time_out_fn = function set_adminmessage_time_out_fn(){
+	set_adminmessage_time_out_fn = function set_adminmessage_time_out_fn(){
 		//alert('timeout');
 		setTimeout(function(){
 				newAdminMessages();
@@ -423,6 +423,7 @@
 	},{
 		'ps-y-reach-end':loadMoreMessages()
 	});
+	
 
 </script>
 

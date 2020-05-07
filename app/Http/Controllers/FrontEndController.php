@@ -138,10 +138,6 @@ class FrontEndController extends Controller
         else return 2;
 	}
 
-//$2y$10$8MyHkYCo7xSK1KhKZ6h7X.fPokXUXi4mQVsrLjISHEmRB94zfT8ci
-//$2y$10$B.vLI3JouOxI.shQyQoVIOXbnTAU/pMpNWhCwx6MXHSeOxmxe0xFa
-
-
 	public function messageList()
     {
         $data['page_title'] = $this->page_title;
@@ -213,7 +209,7 @@ class FrontEndController extends Controller
             ->where('n.to_id',$user_info['id'])
             ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.date_time as msg_date', 'n.view_url as url')
             ->groupBy('n.id')
-            ->orderBy('n.date_time', 'asc')
+            ->orderBy('n.date_time', 'desc')
             ->offset($start)
             ->limit($end)
             ->get();
@@ -237,7 +233,7 @@ class FrontEndController extends Controller
             /*->where('n.expire_date','>=',$date)*/
             ->select('n.id','n.title', 'n.details','n.created_at')
             ->groupBy('n.id')
-            ->orderBy('n.created_at')
+            ->orderBy('n.created_at','desc')
             ->offset($start)
             ->limit($end)
             ->get();
@@ -249,7 +245,7 @@ class FrontEndController extends Controller
     public function userNoticeDetails($id){
         $notice = DB::table('notices as n')
             ->where('n.id',$id)
-            ->select('n.id','n.title', 'n.details','n.notice_date','n.attachment','n.created_at')
+            ->select('n.id','n.title', 'n.details',DB::Raw('from_unixtime(UNIX_TIMESTAMP(created_at)) as notice_date'),DB::Raw('IFNULL( n.attachment , "" ) as attachment'),'n.created_at')
             ->get();
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
 
@@ -300,7 +296,7 @@ class FrontEndController extends Controller
 
         $app_user_id_load_msg 	= $user_info['id'];
         $page_no 				= $_POST['page_no'];
-        $limit 					= $_POST['limit'];
+        $limit 					= 5;
         $message_load_type		= $_POST['message_load_type'];
         $last_admin_message_id	= $_POST['last_admin_message_id'];
         $start = ($page_no*$limit)-$limit;
