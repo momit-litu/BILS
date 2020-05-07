@@ -43,6 +43,7 @@
     }
 
     loadAllNotifications = (type) =>{
+
         $.ajax({
             url: "{{ url('app/')}}/all_notifications/"+page,
             type:'GET',
