@@ -154,7 +154,7 @@ class FrontEndController extends Controller
         $individualMessage = DB::table('message_masters as mm')
             ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
             ->leftJoin('app_user_group_members as apgm', 'mm.group_id','=','apgm.group_id')
-            ->where('mm.is_seen',0)
+            //->where('mm.is_seen',0)
             ->where(function ($query) {
                 $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
 
@@ -166,9 +166,11 @@ class FrontEndController extends Controller
                     });
             })
             ->whereNotNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message','mm.created_at as msg_date', 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.is_seen','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
             ->groupBy('mm.id')
-            ->orderBy('mm.created_at', 'desc')
+            ->orderBy('mm.is_seen', 'asc')
+            ->offset(1)
+            ->limit(10)
             ->get();
         return json_encode($individualMessage);
     }
@@ -189,11 +191,13 @@ class FrontEndController extends Controller
     public function newNotification(){
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $Notifications = DB::table('notifications as n')
-            ->where('n.status',0)
+            //->where('n.status',0)
             ->where('n.to_id',$user_info['id'])
-            ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.created_at as msg_date','n.module_id')
+            ->select('n.id as id', 'n.notification_title as title', 'n.message as details','n.status', DB::Raw('from_unixtime(UNIX_TIMESTAMP(n.created_at)) as msg_date'),'n.module_id')
             ->groupBy('n.id')
-            ->orderBy('n.created_at', 'desc')
+            ->orderBy('n.status', 'asc')
+            ->offset(1)
+            ->limit(10)
             ->get();
         return json_encode($Notifications);
     }
@@ -207,7 +211,7 @@ class FrontEndController extends Controller
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
         $Notifications = DB::table('notifications as n')
             ->where('n.to_id',$user_info['id'])
-            ->select('n.id as id', 'n.notification_title as title', 'n.message as details', 'n.date_time as msg_date', 'n.view_url as url')
+            ->select('n.id as id', 'n.notification_title as title', 'n.status','n.message as details', DB::Raw('from_unixtime(UNIX_TIMESTAMP(n.created_at)) as msg_date'), 'n.view_url as url')
             ->groupBy('n.id')
             ->orderBy('n.date_time', 'desc')
             ->offset($start)
@@ -222,21 +226,34 @@ class FrontEndController extends Controller
 	    return json_encode($notification);
     }
 
-    public function userNotice( $page){
+    public function userNotice( $page, $txt){
         $page_no 				= $page;
         $limit 					= 5;
         $start = ($page_no*$limit)-$limit;
         $end   = $limit;
         $date = date('Y-m-d');
         //return $date;
-        $notice = DB::table('notices as n')
-            /*->where('n.expire_date','>=',$date)*/
-            ->select('n.id','n.title', 'n.details','n.created_at')
-            ->groupBy('n.id')
-            ->orderBy('n.created_at','desc')
-            ->offset($start)
-            ->limit($end)
-            ->get();
+        if($txt!='' && $txt!= null && $txt!='a') {
+            $notice = DB::table('notices as n')
+                /*->where('n.expire_date','>=',$date)*/
+                ->where('n.title',"like","%".$txt."%")
+                ->orWhere("n.details","like","%".$txt."%")
+                ->select('n.id', 'n.title', 'n.details', DB::Raw('from_unixtime(UNIX_TIMESTAMP(created_at)) as created_at'))
+                ->groupBy('n.id')
+                ->orderBy('n.created_at', 'desc')
+                ->offset($start)
+                ->limit($end)
+                ->get();
+        }else {
+            $notice = DB::table('notices as n')
+                /*->where('n.expire_date','>=',$date)*/
+                ->select('n.id', 'n.title', 'n.details', DB::Raw('from_unixtime(UNIX_TIMESTAMP(created_at)) as created_at'))
+                ->groupBy('n.id')
+                ->orderBy('n.created_at', 'desc')
+                ->offset($start)
+                ->limit($end)
+                ->get();
+        }
 
         return json_encode($notice);
 
@@ -254,7 +271,7 @@ class FrontEndController extends Controller
         return json_encode($notice);
     }
 
-    public function publications( $page){
+    public function publications( $page, $txt){
         $page_no 				= $page;
         $limit 					= 5;
         $start = ($page_no*$limit)-$limit;
@@ -262,14 +279,31 @@ class FrontEndController extends Controller
         //return 1;
         $date = date('Y-m-d');
         //return $date;
-        $publication = DB::table('publications as p')
-            ->where('p.status',1)
-            ->select('p.id','p.publication_title as title', 'p.details','p.created_at', 'p.publication_type as type')
-            ->groupBy('p.id')
-            ->orderBy('p.created_at','desc')
-            ->offset($start)
-            ->limit($end)
-            ->get();
+        //return $txt;
+
+        if($txt!='' && $txt!= null && $txt!='a'){
+            $publication = DB::table('publications as p')
+                ->where('p.status',1)
+                ->where("p.publication_title","like","%".$txt."%")
+                ->orWhere("p.details","like","%".$txt."%")
+                ->select('p.id','p.publication_title as title', 'p.details',DB::Raw('from_unixtime(UNIX_TIMESTAMP(created_at)) as created_at'), 'p.publication_type as type')
+                ->groupBy('p.id')
+                ->orderBy('p.created_at','desc')
+                ->offset($start)
+                ->limit($end)
+                ->get();
+        }
+        else{
+            $publication = DB::table('publications as p')
+                ->where('p.status',1)
+                ->select('p.id','p.publication_title as title', 'p.details',DB::Raw('from_unixtime(UNIX_TIMESTAMP(created_at)) as created_at'), 'p.publication_type as type')
+                ->groupBy('p.id')
+                ->orderBy('p.created_at','desc')
+                ->offset($start)
+                ->limit($end)
+                ->get();
+        }
+
 
 
         return json_encode($publication);
@@ -278,7 +312,7 @@ class FrontEndController extends Controller
     public function publicationsDtails($id){
         $publication = DB::table('publications as p')
             ->where('p.id',$id)
-            ->select('p.id','p.publication_title as title', 'p.details','p.publication_type','p.authors','p.attachment','p.created_at', 'p.publication_type as type')
+            ->select('p.id','p.publication_title as title', 'p.details','p.publication_type','p.authors','p.attachment',DB::Raw('from_unixtime(UNIX_TIMESTAMP(created_at)) as created_at'), 'p.publication_type as type')
             ->get();
 
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
@@ -296,7 +330,7 @@ class FrontEndController extends Controller
 
         $app_user_id_load_msg 	= $user_info['id'];
         $page_no 				= $_POST['page_no'];
-        $limit 					= 5;
+        $limit 					= $_POST['limit'];
         $message_load_type		= $_POST['message_load_type'];
         $last_admin_message_id	= $_POST['last_admin_message_id'];
         $start = ($page_no*$limit)-$limit;
@@ -403,7 +437,7 @@ class FrontEndController extends Controller
             $reply_to = null;
         }
         $app_user_id = $user_info['id'];
-        $app_user_message = $r->message_input;
+        $app_user_message = $r->admin_message;
         $message_category = $msg_cat;
         $admin_id = null;
         ## Image

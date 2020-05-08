@@ -30,14 +30,9 @@
         }
     });
 
-    all_notification_reload = () =>{
-        setTimeout(function(){
-            loadAllNotifications();
-           // set_time_out_fn();
-        }, 100000);
-    }
 
     notificationView = (id) =>{
+        //$('#'+id).css('style','color=gray')
         $.ajax({
             url: "{{ url('app/')}}/notification_view/"+id,
             type: 'GET',
@@ -48,6 +43,7 @@
     }
 
     loadAllNotifications = (type) =>{
+
         $.ajax({
             url: "{{ url('app/')}}/all_notifications/"+page,
             type:'GET',
@@ -61,21 +57,31 @@
                 html = ''
                 $.each(response, function (key, value) {
                     count++;
+                    date = new Date(value["msg_date"]+ 'Z');
+                    notificationDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+
+                    if(value.status == 0 ){
+                        //style = 'style="background: #F5DED9"'
+                        style = 'style = "color:red"'
+
+                    }else{
+                        style = ''
+                    }
                     // alert(value.admin_message)
 
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
                     details = value.details==null ? "" : value.details
-                    html +='<div class="panel panel-default"> ' +
+                    html +='<div class="panel panel-default" > ' +
                         '       <div class="panel-heading"> ' +
                         '           <h4 class="panel-title"> ' +
-                        '               <a href="#faq_1_4'+value.id+'" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed" onclick="notificationView('+value.id+')"> ' +
+                        '               <a href="#faq_1_4'+value.id+'" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed" id="'+value.id+'" onclick="notificationView('+value.id+')" '+style+'> ' +
                         '                   <i class="icon-arrow"></i>' +
                                             value.title +
                         '                </a>' +
                         '           </h4> ' +
                         '       </div> ' +
                         '       <div class="panel-collapse collapse" id="faq_1_4'+value.id+'"> ' +
-                        '           <div class="panel-body">'+value.msg_date+'<hr>'+details+'</div> ' +
+                        '           <div class="panel-body">'+notificationDate+'<hr>'+details+'</div> ' +
                         '       </div> ' +
                         '   </div>'
 
@@ -91,9 +97,40 @@
 
         })
         page++;
-        all_notification_reload(1)
+       // all_notification_reload(1)
     }
     loadAllNotifications()
+
+    // load more when scroll reachs to bottom of the scrolling div
+    $('.fixed-panel').on('scroll', function() {
+        if ($(this).scrollTop() + $(this).innerHeight() >=
+            $(this)[0].scrollHeight) {
+            loadAllNotifications(2)
+        }
+    });
+    //------------------------------------------------end------------------------------------------
+
+    // refreash button
+    $('.panel-tools .panel-refresh').on('click', function(e) {
+        var el = $(this).parents(".panel");
+        el.block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            css: {
+                border: 'none',
+                color: '#333',
+                background: 'none'
+            }
+        });
+        window.setTimeout(function() {
+            page =1;
+            loadAllNotifications(1)
+            el.unblock();
+        }, 1000);
+        e.preventDefault();
+    });
 </script>
 
 

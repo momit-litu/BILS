@@ -53,8 +53,11 @@
             async: false,
             success: function (response) {
                 //console.log(response)
+
                 response = JSON.parse(response)
-                let  p = '<span><p style="text-align:left">'+response[0]['authors']+'<b style="float:right"> '+response[0]["publication_type"]+'</b> </p></span>'
+                date = new Date(response[0]["created_at"]+ 'Z');
+                publicationDate = date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+                let  p = '<span><p style="text-align:left">'+response[0]['authors']+'<b style="float:right"> '+response[0]["publication_type"]+'<br>'+publicationDate+'</b> </p></span>'
 
                 let attachment = '';
 
@@ -73,11 +76,16 @@
 
 
 
-    loadPublication = function loadPublication(type){//
-        alert(page)
+    loadPublication = function loadPublication(type){
+        text = 'a'
+        if($(search_input).val()!=null && $(search_input).val()!=''  ) {
+            //alert(1)
+            text = $(search_input).val()
+        }
+
 
         $.ajax({
-            url: "{{ url('app/')}}/load-publications/"+page,
+            url: "{{ url('app/')}}/load-publications/"+page+'/'+text,
             type:'get',
             async:false,
             success: function(response) {
@@ -90,21 +98,22 @@
 
 
                     $.each(response, function(i,publication){
-                        date = new Date(publication['created_at']);
+                        date = new Date(publication["created_at"]+ 'Z');
                         year= date.getFullYear();
                         month = date.getMonth();
                         day = date.getDate();
-                        noticDate = new Date(year+'-'+month+'-'+day)
-                        noticDate = noticDate.toDateString()
+                        publicationDate = date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+
 
                         var details = publication["details"];
                         var details = details.substring(0, 300)+'. . . . . . . .';
 
+                       // alert(publication['title'])
 
                         html+='<li> ' +
                             '   <div class="timeline_element"> ' +
-                            '       <div class="timeline_title">' +
-                            '           <span class="timeline_label">'+publication["title"]+'</span><span class="timeline_date">'+noticDate+'</span> ' +
+                            '       <div class="timeline_title" >' +
+                            '           <span class="timeline_label" style="color:gray">'+publication["title"]+'</span><span class="timeline_date" style="color:gray">'+publicationDate+'</span> ' +
                             '       </div> ' +
                             '       <div class="content"> '+details+'</div> ' +
                             '       <div class="readmore"> ' +
@@ -134,6 +143,38 @@
 
     loadPublication(1)
 
+
+    // load more when scroll reachs to bottom of the scrolling div
+    $('.fixed-panel').on('scroll', function() {
+        if ($(this).scrollTop() + $(this).innerHeight() >=
+            $(this)[0].scrollHeight) {
+            loadPublication(2)
+        }
+    });
+    //------------------------------------------------end------------------------------------------
+
+    // refreash button
+    $('.panel-tools .panel-refresh').on('click', function(e) {
+        var el = $(this).parents(".panel");
+        el.block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            css: {
+                border: 'none',
+                color: '#333',
+                background: 'none'
+            }
+        });
+        window.setTimeout(function() {
+            page =1;
+            loadPublication(1)
+            el.unblock();
+        }, 1000);
+        e.preventDefault();
+    });
+
 		// -----------------------------------SEARCH----------------------------------------
 
 		//alert(11)
@@ -161,7 +202,7 @@
 			}
 		});
 		search_button.on('click', function() {
-			alert('fff')
+			//alert('fff')
 			if($(search_input).is(':hidden')) {
 				$(search_input).addClass('open').css({
 					width: 0,
@@ -178,7 +219,9 @@
 					$(this).hide();
 				});
 			} else if($(search_input).val() != '') {
-				return;
+			    page =1;
+                loadPublication(1)
+				//return;
 			} else
 				$(search_input).focus();
 			return false;
