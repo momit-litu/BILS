@@ -226,21 +226,34 @@ class FrontEndController extends Controller
 	    return json_encode($notification);
     }
 
-    public function userNotice( $page){
+    public function userNotice( $page, $txt){
         $page_no 				= $page;
         $limit 					= 5;
         $start = ($page_no*$limit)-$limit;
         $end   = $limit;
         $date = date('Y-m-d');
         //return $date;
-        $notice = DB::table('notices as n')
-            /*->where('n.expire_date','>=',$date)*/
-            ->select('n.id','n.title', 'n.details','n.created_at')
-            ->groupBy('n.id')
-            ->orderBy('n.created_at','desc')
-            ->offset($start)
-            ->limit($end)
-            ->get();
+        if($txt!='' && $txt!= null && $txt!='a') {
+            $notice = DB::table('notices as n')
+                /*->where('n.expire_date','>=',$date)*/
+                ->where('n.title',"like","%".$txt."%")
+                ->orWhere("n.details","like","%".$txt."%")
+                ->select('n.id', 'n.title', 'n.details', 'UNIX_TIMESTAMP(n.created_at)')
+                ->groupBy('n.id')
+                ->orderBy('n.created_at', 'desc')
+                ->offset($start)
+                ->limit($end)
+                ->get();
+        }else {
+            $notice = DB::table('notices as n')
+                /*->where('n.expire_date','>=',$date)*/
+                ->select('n.id', 'n.title', 'n.details', 'n.created_at')
+                ->groupBy('n.id')
+                ->orderBy('n.created_at', 'desc')
+                ->offset($start)
+                ->limit($end)
+                ->get();
+        }
 
         return json_encode($notice);
 

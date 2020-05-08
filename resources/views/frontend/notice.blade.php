@@ -46,7 +46,7 @@
                 response = JSON.parse(response);
 				var notice_date = new Date(response[0]["notice_date"]+ 'Z');
 				notice_date 	= notice_date.toDateString()+" "+notice_date.getHours()+":"+notice_date.getMinutes();
-				
+
                 let p = '<p style="text-align:right font-weight-bold"> '+notice_date+'</p> '
                 let attachment = '';
                 if(response[0]['attachment']){
@@ -64,8 +64,12 @@
 
 
     loadNotice = function loadNotice(type){
-        $.ajax({
-            url: "{{ url('app/')}}/load-notice/"+page,
+        text = 'a'
+        if($(search_input).val()!=null && $(search_input).val()!=''  ) {
+            //alert(1)
+            text = $(search_input).val()
+        }        $.ajax({
+            url: "{{ url('app/')}}/load-notice/"+page+'/'+text,
             type:'get',
             async:false,
             success: function(response) {
@@ -139,7 +143,7 @@
 
     loadNotice(1)
 
-	// not working 
+	// not working
 	function loadMoreNotice(){
 		//alert(1)
 		loadNotice(2);
@@ -152,8 +156,8 @@
 	},{
 		'ps-y-reach-end':loadMoreNotice()
 	});
-	
-	// refreash button 
+
+	// refreash button
 	$('.panel-tools .panel-refresh').on('click', function(e) {
 		var el = $(this).parents(".panel");
 		el.block({
@@ -218,7 +222,9 @@
 					$(this).hide();
 				});
 			} else if($(search_input).val() != '') {
-				alert('call here the loadNotice function page=1 and send the searchString and add that in controller quey') 
+			    page = 1;
+                loadNotice (1)
+				//alert('call here the loadNotice function page=1 and send the searchString and add that in controller quey')
 				return false;
 			} else
 				$(search_input).focus();

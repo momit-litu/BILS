@@ -301,7 +301,7 @@
 
                     }
                     else if(message_load_type == 3){ // 3: get load more messages
-                        alert('3:add more all message');
+                        //alert('3:add more all message');
                         // need to specify the las message <li> and make the slide animation accoring to that li
 						//container.scrollTop = $(document).height();
                         //$(".message_div").animate({ scrollTop: $(document).height() }, "fast");
@@ -423,7 +423,7 @@
 	},{
 		'ps-y-reach-end':loadMoreMessages()
 	});
-	
+
 
 </script>
 
