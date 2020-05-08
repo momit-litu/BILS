@@ -456,6 +456,27 @@
         }
     });
 
+    $.ajax({
+        url: "{{ url('app/')}}/message/get-message-category",
+        success: function(response){
+            var data = JSON.parse(response);
+            var option = '<option value="">&nbsp;</option>';
+            $.each(data, function(i,data){
+                option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
+            });
+            $("#message_category").append(option)
+            $('#message_category_group').html(option)
+            $("#message_category_group").select2({
+                placeholder: "Categoty/Topic",
+                allowClear: true
+            });
+            $("#message_category").select2({
+                placeholder: "Categoty/Topic",
+                allowClear: true
+            });
+        }
+    });
+
 </script>
 
 
