@@ -60,7 +60,7 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
-    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
 	  <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
@@ -484,6 +484,7 @@
 <script src="{{ asset('assets/js/underscore.js')}}"></script>
 
 <!--<script src="{{ asset('js/notify.js')}}"></script>-->
+<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 
 <script src="{{ asset('assets/js/datatables.min.js')}}"></script>
 <script src="{{ asset('assets/js/dropzone.js')}}"></script>
@@ -584,7 +585,7 @@
 					//$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
 				}
 				else{
-					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+88));
+					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+40));
 				}
 				$('#load-content').unblock();
 				$("#load-content").fadeIn('slow');

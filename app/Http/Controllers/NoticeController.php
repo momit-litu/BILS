@@ -158,23 +158,9 @@ class NoticeController extends Controller
 										];
 										$response = Notification::create($column_value);
 									}
-
 								}
-
-
 							}
-						 }
-
-
-
-
-
-
-
-
-
-
-
+						}
 					}
 
 
