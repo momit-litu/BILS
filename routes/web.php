@@ -2,7 +2,7 @@
 //-------------------------------------------------App------------------------------------------
 //fontend #Login
 
-
+/*
 Route::get('app/language/{lang}',function ($lang){
     try {
         if (in_array($lang,['en','bn'])) {
@@ -10,7 +10,22 @@ Route::get('app/language/{lang}',function ($lang){
             App::setLocale($lang);
 
 			$locale = App::getLocale();
+			//dd($locale);
 		   return redirect()->back();
+        }
+        return redirect()->back();
+    } catch (\Exception $exception) {
+        return redirect()->back();
+    }
+});*/
+Route::get('app/language/{lang}',function ($lang){
+    try {
+        if (in_array($lang, config('locale.languages'))) {
+            Session::put('locale', $lang);
+            App::setLocale($lang);
+			$locale = App::getLocale();
+			//dd(Session::all());
+            return redirect()->back();
         }
         return redirect()->back();
     } catch (\Exception $exception) {

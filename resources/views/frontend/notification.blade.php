@@ -57,6 +57,8 @@
                 html = ''
                 $.each(response, function (key, value) {
                     count++;
+                    date = new Date(value["msg_date"]+ 'Z');
+                    notificationDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
 
                     if(value.status == 0 ){
                         //style = 'style="background: #F5DED9"'
@@ -79,7 +81,7 @@
                         '           </h4> ' +
                         '       </div> ' +
                         '       <div class="panel-collapse collapse" id="faq_1_4'+value.id+'"> ' +
-                        '           <div class="panel-body">'+value.msg_date+'<hr>'+details+'</div> ' +
+                        '           <div class="panel-body">'+notificationDate+'<hr>'+details+'</div> ' +
                         '       </div> ' +
                         '   </div>'
 
@@ -98,6 +100,37 @@
        // all_notification_reload(1)
     }
     loadAllNotifications()
+
+    // load more when scroll reachs to bottom of the scrolling div
+    $('.fixed-panel').on('scroll', function() {
+        if ($(this).scrollTop() + $(this).innerHeight() >=
+            $(this)[0].scrollHeight) {
+            loadAllNotifications(2)
+        }
+    });
+    //------------------------------------------------end------------------------------------------
+
+    // refreash button
+    $('.panel-tools .panel-refresh').on('click', function(e) {
+        var el = $(this).parents(".panel");
+        el.block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            css: {
+                border: 'none',
+                color: '#333',
+                background: 'none'
+            }
+        });
+        window.setTimeout(function() {
+            page =1;
+            loadAllNotifications(1)
+            el.unblock();
+        }, 1000);
+        e.preventDefault();
+    });
 </script>
 
 

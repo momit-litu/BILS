@@ -60,7 +60,10 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
-    <!--<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">-->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bils/messages.css') }}">
+
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
 	  <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
@@ -154,7 +157,18 @@
 				</div>
 			</div>
 		</div>
+    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
 
+    <div class="modal-content">
+
+        <img id="load_zoom_img" src="" alt="" style="width:100%; max-height:600px">
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        </div>
+    </div>
+
+</div>
 <!-- start: RIGHT SIDEBAR -->
 		<div id="page-sidebar">
 			<!--<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i></a>-->
@@ -213,7 +227,7 @@
 					</div>
 					<div class="tab-pane" id="favorites">
 						<div class="users-list">
-							<ul class="media-list">								
+							<ul class="media-list">
 								<h5 class="media-heading padding-10">Interested Course</h5>
 								<li class="media">
 									<a class="activity" href="javascript:void(0)">
@@ -254,60 +268,6 @@
 							<div class="sidebar-content">
 								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
 								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
-									<h4> Vertical description </h4>
-									<dl>
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-										<dd>
-											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-										</dd>
-										<dd>
-											Donec id elit non mi porta gravida at eget metus.
-										</dd>
-										<dt>
-											Malesuada porta
-										</dt>
-										<dd>
-											Etiam porta sem malesuada magna mollis euismod.
-										</dd>
-									</dl>
-									<h4> Horizontal description </h4>
-									<dl class="dl-horizontal">
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-										<dd>
-											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-										</dd>
-										<dd>
-											Donec id elit non mi porta gravida at eget metus.
-										</dd>
-										<dt>
-											Malesuada porta
-										</dt>
-										<dd>
-											Etiam porta sem malesuada magna mollis euismod.
-										</dd>
-										<dt>
-											Felis euismod semper eget lacinia
-										</dt>
-										<dd>
-											Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-										</dd>
-									</dl>
 								</div>
 							</div>
 
@@ -315,7 +275,7 @@
 					</div>
 						<div class="tab-pane" id="settings">
 						<div class="users-list">
-							<ul class="media-list">								
+							<ul class="media-list">
 								<h5 class="media-heading padding-10">Open Survey</h5>
 								<li class="media">
 									<a class="activity" href="javascript:void(0)">
@@ -484,6 +444,7 @@
 <script src="{{ asset('assets/js/underscore.js')}}"></script>
 
 <!--<script src="{{ asset('js/notify.js')}}"></script>-->
+<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
 
 <script src="{{ asset('assets/js/datatables.min.js')}}"></script>
 <script src="{{ asset('assets/js/dropzone.js')}}"></script>
@@ -578,13 +539,13 @@
 
 
 				$("#load-content").html(data);
-				
-				
+
+
 				if(pageName=='message'){
 					//$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
 				}
 				else{
-					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+88));
+					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+40));
 				}
 				$('#load-content').unblock();
 				$("#load-content").fadeIn('slow');
@@ -699,6 +660,10 @@
                             style = 'style = "background:#DBDAD8"'
                         }else style = ''
 
+                        date = new Date(value["msg_date"]+ 'Z');
+                        messageDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+
+
                         html +='<li onclick="messageView('+value.id+')" '+style+'> ' +
                             '       <a href="#">' +
                             '           <div class="clearfix" onclick="viewMessage('+value.id+')">' +
@@ -707,14 +672,14 @@
                             '               </div> ' +
                             '               <div class="thread-content"> ' +
                             '                   <span class="preview">'+value.admin_message+'</span> ' +
-                            '                   <span class="time">'+value.msg_date+'</span>' +
+                            '                   <span class="time">'+messageDate+'</span>' +
                             '               </div> ' +
                             '           </div>' +
                             '        </a>' +
                             '   </li>'
 
                     })
-					
+
                     if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
                         document.getElementById("myAudio").play();
                         localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
@@ -757,6 +722,9 @@
                     count = 0;
                     notificationId = 0;
                     $.each(response, function (key, value) {
+                        date = new Date(value["msg_date"]+ 'Z');
+                        notificationDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+
                         notificationId = notificationId<value.id ? value.id : notificationId;
                         count = value.status==0 ? count+1 :count;
                         if(value.status==0){
@@ -771,14 +739,14 @@
                             '<a href="javascript:void(0)"> ' +
                           //  '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
                             '<span class="message"> '+title+'</span> ' +
-                            '<span class="time">'+value.msg_date+'</span> ' +
+                            '<span class="time">'+notificationDate+'</span> ' +
                             '</a> ' +
                             '</li>'
                     })
                     if(localStorage.getItem('lastNotificationId')<notificationId){
                         $('#lastMessageNotificationId').trigger("play")
 						//document.getElementById("myAudio").play();
-						
+
                         localStorage.setItem('lastNotificationId',notificationId)
                     }else  if(notificationId>0) {
                         if(!localStorage.getItem('lastNotificationId')){
@@ -827,6 +795,28 @@
             })
         }
         badgeCountLoad()
+
+
+        $('.panel-tools .panel-refresh').on('click', function(e) {
+            var el = $(this).parents(".panel");
+            el.block({
+                overlayCSS: {
+                    backgroundColor: '#fff'
+                },
+                message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+                css: {
+                    border: 'none',
+                    color: '#333',
+                    background: 'none'
+                }
+            });
+            window.setTimeout(function() {
+                page =1;
+                location.reload()
+                el.unblock();
+            }, 1000);
+            e.preventDefault();
+        });
 
         //alert($('#message_badge').html())
 

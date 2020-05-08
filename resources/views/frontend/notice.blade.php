@@ -82,14 +82,16 @@
 
 
                     $.each(response, function(i,notice){
-                        date = new Date(notice['created_at']);
+                        date = new Date(response[0]["created_at"]+ 'Z');
+                        noticDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+
                         year= date.getFullYear();
                         month = date.getMonth();
                         day = date.getDate();
 						hour = date.getHours();
 						min  = date.getMinutes();
-                        noticDate = new Date(year+'-'+month+'-'+day, )
-                        noticDate = noticDate.toDateString()
+                       /* noticDate = new Date(year+'-'+month+'-'+day, )
+                        noticDate = noticDate.toDateString()*/
 
                         if(noticeMonth!=month || noticeYear!=year){
                             noticeMonth = month
@@ -143,19 +145,25 @@
 
     loadNotice(1)
 
-	// not working
-	function loadMoreNotice(){
-		//alert(1)
-		loadNotice(2);
-	}
-	// not working
-	$('.panel-scroll').perfectScrollbar({
-		wheelSpeed: 50,
-		minScrollbarLength: 20,
-		suppressScrollX: true
-	},{
-		'ps-y-reach-end':loadMoreNotice()
+
+
+	//---------------- load more by auto scrolling to to and to bottom---------------------------
+
+	// load more when scroll reachs to top of the scrolling div
+	/*$(".fixed-panel").scroll(function() {
+		if($(this).scrollTop()  > 100){
+			loadNotice(2)
+		}
 	});
+	*/
+	// load more when scroll reachs to bottom of the scrolling div
+	 $('.fixed-panel').on('scroll', function() {
+		if ($(this).scrollTop() + $(this).innerHeight() >=
+			$(this)[0].scrollHeight) {
+				loadNotice(2)
+			}
+	});
+	//------------------------------------------------end------------------------------------------
 
 	// refreash button
 	$('.panel-tools .panel-refresh').on('click', function(e) {

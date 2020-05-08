@@ -194,7 +194,7 @@
             allowClear: true
         });
 
-
+        //08--Done
         ajaxPreLoad = () =>{
             //alert("{{ asset('assets/images/loading.gif') }}")
             $('.content').block({
@@ -217,7 +217,7 @@
         // 3: get load more messages
         // 4: get appusers latest message
 
-        //done
+        //08--Done
         loadMessages = function loadMessages(message_load_type){
             $("#search_app_user").val("");
             // event.preventDefault();
@@ -475,12 +475,15 @@
             localStorage.removeItem('app_user_id')
         }
 
+
+        //08---done
 		set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){
 			setTimeout(function(){
 				newAppMessages();
 			}, 5000);
 		}
 
+        //08---done
 		newAppMessages = function newAppMessages(){
 			if($('.receive_msg:last').length>0){
 				last_app_user_message = $('.receive_msg:last').attr('id').split('_');
@@ -491,12 +494,12 @@
 		}
 		newAppMessages();
 
-        //done
+        //08---done
         replyMessage = (id, msg) =>{
             $('#reply_msg_id').val(id)
             $('#reply_msg').html(msg)
         }
-        //done
+        //08---done
         removeMessage = (id, message)=>{
             $.ajax({
                 url: url + '/message/delete-message/'+id,
@@ -516,7 +519,7 @@
             })
         }
 
-        //done
+        //08---done
         editMessage = (id, message) =>{
             $('#edit_msg_id').val(id)
             $('#admin_message').val(message)
@@ -616,7 +619,7 @@
  	    loadAppUser();
 
 
-        //done
+        //08---done
         $("#message_sent_to_user").click(function(){
             event.preventDefault();
             $.ajaxSetup({
@@ -627,7 +630,7 @@
             newMsgSent();
         });
 
-       //done
+        //08---done
         newMsgSent = function newMsgSent(){
             var formData = new FormData($('#sent_message_to_user')[0]);
             if(( $.trim($('#admin_message').val()) != "" || $.trim($('#attachment').val()) != "" ) && $.trim($('#app_user_id').val()) != ""){

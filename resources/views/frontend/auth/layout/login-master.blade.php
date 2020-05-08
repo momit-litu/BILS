@@ -54,7 +54,7 @@
 		</button>
 		<ul class="dropdown-menu" role="menu">
 			<li>
-				<a href="{{url('/app/language/bn')}}">
+				<a href="{{url('/app/language/en')}}">
 					EN
 				</a>
 			</li>

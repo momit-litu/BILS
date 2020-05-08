@@ -30,18 +30,18 @@ class PublicationController extends Controller
     public function index(){
     	$data['page_title'] = $this->page_title;
 		$data['module_name']= "Publication";
-		$data['sub_module']= "";	
+		$data['sub_module']= "";
 		//action permissions
 		$admin_user_id 		   = Auth::user()->id;
 		$add_action_id 	   	   = 65;
 		$add_permisiion 	   = $this->PermissionHasOrNot($admin_user_id,$add_action_id );
-		$data['actions']['add_permisiion']= $add_permisiion;	
+		$data['actions']['add_permisiion']= $add_permisiion;
 
         return view('publication.index', $data);
     }
 
     //Publication Entry And Update
-    public function publicationEntry(Request $request){ 
+    public function publicationEntry(Request $request){
 		$rule = [
             'publication_title' => 'Required|max:150',
             'details' => 'Required',
@@ -56,17 +56,17 @@ class PublicationController extends Controller
 		else{
 			/*----- For notification -----*/
 			$app_user_group = $request->input('app_user_group');
-			
-			
+
+
 			$from_id = Auth::user()->id;
 			$from_user_type = 'Admin';
 			$to_user_type = 'App User';
 			$notification_title = $request->publication_title;
 			$message = $request->details;
 			/*----- For notification -----*/
-			
-			
-				
+
+
+
 			try{
 				DB::beginTransaction();
 				$status = ($request->is_active =="")?'0':'1';
@@ -78,15 +78,15 @@ class PublicationController extends Controller
 						'details'=>$request->details,
 						'publication_type'=>$request->publication_type,
 						'authors'=>$request->authors,
-						'status'=>$status,	
-						'created_by'=>$created_by,	
+						'status'=>$status,
+						'created_by'=>$created_by,
 					];
 					$response = Publication::create($column_value);
 					$publication_id = $response->id;
 					$view_url = 'publication/'.$publication_id;
 
-					## Insert Into Notification 
-					
+					## Insert Into Notification
+
 					if (isset($app_user_group)&& $app_user_group!="") {
 
 						if(isset($app_users)&& $app_users!=""){
@@ -100,11 +100,13 @@ class PublicationController extends Controller
 									$column_value = [
 										'from_id'=>$from_id,
 										'from_user_type'=>$from_user_type,
-										'to_id'=>$to_id,	
-										'to_user_type'=>$to_user_type,	
-										'notification_title'=>$notification_title,	
-										'message'=>$message,	
-										'view_url'=>$view_url,	
+										'to_id'=>$to_id,
+										'to_user_type'=>$to_user_type,
+										'notification_title'=>$notification_title,
+										'message'=>$message,
+										'view_url'=>$view_url,
+                                        'module_id'=>38,
+                                        'module_reference_id'=>$publication_id,
 									];
 									$response = Notification::create($column_value);
 								}
@@ -126,20 +128,22 @@ class PublicationController extends Controller
 												->where('to_id', $to_id)
 												->where('view_url', $view_url)
 												->count();
-									
+
 									if ($old_noti==0) {
 										$column_value = [
 											'from_id'=>$from_id,
 											'from_user_type'=>$from_user_type,
-											'to_id'=>$to_id,	
-											'to_user_type'=>$to_user_type,	
-											'notification_title'=>$notification_title,	
+											'to_id'=>$to_id,
+											'to_user_type'=>$to_user_type,
+											'notification_title'=>$notification_title,
 											'message'=>$message,
-											'view_url'=>$view_url,	
+											'view_url'=>$view_url,
+                                            'module_id'=>38,
+                                            'module_reference_id'=>$publication_id,
 										];
 										$response = Notification::create($column_value);
 									}
-									
+
 								}
 							}
 						}
@@ -191,9 +195,9 @@ class PublicationController extends Controller
 						->orderBy('id','desc')
 						->get();
 		$return_arr = array();
-		foreach($publication_list as $data){		
+		foreach($publication_list as $data){
 			$data['status']=($data->status == 1)?"<button class='btn btn-xs btn-success' disabled>Active</button>":"<button  class='btn btn-xs btn-danger' disabled>In-active</button>";
-			
+
 			$data['actions']=" <button title='View' onclick='publication_view(".$data->id.")' id='view_" . $data->id . "' class='btn btn-xs btn-primary' ><i class='clip-zoom-in'></i></button>";
 
 			if($edit_permisiion>0){

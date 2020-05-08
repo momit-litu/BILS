@@ -103,6 +103,8 @@ class NoticeController extends Controller
 							'notification_title'=>$notification_title,
 							'message'=>$message,
 							'view_url'=>$view_url,
+                            'module_id'=>37,
+                            'module_reference_id'=>$notice_id,
 						];
 						$response = Notification::create($column_value);
 
@@ -125,6 +127,8 @@ class NoticeController extends Controller
 										'notification_title'=>$notification_title,
 										'message'=>$message,
 										'view_url'=>$view_url,
+                                        'module_id'=>37,
+                                        'module_reference_id'=>$notice_id,
 									];
 									$response = Notification::create($column_value);
 								}
@@ -155,26 +159,14 @@ class NoticeController extends Controller
 											'notification_title'=>$notification_title,
 											'message'=>$message,
 											'view_url'=>$view_url,
+                                            'module_id'=>37,
+                                            'module_reference_id'=>$notice_id,
 										];
 										$response = Notification::create($column_value);
 									}
-
 								}
-
-
 							}
-						 }
-
-
-
-
-
-
-
-
-
-
-
+						}
 					}
 
 
