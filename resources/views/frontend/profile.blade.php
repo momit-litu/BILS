@@ -439,7 +439,7 @@
                     processData:false,
                     success: function(data){
                         // need to confirmation
-                        loadProfile()
+                        loadPage('profile')
                         // $(".message_div").animate({ scrollTop: 20000 }, "fast");
                     }
                 });
