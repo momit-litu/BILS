@@ -189,7 +189,7 @@
 						<ul class="activities">
 							<li>
 								<a class="activity" href="javascript:void(0)" onClick="loadPage('message')">
-									<i class="clip-bubbles-3 circle-icon circle-green"></i>
+									<i class="clip-bubbles-3 circle-icon circle-teal"></i>
 									<span class="desc">{{__('app.Messages')}} </span>
 								</a>
 							</li>
@@ -637,7 +637,7 @@
 
         new_message_reload = () =>{
             setTimeout(function(){
-                //newMessages();
+                newMessages();
             }, 5000);
         }
 
@@ -648,7 +648,6 @@
                 type:'GET',
                 async:true,
                 success: function(response){
-
                     response = JSON.parse(response)
                     html = '';
                     count = 0;
@@ -657,11 +656,11 @@
                         lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id :lastMessageNotificationId;
                         count = value.is_seen==0 ? count+1 :count;
                         if(value.is_seen==0){
-                            style = 'style = "background:#DBDAD8"'
+                            style = 'class = "alert-warning"'
                         }else style = ''
 
                         date = new Date(value["msg_date"]+ 'Z');
-                        messageDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+						messageDate 	= date.toLocaleString ();
 
 
                         html +='<li onclick="messageView('+value.id+')" '+style+'> ' +
@@ -671,8 +670,8 @@
                             '                   <img style="width:20px; height:25px" alt="" src="/assets/images/logo.jpg"> ' +
                             '               </div> ' +
                             '               <div class="thread-content"> ' +
+							'                   <span class="time margin-left-5">'+messageDate+'</span>' +
                             '                   <span class="preview">'+value.admin_message+'</span> ' +
-                            '                   <span class="time">'+messageDate+'</span>' +
                             '               </div> ' +
                             '           </div>' +
                             '        </a>' +
@@ -693,7 +692,7 @@
                     }
                     $('#app_message_badge').html(count)
                     $('.message_badge').html(count)
-                    $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
+                    $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span>{{__('app.Unread')}}  {{__('app.messages')}}')
                     $('#app_header_new_message').html(html)
                 }
             })
@@ -723,23 +722,23 @@
                     notificationId = 0;
                     $.each(response, function (key, value) {
                         date = new Date(value["msg_date"]+ 'Z');
-                        notificationDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+                        notificationDate 	= date.toLocaleString ();
 
                         notificationId = notificationId<value.id ? value.id : notificationId;
                         count = value.status==0 ? count+1 :count;
                         if(value.status==0){
-                            style = 'style = "background:#DBDAD8"'
+                            style = 'class = "alert-warning"'
                         }else style = ''
-                        if(value.module_id==7) title = 'A New Course published '
-                        else if(value.module_id==37) title = 'A New Notice published '
-                        else if(value.module_id==38) title = 'A New Publication published '
+                        if(value.module_id==7)		 title = '{{__('app.New_Course')}} : '+value['title'];
+                        else if(value.module_id==37) title = '{{__('app.New_Notice')}}: '+value['title'];
+                        else if(value.module_id==38) title = '{{__('app.New_Publication')}}: '+value['title'];
                         else title = value.title
 
                         html +='<li onclick="notificationView('+value.id+')" '+style+'> ' +
                             '<a href="javascript:void(0)"> ' +
                           //  '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
+						    '<span class="time margin-left-5">'+notificationDate+'</span> ' +
                             '<span class="message"> '+title+'</span> ' +
-                            '<span class="time">'+notificationDate+'</span> ' +
                             '</a> ' +
                             '</li>'
                     })
