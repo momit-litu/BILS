@@ -66,6 +66,7 @@ Route::group(['middleware'=>'appUser'], function() {
     Route::get('app/message',array('as'=>'Message' , 'uses' =>'FrontEndController@messageList'));
     Route::post('app/load-message',array('as'=>'Message' , 'uses' =>'FrontEndController@userMessage'));
 	Route::get('app/message/get-message-category',array('as'=>'Get Message Caategory', 'uses' =>'FrontEndController@getMessageCategory'));
+    Route::get('app/message/get-message-group',array('as'=>'Get Message Group', 'uses' =>'FrontEndController@getMessageGroup'));
     Route::get('app/delete-message/{id}',array('as'=>'Load Message', 'uses' =>'FrontEndController@deleteMessage'));
     Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
     Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));

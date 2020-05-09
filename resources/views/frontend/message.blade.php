@@ -9,35 +9,13 @@
 				{{__('app.Group')}} : <span id="groupl_name_span">  {{__('app.None')}}  </span> <span class="caret"></span>
 			</button>
 			<ul class="dropdown-menu" role="menu" id="groups_ul" style="font-size:12px;">
-				<li id="">
+				<li onclick="group_message(0,'None')" id="0">
 					<a href="#">
 						{{__('app.None')}}
 					</a>
 				</li>
 				<li class="divider"></li>
-				<li id="1">
-					<a href="#">
-						Something else here
-					</a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="#">
-						Separated link
-					</a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="#">
-						Separated link
-					</a>
-				</li>
-				<li class="divider"></li>
-				<li>
-					<a href="#">
-						Separated link
-					</a>
-				</li>
+
 			</ul>
 		</div>
 		<!--
@@ -81,7 +59,7 @@
 									</div>
 								</span>
                                 <input type="hidden" name="app_user_id" id="app_user_id">
-								<input type="hidden" name="group_id" id="group_id">
+								<input type="hidden" name="group_id" id="group_id" value="0">
                                 <input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
                                 <label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
                                     <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
@@ -112,6 +90,7 @@ var loaded = 1;
 var last_admin_message_id = "0";
 
 
+
 var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
@@ -132,6 +111,13 @@ var image_url = "<?php echo asset('assets/images'); ?>";
             }
         });
     }
+if(localStorage.getItem('is_group_message')){
+    $('#group_id').val(localStorage.getItem('is_group_message'))
+    //group_id_set =localStorage.getItem('is_group_message')
+    //$('#'+group_id_set).trigger('click');
+    localStorage.removeItem('is_group_message')
+
+}
 
 
     // message_load_type
@@ -167,7 +153,8 @@ var image_url = "<?php echo asset('assets/images'); ?>";
                 limit:number_of_msg,
                 page_no:current_page_no,
                 message_load_type:message_load_type,
-                last_admin_message_id:last_admin_message_id
+                last_admin_message_id:last_admin_message_id,
+                group_id : $('#group_id').val()
             },
             async:true,
             beforeSend: function( xhr ) {
@@ -189,6 +176,9 @@ var image_url = "<?php echo asset('assets/images'); ?>";
 
                     $.each(message, function(i,message){
                         html = "";
+                        date = new Date(message["msg_date"]+ 'Z');
+                        msg_date = date.toLocaleString ()
+
                         if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!="" && message["is_attachment_app_user"]!=null )  ){
                             if(message["reply_message"]){
                                 html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
@@ -252,7 +242,7 @@ var image_url = "<?php echo asset('assets/images'); ?>";
 
                             if (message["app_user_message"]!=null && message["app_user_message"]!="") 	tem_msg = "'"+message['app_user_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
                             else      tem_msg = "";
-                            html += '<span class="time_date_sent">'+mc+' '+message["msg_date"]+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
+                            html += '<span class="time_date_sent">'+mc+' '+msg_date+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
                         }
                         else if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
                             if(message["reply_app_message"]){
@@ -305,7 +295,7 @@ var image_url = "<?php echo asset('assets/images'); ?>";
 
                             if (message["admin_message"]!=null && message["admin_message"]!="") 	tem_msg = "'"+message['admin_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
                             else      tem_msg = "";
-                            html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+message["msg_date"]+' '+mc+'</span>';
+                            html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+msg_date+' '+mc+'</span>';
                             html += '</li>';
                         }
                         message_body = html+message_body;
@@ -351,13 +341,13 @@ var image_url = "<?php echo asset('assets/images'); ?>";
                         $(".message_body").html("");
                     }
                 }
-				
+
 				if(loaded == 1){
 					if($('#frame').hasClass('hidden'))
 						$('#frame').removeClass('hidden');
 					loaded++;
 				}
-				
+
                 // $('.content').unblock();
             }
         });
@@ -373,10 +363,28 @@ var image_url = "<?php echo asset('assets/images'); ?>";
 
     loadMessages(1); // 1: all message dump
 
+    // load more when scroll reachs to top of the scrolling div
+    $(".fixed-panel").scroll(function() {
+        alert('top')
+        if($(this).scrollTop()  > 100){
+            loadMessages(3)
+        }
+    });
+
+    $('.fixed-panel').on('scroll', function() {
+        alert('ok')
+        if ($(this).scrollTop() + $(this).innerHeight() >=
+            $(this)[0].scrollHeight) {
+            loadNotice(2)
+        }
+    });
+
+
+
     set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){
         setTimeout(function(){
             newAdminMessages();
-        }, 5000);
+        }, 15000);
     }
 
     newAdminMessages = function newAdminMessages(){
@@ -472,7 +480,7 @@ var image_url = "<?php echo asset('assets/images'); ?>";
     }
 
     $.ajax({
-        url: url+"/message/get-message-category",
+        url: "{{ url('app/')}}/message/get-message-category",
         success: function(response){
             var data = JSON.parse(response);
             var option = '<option value="">&nbsp;</option>';
@@ -480,7 +488,7 @@ var image_url = "<?php echo asset('assets/images'); ?>";
                 option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
             });
             $("#message_category").append(option)
-            $('#message_category_group').html(option)
+            //$('#message_category_group').html(option)
             $("#message_category_group").select2({
                 placeholder: "Categoty/Topic",
                 allowClear: true
@@ -491,21 +499,60 @@ var image_url = "<?php echo asset('assets/images'); ?>";
             });
         }
     });
-	
-	
-	//------------------------------- group functions--------------------
-	$('#groups_ul>li').on("click",function(){
+
+
+//------------------------------- group functions--------------------
+
+    group_message = (id, value) =>{
+        //alert(value)
+        $('#groupl_name_span').html(value);
+        $('#group_id').val(id);
+
+        current_page_no = 1;
+        loaded = 1;
+        last_admin_message_id = "0";
+        loadMessages(1)
+    }
+
+    $.ajax({
+        url: "{{ url('app/')}}/message/get-message-group",
+        success: function(response){
+            var data = JSON.parse(response);
+            var option = '';
+            $.each(data, function(i,data){
+                vals = "'"+data.group_name+ "'"
+                option += '<li onclick="group_message('+data.id+','+vals+')" id="'+data.id+'"> ' +
+                    '<a href="#">'+data.group_name+'</a> ' +
+                    '</li> ' +
+                    '<li class="divider"></li>\n';
+            });
+            $("#groups_ul").append(option)
+            //$('#message_category_group').html(option)
+
+        }
+    });
+
+
+	/*$('#groups_ul>li').on("click",function(){
+	    alert($(this).attr('id'))
 		$('#groupl_name_span').html('group name');
 		$('#group_id').val($(this).attr('id'));
+
+        var current_page_no = 1;
+        var loaded = 1;
+//var last_appuser_message_id = 0;
+        var last_admin_message_id = "0";
+        loadMessages(1)
 	});
+	*/
 	if(loaded == 2){
 		$('#groups_ul>li:first').trigger('click');
 	}
 	//------------------------------end group--------------------------------
-	
-	
-	
-	
+
+
+
+
     $('#admin_message').on('keydown', function(e) {
         if (e.which == 13) {
             newMsgSent();
@@ -533,6 +580,9 @@ var image_url = "<?php echo asset('assets/images'); ?>";
             });
         }
     });
+
+
+
 
 </script>
 
