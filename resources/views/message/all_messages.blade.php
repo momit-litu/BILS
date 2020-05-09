@@ -52,6 +52,21 @@
             font-size:10px !important;
         }
 
+		.time_date {
+		  color: #747474;
+		  display: block;
+		  font-size: 12px;
+		  margin: 0px 0 10px 36px;
+		}
+
+		.time_date_sent {
+		  float: right;
+		  color: #747474;
+		  display: block;
+		  font-size: 12px;
+		  margin: -5px 45px 10px 0;
+		}
+
     </style>
 
 
