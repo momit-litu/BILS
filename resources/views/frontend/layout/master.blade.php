@@ -62,7 +62,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
 
-    
+
 
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
@@ -627,91 +627,81 @@
             })
         }
 
-        messageView = (id) =>{
+        messageView = (id, group_id) =>{
+            //alert('ok')
             $.ajax({
                 url: "{{ url('app/')}}/message_view/"+id,
                 type: 'GET',
                 async: true,
                 success: function (response) {
-                    newMessages();
+                    //alert('ok')
+                    localStorage.setItem('is_group_message',group_id)
                     loadPage('message')
                 }
             })
         }
 
-        new_message_reload = () =>{
-            setTimeout(function(){
-                newMessages();
-            }, 5000);
-        }
+        newMessages =  (response) => {
 
+            html = '';
+            count = 0;
+            lastMessageNotificationId = 0;
+            $.each(response, function (key, value) {
+                lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id :lastMessageNotificationId;
+                count = value.is_seen==0 ? count+1 :count;
+                if(value.is_seen==0){
+                    style = 'class = "alert-warning"'
+                }else style = ''
 
-        newMessages =  () => {
-            $.ajax({
-                url: "{{ url('app/')}}/message_notification",
-                type:'GET',
-                async:true,
-                success: function(response){
-                    response = JSON.parse(response)
-                    html = '';
-                    count = 0;
-                    lastMessageNotificationId = 0;
-                    $.each(response, function (key, value) {
-                        lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id :lastMessageNotificationId;
-                        count = value.is_seen==0 ? count+1 :count;
-                        if(value.is_seen==0){
-                            style = 'class = "alert-warning"'
-                        }else style = ''
+                date = new Date(value["msg_date"]+ 'Z');
+                messageDate 	= date.toLocaleString ();
 
-                        date = new Date(value["msg_date"]+ 'Z');
-						messageDate 	= date.toLocaleString ();
-
-
-                        html +='<li onclick="messageView('+value.id+')" '+style+'> ' +
-                            '       <a href="#">' +
-                            '           <div class="clearfix" onclick="viewMessage('+value.id+')">' +
-                            '               <div class="thread-image">' +
-                            '                   <img style="width:20px; height:25px" alt="" src="/assets/images/logo.jpg"> ' +
-                            '               </div> ' +
-                            '               <div class="thread-content"> ' +
-							'                   <span class="time margin-left-5">'+messageDate+'</span>' +
-                            '                   <span class="preview">'+value.admin_message+'</span> ' +
-                            '               </div> ' +
-                            '           </div>' +
-                            '        </a>' +
-                            '   </li>'
-
-                    })
-
-                    if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
-                        document.getElementById("myAudio").play();
-                        localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
-                    }else  if(lastMessageNotificationId>0) {
-                        //alert('message-1')
-                        if(!localStorage.getItem('lastMessageNotificationId')) {
-                             document.getElementById("myAudio").play();
-                        }
-
-                        localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
-                    }
-                    $('#app_message_badge').html(count)
-                    $('.message_badge').html(count)
-                    $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span>{{__('app.Unread')}}  {{__('app.messages')}}')
-                    $('#app_header_new_message').html(html)
+                group_name = ''
+                if(value.group_id>0){
+                    group_name = '('+value.group_name+') '
                 }
+
+
+                html +='<li onclick="messageView('+value.id+','+value.group_id+')" '+style+'> ' +
+                    '       <a href="#">' +
+                    '           <div class="clearfix">' +
+                    '               <div class="thread-image">' +
+                    '                   <img style="width:20px; height:25px" alt="" src="/assets/images/logo.jpg"> ' +
+                    '               </div> ' +
+                    '               <div class="thread-content"> ' +
+                    '                   <span class="time margin-left-5">'+messageDate+'</span>' +
+                    '                   <span class="preview">'+group_name+' '+value.admin_message+'</span> ' +
+                    '               </div> ' +
+                    '           </div>' +
+                    '        </a>' +
+                    '   </li>'
+
             })
-            new_message_reload()
+
+            if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
+                document.getElementById("myAudio").play();
+                localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+            }else  if(lastMessageNotificationId>0) {
+                //alert('message-1')
+                if(!localStorage.getItem('lastMessageNotificationId')) {
+                     document.getElementById("myAudio").play();
+                }
+
+                localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+            }
+            $('#app_message_badge').html(count)
+            $('.message_badge').html(count)
+            $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span>{{__('app.Unread')}}  {{__('app.messages')}}')
+            $('#app_header_new_message').html(html)
+
         }
 
-        //alert($('#myAudio').length)
-        //document.getElementById("myAudio").play();
-        newMessages();
 
         new_notification_reload = () =>{
             setTimeout(function(){
                 newNotifications();
               //  new_notification_reload();
-            }, 10000);
+            }, 30000);
         }
 
         newNotifications =  () => {
@@ -721,10 +711,11 @@
                 async:true,
                 success: function(response){
                     response = JSON.parse(response)
+                    newMessages(response['individualMessage'])
                     html = '';
                     count = 0;
                     notificationId = 0;
-                    $.each(response, function (key, value) {
+                    $.each(response['Notifications'], function (key, value) {
                         date = new Date(value["msg_date"]+ 'Z');
                         notificationDate 	= date.toLocaleString ();
 

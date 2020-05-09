@@ -88,7 +88,8 @@ $(document).ready(function () {
                 count = 0;
                 lastMessageNotificationId = 0
                 $.each(response, function (key, value) {
-
+                    date = new Date(value["msg_date"]+ 'Z');
+                    msg_date = date.toLocaleString ()
                     lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id : lastMessageNotificationId;
                     count++;
                     //alert(value.group_name)
@@ -116,7 +117,7 @@ $(document).ready(function () {
                         '               <div class="thread-content"> ' +
                         '                   <span class="author">'+user+'</span> ' +
                         '                   <span class="preview">'+message+'</span> ' +
-                        '                   <span class="time">'+value.msg_date+'</span>' +
+                        '                   <span class="time">'+msg_date+'</span>' +
                         '               </div> ' +
                         '           </div>' +
                         '        </a>' +
@@ -174,6 +175,8 @@ $(document).ready(function () {
                 count = 0;
                 notificationId = 0;
                 $.each(response, function (key, value) {
+                    date = new Date(value["created_at"]+ 'Z');
+                    created_at = date.toLocaleString ()
                     notificationId = notificationId<value.id? value.id : notificationId
                     count++;
                     if(value.group_name && value.category_name) {
@@ -189,7 +192,7 @@ $(document).ready(function () {
                             '<a href="javascript:void(0)" onclick="view_notification('+value.id+')"> ' +
                                 '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
                                 '<span class="message"> '+value.notification+'</span> ' +
-                                '<span class="time"> '+value.created_at+'</span> ' +
+                                '<span class="time"> '+created_at+'</span> ' +
                             '</a> ' +
                             '</li>'
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AppUser;
 use App\MessageAttachment;
 use App\Notice;
+use App\UserGroup;
 use Illuminate\Http\Request;
 use App\MessageMaster;
 use App\MessageCategory;
@@ -165,7 +166,7 @@ class FrontEndController extends Controller
                     });
             })
             ->whereNotNull('admin_message')
-            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.is_seen','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.is_seen','mm.message_category as category_id', 'mm.group_id as group_id','mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
             ->groupBy('mm.id')
             ->orderBy('mm.is_seen', 'asc')
             ->offset(1)
@@ -198,7 +199,33 @@ class FrontEndController extends Controller
             /*->offset(1)*/ // dont know why u used this chaki?
             ->limit(10)
             ->get();
-        return json_encode($Notifications);
+
+        $individualMessage = DB::table('message_masters as mm')
+            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->leftJoin('user_groups as ug', 'mm.group_id','=','ug.id')
+            ->leftJoin('app_user_group_members as apgm', 'mm.group_id','=','apgm.group_id')
+            //->where('mm.is_seen',0)
+            ->where(function ($query) {
+                $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+                $query->where('mm.app_user_id', $user_info['id'])
+                    ->orWhere(function ($query) {
+                        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+                        $query->where('apgm.app_user_id', $user_info['id'])
+                            ->Where('apgm.status','=', 1);
+                    });
+            })
+            ->whereNotNull('admin_message')
+            ->select('mm.id as id', 'ug.group_name','mm.app_user_id as app_user_id','mm.is_seen','mm.message_category as category_id', 'mm.group_id as group_id','mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+            ->groupBy('mm.id')
+            ->orderBy('mm.is_seen', 'asc')
+            ->offset(1)
+            ->limit(10)
+            ->get();
+        return json_encode(array(
+            "individualMessage"=>$individualMessage,
+            "Notifications"=>$Notifications
+        ));
     }
 
     public function allNotification($page){
@@ -326,7 +353,7 @@ class FrontEndController extends Controller
 	    //return '1';
 
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
-
+        $group_id               =$_POST['group_id'];
         $app_user_id_load_msg 	= $user_info['id'];
         $page_no 				= $_POST['page_no'];
         $limit 					= $_POST['limit'];
@@ -361,13 +388,24 @@ echo  DB::table('message_masters as mm')
                 ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                 ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                 ->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
-                ->where('mm.app_user_id',$app_user_id_load_msg)
+                ->leftJoin('app_user_group_members as augm', function($leftJoin)
+                {
+                    $leftJoin->on('augm.group_id', '=', 'mm.group_id')
+                        ->where('augm.status', '=', 1 );
+                })
+                ->where('mm.group_id','=',$group_id)
+                ->where(function ($query) {
+                    $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+                    $query->where('augm.app_user_id',$user_info['id'])
+                        ->orWhere('mm.app_user_id',$user_info['id']);
+                })
                 ->where('mm.status','!=',0)
-				// condition: and ((group_id!="" AND group_id = 4)
-                ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message', 'reply.app_user_message AS reply_app_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
+                // condition: and ((group_id!="" AND group_id = 4)
+                ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message', 'reply.app_user_message AS reply_app_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','mm.group_id')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->offset($start)
@@ -380,13 +418,24 @@ echo  DB::table('message_masters as mm')
                 ->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
                 ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
                 ->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
-                ->where('mm.app_user_id',$app_user_id_load_msg)
-				->where(function ($query) {
+                ->leftJoin('app_user_group_members as augm', function($leftJoin)
+                {
+                    $leftJoin->on('augm.group_id', '=', 'mm.group_id')
+                        ->where('augm.status', '=', 1 );
+                })
+                ->where('mm.group_id','=',$group_id)
+                ->where(function ($query) {
+                    $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+                    $query->where('augm.app_user_id',$user_info['id'])
+                        ->orWhere('mm.app_user_id',$user_info['id']);
+                })
+                ->where(function ($query) {
 					$query->whereNotNull('mm.app_user_message')
 					->orWhere('mm.is_attachment_app_user', '>', 0);
 				})
                 ->where('mm.status','!=',0)
-                ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message', 'reply.app_user_message AS reply_app_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
+                ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message', 'reply.app_user_message AS reply_app_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
                     'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
@@ -402,14 +451,25 @@ echo  DB::table('message_masters as mm')
 				->leftJoin('message_attachments as ma', 'mm.id', '=', 'ma.message_master_id')
 				->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
 				->leftJoin('message_masters as reply', 'reply.id', '=', 'mm.reply_to')
-				->where('mm.app_user_id',$app_user_id_load_msg)
+                ->leftJoin('app_user_group_members as augm', function($leftJoin)
+                {
+                    $leftJoin->on('augm.group_id', '=', 'mm.group_id')
+                        ->where('augm.status', '=', 1 );
+                })
+                ->where('mm.group_id','=',$group_id)
+                ->where(function ($query) {
+                    $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+
+                    $query->where('augm.app_user_id',$user_info['id'])
+                        ->orWhere('mm.app_user_id',$user_info['id']);
+                })
 				->where(function ($query) {
 					$query->whereNotNull('mm.admin_message')
 					->orWhere('mm.is_attachment', '>', 0);
 				})
 				->where('mm.status','!=',0)
 				->where('mm.id','>',$last_admin_message_id)
-				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message','reply.app_user_message AS reply_app_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message','mm.created_at as msg_date',
+				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.admin_message AS reply_message','reply.app_user_message AS reply_app_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
 				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
 				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
 				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
@@ -435,6 +495,11 @@ echo  DB::table('message_masters as mm')
         return json_encode($data);
     }
 
+    public function getMessageGroup(){
+        $data = UserGroup::where('type',2)->select('id', 'group_name')->get();
+        return json_encode($data);
+    }
+
     public function sendMessage(Request $r){
 		//dd($r->all());
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
@@ -455,6 +520,7 @@ echo  DB::table('message_masters as mm')
         }
         $app_user_id = $user_info['id'];
         $app_user_message = $r->admin_message;
+        $group_id = $r->group_id;
         $message_category = $msg_cat;
         $admin_id = null;
         ## Image
@@ -502,8 +568,10 @@ echo  DB::table('message_masters as mm')
 			$new_msg->message_category = $message_category;
 			$new_msg->app_user_id = $app_user_id;
 			$new_msg->reply_to = $reply_to;
+            $new_msg->group_id = $group_id;
 
-			$new_msg->save();
+
+            $new_msg->save();
 			$mm_id = $new_msg->id;
 
 			if($r->hasFile('attachment')){

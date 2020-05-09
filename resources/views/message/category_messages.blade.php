@@ -265,6 +265,8 @@
                     if (!jQuery.isEmptyObject(message)) {
                         $.each(message, function (i, message) {
                             category_name_ = message['category_name']
+                            date = new Date(message["msg_date"]+ 'Z');
+                            msg_date = date.toLocaleString ()
 
                             html = "";
                             if (($.trim(message["admin_id"]) != 'null' && message["admin_id"] != "") && ((message["admin_message"] != null && message["admin_message"] != "") || (message["is_attachment"] != "" && message["is_attachment"] != null))) {
@@ -324,7 +326,7 @@
 
                                 if (message["admin_message"] != null && message["admin_message"] != "") tem_msg = "'" + message['admin_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '') + "'";
                                 else tem_msg = "";
-                                html += '<span class="time_date_sent">' + mc + ' ' + message["msg_date"] + '<a href="javascript:void(0)" onclick="removeMessage(' + message["id"] + ',' + tem_msg + ')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage(' + message["id"] + ',' + tem_msg + ')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
+                                html += '<span class="time_date_sent">' + mc + ' ' + msg_date + '<a href="javascript:void(0)" onclick="removeMessage(' + message["id"] + ',' + tem_msg + ')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage(' + message["id"] + ',' + tem_msg + ')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
                             } else if ((message["app_user_message"] != null && message["app_user_message"] != "") || (message["is_attachment_app_user"] != "" && message["is_attachment_app_user"] != null)) {
                                 if (message["replied"]) {
                                     html += '<li class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><div class="replied_message_p p_div" ">' + message['reply_message'] + '</div></li>  ';
@@ -373,7 +375,7 @@
 
                                 if (message["app_user_message"] != null && message["app_user_message"] != "") tem_msg = "'" + message['app_user_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '') + "'";
                                 else tem_msg = "";
-                                html += '<span class="time_date">' + '<a href="javascript:void(0)" onclick="replyMessage(' + message["id"] + ',' + tem_msg + ')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>' + message["msg_date"] + ' ' + mc + '</span>';
+                                html += '<span class="time_date">' + '<a href="javascript:void(0)" onclick="replyMessage(' + message["id"] + ',' + tem_msg + ')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>' + msg_date + ' ' + mc + '</span>';
                                 html += '</li>';
                             }
                             message_body = html + message_body;
