@@ -62,7 +62,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bils/messages.css') }}">
+    
 
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
