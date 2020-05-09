@@ -4,7 +4,7 @@
 		Notice
 		<form class="sidebar-search">
 			<div class="form-group">
-				<input type="text" placeholder="Start Searching..." data-default="130" style="width: 130px;">
+				<input type="text" id="search_field" placeholder="Start Searching..." data-default="130" style="width: 130px;">
 				<button class="submit">
 					<i class="clip-search-3"></i>
 				</button>
@@ -45,7 +45,7 @@
 
                 response = JSON.parse(response);
 				var notice_date = new Date(response[0]["notice_date"]+ 'Z');
-				notice_date 	= notice_date.toDateString()+" "+notice_date.getHours()+":"+notice_date.getMinutes();
+				notice_date 	= date.toLocaleString ();
 
                 let p = '<p style="text-align:right font-weight-bold"> '+notice_date+'</p> '
                 let attachment = '';
@@ -78,12 +78,12 @@
                     html = "";
                     noticeMonth = -1
                     noticeYear = -1
-                    loadMore = '<button onclick="loadNotice(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
+                   // loadMore = '<button onclick="loadNotice(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
 
 
                     $.each(response, function(i,notice){
                         date = new Date(response[0]["created_at"]+ 'Z');
-                        noticDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+                        noticDate 	= date.toLocaleString('default',{ month: 'long', year: 'numeric' });
 
                         year= date.getFullYear();
                         month = date.getMonth();
@@ -112,7 +112,7 @@
                         html+='<li>' +
                             '   <div class="timeline_element teal">\n' +
                             '     <div class="timeline_title">\n' +
-                            '       <span class="timeline_label">'+notice["title"]+'</span><span class="timeline_date">'+noticDate+" "+hour+":"+min+'</span>\n' +
+                            '       <span class="timeline_label">'+notice["title"]+'</span><span class="timeline_date">'+date.toLocaleString ()+" "+hour+":"+min+'</span>\n' +
                             '     </div>\n' +
                             '     <div class="content">\n' + details+
                             '     </div>\n' +
@@ -132,7 +132,7 @@
 							$('#all_notice').append(html)
 						}
 						else{
-							$('#all_notice').html(loadMore+' '+html)
+							$('#all_notice').html(html)
 						}
 						page ++ ;
 					}

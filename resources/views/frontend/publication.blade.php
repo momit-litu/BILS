@@ -1,5 +1,4 @@
 
-
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" fa fa-file-text "></i>
@@ -30,8 +29,6 @@
 </div>
 
 
-
-
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
     page =1;
@@ -56,17 +53,18 @@
 
                 response = JSON.parse(response)
                 date = new Date(response[0]["created_at"]+ 'Z');
+				publication = (response[0]["publication_type"])?"<button class='btn btn-disabled btn-info btn-xs'>"+response[0]["publication_type"]+"</button>":"";
                 publicationDate = date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
-                let  p = '<span><p style="text-align:left">'+response[0]['authors']+'<b style="float:right"> '+response[0]["publication_type"]+'<br>'+publicationDate+'</b> </p></span>'
+                let  p = '<span><p style="text-align:left">'+response[0]['authors']+'<b style="float:right"><br>'+publicationDate+'</b> </p></span>'
 
                 let attachment = '';
 
                 if(response[0]['attachment']){
                     //attachment = attachment_url+'/'+response[0]['attachment'];
-                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment"></i></a>'
+                    attachment = "<br>"+publication+ '<br><a class="btn btn-disabled btn-warning" href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment"></i></a>'
                 }
 
-                $(' #modal_title_content').html(response[0]['title'] +''+attachment);
+                $('#modal_title_content').html(response[0]['title'] +''+attachment);
                 $('#modal_body_content').html(p+'<hr> '+response[0]['details'])
                 $('#responsive').modal()
             }
@@ -94,7 +92,7 @@
                     html = "";
                     noticeMonth = -1
                     noticeYear = -1
-                    loadMore = '<button onclick="loadPublication(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
+                   // loadMore = '<button onclick="loadPublication(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
 
 
                     $.each(response, function(i,publication){
@@ -102,18 +100,18 @@
                         year= date.getFullYear();
                         month = date.getMonth();
                         day = date.getDate();
-                        publicationDate = date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
+                        publicationDate = date.toLocaleString();
 
 
-                        var details = publication["details"];
+                        var details = publication["details"].replace(/<(?!br\s*\/?)[^>]+>/g, '');
                         var details = details.substring(0, 300)+'. . . . . . . .';
-
+						
                        // alert(publication['title'])
 
                         html+='<li> ' +
                             '   <div class="timeline_element"> ' +
                             '       <div class="timeline_title" >' +
-                            '           <span class="timeline_label" style="color:gray">'+publication["title"]+'</span><span class="timeline_date" style="color:gray">'+publicationDate+'</span> ' +
+                            '           <span class="timeline_label" style="color:gray">'+publication["title"]+'</span><span class="timeline_date " style="color:gray">'+publicationDate+'</span> ' +
                             '       </div> ' +
                             '       <div class="content"> '+details+'</div> ' +
                             '       <div class="readmore"> ' +
@@ -130,7 +128,7 @@
                         $('#all_publications').append(html)
                     }
                     else{
-                        $('#all_publications').html(loadMore+' '+html)
+                        $('#all_publications').html(html)
                     }
                     page ++ ;
 

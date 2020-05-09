@@ -3,7 +3,7 @@
 		<i class=" clip-notification-2 "></i>
 		Notifications
 		<div class="panel-tools">
-			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('notification')">
+			<a class="btn btn-xs btn-link panel-refresh" href="javascript:void(0)">
 				<i class="fa fa-refresh"></i>
 			</a>
 		</div>
@@ -38,12 +38,14 @@
             type: 'GET',
             async: true,
             success: function (response) {
+				if($('#notification_'+id).hasClass('alert-warning-important'))
+				$('#notification_'+id).removeClass('alert-warning-important');
+				$('#notification_'+id).addClass('alert-success-important');
             }
         })
     }
 
     loadAllNotifications = (type) =>{
-
         $.ajax({
             url: "{{ url('app/')}}/all_notifications/"+page,
             type:'GET',
@@ -52,31 +54,31 @@
 
                 response = JSON.parse(response)
                 //console.log(response)
-                loadMore = '<button onclick="loadAllNotifications(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
+                //loadMore = '<button onclick="loadAllNotifications(2);" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>';
                 count = 0;
                 html = ''
                 $.each(response, function (key, value) {
                     count++;
                     date = new Date(value["msg_date"]+ 'Z');
-                    notificationDate 	= date.toDateString()+" "+date.getHours()+":"+date.getMinutes();
-
-                    if(value.status == 0 ){
-                        //style = 'style="background: #F5DED9"'
-                        style = 'style = "color:red"'
-
-                    }else{
-                        style = ''
-                    }
-                    // alert(value.admin_message)
+                    notificationDate 	= date.toLocaleString ();
+						
+					if(value.status==0){
+						unseen = 'alert-warning-important';
+					}else unseen = 'alert-success-important';
+					
+					if(value.module_id==7) title = '{{__('app.New_Course')}} : '+value['title'];
+					else if(value.module_id==37) title = '{{__('app.New_Notice')}}: '+value['title'];
+					else if(value.module_id==38) title = '{{__('app.New_Publication')}}: '+value['title'];
+					else title = value.title
 
                     //alert(app_user_id+'>>'+group_id+'>>'+category_id)
                     details = value.details==null ? "" : value.details
                     html +='<div class="panel panel-default" > ' +
                         '       <div class="panel-heading"> ' +
                         '           <h4 class="panel-title"> ' +
-                        '               <a href="#faq_1_4'+value.id+'" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed" id="'+value.id+'" onclick="notificationView('+value.id+')" '+style+'> ' +
+                        '               <a href="#faq_1_4'+value.id+'" data-parent="#accordion" data-toggle="collapse" class="accordion-toggle collapsed '+unseen+'" id="notification_'+value.id+'" onclick="notificationView('+value.id+')"> ' +
                         '                   <i class="icon-arrow"></i>' +
-                                            value.title +
+                                            title +
                         '                </a>' +
                         '           </h4> ' +
                         '       </div> ' +
@@ -90,7 +92,7 @@
                     $('#allNotificationGrid').append(html)
                 }
                 else{
-                    $('#allNotificationGrid').html(loadMore+' '+html)
+                    $('#allNotificationGrid').html(html)
                 }
 
             }

@@ -146,3 +146,13 @@ div.timeline_element div.timeline_title span.timeline_date {
 .self{
 	margin-left:45px;
 }
+.alert-warning-important{
+	color: #8a6d3b !important;
+	background-color: #fcf8e3!important;
+	border-color: #faebcc!important;
+}
+.success-warning-important{
+	color: #3c763d!important;
+	background-color: #dff0d8!important;
+	border-color: #d6e9c6!important;
+}
