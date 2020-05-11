@@ -264,12 +264,18 @@
                     var message_body = "";
                     if (!jQuery.isEmptyObject(message)) {
                         $.each(message, function (i, message) {
+
+                            var app_user_message 		= message["app_user_message"];
+                            var is_attachment_app_user 	= message["is_attachment_app_user"];
+                            var admin_message 			= message["admin_message"];
+                            var is_attachment 			= message["is_attachment"];
+
                             category_name_ = message['category_name']
                             date = new Date(message["msg_date"]+ 'Z');
                             msg_date = date.toLocaleString ()
 
                             html = "";
-                            if (($.trim(message["admin_id"]) != 'null' && message["admin_id"] != "") && ((message["admin_message"] != null && message["admin_message"] != "") || (message["is_attachment"] != "" && message["is_attachment"] != null))) {
+                            if((admin_message!==null || is_attachment>0) && ( is_attachment!=='')){
                                 if (message["reply_message"]) {
                                     html += '<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">' + message['reply_message'] + '</div></li>  ';
                                 }
