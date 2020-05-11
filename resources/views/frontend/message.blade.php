@@ -140,7 +140,7 @@ if(localStorage.getItem('is_group_message')){
 							i++;
 						}
 
-
+						//if( ((message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null )) ){
                         if( (app_user_message!==null) && ( is_attachment_app_user!=="" )  ){
                             if(message["reply_message"]){
                                 html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';

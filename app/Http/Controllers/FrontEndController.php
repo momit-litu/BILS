@@ -650,6 +650,4 @@ class FrontEndController extends Controller
     }
 
 
-
-
 }

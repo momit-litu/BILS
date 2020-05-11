@@ -104,6 +104,36 @@ class AppAuthController extends Controller
                 ->with('errormessage', __('auth.Incorrect_combinations') );
         }
     }
+	
+	
+	
+    /********************************************
+    ## CustomerLaguageChange
+     *********************************************/
+    public function CustomerLaguageChange($lang)
+    {
+		
+        try {
+		    if (in_array($lang, config('locale.languages'))) {
+                Session::put('locale', $lang);
+                \App::setLocale($lang);
+				$locale = \App::getLocale();
+				//echo  $locale;die;
+				//dd(config('locale.languages'));
+				//dd(Session::all());
+                return redirect()->back();
+            }
+			//echo \App::getLocale();die;
+            return redirect()->back();
+        } catch (\Exception $exception) {
+            return redirect()->back();
+        }
+    }
+
+
+	
+	
+	
 
     /**
      * Admin logout
