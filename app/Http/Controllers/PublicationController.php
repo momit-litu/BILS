@@ -61,10 +61,21 @@ class PublicationController extends Controller
 			$from_id = Auth::user()->id;
 			$from_user_type = 'Admin';
 			$to_user_type = 'App User';
-			$notification_title = $request->publication_title;
+			$publication_title = $request->publication_title;
 			$message = $request->details;
 			/*----- For notification -----*/
 
+            $attachment = $request->file('attachment');
+            if($request->hasFile('attachment')) {
+
+                $upload_path = 'assets/attachment/publications/';
+                $attachment_name = rand().time().$attachment->getClientOriginalName();
+                //return $attachment_name;
+                $success=$attachment->move($upload_path,$attachment_name);
+            }else{
+                $attachment_name = '';
+
+            }
 
 
 			try{
@@ -80,13 +91,83 @@ class PublicationController extends Controller
 						'authors'=>$request->authors,
 						'status'=>$status,
 						'created_by'=>$created_by,
-					];
+                        'attachment'=>$attachment_name,
+
+                    ];
 					$response = Publication::create($column_value);
 					$publication_id = $response->id;
 					$view_url = 'publication/'.$publication_id;
 
 					## Insert Into Notification
 
+
+                    if (isset($app_user_id)&&isset($app_user_name)&&$app_user_id!=""&&$app_user_name!="") {
+
+                        $to_id = $app_user_id;
+
+
+                        $column_value = [
+                            'from_id'=>$from_id,
+                            'from_user_type'=>$from_user_type,
+                            'to_id'=>$to_id,
+                            'to_user_type'=>$to_user_type,
+                            'notification_title'=>$publication_title,
+                            'message'=>$message,
+                            'view_url'=>$view_url,
+                            'module_id'=>38,
+                            'module_reference_id'=>$publication_id,
+                        ];
+                        $response = Notification::create($column_value);
+
+                    }
+
+                    if(isset($app_users)&& $app_users!="" && $app_users!=null ){
+                        foreach ($app_users as $j) {
+
+                            $column_value = [
+                                'from_id'=>$from_id,
+                                'from_user_type'=>$from_user_type,
+                                'to_id'=>$to_id,
+                                'to_user_type'=>$to_user_type,
+                                'notification_title'=>$publication_title,
+                                'message'=>$message,
+                                'view_url'=>$view_url,
+                                'module_id'=>38,
+                                'module_reference_id'=>$publication_id,
+                            ];
+                            $response = Notification::create($column_value);
+                        }
+                    }
+                    else if (isset($app_user_group)&& $app_user_group!="") {
+
+                        foreach ($app_user_group as $row) {
+                            $to_user_id = AppUserGroupMember::distinct()
+                                ->select('app_user_id')
+                                ->where('group_id',$row)
+                                ->groupBy('app_user_id')
+                                ->get();
+
+                            foreach ($to_user_id as $k) {
+
+                                $column_value = [
+                                    'from_id'=>$from_id,
+                                    'from_user_type'=>$from_user_type,
+                                    'to_id'=>$k['app_user_id'],
+                                    'to_user_type'=>$to_user_type,
+                                    'notification_title'=>$publication_title,
+                                    'message'=>$message,
+                                    'view_url'=>$view_url,
+                                    'module_id'=>37,
+                                    'module_reference_id'=>$publication_id,
+                                ];
+                                $response = Notification::create($column_value);
+
+                            }
+
+                        }
+                    }
+
+                    /*
 					if (isset($app_user_group)&& $app_user_group!="") {
 
 						if(isset($app_users)&& $app_users!=""){
@@ -143,17 +224,10 @@ class PublicationController extends Controller
 										];
 										$response = Notification::create($column_value);
 									}
-
 								}
 							}
 						}
-
-
-
-
-					}
-
-
+					}*/
 				}
 				else{
 					$updated_by = Auth::user()->name;
@@ -166,6 +240,9 @@ class PublicationController extends Controller
 						'updated_by'=>$updated_by,
 					];
 
+                    if($attachment_name!=''){
+                        $column_value['attachment']=$attachment_name;
+                    }
 					$data = Publication::find($request->publication_edit_id);
 					$data->update($column_value);
 				}

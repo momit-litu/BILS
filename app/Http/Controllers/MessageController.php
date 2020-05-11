@@ -76,9 +76,13 @@ class MessageController extends Controller
             try{
                 DB::beginTransaction();
 
-                $files = array();
+                $is_attachment = 0;
+
 
                 if($request->hasFile('attachment')){
+                    $files = array();
+                    $is_attachment = 1;
+
                     foreach ($attachment as $attachment) {
                         $attachment_name = rand().time().$attachment->getClientOriginalName();
                         $ext = strtoupper($attachment->getClientOriginalExtension());
@@ -124,7 +128,6 @@ class MessageController extends Controller
                     if(isset($app_users)&& $app_users!="" && $app_users!=null ){
                         //var_dump (json_encode($app_users));
                         foreach ($app_users as $j) {
-                            $is_attachment = count($files)>0 ? 1: 0;
 
 
                             $app_user_id = $j;
@@ -137,53 +140,44 @@ class MessageController extends Controller
                                 'message_category'=>$request->message_category,
                             ];
                             $response = MessageMaster::create($column_value);
+                            if(isset($files)){
+                                foreach ($files as $file){
+                                    $column_value = [
+                                        'message_master_id'=>$response->id,
+                                        'attachment_type'=>$file['type'],
+                                        'admin_atachment'=>$file['name'],
+                                    ];
+                                    MessageAttachment::create($column_value);
+                                }
+
+                            }
                         }
                     }
                     else if (isset($app_user_group)&& $app_user_group!="") {
 
                         foreach ($app_user_group as $row) {
 
-                                $column_value = [
-                                    'admin_message'=>$request->admin_message,
-                                    'admin_id'=>$admin_id,
-                                    'group_id'=>$row,
-                                    'is_group_msg'=>1,
-                                    'message_id'=>$message_id,
-                                    'status'=>$is_active,
-                                    'message_category'=>$request->message_category,
-                                ];
-                                $response = MessageMaster::create($column_value);
-                            if($request->hasFile('attachment')){
-                                foreach ($attachment as $attachment) {
-                                    $attachment_name = rand().time().$attachment->getClientOriginalName();
-                                    $ext = strtoupper($attachment->getClientOriginalExtension());
-                                    echo $ext;
-                                    if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
-                                        $attachment_type = 1;
-                                    }
-                                    else if ($ext=="MP4" || $ext=="3GP") {
-                                        $attachment_type = 2;
-                                    }
-                                    else if ($ext=="MP3") {
-                                        $attachment_type = 3;
-                                    }
-                                    else{
-                                        $attachment_type = 4;
-                                    }
-                                    //$attachment_full_name = $attachment_name.'.'.$ext;
-                                    $upload_path = 'assets/images/message/';
-
-                                    $success=$attachment->move($upload_path,$attachment_name);
-                                    if($success) MessageMaster::where('id',$request->edit_msg_id)->update(['is_attachment'=>1]);
-                                    ##Save image to the message attachment table
-                                    $msg_attachment = new MessageAttachment();
-                                    $msg_attachment->message_master_id = $response['id'];
-                                    $msg_attachment->admin_atachment = $attachment_name;
-                                    $msg_attachment->attachment_type = $attachment_type;
-                                    $msg_attachment->save();
+                            $column_value = [
+                                'admin_message'=>$request->admin_message,
+                                'admin_id'=>$admin_id,
+                                'is_attachment'=>$is_attachment,
+                                'group_id'=>$row,
+                                'is_group_msg'=>1,
+                                'status'=>$is_active,
+                                'message_category'=>$request->message_category,
+                            ];
+                            $response = MessageMaster::create($column_value);
+                            if(isset($files)){
+                                foreach ($files as $file){
+                                    $column_value = [
+                                        'message_master_id'=>$response->id,
+                                        'attachment_type'=>$file['type'],
+                                        'admin_atachment'=>$file['name'],
+                                    ];
+                                    MessageAttachment::create($column_value);
                                 }
-                            }
 
+                            }
 
                         }
                     }
@@ -193,42 +187,22 @@ class MessageController extends Controller
                             'admin_message'=>$request->admin_message,
                             'admin_id'=>$admin_id,
                             'app_user_id'=>$request->app_user_id,
-                            'message_id'=>$message_id,
                             'status'=>$is_active,
+                            'is_attachment'=>$is_attachment,
                             'message_category'=>$request->message_category,
                         ];
                         $response = MessageMaster::create($column_value);
-                        if($request->hasFile('attachment')){
-                            foreach ($attachment as $attachment) {
-                                $attachment_name = rand().time().$attachment->getClientOriginalName();
-                                $ext = strtoupper($attachment->getClientOriginalExtension());
-                                echo $ext;
-                                if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
-                                    $attachment_type = 1;
-                                }
-                                else if ($ext=="MP4" || $ext=="3GP") {
-                                    $attachment_type = 2;
-                                }
-                                else if ($ext=="MP3") {
-                                    $attachment_type = 3;
-                                }
-                                else{
-                                    $attachment_type = 4;
-                                }
-                                //$attachment_full_name = $attachment_name.'.'.$ext;
-                                $upload_path = 'assets/images/message/';
-
-                                $success=$attachment->move($upload_path,$attachment_name);
-                                if($success) MessageMaster::where('id',$request->edit_msg_id)->update(['is_attachment'=>1]);
-                                ##Save image to the message attachment table
-                                $msg_attachment = new MessageAttachment();
-                                $msg_attachment->message_master_id = $response['id'];
-                                $msg_attachment->admin_atachment = $attachment_name;
-                                $msg_attachment->attachment_type = $attachment_type;
-                                $msg_attachment->save();
+                        if(isset($files)){
+                            foreach ($files as $file){
+                                $column_value = [
+                                    'message_master_id'=>$response->id,
+                                    'attachment_type'=>$file['type'],
+                                    'admin_atachment'=>$file['name'],
+                                ];
+                                MessageAttachment::create($column_value);
                             }
-                        }
 
+                        }
                     }
 
 

@@ -70,9 +70,20 @@ class NoticeController extends Controller
 			$message = $request->details;
 			/*----- For notification -----*/
 
+            $attachment = $request->file('attachment');
+            if($request->hasFile('attachment')) {
+                $upload_path = 'assets/attachment/notice/';
+                $attachment_name = rand().time().$attachment->getClientOriginalName();
+                $success=$attachment->move($upload_path,$attachment_name);
+            }else{
+                $attachment_name = '';
+
+            }
 
 
-			try{
+
+
+                try{
 				DB::beginTransaction();
 				$status = ($request->is_active =="")?'0':'1';
 
@@ -85,6 +96,7 @@ class NoticeController extends Controller
 						'notice_date'=>$request->notice_date,
 						'expire_date'=>$request->expire_date,
 						'created_by'=>$created_by,
+                        'attachment'=>$attachment_name,
 					];
 					$response = Notice::create($column_value);
 					$notice_id = $response->id;
@@ -109,68 +121,87 @@ class NoticeController extends Controller
 						$response = Notification::create($column_value);
 
 					}
-					if (isset($app_user_group)&& $app_user_group!="") {
 
-						 if(isset($app_users)&& $app_users!=""){
-						 	foreach ($app_users as $j) {
-						 		$old_noti = Notification::select('id')
-											->where('to_id', $j)
-											->where('view_url', $view_url)
-											->count();
-								if ($old_noti == 0) {
-									$to_id = $j;
-									$column_value = [
-										'from_id'=>$from_id,
-										'from_user_type'=>$from_user_type,
-										'to_id'=>$to_id,
-										'to_user_type'=>$to_user_type,
-										'notification_title'=>$notification_title,
-										'message'=>$message,
-										'view_url'=>$view_url,
+                    if(isset($app_users)&& $app_users!="" && $app_users!=null ){
+                        foreach ($app_users as $j) {
+
+                            $column_value = [
+                                'from_id'=>$from_id,
+                                'from_user_type'=>$from_user_type,
+                                'to_id'=>$j,
+                                'to_user_type'=>$to_user_type,
+                                'notification_title'=>$notification_title,
+                                'message'=>$message,
+                                'view_url'=>$view_url,
+                                'module_id'=>37,
+                                'module_reference_id'=>$notice_id,
+                            ];
+                            $response = Notification::create($column_value);
+                        }
+                        }
+                    else if (isset($app_user_group)&& $app_user_group!="") {
+
+                        if(isset($app_users)&& $app_users!=""){
+                            foreach ($app_users as $j) {
+                                $old_noti = Notification::select('id')
+                                    ->where('to_id', $j)
+                                    ->where('view_url', $view_url)
+                                    ->count();
+                                if ($old_noti == 0) {
+                                    $to_id = $j;
+                                    $column_value = [
+                                        'from_id'=>$from_id,
+                                        'from_user_type'=>$from_user_type,
+                                        'to_id'=>$to_id,
+                                        'to_user_type'=>$to_user_type,
+                                        'notification_title'=>$notification_title,
+                                        'message'=>$message,
+                                        'view_url'=>$view_url,
                                         'module_id'=>37,
                                         'module_reference_id'=>$notice_id,
-									];
-									$response = Notification::create($column_value);
-								}
-						 	}
-						 }
-						 else{
-						 	foreach ($app_user_group as $row) {
-								$to_user_id = AppUserGroupMember::distinct()
-												->select('app_user_id')
-												->where('group_id',$row)
-												->groupBy('app_user_id')
-												->get();
+                                    ];
+                                    $response = Notification::create($column_value);
+                                }
+                            }
+                        }
+                        else{
+                            foreach ($app_user_group as $row) {
+                                $to_user_id = AppUserGroupMember::distinct()
+                                    ->select('app_user_id')
+                                    ->where('group_id',$row)
+                                    ->groupBy('app_user_id')
+                                    ->get();
 
-								foreach ($to_user_id as $k) {
+                                foreach ($to_user_id as $k) {
 
-									$old_noti = Notification::select('id')
-												->where('to_id', $k['app_user_id'])
-												->where('view_url', $view_url)
-												->count();
+                                    $old_noti = Notification::select('id')
+                                        ->where('to_id', $k['app_user_id'])
+                                        ->where('view_url', $view_url)
+                                        ->count();
 
-									if ($old_noti == 0) {
-										$to_id = $k['app_user_id'];
-										$column_value = [
-											'from_id'=>$from_id,
-											'from_user_type'=>$from_user_type,
-											'to_id'=>$to_id,
-											'to_user_type'=>$to_user_type,
-											'notification_title'=>$notification_title,
-											'message'=>$message,
-											'view_url'=>$view_url,
+                                    if ($old_noti == 0) {
+                                        $to_id = $k['app_user_id'];
+                                        $column_value = [
+                                            'from_id'=>$from_id,
+                                            'from_user_type'=>$from_user_type,
+                                            'to_id'=>$to_id,
+                                            'to_user_type'=>$to_user_type,
+                                            'notification_title'=>$notification_title,
+                                            'message'=>$message,
+                                            'view_url'=>$view_url,
                                             'module_id'=>37,
                                             'module_reference_id'=>$notice_id,
-										];
-										$response = Notification::create($column_value);
-									}
-								}
-							}
-						}
-					}
+                                        ];
+                                        $response = Notification::create($column_value);
+                                    }
+                                }
+                            }
+                        }
+                    }
 
 
-				}
+
+                }
 				else{
 					$updated_by = Auth::user()->name;
 					$column_value = [
@@ -181,6 +212,9 @@ class NoticeController extends Controller
 						'expire_date'=>$request->expire_date,
 						'updated_by'=>$updated_by,
 					];
+					if($attachment_name!=''){
+					    $column_value['attachment']=$attachment_name;
+                    }
 
 					$data = Notice::find($request->notice_edit_id);
 					$data->update($column_value);

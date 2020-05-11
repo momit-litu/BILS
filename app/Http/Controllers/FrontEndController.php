@@ -363,6 +363,8 @@ class FrontEndController extends Controller
         $end   = $limit;
 
 
+
+
         if($message_load_type ==1 || $message_load_type ==3){
             $message = DB::table('message_masters as mm')
                 ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
@@ -388,7 +390,7 @@ class FrontEndController extends Controller
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
                     'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','mm.group_id')
-                ->groupBy('id')
+                ->groupBy('mm.id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->offset($start)
                 ->limit($end)
@@ -420,7 +422,7 @@ class FrontEndController extends Controller
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
                     'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
-                ->groupBy('id')
+                ->groupBy('mm.id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->get();
         }
