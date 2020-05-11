@@ -61,7 +61,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
     <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
-
+<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bils/app_messages.css') }}">
 
 
     {{-- Auto Load css --}}
@@ -136,12 +136,65 @@
 		</div>
 		<!-- end: MAIN CONTAINER -->
 		<!-- start: FOOTER -->
-		<div class="footer clearfix">
-			<div class="footer-inner">
-			</div>
+		<div class="footer clearfix" id="footer">
+				<div class="chat-form" style="display: none; margin-bottom:0px">
+					<form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
+						@csrf
+						<p id="reply_msg"  style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
+						<input type="hidden" id="edit_msg_id" name="edit_msg_id">
+						<div class="input-group">
+							<span class="input-group-btn dropup ">
+								<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding " data-toggle="dropdown" style="padding-top:7px; margin-top:-1px">
+									<span class="caret"></span>
+								</button>
+								<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
+									<select name="message_category" id="message_category" style="min-width:150px; font-size:10px">
+										<option disabled="" selected="" value="">Category/Topic</option>
+									</select>
+								</div>
+							</span>
+							<input type="hidden" name="app_user_id" id="app_user_id">
+							<input type="hidden" name="group_id" id="group_id" value="0">
+							<input type="hidden" id="reply_msg_id" name="reply_msg_id">
+							<input type="text" class="form-control " name="admin_message" id="admin_message" placeholder="Write your message..." />
+							<span class="input-group-btn">
+							<label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
+								<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+							</label>
+							<input multiple id="attachment" name="attachment[]" type="file"/>
+							</span>
+							<span class="input-group-btn">
+								<button class="btn btn-success submit" type="submit" id="message_sent_to_user">
+									<i class="fa fa-paper-plane"></i>
+								</button> 
+							</span>
+						</div>
+					</form>
+				</div>
+				<!--<div class="message-input" >
+                    <div class="wrap">
+                        <form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
+                            @csrf
+                            <p id="reply_msg"  class="replied_message_p" style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
+                            <input type="hidden" id="edit_msg_id" name="edit_msg_id">
+                            <div class="input-group">
+                                <input type="hidden" name="app_user_id" id="app_user_id">
+								<input type="hidden" name="group_id" id="group_id" value="0">
+                                <input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
+                                <label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
+                                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+                                </label>
+                                <input multiple id="attachment" name="attachment[]" type="file"/>
+                                <input type="hidden" id="reply_msg_id" name="reply_msg_id">
+                                <button class="btn btn-success " type="submit" class="submit" id="message_sent_to_user"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+				-->
 			<div class="footer-items">
 				<!--<span class="go-top"><i class="clip-chevron-up"></i></span>-->
-				<ul class="nav navbar-right"><li><a class="sb-toggle" href="#"><i class="fa fa-outdent" style="color:#a7b4d1; font-size:18px;"></i></a></li></ul>
+				<ul class="nav navbar-left pull-left"><li><a class="sb-toggle" href="#"><i class="fa fa-outdent" style="color:#a7b4d1; font-size:18px;"></i></a></li></ul>
 			</div>
 		</div>
 		<!-- end: FOOTER -->
@@ -475,14 +528,10 @@
 <script src="{{ asset('assets/js/ui-animation.js')}}"></script>
 @yield('JScript')
 <script>
-
-  
-   history.pushState(null, null, location.href); 
-   history.back(); 
-   history.forward(); 
-   window.onpopstate = function () { history.go(1); };
-  
-
+	jQuery(document).ready(function() {
+		Main.init();
+		Animation.init();
+	});
 
     $.ajaxSetup({
         headers:{
@@ -546,9 +595,11 @@
 
 
 				if(pageName=='message'){
-					//$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+103));
+					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+65));
+					$('.chat-form').show();
 				}
 				else{
+					$('.chat-form').hide();
 					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+40));
 				}
 				$('#load-content').unblock();
@@ -701,7 +752,7 @@
             setTimeout(function(){
                 newNotifications();
               //  new_notification_reload();
-            }, 30000);
+            }, 10000);
         }
 
         newNotifications =  () => {
