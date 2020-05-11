@@ -4,20 +4,23 @@
 	<div class="panel-heading">
 		<i class="clip-bubble-4"></i>
 		{{__('app.Message')}}
-		<div class="btn-group group_message_btn">
-			<button data-toggle="dropdown" class="btn btn-orange btn-sm dropdown-toggle">
-				{{__('app.Group')}} : <span id="groupl_name_span">  {{__('app.None')}}  </span> <span class="caret"></span>
-			</button>
-			<ul class="dropdown-menu" role="menu" id="groups_ul" style="font-size:12px;">
-				<li onclick="group_message(0,'None')" id="0">
-					<a href="#">
-						{{__('app.None')}}
-					</a>
-				</li>
-				<li class="divider"></li>
 
-			</ul>
-		</div>
+        <div class="btn-group group_message_btn" style="padding-right: 0px">
+            <button  class="btn btn-primary btn-xs "  onclick="loadMore()">Load more</button>
+
+            <button data-toggle="dropdown" class="btn btn-orange btn-xs dropdown-toggle">
+                {{__('app.Group')}} : <span id="groupl_name_span">  {{__('app.None')}}  </span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" id="groups_ul" style="font-size:12px;">
+                <li onclick="group_message(0,'None')" id="0">
+                    <a href="#">
+                        {{__('app.None')}}
+                    </a>
+                </li>
+                <li class="divider"></li>
+
+            </ul>
+        </div>
 		<!--
 		<div class="panel-tools">
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="loadNewMessaeg()">
@@ -25,6 +28,7 @@
 			</a>
 		</div>-->
 	</div>
+
 		<div class="panel-body panel-scroll ps-container ps-active-y fixed-panel message_div margin-0 padding-0" >
 			<ul style="padding-left: 0;" class="message_body">
 			</ul>
@@ -36,7 +40,7 @@
 <script>
 
 var url = $('.site_url').val();
-var number_of_msg = 20;
+var number_of_msg = 50;
 var current_page_no = 1;
 var loaded = 1;
 //var last_appuser_message_id = 0;
@@ -51,7 +55,6 @@ var admin_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
 var image_url = "<?php echo asset('assets/images'); ?>";
 
 ajaxPreLoad = () =>{
-	//alert("{{ asset('assets/images/loading.gif') }}")
 	$('.content').block({
 		overlayCSS: {
 			backgroundColor: '#fff'
@@ -86,7 +89,6 @@ if(localStorage.getItem('is_group_message')){
     loadMessages = function loadMessages(message_load_type){
         $("#search_app_user").val("");
         // event.preventDefault();
-        //alert('wtf---'+message_load_type);
         $.ajaxSetup({
             headers:{
                 'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -97,7 +99,6 @@ if(localStorage.getItem('is_group_message')){
         if(message_load_type == 1){
             current_page_no =1;
         }
-        //alert(last_message_id)
 
         $.ajax({
             url: "{{ url('app/')}}/load-message",
@@ -106,7 +107,7 @@ if(localStorage.getItem('is_group_message')){
                 limit:number_of_msg,
                 page_no:current_page_no,
                 message_load_type:message_load_type,
-                last_message_id:last_message_id, 
+                last_message_id:last_message_id,
                 group_id : $('#group_id').val()
             },
             async:false,
@@ -115,7 +116,6 @@ if(localStorage.getItem('is_group_message')){
                 //$("#load-content").fadeOut('slow');
             },
             success: function(response){
-                //alert(1)
                 var response = JSON.parse(response);
                 var message = response['message'];
                 var img_id="";
@@ -130,7 +130,8 @@ if(localStorage.getItem('is_group_message')){
                         html = "";
                         date = new Date(message["msg_date"]+ 'Z');
                         msg_date = date.toLocaleString ();
-						
+
+
 						var app_user_message 		= message["app_user_message"];
                         var is_attachment_app_user 	= message["is_attachment_app_user"];
                         var admin_message 			= message["admin_message"];
@@ -140,8 +141,8 @@ if(localStorage.getItem('is_group_message')){
 							i++;
 						}
 
-						//if( ((message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null )) ){
-                        if( (app_user_message!==null) && ( is_attachment_app_user!=="" )  ){
+
+                        if( (app_user_message!==null || is_attachment_app_user>0) && ( is_attachment_app_user!=="" )  ){
                             if(message["reply_message"]){
                                 html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
                             }
@@ -161,6 +162,7 @@ if(localStorage.getItem('is_group_message')){
                                 html+="<div class='attachment_div'>";
                                 attachements = message["app_user_attachment"].split(',');
                                 var old_type = "";
+
                                 for(var i=0; i<attachements.length; i++){
                                     var att_type 		= (attachements[i].split("*"));
                                     var attachment_type = att_type[1];
@@ -180,7 +182,7 @@ if(localStorage.getItem('is_group_message')){
                                     }
                                     else if(attachment_type==2){
                                         //Video
-                                        html +='<div class="row pull-right text-right"><video style="float:right;margin-right:10px;" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+                                        html +='<div class="row pull-right text-right"><video style="float:right;margin-right:10px;" width="230" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
                                     }
                                     else if(attachment_type==3){
                                         //Audio
@@ -236,11 +238,11 @@ if(localStorage.getItem('is_group_message')){
                                     }
                                     else if(message["attachment_type"]==2){
                                         //Video
-                                        html +='<div class="row text-left"><video style="float:left; margin-left:10px" width="280" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+                                        html +='<div class="row text-left"><video style="float:left; margin-left:10px" width="230" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
                                     }
                                     else if(message["attachment_type"]==3){
                                         //Audio
-                                        html +='<div class="row text-left"><audio style="float:left; margin-left:10px" width="280"  controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
+                                        html +='<div class="row text-left"><audio style="float:left; margin-left:10px" width="230"  controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
                                     }
                                     else{
                                         //Other Files
@@ -272,27 +274,28 @@ if(localStorage.getItem('is_group_message')){
                         //alert('1:change all message')
                         $(".message_body").html(message_body);
                         $(".message_div").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+                        /*---------------work on above line-------------*/
                         current_page_no=2;
                     }
                     // 2: get last message which just entered by admin
                     // load appuser last message
                     else if(message_load_type == 2){
-                        //alert('1:add last mesage')
                         var html_tag = $(".message_body");
                         html_tag.append(message_body);
                         $(".message_div").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
+                        /*---------------work on above line-------------*/
 
                     }
                     else if(message_load_type == 3){ // 3: get load more messages
                         //alert('1:add more all message')
                         // need to specify the las message <li> and make the slide animation accoring to that li
                         //$(".message_div").animate({ scrollTop: $(document).height() }, "fast");
+                        /*---------------work on above line-------------*/
                         var html_tag = $(".message_body");
                         html_tag.prepend(message_body);
                         current_page_no++;
                     }
                     last_message_id = message_id;
-					//alert(last_message_id);
                 }
                 else{
                     if(message_load_type == 1){
@@ -323,18 +326,26 @@ if(localStorage.getItem('is_group_message')){
     loadMessages(1); // 1: all message dump
 
     // load more when scroll reachs to top of the scrolling div
+    /*
     $(".fixed-panel").scroll(function() {
-       // alert('top')
+        //alert('top')
         if($(this).scrollTop()  > 100){
             loadMessages(3)
         }
     });
 
+     */
+
+    loadMore = function loadMore(){
+        loadMessages(3)
+
+    }
+
 
     set_appmessage_time_out_fn = function set_appmessage_time_out_fn(){
         setTimeout(function(){
             newAdminMessages();
-        }, 10000);
+        }, 20000);
     }
 
     newAdminMessages = function newAdminMessages(){
@@ -423,32 +434,10 @@ if(localStorage.getItem('is_group_message')){
         }
     }
 
-    $.ajax({
-        url: "{{ url('app/')}}/message/get-message-category",
-        success: function(response){
-            var data = JSON.parse(response);
-            var option = '<option value="">&nbsp;</option>';
-            $.each(data, function(i,data){
-                option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
-            });
-            $("#message_category").append(option)
-            //$('#message_category_group').html(option)
-            $("#message_category_group").select2({
-                placeholder: "Categoty/Topic",
-                allowClear: true
-            });
-            $("#message_category").select2({
-                placeholder: "Categoty/Topic",
-                allowClear: true
-            });
-        }
-    });
-
 
 //------------------------------- group functions--------------------
 
     group_message = (id, value) =>{
-        //alert(value)
         $('#groupl_name_span').html(value);
         $('#group_id').val(id);
 
@@ -458,23 +447,6 @@ if(localStorage.getItem('is_group_message')){
         loadMessages(1)
     }
 
-    $.ajax({
-        url: "{{ url('app/')}}/message/get-message-group",
-        success: function(response){
-            var data = JSON.parse(response);
-            var option = '';
-            $.each(data, function(i,data){
-                vals = "'"+data.group_name+ "'"
-                option += '<li onclick="group_message('+data.id+','+vals+')" id="'+data.id+'"> ' +
-                    '<a href="#">'+data.group_name+'</a> ' +
-                    '</li> ' +
-                    '<li class="divider"></li>\n';
-            });
-            $("#groups_ul").append(option)
-            //$('#message_category_group').html(option)
-
-        }
-    });
 
 
 	/*$('#groups_ul>li').on("click",function(){
@@ -526,6 +498,24 @@ if(localStorage.getItem('is_group_message')){
     });
 
 
+    $.ajax({
+    url: "{{ url('app/')}}/message/get-message-group",
+    success: function(response){
+        var data = JSON.parse(response);
+        var option = '';
+        $.each(data, function(i,data){
+            vals = "'"+data.group_name+ "'"
+            option += '<li onclick="group_message('+data.id+','+vals+')" id="'+data.id+'"> ' +
+                '<a href="#">'+data.group_name+'</a> ' +
+                '</li> ' +
+                '<li class="divider"></li>\n';
+        });
+        //alert($("#groups_ul").html())
+        $("#groups_ul").append(option)
+        //$('#message_category_group').html(option)
+
+    }
+});
 
 
 </script>

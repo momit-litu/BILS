@@ -509,11 +509,18 @@
                     var message_body = "";
                     if(!jQuery.isEmptyObject(message)){
                         $.each(message, function(i,message){
+
+                            var app_user_message 		= message["app_user_message"];
+                            var is_attachment_app_user 	= message["is_attachment_app_user"];
+                            var admin_message 			= message["admin_message"];
+                            var is_attachment 			= message["is_attachment"];
+
+
                             group_name_ = message.group_name
                             date = new Date(message["msg_date"]+ 'Z');
                             msg_date = date.toLocaleString ()
                             html = "";
-                            if( ($.trim(message["admin_id"]) != 'null' && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
+                            if((admin_message!==null || is_attachment>0) && ( is_attachment!=='')){
                                 if(message["reply_message"]){
                                     html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
                                 }
@@ -576,7 +583,7 @@
                                 else      tem_msg = "";
                                 html += '<span class="time_date_sent">'+mc+' '+msg_date+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
                             }
-                            else if( (message["app_user_message"]!=null && message["app_user_message"]!="") || ( message["is_attachment_app_user"]!=""&& message["is_attachment_app_user"]!=null ) ){
+                            else {
                                 if(message["replied"]){
                                     html+='<li class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
                                 }
