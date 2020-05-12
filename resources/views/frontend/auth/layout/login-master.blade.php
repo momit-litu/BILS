@@ -11,7 +11,6 @@
     <meta charset="utf-8" />
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-	<meta name="mobile-web-app-capable" content="yes">   
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta content="" name="description" />
@@ -45,7 +44,7 @@
 <div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
     <div class="logo text-center" style="color: #fff">
        <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>
-	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies</h5>
+	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies-BILS</h5>
     </div>
     <!-- start: LOGIN BOX -->
 	<div class="box-login">

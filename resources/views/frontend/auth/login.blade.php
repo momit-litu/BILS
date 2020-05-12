@@ -2,10 +2,8 @@
 @section('login-content')
 
         <h4><strong>{{__('auth.sign-up')}}</strong></h4>
-			<h1>@lang('auth.sign-up')</h1>
-        <p> {{Lang::locale()}}
-		{{app()->getLocale() }}
-		
+			{{--<h1>@lang('auth.sign-up')</h1>--}}
+        <p>
             {{__('auth.signin_details')}}
         </p>
         <form class="form-login" action="{{ url('app/auth/post/login') }}" method="post">

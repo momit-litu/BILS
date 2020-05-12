@@ -11,19 +11,12 @@
     <meta charset="utf-8" />
     <!--[if IE]><meta http-equiv='X-UA-Compatible' content="IE=edge,IE=9,IE=8,chrome=1" /><![endif]-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
-    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta content="" name="description" />
     <meta content="" name="author" />
     <!-- end: META -->
-	<!--
-	<link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
-	<link rel="apple-touch-icon" href="/apple-touch-icon-57x57.png">
-	<link rel="apple-touch-startup-image" href="/splash-startup.png">
-	-->
     <!-- start: MAIN CSS -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css') }}">
@@ -142,7 +135,7 @@
 			<!-- end: PAGE -->
 		</div>
 		<!-- end: MAIN CONTAINER -->
-		<!-- start: FOOTER -->
+		<!-- start: FOOTER --> 
 		<div class="footer clearfix" id="footer">
 				<div class="chat-form" style="display: none; margin-bottom:0px">
 					<form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
@@ -153,7 +146,7 @@
 							<span class="input-group-btn dropup ">
 								<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding " data-toggle="dropdown" style="padding-top:7px; margin-top:-1px">
 									<span class="caret"></span>
-								</button>
+								</button> 
 								<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
 									<select name="message_category" id="message_category" style="min-width:150px; font-size:10px">
 										<option disabled="" selected="" value="">Category/Topic</option>
@@ -875,7 +868,12 @@
     </script>
 
 
+
+
+
+
 </body>
+
 
 <!-- end: BODY -->
 </html>

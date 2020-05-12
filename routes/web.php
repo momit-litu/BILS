@@ -18,7 +18,7 @@ Route::get('app/language/{lang}',function ($lang){
         return redirect()->back();
     }
 });*/
-/*Route::get('app/language/{lang}',function ($lang){
+Route::get('app/language/{lang}',function ($lang){
     try {
         if (in_array($lang, config('locale.languages'))) {
             Session::put('locale', $lang);
@@ -32,7 +32,7 @@ Route::get('app/language/{lang}',function ($lang){
         return redirect()->back();
     }
 });
-*/
+
 
 Route::get('app/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
@@ -50,7 +50,6 @@ Route::get('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'
 Route::post('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'AppAuthController@authForgotPasswordConfirm'));
 Route::get('app/auth/forget/password/{user_id}/verify',array('as'=>'Forgot Password Verify' , 'uses' =>'AppAuthController@authSystemForgotPasswordVerification'));
 Route::post('app/auth/forget/password/{user_id}/verify',array('as'=>'New Password Submit' , 'uses' =>'AppAuthController@authSystemNewPasswordPost'));
-Route::get('app/language/{lang}', array('as'=>'Customer Language', 'uses' =>'AppAuthController@CustomerLaguageChange'));
 
 Route::group(['middleware'=>'appUser'], function() {
 	Route::get('/',array('as'=>'Dashboard' , 'uses' =>'FrontEndController@index'));
