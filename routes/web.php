@@ -474,12 +474,18 @@ Route::get('/settings/survey/survey-categories-edit/{id}',array('as'=>'Edit Surv
 
 
 	/*--------------  Sent Message Management Start  -------------*/
-	Route::get('messages/sent-message',array('as'=>'Sent Message Management', 'action_id'=>'72', 'uses' =>'MessageController@sentMessageManage'));
-	Route::post('/message/message-entry',array('as'=>'Message Entry', 'action_id'=>'73', 'uses' =>'MessageController@messageEntry'));
+    Route::get('messages/sent-message',array('as'=>'Sent Message Management', 'action_id'=>'72', 'uses' =>'MessageController@sentMessageManage'));
+    Route::post('/message/message-entry',array('as'=>'Message Entry', 'action_id'=>'73', 'uses' =>'MessageController@messageEntry'));
 	Route::get('/message/message-delete/{id}',array('as'=>'Message Delete', 'action_id'=>'75', 'uses' =>'MessageController@messageDelete'));
     Route::get('/message/message-edit/{id}',array('as'=>'Message Delete', 'action_id'=>'75', 'uses' =>'MessageController@messageEdit'));
 
     /*--------------  Sent Message Management End  -------------*/
+
+    /*--------------  Notification Management Start  -------------*/
+    Route::get('/notification/notification-view',array('as'=>'All Notification', 'action_id'=>'95', 'uses' =>'NotificationController@allNotificationView'));
+    Route::get('/notification/all-notification-list',array('as'=>'All Notification List', 'uses' =>'NotificationController@allNotificationList'));
+
+    /*--------------  Notification Management End  -------------*/
 
 	/*--------------  Manage Teacher Start  -------------*/
 	Route::get('course/teacher/manage-teacher',array('as'=>'Manage Teacher', 'action_id'=>'88', 'uses' =>'TeacherController@index'));
