@@ -96,6 +96,7 @@
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Attachment</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
                                             <input multiple id="attachment" name="attachment[]" type="file"/>
+                                            <p id="file"></p>
 										</div>
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Message Category</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">

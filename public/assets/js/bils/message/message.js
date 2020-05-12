@@ -111,6 +111,8 @@ $(document).ready(function () {
 						$("#message_form .tableflat").iCheck('uncheck');
 					}
 					$(window).scrollTop();
+
+
 				 }
 			});
 		}
@@ -155,49 +157,28 @@ $(document).ready(function () {
 	// need the edit message
 
 	//Publication Edit
-	/*edit_publication = function edit_publication(id){
-		var edit_id = id;
-		$.ajax({
-			url: url+'/publication/publication-edit/'+edit_id,
-			success: function(response){
-				var data = JSON.parse(response);
-				$("#publication_entry").trigger('click');
-				$("#publication_entry").html('Publication Update');
-				$("#save_publication").html('Update');
-				$("#publication_edit_id").val(data['id']);
-				$("#publication_title").val(data['publication_title']);
-				$("#details").val(data['details']);
-				$("#authors").val(data['authors']);
-				$("#publication_type").val(data['publication_type']).change();
-				(data['status']=='1')?$("#is_active").iCheck('check'):$("#is_active").iCheck('uncheck');
-			}
-		});
-	}*/
+
+    edit_message = (id) =>{
+        $.ajax({
+            url: url + '/message/message-edit/'+id,
+            success: function (response) {
+                response = JSON.parse(response)
+
+
+                $("#admin_message").summernote('code',response[0]['admin_message']);
+                $("#message_category").val(response[0]['message_category'])
+                $("#app_user_name").val(response[0]['name'])
+                $("#app_user_id").val(response[0]['user_id'])
+                $("#file").html(response[0]['admin_atachment'])
+                $("#message_edit_id").val(response[0]['id'])
 
 
 
+                $("#message_entry").trigger("click");
 
-
-
-
-
-
-
-
-
-/*
-	$(window).on('keydown', function(e) {
-		alert('enter')
-		if (e.which == 13) {
-			newMsgSent();
-			return false;
-		}
-	});
-*/
-
-
-
-
+            }
+        })
+    }
 
 	//autosuggest
 	$.ajaxSetup({

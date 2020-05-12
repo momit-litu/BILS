@@ -477,7 +477,9 @@ Route::get('/settings/survey/survey-categories-edit/{id}',array('as'=>'Edit Surv
 	Route::get('messages/sent-message',array('as'=>'Sent Message Management', 'action_id'=>'72', 'uses' =>'MessageController@sentMessageManage'));
 	Route::post('/message/message-entry',array('as'=>'Message Entry', 'action_id'=>'73', 'uses' =>'MessageController@messageEntry'));
 	Route::get('/message/message-delete/{id}',array('as'=>'Message Delete', 'action_id'=>'75', 'uses' =>'MessageController@messageDelete'));
-	/*--------------  Sent Message Management End  -------------*/
+    Route::get('/message/message-edit/{id}',array('as'=>'Message Delete', 'action_id'=>'75', 'uses' =>'MessageController@messageEdit'));
+
+    /*--------------  Sent Message Management End  -------------*/
 
 	/*--------------  Manage Teacher Start  -------------*/
 	Route::get('course/teacher/manage-teacher',array('as'=>'Manage Teacher', 'action_id'=>'88', 'uses' =>'TeacherController@index'));
