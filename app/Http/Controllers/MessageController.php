@@ -78,7 +78,6 @@ class MessageController extends Controller
 
                 $is_attachment = 0;
 
-
                 if($request->hasFile('attachment')){
                     $files = array();
                     $is_attachment = 1;
@@ -111,13 +110,8 @@ class MessageController extends Controller
                     }
                 }
 
-                //return json_encode($files);
-
-
                 $is_active = ($request->is_active=="")?"0":"1";
-
                  $admin_id = Auth::user()->id;
-
 
                 if ($request->message_edit_id == '') {
 

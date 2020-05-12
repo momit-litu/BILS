@@ -99,135 +99,6 @@ class PublicationController extends Controller
 					$view_url = 'publication/'.$publication_id;
 
 					## Insert Into Notification
-
-
-                    if (isset($app_user_id)&&isset($app_user_name)&&$app_user_id!=""&&$app_user_name!="") {
-
-                        $to_id = $app_user_id;
-
-
-                        $column_value = [
-                            'from_id'=>$from_id,
-                            'from_user_type'=>$from_user_type,
-                            'to_id'=>$to_id,
-                            'to_user_type'=>$to_user_type,
-                            'notification_title'=>$publication_title,
-                            'message'=>$message,
-                            'view_url'=>$view_url,
-                            'module_id'=>38,
-                            'module_reference_id'=>$publication_id,
-                        ];
-                        $response = Notification::create($column_value);
-
-                    }
-
-                    if(isset($app_users)&& $app_users!="" && $app_users!=null ){
-                        foreach ($app_users as $j) {
-
-                            $column_value = [
-                                'from_id'=>$from_id,
-                                'from_user_type'=>$from_user_type,
-                                'to_id'=>$to_id,
-                                'to_user_type'=>$to_user_type,
-                                'notification_title'=>$publication_title,
-                                'message'=>$message,
-                                'view_url'=>$view_url,
-                                'module_id'=>38,
-                                'module_reference_id'=>$publication_id,
-                            ];
-                            $response = Notification::create($column_value);
-                        }
-                    }
-                    else if (isset($app_user_group)&& $app_user_group!="") {
-
-                        foreach ($app_user_group as $row) {
-                            $to_user_id = AppUserGroupMember::distinct()
-                                ->select('app_user_id')
-                                ->where('group_id',$row)
-                                ->groupBy('app_user_id')
-                                ->get();
-
-                            foreach ($to_user_id as $k) {
-
-                                $column_value = [
-                                    'from_id'=>$from_id,
-                                    'from_user_type'=>$from_user_type,
-                                    'to_id'=>$k['app_user_id'],
-                                    'to_user_type'=>$to_user_type,
-                                    'notification_title'=>$publication_title,
-                                    'message'=>$message,
-                                    'view_url'=>$view_url,
-                                    'module_id'=>37,
-                                    'module_reference_id'=>$publication_id,
-                                ];
-                                $response = Notification::create($column_value);
-
-                            }
-
-                        }
-                    }
-
-                    /*
-					if (isset($app_user_group)&& $app_user_group!="") {
-
-						if(isset($app_users)&& $app_users!=""){
-						 	foreach ($app_users as $j) {
-						 		$old_noti = Notification::select('id')
-											->where('to_id', $j)
-											->where('view_url', $view_url)
-											->count();
-								if ($old_noti == 0) {
-									$to_id = $j;
-									$column_value = [
-										'from_id'=>$from_id,
-										'from_user_type'=>$from_user_type,
-										'to_id'=>$to_id,
-										'to_user_type'=>$to_user_type,
-										'notification_title'=>$notification_title,
-										'message'=>$message,
-										'view_url'=>$view_url,
-                                        'module_id'=>38,
-                                        'module_reference_id'=>$publication_id,
-									];
-									$response = Notification::create($column_value);
-								}
-						 	}
-						 }
-
-						else{
-							foreach ($app_user_group as $row) {
-								$to_user_id = AppUserGroupMember::distinct()
-												->select('app_user_id')
-												->where('group_id',$row)
-												->groupBy('app_user_id')
-												->get();
-
-								foreach ($to_user_id as $k) {
-									$to_id = $k['app_user_id'];
-
-									$old_noti = Notification::select('id')
-												->where('to_id', $to_id)
-												->where('view_url', $view_url)
-												->count();
-
-									if ($old_noti==0) {
-										$column_value = [
-											'from_id'=>$from_id,
-											'from_user_type'=>$from_user_type,
-											'to_id'=>$to_id,
-											'to_user_type'=>$to_user_type,
-											'notification_title'=>$notification_title,
-											'message'=>$message,
-											'view_url'=>$view_url,
-                                            'module_id'=>38,
-                                            'module_reference_id'=>$publication_id,
-										];
-										$response = Notification::create($column_value);
-									}
-								}
-							}
-						}
-					}*/
 				}
 				else{
 					$updated_by = Auth::user()->name;
@@ -244,9 +115,89 @@ class PublicationController extends Controller
                         $column_value['attachment']=$attachment_name;
                     }
 					$data = Publication::find($request->publication_edit_id);
+                    $publication_id = $request->publication_edit_id;
 					$data->update($column_value);
 				}
-				DB::commit();
+
+                if (isset($app_user_id)&&isset($app_user_name)&&$app_user_id!=""&&$app_user_name!="") {
+
+                    $to_id = $app_user_id;
+
+                    $isNotification = Notification::where([['to_id',$to_id],['module_id',38],['module_reference_id',$publication_id]])->get();
+
+                    if(sizeof($isNotification)==0){
+                        //return $to_id;
+                        $column_value = [
+                            'from_id'=>$from_id,
+                            'from_user_type'=>$from_user_type,
+                            'to_id'=>$to_id,
+                            'to_user_type'=>$to_user_type,
+                            'notification_title'=>$publication_title,
+                            'message'=>$message,
+                            'view_url'=>'publication/'.$publication_id,
+                            'module_id'=>38,
+                            'module_reference_id'=>$publication_id,
+                        ];
+                        $response = Notification::create($column_value);
+                        //return $to_id;
+                    }
+                }
+
+                if(isset($app_users)&& $app_users!="" && $app_users!=null ){
+
+                    foreach ($app_users as $j) {
+                        $isNotification = Notification::where([['to_id',$j],['module_id',38],['module_reference_id',$publication_id]])->get();
+
+                        if(sizeof($isNotification)==0){
+                            $column_value = [
+                                'from_id'=>$from_id,
+                                'from_user_type'=>$from_user_type,
+                                'to_id'=>$j,
+                                'to_user_type'=>$to_user_type,
+                                'notification_title'=>$publication_title,
+                                'message'=>$message,
+                                'view_url'=>'publication/'.$publication_id,
+                                'module_id'=>38,
+                                'module_reference_id'=>$publication_id,
+                            ];
+                            $response = Notification::create($column_value);
+                        }
+                    }
+                }
+                else if (isset($app_user_group)&& $app_user_group!="") {
+
+                    foreach ($app_user_group as $group) {
+                        $appUsers = AppUserGroupMember::where([['group_id', $group], ['status', '=', 1]])->get();
+
+                        foreach ($appUsers as $j) {
+                            $isNotification = Notification::where([['to_id', $j['app_user_id']], ['module_id', 38], ['module_reference_id', $publication_id]])->get();
+
+                            if (sizeof($isNotification) == 0) {
+                                //return json_encode($isNotification);
+
+                                $column_value = [
+                                    'from_id' => $from_id,
+                                    'from_user_type' => $from_user_type,
+                                    'to_id' => $j['app_user_id'],
+                                    'to_user_type' => $to_user_type,
+                                    'notification_title' => $publication_title,
+                                    'message' => $message,
+                                    'view_url' => 'publication/' . $publication_id,
+                                    'module_id' => 38,
+                                    'module_reference_id' => $publication_id,
+                                ];
+                                $response = Notification::create($column_value);
+                            }
+
+                        }
+                    }
+                }
+
+
+
+
+
+                DB::commit();
 				$return['result'] = "1";
 				return json_encode($return);
 			}
