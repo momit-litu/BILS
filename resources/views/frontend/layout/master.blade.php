@@ -529,9 +529,29 @@
 @yield('JScript')
 <script>
 	jQuery(document).ready(function() {
-		Main.init();
+		//Main.init();
 		Animation.init();
 	});
+
+/*
+var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
+var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
+$(document).ready(function () {
+    if (deviceIsAndroid || deviceIsIos) {
+        $(document).bind("click", function () {
+            if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
+                var textBox = document.activeElement.id;
+                document.getElementById(textBox).scrollIntoView();
+            }
+        });
+    }
+});
+$("input").bind("click", function () {
+    var textBox = document.activeElement.id;
+    document.getElementById(textBox).scrollIntoView();
+});
+
+*/
 
     $.ajaxSetup({
         headers:{
