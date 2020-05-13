@@ -290,7 +290,9 @@ if(localStorage.getItem('is_group_message')){
                         //$(".message_div").animate({ scrollTop: $(document).height() }, "fast");
                         /*---------------work on above line-------------*/
                         var html_tag = $(".message_body");
-                        html_tag.prepend(message_body);
+                       // html_tag.prepend(message_body);
+                        $(".message_body").html(message_body+html_tag);
+
                         current_page_no++;
                     }
                     last_message_id = message_id;

@@ -78,7 +78,6 @@ class MessageController extends Controller
 
                 $is_attachment = 0;
 
-
                 if($request->hasFile('attachment')){
                     $files = array();
                     $is_attachment = 1;
@@ -86,7 +85,7 @@ class MessageController extends Controller
                     foreach ($attachment as $attachment) {
                         $attachment_name = rand().time().$attachment->getClientOriginalName();
                         $ext = strtoupper($attachment->getClientOriginalExtension());
-                        echo $ext;
+                        //echo $ext;
                         if ($ext=="JPG" || $ext=="JPEG" || $ext=="PNG" || $ext=="GIF" || $ext=="WEBP" || $ext=="TIFF" || $ext=="PSD" || $ext=="RAW" || $ext=="INDD" || $ext=="SVG") {
                             $attachment_type = 1;
                         }
@@ -111,18 +110,15 @@ class MessageController extends Controller
                     }
                 }
 
-                //return json_encode($files);
-
-
                 $is_active = ($request->is_active=="")?"0":"1";
-
                  $admin_id = Auth::user()->id;
-
 
                 if ($request->message_edit_id == '') {
 
                     $app_user_group = $request->input('app_user_group');
                     $app_users = $request->input('app_users');
+                    $message_id =  MessageMaster::max('message_id')+1;
+
 
                     //return json_encode($app_users);
                     if(isset($app_users)&& $app_users!="" && $app_users!=null ){
@@ -137,6 +133,7 @@ class MessageController extends Controller
                                 'app_user_id'=>$app_user_id,
                                 'is_attachment'=>$is_attachment,
                                 'status'=>$is_active,
+                                'message_id'=>$message_id,
                                 'message_category'=>$request->message_category,
                             ];
                             $response = MessageMaster::create($column_value);
@@ -164,6 +161,7 @@ class MessageController extends Controller
                                 'group_id'=>$row,
                                 'is_group_msg'=>1,
                                 'status'=>$is_active,
+                                'message_id'=>$message_id,
                                 'message_category'=>$request->message_category,
                             ];
                             $response = MessageMaster::create($column_value);
@@ -189,6 +187,7 @@ class MessageController extends Controller
                             'app_user_id'=>$request->app_user_id,
                             'status'=>$is_active,
                             'is_attachment'=>$is_attachment,
+                            'message_id'=>$message_id,
                             'message_category'=>$request->message_category,
                         ];
                         $response = MessageMaster::create($column_value);
@@ -205,7 +204,69 @@ class MessageController extends Controller
                         }
                     }
 
+                    if(isset($request->all_users)){
+                        $users_list = AppUser::all();
+                        foreach ($users_list as $j) {
 
+
+                            $app_user_id = $j['id'];
+                            $column_value = [
+                                'admin_message'=>$request->admin_message,
+                                'admin_id'=>$admin_id,
+                                'app_user_id'=>$app_user_id,
+                                'is_attachment'=>$is_attachment,
+                                'status'=>$is_active,
+                                'message_id'=>$message_id,
+                                'message_category'=>$request->message_category,
+                            ];
+                            $response = MessageMaster::create($column_value);
+                            if(isset($files)){
+                                foreach ($files as $file){
+                                    $column_value = [
+                                        'message_master_id'=>$response->id,
+                                        'attachment_type'=>$file['type'],
+                                        'admin_atachment'=>$file['name'],
+                                    ];
+                                    MessageAttachment::create($column_value);
+                                }
+
+                            }
+                        }
+
+                    }
+
+
+                }
+                else{
+
+                    $message = MessageMaster::where('id',$request->message_edit_id)->get();
+                    $message_id = $message[0]['message_id'];
+                    $column_value = [
+                        'admin_message'=>$request->admin_message,
+                        'message_category'=>$request->message_category,
+                    ];
+                    if(isset($files)) {
+                        $column_value['is_attachment']=1;
+                    }
+                        MessageMaster::where('message_id',$message_id)->update($column_value);
+
+                    if(isset($files)){
+                        $users = MessageMaster::where('message_id',$message_id)->get();
+                        foreach ($users as $user){
+                            foreach ($files as $file){
+                                $column_value = [
+                                    'message_master_id'=>$user['id'],
+                                    'attachment_type'=>$file['type'],
+                                    'admin_atachment'=>$file['name'],
+                                ];
+                                MessageAttachment::create($column_value);
+                            }
+
+                        }
+
+                    }
+
+                    //return json_encode($message_id);
                 }
                 // else if($request->message_edit_id != ''){
                 //     $data = User::find($request->id);
@@ -223,6 +284,16 @@ class MessageController extends Controller
                 return json_encode($return);
             }
         }
+    }
+
+    public function messageEdit($id){
+	    $message = DB::table('message_masters as mm')
+            ->leftJoin('message_attachments as ma','mm.id','=','ma.message_master_id')
+            ->leftJoin('app_users as au','mm.app_user_id','=','au.id')
+            ->where('mm.id','=',$id)
+            ->select('ma.admin_atachment','mm.id','mm.message_category','au.name','au.id as user_id','mm.admin_message')
+            ->get();
+	    return json_encode($message);
     }
 
 
@@ -287,6 +358,8 @@ class MessageController extends Controller
     //Message view
     public function messageView($id){
         $data = MessageMaster::find($id);
+        $attachment = MessageAttachment::find($id);
+        $data['attachment']=$attachment;
         return json_encode($data);
     }
 
