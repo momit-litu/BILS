@@ -204,6 +204,37 @@ class MessageController extends Controller
                         }
                     }
 
+                    if(isset($request->all_users)){
+                        $users_list = AppUser::all();
+                        foreach ($users_list as $j) {
+
+
+                            $app_user_id = $j['id'];
+                            $column_value = [
+                                'admin_message'=>$request->admin_message,
+                                'admin_id'=>$admin_id,
+                                'app_user_id'=>$app_user_id,
+                                'is_attachment'=>$is_attachment,
+                                'status'=>$is_active,
+                                'message_id'=>$message_id,
+                                'message_category'=>$request->message_category,
+                            ];
+                            $response = MessageMaster::create($column_value);
+                            if(isset($files)){
+                                foreach ($files as $file){
+                                    $column_value = [
+                                        'message_master_id'=>$response->id,
+                                        'attachment_type'=>$file['type'],
+                                        'admin_atachment'=>$file['name'],
+                                    ];
+                                    MessageAttachment::create($column_value);
+                                }
+
+                            }
+                        }
+
+                    }
+
 
                 }
                 else{
@@ -327,6 +358,8 @@ class MessageController extends Controller
     //Message view
     public function messageView($id){
         $data = MessageMaster::find($id);
+        $attachment = MessageAttachment::find($id);
+        $data['attachment']=$attachment;
         return json_encode($data);
     }
 

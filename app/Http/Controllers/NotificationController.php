@@ -10,6 +10,7 @@ use App\Traits\HasPermission;
 use Illuminate\Http\Request;
 use App\Menu;
 use App\Notification;
+use App\AppUser;
 
 use \App\System;
 use \App\Setting;
@@ -60,7 +61,7 @@ class NotificationController extends Controller
     public function allNotificationList(){
         $admin_user_id      = Auth::user()->id;
         $edit_action_id     = 95;
-        $edit_permisiion    = $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
+        $edit_permisiion    = 0;
         $delete_permisiion  = 0;
 
         /*echo MessageMaster::Select('id', 'admin_message', 'app_user_id', 'is_seen', 'status', 'message_category')
@@ -70,19 +71,19 @@ class NotificationController extends Controller
                         ->toSql();die;*/
 
         $notification_list = Notification::Select('id', 'notification_title', 'message', 'from_id', 'status', 'module_id','updated_at')
-            ->distinct('message_id')
-            ->whereNotNull('message_id')
-            ->orderBy('message_id','desc')
-            ->groupBy('message_id')
+            ->distinct('id')
+            ->where('to_user_type','Admin')
+            ->orderBy('status','asc')
+            ->groupBy('id')
             ->get();
 
 
         $return_arr = array();
         foreach($notification_list as $data){
 
-            $module_name = Menu::select('name')->where('id',$data->module_id)->first();
+            $module_name = Menu::select('module_name')->where('id',$data->module_id)->first();
 
-            $data['module_name'] = $module_name['name'];
+            $data['module_name'] = $module_name['module_name'];
 
             $app_user_name = AppUser::select('name')->where('id', $data->from_id)->first();
 
@@ -102,5 +103,9 @@ class NotificationController extends Controller
             $return_arr[] = $data;
         }
         return json_encode(array('data'=>$return_arr));
+    }
+
+    public function Notificationseen($id){
+
     }
 }

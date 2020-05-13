@@ -97,23 +97,45 @@
     <script>
         var url = $('.site_url').val();
 
-        var notification_table = $('#notification_table').DataTable({
-            destroy: true,
-            "processing": true,
-            "serverSide": false,
-            "ajax": url+"/notification/all-notification-list",
-            "aoColumns": [
-                // { mData: 'id'},
-                //{ mData: 'message_id' },
-                //{ mData: 'admin_id'},
-                { mData: 'title'},
-                { mData: 'message'},
-                { mData: 'module_name'},
-                { mData: 'app_user_name'},
-                { mData: 'is_seen', className: "text-center"},
-                { mData: 'actions' , className: "text-center"},
-            ],
-        });
+         notification_table = () =>{
+             $('#notification_table').DataTable({
+                 destroy: true,
+                 "processing": true,
+                 "serverSide": false,
+                 "ajax": url+"/notification/all-notification-list",
+                 "aoColumns": [
+                     // { mData: 'id'},
+                     //{ mData: 'message_id' },
+                     //{ mData: 'admin_id'},
+                     { mData: 'notification_title'},
+                     { mData: 'message'},
+                     { mData: 'module_name'},
+                     { mData: 'app_user_name'},
+                     { mData: 'is_seen', className: "text-center"},
+                     { mData: 'actions' , className: "text-center"},
+                 ],
+             });
+         }
+        notification_table()
+
+        notification_view = (id) =>{
+            $.ajax({
+                url: url+"/notification/notification_view/"+id,
+                success: function(response){
+                    notification_table()
+                    var data = JSON.parse(response);
+                    $("#admin_user_view").modal();
+                    $("#modal_title").html("Notification View");
+                    var notice_info = "";
+                    notice_info += "<h3>"+data[0]['notification_title']+"</h3><hr>";
+                    notice_info += "<p>"+data[0]['message']+"</p>";
+                    $("#modal_body").html(notice_info);
+
+
+                }
+            });
+
+        }
 
     </script>
 

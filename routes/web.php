@@ -483,7 +483,9 @@ Route::get('/settings/survey/survey-categories-edit/{id}',array('as'=>'Edit Surv
 
     /*--------------  Notification Management Start  -------------*/
     Route::get('/notification/notification-view',array('as'=>'All Notification', 'action_id'=>'95', 'uses' =>'NotificationController@allNotificationView'));
-    Route::get('/notification/all-notification-list',array('as'=>'All Notification List', 'uses' =>'NotificationController@allNotificationList'));
+    Route::get('/notification/all-notification-list',array('as'=>'All Notification List', 'action_id'=>'95','uses' =>'NotificationController@allNotificationList'));
+    Route::get('/notification/notification_seen_status/{id}',array('as'=>'Notification Seen', 'action_id'=>'95','uses' =>'NotificationController@Notificationseen'));
+
 
     /*--------------  Notification Management End  -------------*/
 

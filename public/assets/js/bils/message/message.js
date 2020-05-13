@@ -144,9 +144,10 @@ $(document).ready(function () {
 			url: url+'/message/message-view/'+id,
 			success: function(response){
 				var data = JSON.parse(response);
+				console.log(data)
 				$("#admin_user_view").modal();
 				$("#modal_title").html("Message View");
-				var message_info = "";
+				var message_info = data['admin_message'];
 
 				$("#modal_body").html(message_info);
 			}
