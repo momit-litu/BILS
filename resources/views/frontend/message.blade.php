@@ -4,11 +4,9 @@
 	<div class="panel-heading">
 		<i class="clip-bubble-4"></i>
 		{{__('app.Message')}}
-
+        <button  class="btn btn-primary btn-xs "  onclick="loadMore()">Load more</button>
         <div class="btn-group group_message_btn" style="padding-right: 0px">
-            <button  class="btn btn-primary btn-xs "  onclick="loadMore()">Load more</button>
-
-            <button data-toggle="dropdown" class="btn btn-orange btn-xs dropdown-toggle">
+            <button data-toggle="dropdown" class="btn btn-warning btn-sm dropdown-toggle">
                 {{__('app.Group')}} : <span id="groupl_name_span">  {{__('app.None')}}  </span> <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu" id="groups_ul" style="font-size:12px;">
@@ -47,7 +45,7 @@ var loaded = 1;
 var last_message_id = "0";
 
 
-
+   
 var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
@@ -181,11 +179,11 @@ if(localStorage.getItem('is_group_message')){
                                     }
                                     else if(attachment_type==2){
                                         //Video
-                                        html +='<div class="row pull-right text-right"><video style="float:right;margin-right:10px;" width="230" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+                                        html +='<div class="row pull-right text-right"><video style="float:right; margin-right:10px;" width="190" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
                                     }
                                     else if(attachment_type==3){
                                         //Audio
-                                        html +='<div class="row pull-right text-right"><audio style="float:right;margin-right:10px;" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
+                                        html +='<div class="row pull-right text-right"><audio style="float:right;margin-right:0px; width: 190px;" width="190" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
                                     }
                                     else{
                                         //Other Files
@@ -215,9 +213,9 @@ if(localStorage.getItem('is_group_message')){
                             html += '<li class="receive_msg message_li" id="receive_message_id_'+message['id']+'">';
 
                             html += '<img style="width:25px;height:25px;"  src="'+image_url+'/logo.jpg" alt="" />';
-
+							html += '<div class="left p_div">';
                             if (message["admin_message"]!=null && message["admin_message"]!="") {
-                                html += '<div class="left p_div">'+message["admin_message"]+'</div><br>';
+                                html += message["admin_message"]+'<br>';
                             }
                             if( (message["admin_message"]!=null && message["admin_message"]!="")&& (message["is_attachment"]==1) ){
                                 html+="";
@@ -237,11 +235,11 @@ if(localStorage.getItem('is_group_message')){
                                     }
                                     else if(message["attachment_type"]==2){
                                         //Video
-                                        html +='<div class="row text-left"><video style="float:left; margin-left:10px" width="230" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
+                                        html +='<div class="row text-left"><video style="float:left; margin-left:0px" width="190" controls><source src="'+msg_image_url+'/'+attachment_name+'" type="video/mp4"></video></div>';
                                     }
                                     else if(message["attachment_type"]==3){
                                         //Audio
-                                        html +='<div class="row text-left"><audio style="float:left; margin-left:10px" width="230"  controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
+                                        html +='<div class="row text-left"><audio style="float:left; margin-left:0; width: 190px;" width="190"  controls><source src="'+msg_image_url+'/'+attachment_name+'" type="audio/mpeg"></audio></div>';
                                     }
                                     else{
                                         //Other Files
@@ -250,6 +248,7 @@ if(localStorage.getItem('is_group_message')){
                                 }
                                 html+="</div>";
                             }
+							html+="</div>";
                             if (message["category_name"]!=null && message["category_name"]!="") {
                                 mc = '<div class="btn btn-xs btn-default disabled" style="font-size:10px !important;border-radius:7px !important;">'+message["category_name"]+'</div>';
                             }
@@ -441,11 +440,16 @@ if(localStorage.getItem('is_group_message')){
     group_message = (id, value) =>{
         $('#groupl_name_span').html(value);
         $('#group_id').val(id);
+		
+		$('#reply_msg').html("");
+		$('#edit_msg_id').val("");
+		$('#app_user_id').val("");
+		$('#reply_msg_id').val("");
 
         current_page_no = 1;
         loaded = 1;
         last_message_id = "0";
-        loadMessages(1)
+        loadMessages(1);
     }
 
 
@@ -499,7 +503,7 @@ if(localStorage.getItem('is_group_message')){
     });
 
 
-    $.ajax({
+$.ajax({
     url: "{{ url('app/')}}/message/get-message-group",
     success: function(response){
         var data = JSON.parse(response);

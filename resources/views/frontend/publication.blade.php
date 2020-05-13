@@ -32,6 +32,7 @@
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
     page =1;
+	$('.sidebar-search input').val('');
         //alert("NOtice");
     var attachment_url = "<?php echo asset('assets/attachment/publications'); ?>";
 
@@ -125,13 +126,12 @@
 
                     //console.log(html)
                     if(type==2){
-                        $('#all_publications').append(html)
+                        $('#all_publications').append(html);
+						 page ++ ;
                     }
                     else{
                         $('#all_publications').html(html)
                     }
-                    page ++ ;
-
                     //$('#all_publications').html(html)
                 }
             }

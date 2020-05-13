@@ -102,7 +102,7 @@ input[type="file"] {
  .message_div ul li div>.attachment_div {
   display: inline-block;
   padding: 10px 15px;
-  max-width: 80%;
+  max-width: 100%;
   line-height: 130%;
 }
 

@@ -44,7 +44,7 @@
 <div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
     <div class="logo text-center" style="color: #fff">
        <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>
-	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies</h5>
+	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies-BILS</h5>
     </div>
     <!-- start: LOGIN BOX -->
 	<div class="box-login">

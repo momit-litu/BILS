@@ -28,6 +28,7 @@
 <script>
     var attachment_url = "<?php echo asset('assets/attachment/notice'); ?>";
     var page =1;
+	$('.sidebar-search input').val('');
 
     $.ajaxSetup({
         headers:{
@@ -130,11 +131,12 @@
 					if(html != ""){
 						if(type==2){
 							$('#all_notice').append(html)
+							page ++ ;
 						}
 						else{
 							$('#all_notice').html(html)
 						}
-						page ++ ;
+						
 					}
                     //$('#all_notice').html(html)
                 }
@@ -158,6 +160,7 @@
 	*/
 	// load more when scroll reachs to bottom of the scrolling div
 	 $('.fixed-panel').on('scroll', function() {
+
 		if ($(this).scrollTop() + $(this).innerHeight() >=
 			$(this)[0].scrollHeight) {
 				loadNotice(2)

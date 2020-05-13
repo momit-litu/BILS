@@ -135,7 +135,7 @@
 			<!-- end: PAGE -->
 		</div>
 		<!-- end: MAIN CONTAINER -->
-		<!-- start: FOOTER -->
+		<!-- start: FOOTER --> 
 		<div class="footer clearfix" id="footer">
 				<div class="chat-form" style="display: none; margin-bottom:0px">
 					<form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
@@ -146,7 +146,7 @@
 							<span class="input-group-btn dropup ">
 								<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding " data-toggle="dropdown" style="padding-top:7px; margin-top:-1px">
 									<span class="caret"></span>
-								</button>
+								</button> 
 								<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
 									<select name="message_category" id="message_category" style="min-width:150px; font-size:10px">
 										<option disabled="" selected="" value="">Category/Topic</option>
@@ -529,9 +529,29 @@
 @yield('JScript')
 <script>
 	jQuery(document).ready(function() {
-		Main.init();
+		//Main.init();
 		Animation.init();
 	});
+
+/*
+var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
+var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
+$(document).ready(function () {
+    if (deviceIsAndroid || deviceIsIos) {
+        $(document).bind("click", function () {
+            if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
+                var textBox = document.activeElement.id;
+                document.getElementById(textBox).scrollIntoView();
+            }
+        });
+    }
+});
+$("input").bind("click", function () {
+    var textBox = document.activeElement.id;
+    document.getElementById(textBox).scrollIntoView();
+});
+
+*/
 
     $.ajaxSetup({
         headers:{
