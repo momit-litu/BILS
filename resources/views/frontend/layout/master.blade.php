@@ -532,14 +532,17 @@
 		//Main.init();
 		Animation.init();
 	});
-
+	
 /*
+
 var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
 var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
+alert(deviceIsAndroid)
 $(document).ready(function () {
     if (deviceIsAndroid || deviceIsIos) {
         $(document).bind("click", function () {
             if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
+				alert('something')
                 var textBox = document.activeElement.id;
                 document.getElementById(textBox).scrollIntoView();
             }
@@ -547,8 +550,9 @@ $(document).ready(function () {
     }
 });
 $("input").bind("click", function () {
+		alert('something after click')
     var textBox = document.activeElement.id;
-    document.getElementById(textBox).scrollIntoView();
+    document.getElementById(textBox).scrollIntoView(); 
 });
 
 */
