@@ -1,7 +1,12 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 <div class="panel panel-default border-none">
     <div class="panel-heading">
-        <i class=" fa fa-file-user "></i>
-        Profile
+        <i class=" fa fa-file-user "></i>        
+		 {{__('app.Profile')}}
         <div class="panel-tools">
 
         </div>

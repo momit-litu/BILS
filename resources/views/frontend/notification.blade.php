@@ -1,7 +1,12 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
-		<i class=" clip-notification-2 "></i>
-		Notifications
+		<i class=" clip-notification-2 "></i>		
+		{{__('app.Notifications')}}
 		<div class="panel-tools">
 			<a class="btn btn-xs btn-link panel-refresh" href="javascript:void(0)">
 				<i class="fa fa-refresh"></i>

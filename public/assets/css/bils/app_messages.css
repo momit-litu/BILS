@@ -171,3 +171,27 @@ input[type="file"] {
 .margin-left-2{margin-left:2px;}
 .margin-right-2{margin-right:2px;}
 
+.circle-icon-message {
+    background-color: #f5f5f5;
+    border-radius: 25px 25px 25px 25px;
+    color: #333333;
+    margin-top: 2px;
+    text-align: center;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    font-size: 12px !important;
+    padding-top: 3px;
+}
+.circle-bricky{
+    border-color: #b33426;
+    color: #C83A2A;
+}
+.circle-green {
+    border-color: #327B00;
+    color: #3D9400;
+}
+.circle-teal {
+    border-color: #4D8189;
+    color: #3D9400;
+}

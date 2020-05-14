@@ -96,6 +96,7 @@
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Attachment</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
                                             <input multiple id="attachment" name="attachment[]" type="file"/>
+                                            <p id="file"></p>
 										</div>
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Message Category</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
@@ -109,6 +110,10 @@
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<input type="checkbox" id="is_active" name="is_active" checked="checked" class="form-control col-lg-12"/>
 										</div>
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-6" >Send to All App Users</label>
+                                        <div class="col-md-4 col-sm-4 col-xs-6">
+                                            <input type="checkbox" id="all_users" name="all_users" checked="checked" class="form-control col-lg-12"/>
+                                        </div>
 									</div>
 
 									<div class="form-group">

@@ -1,16 +1,33 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Notification;
+use App\UserGroup;
+use Auth;
+use Validator;
+use Session;
 use DB;
-
-
+use App\Traits\HasPermission;
 use Illuminate\Http\Request;
+use App\Menu;
+use App\Notification;
+use App\AppUser;
+
+use \App\System;
+use \App\Setting;
+
 
 class NotificationController extends Controller
 {
     //
+    use HasPermission;
+
+    public function __construct(Request $request)
+    {
+        $this->page_title = $request->route()->getName();
+        $description = \Request::route()->getAction();
+        $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
+    }
+
     public function newNotificationLoad(){
         $notifications = DB::table('notifications as nf')
             ->leftJoin('app_users as apu', 'nf.from_id', '=', 'apu.id')
@@ -28,5 +45,67 @@ class NotificationController extends Controller
         Notification::where('id',$id)->update(['status'=>1]);
         $notification =  Notification::where('id',$id)->get();
         return json_encode($notification);
+    }
+
+    public function allNotificationView(){
+        $data['page_title'] = $this->page_title;
+        $data['module_name']= "Notification";
+        //action permissions
+        $admin_user_id         = Auth::user()->id;
+        $add_action_id         = 95;
+        $add_permisiion        = $this->PermissionHasOrNot($admin_user_id,$add_action_id );
+        $data['actions']['add_permisiion']= $add_permisiion;
+        return view('notification.notification',$data);
+    }
+
+    public function allNotificationList(){
+        $admin_user_id      = Auth::user()->id;
+        $edit_action_id     = 95;
+        $edit_permisiion    = 0;
+        $delete_permisiion  = 0;
+
+        /*echo MessageMaster::Select('id', 'admin_message', 'app_user_id', 'is_seen', 'status', 'message_category')
+                        ->distinct('message_id')
+                        ->whereNotNull('message_id')
+                        ->orderBy('message_id','desc')
+                        ->toSql();die;*/
+
+        $notification_list = Notification::Select('id', 'notification_title', 'message', 'from_id', 'status', 'module_id','updated_at')
+            ->distinct('id')
+            ->where('to_user_type','Admin')
+            ->orderBy('status','asc')
+            ->groupBy('id')
+            ->get();
+
+
+        $return_arr = array();
+        foreach($notification_list as $data){
+
+            $module_name = Menu::select('module_name')->where('id',$data->module_id)->first();
+
+            $data['module_name'] = $module_name['module_name'];
+
+            $app_user_name = AppUser::select('name')->where('id', $data->from_id)->first();
+
+            $data['app_user_name'] = $app_user_name['name'];
+
+            $data['is_seen']=($data->status == 1)?"<button class='btn btn-xs btn-success' disabled>Seen</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-seen</button>";
+
+
+            $data['actions']=" <button title='View' onclick='notification_view(".$data->id.")' id='view_" . $data->id . "' class='btn btn-xs btn-primary' ><i class='clip-zoom-in'></i></button>";
+
+            if($edit_permisiion>0){
+                $data['actions'] .=" <button title='Edit' onclick='edit_notification(".$data->id.")' id=edit_" . $data->id . "  class='btn btn-xs btn-green' ><i class='clip-pencil-3'></i></button>";
+            }
+            if ($delete_permisiion>0) {
+                $data['actions'] .=" <button title='Delete' onclick='delete_notification(".$data->id.")' id='delete_" . $data->id . "' class='btn btn-xs btn-danger' ><i class='clip-remove'></i></button>";
+            }
+            $return_arr[] = $data;
+        }
+        return json_encode(array('data'=>$return_arr));
+    }
+
+    public function Notificationseen($id){
+
     }
 }

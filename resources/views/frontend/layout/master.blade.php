@@ -2,6 +2,13 @@
 <!--[if IE 8]><html class="ie8 no-js" lang="en"><![endif]-->
 <!--[if IE 9]><html class="ie9 no-js" lang="en"><![endif]-->
 <!--[if !IE]><!-->
+@php
+    $token = "";
+    if(isset($_GET['token'])) $token = $_GET['token'];
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 <html lang="en" class="no-js">
 <!--<![endif]-->
 <!-- start: HEAD -->
@@ -149,7 +156,7 @@
 								</button> 
 								<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
 									<select name="message_category" id="message_category" style="min-width:150px; font-size:10px">
-										<option disabled="" selected="" value="">Category/Topic</option>
+										<option disabled="" selected="" value="">{{__('app.Category_Topic')}} </option>
 									</select>
 								</div>
 							</span>
@@ -228,13 +235,13 @@
 			<div class="sidebar-wrapper">
 				<ul class="nav nav-tabs nav-justified" id="sidebar-tab">
 					<li class="active">
-						<a href="#menus" role="tab" data-toggle="tab">Menu</a>
+						<a href="#menus" role="tab" data-toggle="tab">{{__('app.Menu')}} </a>
 					</li>
 					<li>
-						<a href="#favorites" role="tab" data-toggle="tab">Course</a>
+						<a href="#favorites" role="tab" data-toggle="tab">{{__('app.Course')}} </a>
 					</li>
 					<li>
-						<a href="#settings" role="tab" data-toggle="tab">Survey</a>
+						<a href="#settings" role="tab" data-toggle="tab">{{__('app.Survey')}} </a>
 					</li>
 				</ul>
 				<div class="tab-content">
@@ -321,6 +328,32 @@
 							<div class="sidebar-content">
 								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
 								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
+
+									<h4> Vertical description </h4>
+									<dl>
+										<dt>
+											Description lists
+										</dt>
+										<dd>
+											A description list is perfect for defining terms.
+										</dd>
+										<dt>
+											Euismod
+										</dt>
+									</dl>
+									<h4> Horizontal description </h4>
+									<dl class="dl-horizontal">
+										<dt>
+											Description lists
+										</dt>
+										<dd>
+											A description list is perfect for defining terms.
+										</dd>
+										<dt>
+											Euismod
+										</dt>
+									</dl>
+
 								</div>
 							</div>
 
@@ -532,17 +565,14 @@
 		//Main.init();
 		Animation.init();
 	});
-	
+//alert("{{$token}}")
 /*
-
 var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
 var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
-alert(deviceIsAndroid)
 $(document).ready(function () {
     if (deviceIsAndroid || deviceIsIos) {
         $(document).bind("click", function () {
             if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
-				alert('something')
                 var textBox = document.activeElement.id;
                 document.getElementById(textBox).scrollIntoView();
             }
@@ -550,9 +580,8 @@ $(document).ready(function () {
     }
 });
 $("input").bind("click", function () {
-		alert('something after click')
     var textBox = document.activeElement.id;
-    document.getElementById(textBox).scrollIntoView(); 
+    document.getElementById(textBox).scrollIntoView();
 });
 
 */

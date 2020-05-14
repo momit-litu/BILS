@@ -1,7 +1,12 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" fa fa-file-text "></i>
-		Survey
+		{{__('app.Survey')}}
+		
 		<div class="panel-tools">			
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('survey')">
 				<i class="fa fa-refresh"></i>
@@ -19,7 +24,7 @@
 <script src="{{-- asset('assets/js/bils/admin/user.js')--}}"></script>
 <script>
 $(document).ready(function(){
-	alert("survey")
+	//alert("survey")
 });
 </script>
 

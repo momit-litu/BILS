@@ -356,11 +356,14 @@ class FrontEndController extends Controller
         $group_id               =$_POST['group_id'];
         $app_user_id_load_msg 	= $user_info['id'];
         $page_no 				= $_POST['page_no'];
-        $limit 					= 8;// $_POST['limit'];
+        $limit 					= $_POST['limit'];
         $message_load_type		= $_POST['message_load_type'];
         $last_message_id	= $_POST['last_message_id'];
         $start = ($page_no*$limit)-$limit;
         $end   = $limit;
+
+
+    //return $start;
 
 /*echo DB::table('message_masters as mm')
                 ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
@@ -391,6 +394,7 @@ class FrontEndController extends Controller
                 ->offset($start)
                 ->limit($end)
 				->toSql();die;*/
+
 
 
 

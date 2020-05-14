@@ -1,8 +1,14 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" fa fa-file-text "></i>
-		Publication
+		{{__('app.Publication')}}
+		
 		<form class="sidebar-search">
 			<div class="form-group">
 				<input type="text" placeholder="Start Searching..." data-default="130" style="width: 130px;">

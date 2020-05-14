@@ -1,4 +1,7 @@
-
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
 
 <div class="panel panel-default border-none ">
 	<div class="panel-heading">
@@ -145,9 +148,9 @@ if(localStorage.getItem('is_group_message')){
                             }
                             html += '<li class="sent_msg message_li" id="sent_message_id_'+message['id']+'">';
 
-                            if($.trim(message['app_user_image']) == "null" || $.trim(message['app_user_image']) == ""  ) app_user_image = "no-user-image.png";
-                            else  									 	app_user_image = message['app_user_image'];
-                            html += '<img style="width:25px;height:25px; cursor:pointer" title="'+message['app_user_image']+'" src="'+app_user_profile_url+'/{{ \Auth::guard('appUser')->user()->user_profile_image }}" alt="" />'
+                            if(("{{ \Auth::guard('appUser')->user()->user_profile_image }}") == ""  ) app_user_image = "no-user-image.png";
+                            else  									 	app_user_image = "{{ \Auth::guard('appUser')->user()->user_profile_image }}";
+                            html += '<img style="width:25px;height:25px; cursor:pointer" title="'+message['app_user_image']+'" src="'+app_user_profile_url+'/'+app_user_image+'" alt="" />'
 							html += '<div class="right p_div">';
                             if (message["app_user_message"]!=null && message["app_user_message"]!="") {
                                 //alert('<div class="right p_div">'+message["admin_message"]+'</div>')
@@ -203,7 +206,7 @@ if(localStorage.getItem('is_group_message')){
 
                             if (message["app_user_message"]!=null && message["app_user_message"]!="") 	tem_msg = "'"+message['app_user_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
                             else      tem_msg = "";
-                            html += '<span class="time_date_sent">'+mc+' '+msg_date+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
+                            html += '<span class="time_date_sent">'+mc+' '+msg_date+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove clip-user-4 circle-icon-message circle-bricky"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil  circle-icon-message circle-green"></i></a></span>';
                         }
                         //else if( (message["admin_id"] != null && message["admin_id"] != "" ) && ((message["admin_message"]!=null && message["admin_message"]!="") || ( message["is_attachment"]!=""&& message["is_attachment"]!=null )) ){
                         else{
@@ -258,7 +261,7 @@ if(localStorage.getItem('is_group_message')){
 
                             if (message["admin_message"]!=null && message["admin_message"]!="") 	tem_msg = "'"+message['admin_message'].replace(/<(?!br\s*\/?)[^>]+>/g, '')+"'";
                             else      tem_msg = "";
-                            html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply"></i></a>'+msg_date+' '+mc+'</span>';
+                            html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply circle-icon-message circle-teal"></i></a>'+msg_date+' '+mc+'</span>';
                             html += '</li>';
                         }
                         message_body = html+message_body;
@@ -290,7 +293,9 @@ if(localStorage.getItem('is_group_message')){
                         //$(".message_div").animate({ scrollTop: $(document).height() }, "fast");
                         /*---------------work on above line-------------*/
                         var html_tag = $(".message_body");
-                        html_tag.prepend(message_body);
+                       // html_tag.prepend(message_body);
+                        $(".message_body").html(message_body+html_tag);
+
                         current_page_no++;
                     }
                     last_message_id = message_id;

@@ -29,7 +29,7 @@ class CoursesController extends Controller
         $description = \Request::route()->getAction();
         $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
     }
-	
+
 	public function index()
     {
         $data['page_title'] = $this->page_title;
@@ -55,7 +55,7 @@ class CoursesController extends Controller
     }
 
     //Course Entry And Update
-    public function courseEntryUpdate(Request $request){ 
+    public function courseEntryUpdate(Request $request){
         $rule = [
             'course_title' => 'Required|max:100',
         ];
@@ -73,35 +73,38 @@ class CoursesController extends Controller
             $from_user_type = 'Admin';
             $to_user_type = 'App User';
             /*----- For notification -----*/
-            
-            
-                
+
+
+
             try{
                 DB::beginTransaction();
                 $pub_status = ($request->pub_status =="")?'0':'1';
 
+                $admin_user = Auth::user()->name;
+
+                $column_value = [
+                    'course_title'=>$request->course_title,
+                    'course_code'=>$request->course_code,
+                    'details'=>$request->details,
+                    'duration'=>$request->duration,
+                    'course_type'=>$request->course_type,
+                    'appx_start_time'=>$request->appx_start_time,
+                    'appx_end_time'=>$request->appx_end_time,
+                    'act_start_time'=>$request->act_start_time,
+                    'act_end_time'=>$request->act_end_time,
+                    'pub_status'=>$pub_status,
+                    'course_status'=>$request->course_status,
+                    'payment_fee'=>$request->payment_fee,
+                    'payment_method'=>$request->payment_method,
+                    'course_teacher'=>$request->course_teacher,
+                    'discount_message'=>$request->discount_message,
+                    'perticipants_limit'=>$request->perticipants_limit,
+                ];
+
                 ##Entry
                 if ($request->course_edit_id == '') {
-                    $created_by = Auth::user()->name;
-                    $column_value = [
-                        'course_title'=>$request->course_title,
-                        'course_code'=>$request->course_code,
-                        'details'=>$request->details,
-                        'duration'=>$request->duration,  
-                        'course_type'=>$request->course_type,   
-                        'appx_start_time'=>$request->appx_start_time,   
-                        'appx_end_time'=>$request->appx_end_time,   
-                        'act_start_time'=>$request->act_start_time,   
-                        'act_end_time'=>$request->act_end_time,   
-                        'created_by'=>$created_by,
-                        'pub_status'=>$pub_status,
-                        'course_status'=>1,
-                        'payment_fee'=>$request->payment_fee,
-                        'payment_method'=>$request->payment_method,
-                        'course_teacher'=>$request->course_teacher,
-                        'discount_message'=>$request->discount_message,
-                        'perticipants_limit'=>$request->perticipants_limit,
-                    ];
+                    $column_value['$created_by']=$admin_user;
+
                     $response = CourseMaster::create($column_value);
 
                     if($pub_status=='1'){
@@ -122,63 +125,22 @@ class CoursesController extends Controller
                                 'from_user_type'=>$from_user_type,
                                 'to_id'=>$perticipant_id['id'],
                                 'to_user_type'=>$to_user_type,
-                                'notification_title'=>'BILS Initiate '.$request->course_title.' Course',
+                                'notification_title'=>'BILS initiated a new course',
+                                'message'=>'BILS created a new course entitle: '.$request->course_title,
                                 'view_url'=>'course/'.$course_id,
+                                'module_id'=>7,
+                                'module_reference_id'=>$response['id']
                             ];
                             $res1 = Notification::create($column_value1);
                         }
                     }
-                    
-                    /*if (isset($app_user_group)&& $app_user_group!="") {
-                        foreach ($app_user_group as $row) {
-                            $to_user_id = AppUserGroupMember::distinct()
-                                            ->select('app_user_id')
-                                            ->where('group_id',$row)
-                                            ->groupBy('app_user_id')
-                                            ->get();
-
-                            foreach ($to_user_id as $k) {
-                                
-                                $to_id = $k['app_user_id'];
-                                $column_value = [
-                                    'from_id'=>$from_id,
-                                    'from_user_type'=>$from_user_type,
-                                    'to_id'=>$to_id,    
-                                    'to_user_type'=>$to_user_type,  
-                                    'notification_title'=>$notification_title,  
-                                    'message'=>$message,    
-                                ];
-                                $response = Notification::create($column_value);
-                            }
-                        }
-                    }*/
-
 
                 }
                 ##Update
                 else{
                     $updated_by = Auth::user()->name;
-                    $column_value = [
-                        'course_title'=>$request->course_title,
-                        'course_code'=>$request->course_code,
-                        'details'=>$request->details,
-                        'duration'=>$request->duration,  
-                        'course_type'=>$request->course_type,   
-                        'appx_start_time'=>$request->appx_start_time,   
-                        'appx_end_time'=>$request->appx_end_time,   
-                        'act_start_time'=>$request->act_start_time,   
-                        'act_end_time'=>$request->act_end_time,   
-                        'updated_by'=>$updated_by,
-                        'pub_status'=>$pub_status,
-                        'course_status'=>$request->course_status,
-                        'payment_fee'=>$request->payment_fee,
-                        'payment_method'=>$request->payment_method,
-                        'course_teacher'=>$request->course_teacher,
-                        'discount_message'=>$request->discount_message,
-                        'perticipants_limit'=>$request->perticipants_limit,
-                    ];
+                    $column_value['updated_by']=$admin_user;
 
-                   
 
                     $data_check = CourseMaster::find($request->course_edit_id);
 
@@ -211,7 +173,7 @@ class CoursesController extends Controller
                      }
 
 
-                    
+
                     $data = CourseMaster::find($request->course_edit_id);
                     $data->update($column_value);
 
@@ -221,7 +183,7 @@ class CoursesController extends Controller
                     if($data_check['course_status']!='2'){
 
                         if ($request->course_status=='2') {     ##Approve Course
- 
+
                             $Interested_user_id = AppUser::select('id')->get();
                             // CoursePerticipant::select('perticipant_id')
                             //                     ->where('is_interested','1')
@@ -234,9 +196,12 @@ class CoursesController extends Controller
                                     'from_user_type'=>$from_user_type,
                                     'to_id'=>$Interested_user_id['id'],
                                     'to_user_type'=>$to_user_type,
-                                    'notification_title'=>'BILS Approved '.$request->course_title.' Course',
+                                    'notification_title'=>'BILS approved a course',
+                                    'message'=>'BILS approved the course entitle: '.$request->course_title,
                                     'view_url'=>'course/'.$request->course_edit_id,
-                                    
+                                    'module_id'=>7,
+                                    'module_reference_id'=>$request->course_edit_id,
+
                                 ];
                                 $res2 = Notification::create($column_value4);
                             }
@@ -258,9 +223,12 @@ class CoursesController extends Controller
                                     'from_user_type'=>$from_user_type,
                                     'to_id'=>$Interested_user_id['perticipant_id'],
                                     'to_user_type'=>$to_user_type,
-                                    'notification_title'=>'BILS Rejected '.$request->course_title.' Course',
+                                    'notification_title'=>'BILS rejected a course which you are interested in',
+                                    'message'=>'BILS rejected the course entitle: '.$request->course_title,
                                     'view_url'=>'course/'.$request->course_edit_id,
-                                    
+                                    'module_id'=>7,
+                                    'module_reference_id'=>$request->course_edit_id,
+
                                 ];
                                 $res2 = Notification::create($column_value4);
                             }
@@ -282,9 +250,10 @@ class CoursesController extends Controller
                                     'from_user_type'=>$from_user_type,
                                     'to_id'=>$Interested_user_id['perticipant_id'],
                                     'to_user_type'=>$to_user_type,
-                                    'notification_title'=>'BILS Started '.$request->course_title.' Course',
+                                    'notification_title'=>'BILS started a course which you are interested in',
+                                    'message'=>'BILS Started the course entitle: '.$request->course_title,
                                     'view_url'=>'course/'.$request->course_edit_id,
-                                    
+
                                 ];
                                 $res2 = Notification::create($column_value4);
                             }
@@ -306,18 +275,15 @@ class CoursesController extends Controller
                                     'from_user_type'=>$from_user_type,
                                     'to_id'=>$Interested_user_id['perticipant_id'],
                                     'to_user_type'=>$to_user_type,
-                                    'notification_title'=>'BILS Completed '.$request->course_title.' Course',
+                                    'notification_title'=>'BILS completed a course which you are interested in',
+                                    'message'=>$request->course_title.'has been completed',
                                     'view_url'=>'course/'.$request->course_edit_id,
-                                    
+
                                 ];
                                 $res2 = Notification::create($column_value4);
                             }
                         }
                     }
-
-
-
-
                 }
                 DB::commit();
                 $return['result'] = "1";
@@ -348,7 +314,7 @@ class CoursesController extends Controller
             $teacher = Teacher::select('name')->where('id', $data->course_teacher)->first();
             $data['course_teacher'] = $teacher['name'];
 
-            $data['pub_status']=($data->pub_status == 1)?"<button class='btn btn-xs btn-success' disabled>Published</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-published</button>";       
+            $data['pub_status']=($data->pub_status == 1)?"<button class='btn btn-xs btn-success' disabled>Published</button>":"<button  class='btn btn-xs btn-danger' disabled>Not-published</button>";
             if($data->course_status==1){
                 $data['course_status'] = "<button class='btn btn-xs btn-warning' disabled>Initiate</button>";
             }
@@ -364,7 +330,7 @@ class CoursesController extends Controller
             else if($data->course_status==5){
                 $data['course_status'] = "<button class='btn btn-xs btn-success' disabled>Completed</button>";
             }
-            
+
             $data['actions']=" <button title='View' onclick='course_view(".$data->id.")' id='view_" . $data->id . "' class='btn btn-xs btn-primary' ><i class='clip-zoom-in'></i></button>";
 
             if($edit_permisiion>0){
@@ -457,7 +423,7 @@ class CoursesController extends Controller
 
 
 
-                          
+
         return json_encode(array(
             "perticipantsList"=>$perticipantsList,
             "registeredList"=>$registeredList,
@@ -516,7 +482,7 @@ class CoursesController extends Controller
     }
 
     public function getCourseSummery(Request $request){
-        
+
         $summary_data = CourseMaster::whereBetween('appx_start_time',[$request->date_from, $request->date_to])->get();
 
         $data=[];
@@ -537,7 +503,7 @@ class CoursesController extends Controller
                         ->count();
 
             $value['selected']=$selected;
-           
+
             $data[]=$value;
         }
 
@@ -615,7 +581,7 @@ class CoursesController extends Controller
     ## Auto complete
     public function loadTeacherName(){
         $name = $_REQUEST['term'];
-        
+
         $data = Teacher::select('id', 'name', 'email', 'contact_no')
                 ->where('name','like','%'.$name.'%')
                 ->orwhere('email','like','%'.$name.'%')
@@ -627,7 +593,7 @@ class CoursesController extends Controller
             foreach ($data as $row) {
                 $json[] = array('id' => $row["id"],'label' => $row["name"]." (".$row["email"].", ".$row["contact_no"].")",'name'=>$row["name"] );
             }
-        } 
+        }
         else {
             $json[] = array('id' => "0",'label' => "Not Found !!!");
         }

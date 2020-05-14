@@ -1,7 +1,12 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" clip-notification-2 "></i>
-		Notice
+		{{__('app.Notice')}} 
 		<form class="sidebar-search">
 			<div class="form-group">
 				<input type="text" id="search_field" placeholder="Start Searching..." data-default="130" style="width: 130px;">

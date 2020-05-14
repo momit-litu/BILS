@@ -1,6 +1,9 @@
 @extends('frontend.auth.layout.login-master')
 @section('login-content')
-
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
 
         <h5>{{__('auth.forget_password')}}</h5>
         <p>

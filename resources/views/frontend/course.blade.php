@@ -1,3 +1,8 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 <style>
 .swiper-container {
   width: 100%;
@@ -24,7 +29,7 @@
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" fa fa-file-text "></i>
-		Course
+		{{__('app.Course')}}
 		<div class="panel-tools">			
 			<a class="btn btn-xs btn-link panel-refresh" href="#" onclick="pageLoad('course')">
 				<i class="fa fa-refresh"></i>

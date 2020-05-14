@@ -1,5 +1,10 @@
 @extends('frontend.auth.layout.login-master')
 @section('login-content')
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 	<h4><strong>{{__('auth.registration')}}</strong></h4>        
 	<p>
 		{{__('auth.reg_page_details')}}

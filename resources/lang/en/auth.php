@@ -53,5 +53,22 @@ return [
 	"Back" => "Back",
 	"Submit" => "Submit",
 	
+	"Download_Documnet" => 'Download Documnet'
+	"Notice_Details" =>'Notice Details',
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	"Back" => "Back",
+	
+	
+	
 
 ];

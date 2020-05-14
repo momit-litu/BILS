@@ -1,16 +1,10 @@
 @extends('frontend.auth.layout.login-master')
 @section('login-content')
 @php
-	if(\Session::get('locale') == 'en') \App::setLocale('en');
-	else 							    \App::setLocale('bn');
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
 @endphp
-
         <h4><strong>{{__('auth.sign-up')}}</strong></h4>
-			<h1>@lang('auth.sign-up')</h1>
-			
-				{{Lang::locale()}}
-				{{\Session::get('locale')}}
-				
         <p>
             {{__('auth.signin_details')}}
         </p>

@@ -67,6 +67,7 @@ return [
     'Unread' => 'Unread',
     'Group' => 'Group',
     'None' => 'None',
+	'Menu' => 'Menu',
     'Message' => 'Message',
     'Message' => 'Message',
     'Message' => 'Message',

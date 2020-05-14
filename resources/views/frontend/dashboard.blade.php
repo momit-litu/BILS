@@ -1,8 +1,13 @@
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
 
 	<div class="panel panel-default border-none">
 		<div class="panel-heading which_page">
 			<i class="clip-home"></i>
-			Dashboard
+			{{__('app.Dashboard')}} 
 			<div class="panel-tools">
 				<a class="btn btn-xs btn-link panel-refresh" href="#">
 					<i class="fa fa-refresh"></i>

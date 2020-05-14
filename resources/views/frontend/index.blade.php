@@ -1,5 +1,12 @@
 @extends('frontend.layout.master')
 @section('content')
+
+@php
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+@endphp
+
+
 <div  id="load-content" >
 	<div class="panel panel-default border-none">
 		<div class="panel-heading which_page">

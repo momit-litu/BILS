@@ -11,13 +11,13 @@
                 <!-- start: NOTIFICATION DROPDOWN -->
 				
 				
-				<!--
+				
 				<li class="dropdown">
-                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
-						<span class="">EN</span>
+                    <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#" style="font-size:12px; font-weight:bold;">
+						<span class="" style="text-transform:uppercase" >{{\Session::get('locale')}}</span>
                         <i class="clip-chevron-down"></i>
 					</a>
-					<ul class="dropdown-menu">
+					<ul class="dropdown-menu" style="min-width:70px">
                        <li>
 							<a href="{{url('/app/language/en')}}">
 								EN
@@ -29,7 +29,7 @@
 							</a>
 						</li>
 					</ul>
-				</li>-->
+				</li>
                 <li class="dropdown">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#">
                         <i class="clip-notification-2"></i>
