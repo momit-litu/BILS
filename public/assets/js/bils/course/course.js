@@ -123,17 +123,17 @@ $(document).ready(function () {
                 $("#course_view_button").trigger('click');
                 $("#c_title").html("<h2>"+data['course_title']+"</h2>");
                 var status_btn = "";
-                status_btn +=(data['pub_status']=='0')?"<button class='btn  btn-danger'>Not-published</button>":"<button class='btn  btn-success'>Published</button>";
+                status_btn +=(data['pub_status']=='0')?"<button class='btn  btn-danger' disabled>Not-published</button>":"<button class='btn  btn-success' disabled>Published</button>";
                 if (data['course_status']=='1') {
-                    status_btn +=" <button class='btn  btn-warning'>Initiated</button>"
+                    status_btn +=" <button class='btn  btn-warning' disabled>Initiated</button>"
                 }else if (data['course_status']=='2') {
-                    status_btn +=" <button class='btn  btn-success'>Approved</button>"
+                    status_btn +=" <button class='btn  btn-success' disabled>Approved</button>"
                 }else if (data['course_status']=='3') {
-                    status_btn +=" <button class='btn  btn-danger'>Rejected</button>"
+                    status_btn +=" <button class='btn  btn-danger' disabled>Rejected</button>"
                 }else if (data['course_status']=='4') {
-                    status_btn +=" <button class='btn  btn-info'>Started</button>"
+                    status_btn +=" <button class='btn  btn-info' disabled>Started</button>"
                 }else if (data['course_status']=='5') {
-                    status_btn +=" <button class='btn  btn-success'>Completed</button>"
+                    status_btn +=" <button class='btn  btn-success' disabled>Completed</button>"
                 }
                 $("#status_btn").html(status_btn);
 
@@ -147,7 +147,7 @@ $(document).ready(function () {
                     left_sub += "<br><b>Payment Fee: </b>"+data['payment_fee'];
                 }
                 else{
-                   left_sub += "<br><b>Payment Fee: </b> Free Course"; 
+                   left_sub += "<br><b>Payment Fee: </b> Free Course";
                 }
                 if(data['discount_message']!=null && data['discount_message']!=""){left_sub += "<br><b>Discount Message: </b>"+data['discount_message'];}
                 $("#left_sub").html(left_sub);
@@ -157,7 +157,7 @@ $(document).ready(function () {
 
                 if(data['appx_end_time']!=null){right_sub +="<br/><b>Approximate End Time: </b>"+data['appx_end_time'];}
                 if(data['act_end_time']!=null){right_sub +="<br/><b>Actual End Time: </b>"+data['act_end_time'];}
-                
+
                 // right_sub +="<br/><b>Updated By: </b>"+data['updated_by'];
                 if(data['payment_method']!=null){right_sub +="<br/><b>Payment Method: </b>"+data['payment_method'];}
                 right_sub +="<br/><b>Course Responsible Person: </b>"+data['course_responsible_person'];
@@ -170,7 +170,7 @@ $(document).ready(function () {
                         description +="<br><b>Coordinator Profile: </b><br>"+data['remarks'];
                     }
                 }
-               
+
                 description +="<hr>"+data['details']+"<hr>";
                 $("#description").html(description);
                 global_id = id;
@@ -204,13 +204,13 @@ $(document).ready(function () {
                 var registerTotal = perticipants['registerTotal'];
                 var selectedTotal = perticipants['selectedTotal'];
                 var status_btn;
-                
-	
+
+
                 if(!jQuery.isEmptyObject(perticipants)){
                     var html='';
                     html +='<br><div class="tabbable">';
                     html +='<ul class="nav nav-tabs tab-padding tab-space-3 tab-blue" id="myTab4">';
-                    
+
                     html +='<li class="active"><a id="interested_list_button" data-toggle="tab" href="#interested_div"><b>Interested List <span class="badge badge-pill badge-warning">'+perticipantTotal+'</span></b></a></li>';
                     if(registerTotal>0){html +='<li><a id="registered_list_button" data-toggle="tab" href="#registered_div"><b>Registered List <span class="badge badge-pill badge-warning">'+registerTotal+'</span></b></a></li>';}
                     if(selectedTotal>0){html +='<li><a id="selected_list_button" data-toggle="tab" href="#selected_div"><b>Selected List <span class="badge badge-pill badge-warning">'+selectedTotal+'</span></b></a></li>';}
@@ -242,7 +242,7 @@ $(document).ready(function () {
                     html += '<table class="table table-bordered">';
                     html += '<thead><tr class="headings"><th>SL NO</th><th>Name</th><th>Email</th><th>Phone</th><th class="text-right">Payment</th><th>Payment Method</th><th>Reference No</th><th>Payment Status</th><th>Selection</th></tr></thead>';
                     var register_sl = 1;
-                    $.each(registeredList, function(i,register_row){ //style="width:10%"  style="width:35%" style="width:20%" style="width:20%" style="width:15%" 
+                    $.each(registeredList, function(i,register_row){ //style="width:10%"  style="width:35%" style="width:20%" style="width:20%" style="width:15%"
                         html += '<tr>';
                         html += '<td>'+register_sl+'</td>';
                         html += '<td>'+register_row["name"]+'</td>';
@@ -259,7 +259,7 @@ $(document).ready(function () {
                         }
                         html += '<td>'+status_btn+'</td>';
                         html += '<td>';
-                       
+
                         if(select_perticipant_permisiion>0){
                             html +=(register_row["is_selected"]=="1")?'<input class="form-control" checked value="'+register_row["cp_id"]+'"  type="checkbox" name="selected_person[]">':'<input class="form-control" value="'+register_row["cp_id"]+'"  type="checkbox" name="selected_person[]">';
                         }
@@ -324,7 +324,7 @@ $(document).ready(function () {
         var course_id = global_id;
          $.ajax({
             url: url+'/course/verify-payment/'+varify_id,
-            
+
             success: function(response){
                 perticipant_manage();
                 $("#registered_list_button").trigger('click');
@@ -389,7 +389,7 @@ $(document).ready(function () {
                 $("#payment_fee").val(data['payment_fee']);
                 $("#payment_method").val(data['payment_method']);
                 $("#perticipants_limit").val(data['perticipants_limit']);
-                
+
                 $("#discount_message").val(data['discount_message']);
                 (data['pub_status']=='0')?$("#pub_status").iCheck('uncheck'):$("#pub_status").iCheck('check');
                 $("#edit_course_status").css('display','block');
@@ -412,7 +412,7 @@ $(document).ready(function () {
         $("#clear_button").removeClass('hidden');
         $("#course_cancel_btn").addClass('hidden');
     });
-    
+
 
     // Get Course Category
     $.ajax({
@@ -524,7 +524,7 @@ $(document).ready(function () {
             });
         },
         minLength: 1,
-        select: function(event, ui) { 
+        select: function(event, ui) {
             var id = ui.item.id;
             var name = ui.item.name;
             $(this).next().val(id);

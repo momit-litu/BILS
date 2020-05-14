@@ -71,7 +71,8 @@ return [
     'Unread' => 'অপঠিত',
     'Group' => 'গ্রুপ',
     'None' => 'কিছু নাই',
+
 	'Category_Topic'=>'বিভাগ',
 	'Menu' => 'মেন্যু',
-	
+
 ];
