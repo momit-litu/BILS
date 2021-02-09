@@ -9,6 +9,6 @@ class UserGroup extends Model
     protected $table = 'user_groups';
 
     protected $fillable = [
-        'group_name','type','status',
+        'group_name','group_name_bn','type','status',
     ];
 }

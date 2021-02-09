@@ -74,78 +74,69 @@ $(document).ready(function () {
 
 
 
-    newMessages = () =>{
+    newMessages = (response) =>{
 		//alert(5555555);
-        $.ajax({
-            url: url+'/message/load-new-message',
-            type:'GET',
-            async:true,
-            success: function(response){
-                response = JSON.parse(response)
 
-
-                html = '';
-                count = 0;
-                lastMessageNotificationId = 0
-                $.each(response, function (key, value) {
-                    date = new Date(value["msg_date"]+ 'Z');
-                    msg_date = date.toLocaleString ()
-                    lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id : lastMessageNotificationId;
-                    count++;
-                    //alert(value.group_name)
-                    if(value.group_name) {
-                        //alert(1)
-                        user = value.app_user_name+' ('+value.group_name+')'
-                    }
-                    else {
-                        user = value.app_user_name
-                    }
-                    //alert(app_user_id+'>>'+group_id+'>>'+category_id)
-                    if(value.app_user_message==null){
-                        message = 'You have a new Attachment'
-                    }
-                    else {
-                        message = (value.app_user_message).substr(0, 40)+'. . .'
-                    }
-
-                    html +='<li> ' +
-                        '       <a href="#">' +
-                        '           <div class="clearfix" onclick="viewMessage('+value.app_user_id+','+ value.group_id+','+value.category_id+')">' +
-                        '               <div class="thread-image">' +
-                        '                   <img alt="" src="'+url+'/assets/images/user/app_user/'+value.user_profile_image+'" style="height: 50px; width: 40px"> ' +
-                        '               </div> ' +
-                        '               <div class="thread-content"> ' +
-                        '                   <span class="author">'+user+'</span> ' +
-                        '                   <span class="preview">'+message+'</span> ' +
-                        '                   <span class="time">'+msg_date+'</span>' +
-                        '               </div> ' +
-                        '           </div>' +
-                        '        </a>' +
-                        '   </li>'
-
-                })
-
-                if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
-                    document.getElementById("myAudio").play();
-                    localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
-                }else  if(lastMessageNotificationId>0) {
-                    if(!localStorage.getItem('lastMessageNotificationId')) {
-                        document.getElementById("myAudio").play();
-                    }
-
-                    localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
-                }
-
-                $('#badge').html(count)
-                $('#message_top_unread').html('You have total '+count+' unread message')
-                $('#message_header').html(html)
-                //console.log(response)
-
+        html = '';
+        count = 0;
+        lastMessageNotificationId = 0
+        $.each(response, function (key, value) {
+            date = new Date(value["msg_date"]+ 'Z');
+            msg_date = date.toLocaleString ()
+            lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id : lastMessageNotificationId;
+            count++;
+            //alert(value.group_name)
+            if(value.group_name) {
+                //alert(1)
+                user = value.app_user_name+' ('+value.group_name+')'
             }
+            else {
+                user = value.app_user_name
+            }
+            //alert(app_user_id+'>>'+group_id+'>>'+category_id)
+            if(value.app_user_message==null){
+                message = 'You have a new Attachment'
+            }
+            else {
+                message = (value.app_user_message).substr(0, 40)+'. . .'
+            }
+            var app_user_image = (value.user_profile_image!="")?value.user_profile_image:'no-user-image.png';
+            html +='<li> ' +
+                '       <a href="#">' +
+                '           <div class="clearfix" onclick="viewMessage('+value.app_user_id+','+ value.group_id+','+value.category_id+')">' +
+                '               <div class="thread-image">' +
+                '                   <img alt="" src="'+url+'/assets/images/user/app_user/'+app_user_image+'" style="height: 50px; width: 40px"> ' +
+                '               </div> ' +
+                '               <div class="thread-content"> ' +
+                '                   <span class="author">'+user+'</span> ' +
+                '                   <span class="preview">'+message+'</span> ' +
+                '                   <span class="time">'+msg_date+'</span>' +
+                '               </div> ' +
+                '           </div>' +
+                '        </a>' +
+                '   </li>'
+
         })
-        set_message_time_out_fn()
+
+        //alert(localStorage.getItem('lastMessageNotificationId'))
+        //alert(lastMessageNotificationId)
+        if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
+            document.getElementById("myAudio").play();
+            localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+        }else if(lastMessageNotificationId>0) {
+            if(!localStorage.getItem('lastMessageNotificationId')) {
+                document.getElementById("myAudio").play();
+            }
+            localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+        }
+
+        $('#badge').html(count)
+        $('#message_top_unread').html('You have total '+count+' unread message')
+        $('#message_header').html(html)
+        //console.log(response)
+
+
     }
-    newMessages()
 
     view_notification = (id) =>{
         $.ajax({
@@ -169,12 +160,11 @@ $(document).ready(function () {
             async:true,
             success: function(response){
                 response = JSON.parse(response)
-
-
+                newMessages(response['message'])
                 html = '';
                 count = 0;
                 notificationId = 0;
-                $.each(response, function (key, value) {
+                $.each(response['notification'], function (key, value) {
                     date = new Date(value["created_at"]+ 'Z');
                     created_at = date.toLocaleString ()
                     notificationId = notificationId<value.id? value.id : notificationId
@@ -199,11 +189,11 @@ $(document).ready(function () {
                 })
 
                 if(localStorage.getItem('lastNotificationId')<notificationId){
-                    document.getElementById("lastMessageNotificationId").play();
+                    document.getElementById("myAudio").play();
                     localStorage.setItem('lastNotificationId',notificationId)
                 }else  if(notificationId>0) {
                     if(!localStorage.getItem('lastNotificationId')){
-                        document.getElementById("lastMessageNotificationId").play();
+                        document.getElementById("myAudio").play();
                     }
 
                     localStorage.setItem('lastNotificationId',notificationId)
@@ -218,11 +208,5 @@ $(document).ready(function () {
         set_notification_time_out_fn()
     }
     loadNotifications()
-
-
-
-
-
-
 })
 

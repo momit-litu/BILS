@@ -254,7 +254,14 @@ class PublicationController extends Controller
 	}
 	//Publication category
 	public function publicationTypeList(){
-		$data = PublicationCategory::where('status','1')->get();
+		//$data = PublicationCategory::where('status','1')->get();
+		$data = DB::table('publication_categories')
+            ->where ('status',1)
+            ->select('id', DB::raw(
+                'concat(category_name," ",ifnull(category_name_bn,"")) as category_name'
+            ))
+            ->get();
+
 		return json_encode($data);
 	}
 

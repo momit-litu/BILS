@@ -11,4 +11,5 @@ class SurveyParticipatent extends Model
     protected $fillable = [
         'app_user_id','survey_id','answer_date','survey_completed',
     ];
+
 }

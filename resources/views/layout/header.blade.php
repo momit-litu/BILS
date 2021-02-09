@@ -9,7 +9,7 @@
             <!-- end: RESPONSIVE MENU TOGGLER -->
             <!-- start: LOGO -->
 
-            <a class="navbar-brand" href="javascript:void(0)">
+            <a class="navbar-brand" href="{{ url('dashboard')}}">
                 <span class="text-shadow" style="color: #fff"> <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>  {{$site_settings['short_name']}}</span>
             </a>
             <!-- end: LOGO -->
@@ -42,7 +42,7 @@
                             </div>
                         </li>
                         <li class="view-all">
-                            <a href="{{url('/notification')}}" >
+                            <a href="{{url('/notification/notification-view')}}" >
                                 See all notifications <i class="fa fa-arrow-circle-o-right"></i>
                             </a>
                         </li>

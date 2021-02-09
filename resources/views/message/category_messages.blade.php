@@ -157,36 +157,41 @@
         var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
         var admin_image_url = "<?php echo asset('assets/images/user/admin'); ?>";
 
-        $.ajax({
-            url: url+"/message/get-message-category",
-            success: function(response){
-                var response = JSON.parse(response);
-                if(!jQuery.isEmptyObject(response)){
-                    var html = '<div class="msg_auto_load">';
-                    $.each(response, function(i,row){
+       loadCategory= ()=>{
+           $.ajax({
+               url: url+"/message/get-message-category",
+               success: function(response){
+                   var response = JSON.parse(response);
+                   if(!jQuery.isEmptyObject(response)){
+                       var html = '<div class="msg_auto_load">';
+                       $.each(response, function(i,row){
 
-                        html+='<li onclick="loadCategoryMessage(1,'+row["id"]+')" class="contact ">';
-                        html+='<div class="wrap">';
+                           //html+='<li onclick="loadCategoryMessage(1,'+row["id"]+')" class="contact ">';
+                           html+='<li onclick="loadCategoryMessage(1,'+row["id"]+')" class="contact border-bottom-message">';
+                           html+='<div class="wrap">';
+                           html+='<div class="meta">';
+                           html+='<p class="name">'+row["category_name"]+'</p>';
+                           html+='</div>';
+                           html+='</div>';
+                           html+='</li>';
+                           html+='</div>';
 
+                       });
+                   }
+                   $("#category_show").html(html);
+               }
+           });
 
-                        html+='<img src="'+app_user_profile_url+'/no-user-image.png" alt="" />';
+       }
+        loadCategory ()
 
-                        html+='<div class="meta">';
-                        html+='<p class="name">'+row["category_name"]+'</p>';
-                        //html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
-                        html+='</div>';
-                        html+='</div>';
-                        html+='</li>';
-                        html+='</div>';
-
-                    });
-                }
-                $("#category_show").html(html);
-            }
-        });
 
 
         $("#search_message_category").keyup(function(){
+            if($("#search_message_category").val()=='' ){
+                loadCategory ()
+                return false;
+            }
 
             key = $('#search_message_category').val()
             $.ajax({

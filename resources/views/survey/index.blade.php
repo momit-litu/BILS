@@ -209,7 +209,7 @@
                                                         <div class="col-md-7">
                                                             <label class="control-label col-md-2 col-sm-2 col-xs-12">Question Title<span class="required">*</span></label>
                                                             <div class="col-md-10 col-sm-10 col-xs-12">
-																<textarea class="summernote form-control"  id="question" name="question" cols="10" rows="4"></textarea>
+																<textarea class="form-control"  id="question" name="question" cols="10" rows="4"></textarea>
                                                                 <input type="hidden" name="question_id" id="question_id">
                                                             </div>
                                                         </div>

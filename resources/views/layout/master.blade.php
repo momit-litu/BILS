@@ -293,6 +293,7 @@
 
 
 
+
 <!-- end: FOOTER -->
 <!-- start: MAIN JAVASCRIPTS -->
 <!--[if lt IE 9]>
@@ -301,62 +302,62 @@
 <script type="text/javascript" src="{{ asset('assets/plugins/jQuery-lib/1.10.2/jquery.min.js') }}"></script>
 <![endif]-->
 <!--[if gte IE 9]><!-->
-<script src="{{ asset('assets/plugins/jQuery-lib/2.0.3/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/jQuery-lib/2.0.3/jquery.min.js') }}"></script>
 <!--<![endif]-->
-<script src="{{ asset('assets/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/jquery-ui.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets/plugins/DataTables/media/js/jquery.dataTables.min.js')}}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('js/jquery-ui.js')}}"></script> 
+<script type="text/javascript" type="text/javascript" src="{{asset('assets/plugins/DataTables/media/js/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/plugins/DataTables/media/js/DT_bootstrap.js')}}"></script>
-<script src="{{asset('assets/js/table-data.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/js/table-data.js')}}"></script>
 
-<script src="{{ asset('assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/blockUI/jquery.blockUI.js') }}"></script>
-<script src="{{ asset('assets/plugins/iCheck/jquery.icheck.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/perfect-scrollbar/src/jquery.mousewheel.js') }}"></script>
-<script src="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.js') }}"></script>
-<script src="{{ asset('assets/plugins/less/less-1.5.0.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/jquery-cookie/jquery.cookie.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js') }}"></script>
-<script src="{{ asset('assets/js/main.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/blockUI/jquery.blockUI.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/iCheck/jquery.icheck.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/perfect-scrollbar/src/jquery.mousewheel.js') }}"></script>
+<script  type="text/javascript" src="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/less/less-1.5.0.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/jquery-cookie/jquery.cookie.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/main.js') }}"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 
-<script src="{{ asset('assets/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}"></script>
-<script src="{{ asset('assets/js/ui-modals.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/bootstrap-modal/js/bootstrap-modalmanager.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/js/ui-modals.js') }}"></script>
 
-<script src="{{ asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+<script type="text/javascript" src="{{ asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 
 <!--sweetlertJs-->
-<script src="{{asset('assets/plugins/sweetalert/sweetalert2.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('assets/plugins/sweetalert/sweetalert2.min.js')}}"></script>
 
-<script src="{{ asset('assets/plugins/jquery-inputlimiter/jquery.inputlimiter.1.3.1.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/autosize/jquery.autosize.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js') }}"></script>
-<script src="{{ asset('assets/plugins/jquery-maskmoney/jquery.maskMoney.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/commits.js') }}"></script>
-<script src="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
-<script src="{{ asset('assets/js/summernote.js') }}"></script>
-<script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
-<script src="{{ asset('assets/plugins/ckeditor/adapters/jquery.js') }}"></script>
-<script src="{{ asset('assets/js/form-elements.js') }}"></script>
-<script src="{{ asset('assets/js/jquery.jgrowl.min.js') }}"></script>
-<script src="{{ asset('assets/js/bootbox.min.js') }}"></script>
-<script src="{{ asset('assets/js/jquery-sortable-min.js') }}"></script>
-<script src="{{ asset('assets/js/underscore.js')}}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/jquery-inputlimiter/jquery.inputlimiter.1.3.1.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/autosize/jquery.autosize.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/jquery-maskmoney/jquery.maskMoney.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-colorpicker/js/commits.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/summernote.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/plugins/ckeditor/adapters/jquery.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/form-elements.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/jquery.jgrowl.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/bootbox.min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/jquery-sortable-min.js') }}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/underscore.js')}}"></script>
 
-<!--<script src="{{ asset('js/notify.js')}}"></script>-->
+<!--<script type="text/javascript"  src="{{ asset('js/notify.js')}}"></script>-->
 
-<script src="{{ asset('assets/js/datatables.min.js')}}"></script>
-<script src="{{ asset('assets/js/dropzone.js')}}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/datatables.min.js')}}"></script>
+<script type="text/javascript"  src="{{ asset('assets/js/dropzone.js')}}"></script>
 <script src="{{ asset('assets/js/image-uploader.min.js')}}"></script>
 <script src="{{ asset('assets/js/jquery-editable-poshytip.min.js')}}"></script>
 <script src="{{ asset('assets/js/jquery.poshytip.min.js')}}"></script>

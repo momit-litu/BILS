@@ -8,7 +8,7 @@
 	<div class="panel-heading">
 		<i class=" fa fa-file-text "></i>
 		{{__('app.Publication')}}
-		
+
 		<form class="sidebar-search">
 			<div class="form-group">
 				<input type="text" placeholder="Start Searching..." data-default="130" style="width: 130px;">
@@ -55,8 +55,15 @@
             url: "{{ url('app/')}}/load-publications-details/"+id,
             type: 'get',
             async: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
             success: function (response) {
                 //console.log(response)
+                $('#load-content').unblock();
 
                 response = JSON.parse(response)
                 date = new Date(response[0]["created_at"]+ 'Z');
@@ -68,7 +75,7 @@
 
                 if(response[0]['attachment']){
                     //attachment = attachment_url+'/'+response[0]['attachment'];
-                    attachment = "<br>"+publication+ '<br><a class="btn btn-disabled btn-warning" href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment"></i></a>'
+                    attachment = "<br>"+publication+ '<br><a class="btn btn-disabled btn-warning" href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment">{{__("app.download_file")}}</i></a>'
                 }
 
                 $('#modal_title_content').html(response[0]['title'] +''+attachment);
@@ -92,9 +99,16 @@
         $.ajax({
             url: "{{ url('app/')}}/load-publications/"+page+'/'+text,
             type:'get',
-            async:false,
+            async:true,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
             success: function(response) {
+                $('#load-content').unblock();
+
                 var response = JSON.parse(response);
+                console.log(response)
                 if(!jQuery.isEmptyObject(response)){
                     html = "";
                     noticeMonth = -1
@@ -112,7 +126,7 @@
 
                         var details = publication["details"].replace(/<(?!br\s*\/?)[^>]+>/g, '');
                         var details = details.substring(0, 300)+'. . . . . . . .';
-						
+
                        // alert(publication['title'])
 
                         html+='<li> ' +
@@ -133,11 +147,12 @@
                     //console.log(html)
                     if(type==2){
                         $('#all_publications').append(html);
-						 page ++ ;
                     }
                     else{
                         $('#all_publications').html(html)
                     }
+                    page ++ ;
+
                     //$('#all_publications').html(html)
                 }
             }

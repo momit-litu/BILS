@@ -5,11 +5,11 @@
     else 							    \App::setLocale('bn');
 @endphp
 
-	<h4><strong>{{__('auth.registration')}}</strong></h4>        
+	<h4><strong>{{__('auth.registration')}}</strong></h4>
 	<p>
 		{{__('auth.reg_page_details')}}
 	</p>
-	<form method="POST" action="{{ url('app/auth/post/register') }}">
+	<form class="form-register"  method="POST" action="{{ url('app/register_verify') }}">
 		@csrf
 		@if($errors->count() > 0 )
 			<div class="alert alert-danger btn-squared">
@@ -40,19 +40,30 @@
 			<div class="form-group">
 				<span class="input-icon">
 					<input id="name" type="text"  placeholder="{{ __('auth.name') }}" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-					<i class="fa fa-user"></i> 
-				</span>					
+					<i class="fa fa-user"></i>
+				</span>
 				@error('name')
 					<span class="invalid-feedback" role="alert">
 						<strong>{{ $message }}</strong>
 					</span>
 				@enderror
 			</div>
+            <div class="form-group">
+				<span class="input-icon">
+					<input id="contact_no" type="mobile" placeholder="{{ __('auth.mobile') }}" class="form-control @error('contact_no') is-invalid @enderror" name="contact_no" value="{{ old('contact_no') }}" required autocomplete="contact_no">
+					<i class="fa fa-envelope"></i>
+				</span>
+                @error('contact_no')
+                <span class="invalid-feedback" role="alert">
+						<strong>{{ $message }}</strong>
+					</span>
+                @enderror
+            </div>
 			<div class="form-group">
 				<span class="input-icon">
-					<input id="email" type="email" placeholder="{{ __('auth.email') }}" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-					<i class="fa fa-envelope"></i> 
-				</span>			
+					<input id="email" type="email" placeholder="{{ __('auth.email') }}" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" autocomplete="email">
+					<i class="fa fa-envelope"></i>
+				</span>
 				@error('email')
 					<span class="invalid-feedback" role="alert">
 						<strong>{{ $message }}</strong>
@@ -62,8 +73,8 @@
 			<div class="form-group">
 				<span class="input-icon">
 					<input id="password" type="password" placeholder="{{ __('auth.password') }}" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-					<i class="fa fa-lock"></i> 
-				</span>			
+					<i class="fa fa-lock"></i>
+				</span>
 				@error('password')
 					<span class="invalid-feedback" role="alert">
 						<strong>{{ $message }}</strong>
@@ -72,9 +83,9 @@
 			</div>
 			<div class="form-group">
 				<span class="input-icon">
-					<input id="password-confirm" type="password"  placeholder="{{ __('auth.confirm_password') }}" class="form-control" name="repeat_password" required autocomplete="new-password">
-					<i class="fa fa-lock"></i> 
-				</span>			
+					<input id="repeat_password" type="password"  placeholder="{{ __('auth.confirm_password') }}" class="form-control" name="repeat_password" required autocomplete="new-password">
+					<i class="fa fa-lock"></i>
+				</span>
 				@error('password-confirm')
 					<span class="invalid-feedback" role="alert">
 						<strong>{{ $message }}</strong>
@@ -82,18 +93,18 @@
 				@enderror
 			</div>
 			<div class="form-actions">
-				<button type="submit" class="btn btn-primary pull-right btn-squared">
+				<button type="submit" class="btn btn-primary pull-right btn-squared registerButton">
 					{{ __('auth.Register') }} <i class="fa fa-arrow-circle-right"></i>
 				</button>
             </div>
 			<div class="new-account">
 				{{__('auth.have_accout')}}
 				<a href="{{url('app/login')}}" class="register">
-					{{__('auth.Login')}} 
+					{{__('auth.Login')}}
 				</a>
 			</div>
 		</fieldset>
 	</form>
 
-
 @endsection
+

@@ -50,7 +50,13 @@ class CoursesController extends Controller
     }
 
     public function getCategories(){
-        $data = CourseCategory::select('id','category_name')->get();
+        //$data = CourseCategory::select('id','category_name')->get();
+        $data = DB::table('course_categories')
+            ->where ('status',1)
+            ->select('id', DB::raw(
+                'concat(category_name," ",ifnull(category_name_bn,"")) as category_name'
+            ))
+            ->get();
         return json_encode($data);
     }
 
@@ -379,15 +385,15 @@ class CoursesController extends Controller
         $perticipantsList = DB::table('course_perticipants as cp')
                             ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
                             ->where('cp.course_id', $c_id)
-                            ->whereIn('cp.is_interested', ['1','3'])
+                            ->whereIn('cp.is_interested', ['1','2'])
                             ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile', 'cp.id as cp_id', 'cp.is_selected as is_selected')
                             ->get();
 
         $registeredList = DB::table('course_perticipants as cp')
                             ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
                             ->where('cp.course_id', $c_id)
-                            ->where('cp.is_interested', '3')
-                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile', 'cp.id as cp_id', 'cp.is_selected as is_selected', 'cp.payment as payment', 'cp.payment_method as payment_method', 'cp.reference_no as reference_no', 'cp.is_payment_verified as is_payment_verified', 'cp.id as v_id')
+                            ->where('cp.is_interested', '2')
+                            ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile', 'cp.id as cp_id', 'cp.is_selected as is_selected', DB::Raw('IFNULL( cp.payment , 0 ) as payment'), DB::Raw('IFNULL( cp.payment_method , "" ) as payment_method'), DB::Raw('IFNULL( cp.reference_no , "" ) as reference_no'), 'cp.is_payment_verified as is_payment_verified', 'cp.id as v_id')
                             ->get();
 
         $selectedList = DB::table('course_perticipants as cp')
@@ -403,14 +409,14 @@ class CoursesController extends Controller
         $perticipantTotal = DB::table('course_perticipants as cp')
                             ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
                             ->where('cp.course_id', $c_id)
-                            ->whereIn('cp.is_interested', ['1','3'])
+                            ->whereIn('cp.is_interested', ['1','2'])
                             ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile')
                             ->count();
 
         $registerTotal = DB::table('course_perticipants as cp')
                             ->leftJoin('app_users as au', 'cp.perticipant_id', '=', 'au.id')
                             ->where('cp.course_id', $c_id)
-                            ->where('cp.is_interested', '3')
+                            ->where('cp.is_interested', '2')
                             ->select('au.name as name', 'au.email as email', 'au.contact_no as mobile')
                             ->count();
 

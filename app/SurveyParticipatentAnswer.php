@@ -11,4 +11,9 @@ class SurveyParticipatentAnswer extends Model
     protected $fillable = [
         'survey_participan_id','survey_question_id',
     ];
+
+    public function options()
+    {
+        return $this->hasMany('App\SurveyParticipatentAnswerOption','survey_participant_answer_id','id');
+    }
 }

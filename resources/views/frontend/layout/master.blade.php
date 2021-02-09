@@ -9,6 +9,11 @@
     else 							    \App::setLocale('bn');
 @endphp
 
+<script>
+//alert('need to add a loader before load')
+
+</script>
+
 <html lang="en" class="no-js">
 <!--<![endif]-->
 <!-- start: HEAD -->
@@ -36,7 +41,7 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme_navy.css') }}" type="text/css" id="skin_color">
     <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}" type="text/css" media="print"/>
-    <!--[if IE 7]>
+<!--[if IE 7]>
 
 
 
@@ -51,7 +56,7 @@
     <!-- Form elements-->
 
     <link rel="stylesheet" href="{{asset('assets/plugins/DataTables/media/css/DT_bootstrap.css')}}" />
-	<link rel="stylesheet" href="{{asset('assets/plugins/css3-animation/animations.css')}}">
+    <link rel="stylesheet" href="{{asset('assets/plugins/css3-animation/animations.css')}}">
 
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2/select2.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/datepicker.css') }}">
@@ -67,13 +72,19 @@
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
-    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
-<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bils/app_messages.css') }}">
+    <!--<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">-->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
+    <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bils/app_messages.css') }}">
 
 
     {{-- Auto Load css --}}
     <link rel="stylesheet" href="{{ asset('assets/css/jquery-ui.css') }}" rel="stylesheet">
-	  <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/app.css') }}">
     <style type="text/css" media="screen">
         .jumbotron p {
             /*margin-bottom: 15px;*/
@@ -90,10 +101,14 @@
 
 
 <body class="footer-fixed">
-<audio id="myAudio">
+<audio id="myAudio1">
     <source src="{{ asset('assets/tone/eventually.mp3')}}" type="audio/mpeg">
     <source src="{{ asset('assets/tone/eventually.m4r')}}" type="audio/mpeg">
     <source src="{{ asset('assets/eventually.ogg')}}" type="audio/mpeg">
+</audio>
+<audio id="myAudio" style="float:right;margin-top:100px; width: 190px; display:none" width="190" controls>
+    <source src="{{ asset('assets/tone/inflicted.mp3')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/tone/inflicted.ogg')}}" type="audio/mpeg">
 </audio>
 
 <audio id="myNotificationAudio">
@@ -101,97 +116,111 @@
     <source src="{{ asset('assets/tone/inflicted.m4r')}}" type="audio/mpeg">
     <source src="{{ asset('assets/inflicted.ogg')}}" type="audio/mpeg">
 </audio>
-		<!-- start: HEADER -->
-		@include('frontend.layout.header')
-		<!-- end: HEADER -->
-		<!-- start: MAIN CONTAINER -->
-		<div class="main-container">
-			<div class="navbar-content">
-				<!-- start: SIDEBAR -->
-				 @include('frontend.layout.sidebar')
-				<!-- end: SIDEBAR -->
-			</div>
-			<!-- start: PAGE -->
-			<div class="main-content">
-				<!-- start: PANEL CONFIGURATION MODAL FORM -->
+<!-- start: HEADER -->
+@include('frontend.layout.header')
+<!-- end: HEADER -->
+<!-- start: MAIN CONTAINER -->
+<div class="main-container">
+    <div class="navbar-content">
+        <!-- start: SIDEBAR -->
+    @include('frontend.layout.sidebar')
+    <!-- end: SIDEBAR -->
+    </div>
+    <!-- start: PAGE -->
+    <div class="main-content">
+        <!-- start: PANEL CONFIGURATION MODAL FORM -->
 
-                <div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
-                    <div class="modal-header">
-                        <button type="button" class="btn btn-danger btn-xs pull-right" data-dismiss="modal" aria-hidden="true">
-                            &times;
-                        </button>
-						&nbsp;&nbsp;<br>
-                    </div>
-                    <div class="modal-body">
-                        <div class="panel-body">
-                            <h4 class="modal-title" id="modal_title_content"></h4>
-                            <div id="modal_body_content">
+        <div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
+            <div class="modal-header">
+                <button type="button" class="btn btn-danger btn-xs pull-right" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                &nbsp;&nbsp;<br>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    <h4 class="modal-title" id="modal_title_content"></h4>
+                    <div id="modal_body_content">
 
-                            </div>
-
-                        </div>
                     </div>
 
                 </div>
+            </div>
 
-				<!-- end: SPANEL CONFIGURATION MODAL FORM -->
-				<div class="container padding-left-0 padding-right-0" style="margin-bottom: 0px;">
-					@yield('content')
-				</div>
-			</div>
-			<!-- end: PAGE -->
-		</div>
-		<!-- end: MAIN CONTAINER -->
-		<!-- start: FOOTER --> 
-		<div class="footer clearfix" id="footer">
-				<div class="chat-form" style="display: none; margin-bottom:0px">
-					<form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
-						@csrf
-						<p id="reply_msg"  style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
-						<input type="hidden" id="edit_msg_id" name="edit_msg_id">
-						<div class="input-group">
+        </div>
+
+        <!-- end: SPANEL CONFIGURATION MODAL FORM -->
+        <div class="container padding-left-0 padding-right-0" style="margin-bottom: 0px;">
+            @yield('content')
+        </div>
+    </div>
+    <!-- end: PAGE -->
+</div>
+<!-- end: MAIN CONTAINER -->
+<!-- start: FOOTER -->
+<div class="footer clearfix" id="footer">
+    <div class="chat-form" style="display: none; margin-bottom:0px">
+        <form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
+            @csrf
+            <p id="reply_msg"  style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
+            <input type="hidden" id="edit_msg_id" name="edit_msg_id">
+            <div class="input-group">
 							<span class="input-group-btn dropup ">
-								<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding " data-toggle="dropdown" style="padding-top:7px; margin-top:-1px">
+                                <button data-toggle="dropdown" class="btn btn-warning btn-sm dropdown-toggle" style="border-top-width: 5px;border-bottom-width: 1px;">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" id="category_ul" style="font-size:12px;">
+                                    <li onclick="categorySelect(0,'None')" id="0">
+                                        <a href="#">
+                                            {{__('app.None')}}
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+
+                                </ul>
+                                <input type="hidden" name="message_category" id="message_category">
+
+                                    <!--<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding " data-toggle="dropdown" style="padding-top:7px; margin-top:-1px">
 									<span class="caret"></span>
-								</button> 
+								</button>
 								<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
 									<select name="message_category" id="message_category" style="min-width:150px; font-size:10px">
 										<option disabled="" selected="" value="">{{__('app.Category_Topic')}} </option>
 									</select>
-								</div>
+								</div>-->
 							</span>
-							<input type="hidden" name="app_user_id" id="app_user_id">
-							<input type="hidden" name="group_id" id="group_id" value="0">
-							<input type="hidden" id="reply_msg_id" name="reply_msg_id">
-							<input type="text" class="form-control " name="admin_message" id="admin_message" placeholder="Write your message..." />
-							<span class="input-group-btn">
+                <input type="hidden" name="app_user_id" id="app_user_id">
+                <input type="hidden" name="group_id" id="group_id" value="0">
+                <input type="hidden" id="reply_msg_id" name="reply_msg_id">
+                <input type="text" class="form-control " name="admin_message" id="admin_message" autocomplete="off" placeholder="Write your message..." />
+                <span class="input-group-btn">
 							<label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
 								<i class="fa fa-paperclip attachment" aria-hidden="true"></i>
 							</label>
 							<input multiple id="attachment" name="attachment[]" type="file"/>
 							</span>
-							<span class="input-group-btn">
+                <span class="input-group-btn">
 								<button class="btn btn-success submit" type="submit" id="message_sent_to_user">
 									<i class="fa fa-paper-plane"></i>
-								</button> 
+								</button>
 							</span>
-						</div>
-					</form>
-				</div>
-				<!--<div class="message-input" >
+            </div>
+        </form>
+    </div>
+<!--<div class="message-input" >
                     <div class="wrap">
                         <form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
                             @csrf
-                            <p id="reply_msg"  class="replied_message_p" style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
-                            <input type="hidden" id="edit_msg_id" name="edit_msg_id">
-                            <div class="input-group">
-                                <input type="hidden" name="app_user_id" id="app_user_id">
-								<input type="hidden" name="group_id" id="group_id" value="0">
-                                <input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
-                                <label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
-                                    <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-                                </label>
-                                <input multiple id="attachment" name="attachment[]" type="file"/>
+    <p id="reply_msg"  class="replied_message_p" style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
+    <input type="hidden" id="edit_msg_id" name="edit_msg_id">
+    <div class="input-group">
+        <input type="hidden" name="app_user_id" id="app_user_id">
+        <input type="hidden" name="group_id" id="group_id" value="0">
+        <input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
+        <label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
+            <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
+        </label>
+        <input multiple id="attachment" name="attachment[]" type="file"/>
                                 <input type="hidden" id="reply_msg_id" name="reply_msg_id">
                                 <button class="btn btn-success " type="submit" class="submit" id="message_sent_to_user"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
                             </div>
@@ -199,12 +228,13 @@
                     </div>
                 </div>
 				-->
-			<div class="footer-items">
-				<!--<span class="go-top"><i class="clip-chevron-up"></i></span>-->
-				<ul class="nav navbar-left pull-left"><li><a class="sb-toggle" href="#"><i class="fa fa-outdent" style="color:#a7b4d1; font-size:18px;"></i></a></li></ul>
-			</div>
-		</div>
-		<!-- end: FOOTER -->
+    <div class="footer-items">
+        <!--<span class="go-top"><i class="clip-chevron-up"></i></span>-->
+        <ul class="nav navbar-left pull-left"><li><a class="sb-toggle" href="#"><i class="fa fa-outdent" style="color:#a7b4d1; font-size:18px;"></i></a></li></ul>
+    </div>
+</div>
+<!-- end: FOOTER -->
+<!--
 		<div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
 			<div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -217,7 +247,8 @@
 				</div>
 			</div>
 		</div>
-    <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
+-->
+<div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
 
     <div class="modal-content">
 
@@ -230,245 +261,273 @@
 
 </div>
 <!-- start: RIGHT SIDEBAR -->
-		<div id="page-sidebar">
-			<!--<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i></a>-->
-			<div class="sidebar-wrapper">
-				<ul class="nav nav-tabs nav-justified" id="sidebar-tab">
-					<li class="active">
-						<a href="#menus" role="tab" data-toggle="tab">{{__('app.Menu')}} </a>
-					</li>
-					<li>
-						<a href="#favorites" role="tab" data-toggle="tab">{{__('app.Course')}} </a>
-					</li>
-					<li>
-						<a href="#settings" role="tab" data-toggle="tab">{{__('app.Survey')}} </a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div class="tab-pane active" id="menus">
-						<ul class="activities">
-							<li>
-								<a class="activity" href="javascript:void(0)" onClick="loadPage('message')">
-									<i class="clip-bubbles-3 circle-icon circle-teal"></i>
-									<span class="desc">{{__('app.Messages')}} </span>
-								</a>
-							</li>
-							<li>
-								<a class="activity" href="javascript:void(0)" onClick="loadPage('notice')">
-									<i class="clip-notification circle-icon "></i>
-									<span class="desc">{{__('app.Notices')}}  </span>
-								</a>
-							</li>
-							<li>
-								<a class="activity" href="javascript:void(0)" onClick="loadPage('publication')">
-									<i class="clip-file circle-icon circle-yellow"></i>
-									<span class="desc">{{__('app.Publications')}}</span>
-								</a>
-							</li>
-							<li>
-								<a class="activity" href="javascript:void(0)" onClick="loadPage('course')">
-									<i class="clip-book circle-icon circle-purple"></i>
-									<span class="desc">{{__('app.Courses')}}</span>
-								</a>
-							</li>
-							<li>
-								<a class="activity" href="javascript:void(0)" onClick="loadPage('survey')">
-									<i class="clip-users-2 circle-icon circle-orange"></i>
-									<span class="desc">{{__('app.Surveys')}}</span>
-								</a>
-							</li>
-							<li>
-								<a class="activity" href="javascript:void(0)" onClick="loadPage('notification')">
-									<i class="clip-notification-2 circle-icon circle-bricky"></i>
-									<span class="desc">{{__('app.Notifications')}}</span>
-								</a>
-							</li>
-						</ul>
-					</div>
-					<div class="tab-pane" id="favorites">
-						<div class="users-list">
-							<ul class="media-list">
-								<h5 class="media-heading padding-10">Interested Course</h5>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
+<div id="page-sidebar">
+    <!--<a class="sidebar-toggler sb-toggle" href="#"><i class="fa fa-indent"></i></a>-->
+    <div class="sidebar-wrapper">
+        <ul class="nav nav-tabs nav-justified" id="sidebar-tab">
+            <li class="active">
+                <a href="#menus" role="tab" data-toggle="tab">{{__('app.Menu')}} </a>
+            </li>
+            <li>
+                <a href="#favorites" role="tab" data-toggle="tab">{{__('app.Course')}} </a>
+            </li>
+            <li>
+                <a href="#settings" role="tab" data-toggle="tab">{{__('app.Survey')}} </a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="menus">
+                <ul class="activities">
+                    <li>
+                        <a class="activity" href="javascript:void(0)" onClick="changePage('message')">
+                            <i class="clip-bubbles-3 circle-icon circle-teal"></i>
+                            <span class="desc">{{__('app.Messages')}} </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="activity" href="javascript:void(0)" onClick="changePage('notice')">
+                            <i class="clip-notification circle-icon "></i>
+                            <span class="desc">{{__('app.Notices')}}  </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="activity" href="javascript:void(0)" onClick="changePage('publication')">
+                            <i class="clip-file circle-icon circle-yellow"></i>
+                            <span class="desc">{{__('app.Publications')}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="activity" href="javascript:void(0)" onClick="changePage('course')">
+                            <i class="clip-book circle-icon circle-purple"></i>
+                            <span class="desc">{{__('app.Courses')}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="activity" href="javascript:void(0)" onClick="changePage('survey')">
+                            <i class="clip-users-2 circle-icon circle-orange"></i>
+                            <span class="desc">{{__('app.Surveys')}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="activity" href="javascript:void(0)" onClick="changePage('notification')">
+                            <i class="clip-notification-2 circle-icon circle-bricky"></i>
+                            <span class="desc">{{__('app.Notifications')}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="tab-pane" id="favorites">
+                <div class="users-list">
+                    <ul class="media-list" id="user_course_list">
+                        <!--<h5 class="media-heading padding-10">Interested Course</h5>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
 
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<h5 class="media-heading padding-10">Registered Course</h5>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<h5 class="media-heading padding-10">Completed Course</h5>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-						<div class="user-chat">
-							<div class="sidebar-content">
-								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
-								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <h5 class="media-heading padding-10">Registered Course</h5>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <h5 class="media-heading padding-10">Completed Course</h5>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>-->
+                    </ul>
+                </div>
+                <div class="user-chat">
+                    <div class="sidebar-content">
+                        <a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
+                        <div class="panel-body panel-scroll ps-container ps-active-y" id="course_description_side" style="height: 377px;">
+                            <!--
+                            <h4> Vertical description </h4>
+                            <dl>
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                            </dl>
+                            <h4> Horizontal description </h4>
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                            </dl>-->
 
-									<h4> Vertical description </h4>
-									<dl>
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-									</dl>
-									<h4> Horizontal description </h4>
-									<dl class="dl-horizontal">
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-									</dl>
+                        </div>
+                    </div>
 
-								</div>
-							</div>
+                </div>
+            </div>
+            <div class="tab-pane" id="settings">
+                <div class="users-list">
+                    <ul class="media-list" id="user_survey_list">
+                        <!--<h5 class="media-heading padding-10">Open Survey</h5>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
 
-						</div>
-					</div>
-						<div class="tab-pane" id="settings">
-						<div class="users-list">
-							<ul class="media-list">
-								<h5 class="media-heading padding-10">Open Survey</h5>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <h5 class="media-heading padding-10">Completed Survey</h5>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>
+                        <li class="media">
+                            <a class="activity" href="javascript:void(0)">
+                                <span class="desc">You added a new event to the calendar.</span>
+                            </a>
+                        </li>-->
+                    </ul>
+                </div>
+                <div class="user-chat">
+                    <div class="sidebar-content">
+                        <a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
+                        <div class="panel-body panel-scroll ps-container ps-active-y" id="survey_description_side" style="height: 377px;">
+                            <!--
+                            <h4> Vertical description </h4>
+                            <dl>
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                            </dl>
+                            <h4> Horizontal description </h4>
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                            </dl>-->
+                        </div>
+                    </div>
+                </div>
 
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<h5 class="media-heading padding-10">Completed Survey</h5>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-								<li class="media">
-									<a class="activity" href="javascript:void(0)">
-										<span class="desc">You added a new event to the calendar.</span>
-									</a>
-								</li>
-							</ul>
-							<div class="sidebar-content">
-								<button class="btn btn-success">
-									<i class="icon-settings"></i> Save Changes
-								</button>
-							</div>
-						</div>
-						<div class="user-chat">
-							<div class="sidebar-content">
-								<a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
-								<div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
-									<h4> Vertical description </h4>
-									<dl>
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-										<dd>
-											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-										</dd>
-										<dd>
-											Donec id elit non mi porta gravida at eget metus.
-										</dd>
-										<dt>
-											Malesuada porta
-										</dt>
-										<dd>
-											Etiam porta sem malesuada magna mollis euismod.
-										</dd>
-									</dl>
-									<h4> Horizontal description </h4>
-									<dl class="dl-horizontal">
-										<dt>
-											Description lists
-										</dt>
-										<dd>
-											A description list is perfect for defining terms.
-										</dd>
-										<dt>
-											Euismod
-										</dt>
-										<dd>
-											Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-										</dd>
-										<dd>
-											Donec id elit non mi porta gravida at eget metus.
-										</dd>
-										<dt>
-											Malesuada porta
-										</dt>
-										<dd>
-											Etiam porta sem malesuada magna mollis euismod.
-										</dd>
-										<dt>
-											Felis euismod semper eget lacinia
-										</dt>
-										<dd>
-											Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-										</dd>
-									</dl>
-								</div>
-							</div>
+                <!--<div class="user-chat">
+                    <div class="sidebar-content">
+                        <a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
+                        <div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
+                            <h4> Vertical description </h4>
+                            <dl>
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                                <dd>
+                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+                                </dd>
+                                <dd>
+                                    Donec id elit non mi porta gravida at eget metus.
+                                </dd>
+                                <dt>
+                                    Malesuada porta
+                                </dt>
+                                <dd>
+                                    Etiam porta sem malesuada magna mollis euismod.
+                                </dd>
+                            </dl>
+                            <h4> Horizontal description </h4>
+                            <dl class="dl-horizontal">
+                                <dt>
+                                    Description lists
+                                </dt>
+                                <dd>
+                                    A description list is perfect for defining terms.
+                                </dd>
+                                <dt>
+                                    Euismod
+                                </dt>
+                                <dd>
+                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
+                                </dd>
+                                <dd>
+                                    Donec id elit non mi porta gravida at eget metus.
+                                </dd>
+                                <dt>
+                                    Malesuada porta
+                                </dt>
+                                <dd>
+                                    Etiam porta sem malesuada magna mollis euismod.
+                                </dd>
+                                <dt>
+                                    Felis euismod semper eget lacinia
+                                </dt>
+                                <dd>
+                                    Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
 
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- end: RIGHT SIDEBAR -->
+                </div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end: RIGHT SIDEBAR -->
 
 <!-- start: MAIN JAVASCRIPTS -->
 <!--[if lt IE 9]>
@@ -530,7 +589,7 @@
 <script src="{{ asset('assets/js/underscore.js')}}"></script>
 
 <!--<script src="{{ asset('js/notify.js')}}"></script>-->
-<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
+<!--<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>-->
 
 <script src="{{ asset('assets/js/datatables.min.js')}}"></script>
 <script src="{{ asset('assets/js/dropzone.js')}}"></script>
@@ -543,6 +602,7 @@
 
 
 <script>
+
     jQuery(document).ready(function() {
         Main.init();
         UIModals.init();
@@ -551,7 +611,7 @@
     });
     var APP_URL = '{!! url('/') !!}';
 
-    </script>
+</script>
 
 <input type="hidden" class="site_url" value="{{url('/')}}">
 {{-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> --}}
@@ -559,38 +619,100 @@
 <script src="{{ asset('assets/js/jquery-ui.min.js')}}"></script>
 
 <script src="{{ asset('assets/js/ui-animation.js')}}"></script>
+<script src="{{ asset('assets/js/jquery.mb.audio.js')}}"></script>
+
 @yield('JScript')
 <script>
-	jQuery(document).ready(function() {
-		//Main.init();
-		Animation.init();
-	});
-//alert("{{$token}}")
+    jQuery(document).ready(function() {
+        //Main.init();
+        Animation.init();
+    });
 /*
-var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
-var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
-$(document).ready(function () {
-    if (deviceIsAndroid || deviceIsIos) {
-        $(document).bind("click", function () {
-            if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
-                var textBox = document.activeElement.id;
-                document.getElementById(textBox).scrollIntoView();
-            }
-        });
-    }
-});
-$("input").bind("click", function () {
-    var textBox = document.activeElement.id;
-    document.getElementById(textBox).scrollIntoView();
-});
+    var player = document.getElementById("myAudio");
+    player.addEventListener("play", function () {
+      console.log("it's go time");
+      alert('1111111');
+    });
+   // alert('loaded')
+    player.play();
 
 */
+		//{{ asset('assets/tone/effectsSprite.ogg') }}
+
+		/*
+         * DEFINE SOUNDS
+         */
+        $.mbAudio.sounds = {
+            backgroundSprite: {
+                id    : "backgroundSprite",
+                ogg   : "sounds/bgndsSprite.ogg",
+                mp3   : "sounds/bgndsSprite.mp3",
+                //example of sprite
+                sprite: {
+                    intro     : {id: "intro", start: 80, end: 116.975, loop: true},
+                    levelIntro: {id: "levelIntro", start: 63, end: 75.5, loop: true},
+                    tellStory : {id: "tellStory", start: 80, end: 116.975, loop: true},
+                    level1    : {id: "level1", start: 5, end: 13, loop: true},
+                    level2    : {id: "level2", start: 40, end: 56, loop: true},
+                    level3    : {id: "level3", start: 120, end: 136.030, loop: true}
+                }
+            },
+
+            effectSprite: {
+                id    : "effectSprite",
+                ogg   : '{{ asset('assets/tone/effectsSprite_small.ogg') }}',
+                mp3   : '{{ asset('assets/tone/effectsSprite_small.mp3') }}',
+                //example of sprite
+                sprite: {
+                    great        : {id: "great", start: 0, end: 1.8, loop: false},
+                }
+            }
+        };
+
+    $('.showLoading').click(function(){
+        //alert('ok')
+        $('.box-login').block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /><b>Loading ....</b>',
+            css: {
+                border: '1px solid black',
+                color: '#333',
+                background: 'none'
+            }
+        });
+    })
 
     $.ajaxSetup({
         headers:{
             'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    localStorage.removeItem('messageMaster')
+    //alert("{{$token}}")
+    /*
+    var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
+    var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
+    $(document).ready(function () {
+        if (deviceIsAndroid || deviceIsIos) {
+            $(document).bind("click", function () {
+                if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
+                    var textBox = document.activeElement.id;
+                    document.getElementById(textBox).scrollIntoView();
+                }
+            });
+        }
+    });
+    $("input").bind("click", function () {
+        var textBox = document.activeElement.id;
+        document.getElementById(textBox).scrollIntoView();
+    });
+
+    */
+
+
 
 
     ajaxPreLoad = () =>{
@@ -607,318 +729,937 @@ $("input").bind("click", function () {
         });
     }
 
-	loadpageFunctionality = function loadpageFunctionality(){
-
-		Main.init();
-		//loadPage();
-		$('.hometab').on('click', function (){
-			page = $(this).attr('id');
-			loadPage(page)
-		})
-
-	}
-
-
-// page name: message notice course survey publication notification
-    loadPage = function loadPage(pageName) {
-		$('.navbar-toggle').trigger('click');
-		// load a ajax loader
-		$.ajax({
-			type: "GET",
-			url:"{{ url('app/')}}/"+pageName,
-			cache: false,
-			contentType: false,
-			processData: false,
-			beforeSend: function( xhr ) {
-                ajaxPreLoad()
-				//$("#load-content").fadeOut('slow');
-			},
-			success: function (data) {
-
-				if($(".sb-toggle").hasClass("open")) {
-					$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
-					$(".sb-toggle").removeClass("open")
-					$("#page-sidebar").css({
-						right: -$("#page-sidebar").outerWidth()
-					});
-				}
-
-
-				$("#load-content").html(data);
-
-
-				if(pageName=='message'){
-					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+65));
-					$('.chat-form').show();
-				}
-				else{
-					$('.chat-form').hide();
-					$('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+40));
-				}
-				$('#load-content').unblock();
-				$("#load-content").fadeIn('slow');
-
-				loadpageFunctionality();
-			},
-			error: function (xhr, textStatus, errorThrown) {
-				console.log("XHR",xhr);
-				console.log("status",textStatus);
-				console.log("Error in",errorThrown);
-			}
-		});
+    //alert('.ok')
+    changePage = (name) =>{
+        ajaxPreLoad()
+        localStorage.setItem('content',name)
+        window.location.href = "{{ url('app/dashboard/content_load')}}"
     }
-	$('.hometab').on('click', function (){
-		page = $(this).attr('id');
-		loadPage(page)
-	})
-
-//function to open quick sidebar
-
-		$(".sb-toggle").on("click", function(e) {
-			if($(this).hasClass("open")) {
-				$(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
-				$(".sb-toggle").removeClass("open")
-				$("#page-sidebar").css({
-					right: -$("#page-sidebar").outerWidth()
-				});
-			} else {
-				$(this).not(".sidebar-toggler ").find(".fa-outdent").removeClass("fa-outdent").addClass("fa-indent");
-				$(".sb-toggle").addClass("open")
-				$("#page-sidebar").css({
-					right: 0
-				});
-			}
-			e.preventDefault();
-		});
 
 
-		$("#page-sidebar .media a").on("click", function(e) {
-			//alert($("#page-sidebar").outerWidth())
-			$(this).closest(".tab-pane").css({
-				right: $("#page-sidebar").outerWidth()
-			});
-			e.preventDefault();
-		});
-		$("#page-sidebar .sidebar-back").on("click", function(e) {
-			$(this).closest(".tab-pane").css({
-				right: 0
-			});
-			e.preventDefault();
-		});
-		$('#page-sidebar .sidebar-wrapper').perfectScrollbar({
-			wheelSpeed: 50,
-			minScrollbarLength: 20,
-			suppressScrollX: true
-		});
-		$('#sidebar-tab a').on('shown.bs.tab', function (e) {
-			$("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
-		});
+    answerText = ''
+    answerList=[]
+    pageNo=0;
+    LastpageNo=0;
 
-	</script>
-    <script>
+    surveyId = 0
 
+    surveyTitle = (survey_id) =>{
+        $.ajax({
+            url: "{{ url('app/')}}/load-survey_title/"+survey_id,
+            type:'get',
+            async:true,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
+            success: function(response) {
+                $('#load-content').unblock();
+                var response = JSON.parse(response);
+                $('#survey_title').html(response[0]['survey_name'])
+                //console.log(response[0]['survey_name'])
 
-        notificationView = (id) =>{
-            $.ajax({
-                url: "{{ url('app/')}}/notification_view/"+id,
-                type: 'GET',
-                async: true,
-                success: function (response) {
-                    response = JSON.parse(response)
-                    newNotifications();
-                    loadPage('notification')
-                }
-            })
-        }
-
-        messageView = (id, group_id) =>{
-            //alert('ok')
-            $.ajax({
-                url: "{{ url('app/')}}/message_view/"+id,
-                type: 'GET',
-                async: true,
-                success: function (response) {
-                    //alert('ok')
-                    localStorage.setItem('is_group_message',group_id)
-                    loadPage('message')
-                }
-            })
-        }
-
-        newMessages =  (response) => {
-
-            html = '';
-            count = 0;
-            lastMessageNotificationId = 0;
-            $.each(response, function (key, value) {
-                lastMessageNotificationId = lastMessageNotificationId<value.id ? value.id :lastMessageNotificationId;
-                count = value.is_seen==0 ? count+1 :count;
-                if(value.is_seen==0){
-                    style = 'class = "alert-warning"'
-                }else style = ''
-
-                date = new Date(value["msg_date"]+ 'Z');
-                messageDate 	= date.toLocaleString ();
-
-                group_name = ''
-                if(value.group_id>0){
-                    group_name = '('+value.group_name+') '
-                }
-
-
-                html +='<li onclick="messageView('+value.id+','+value.group_id+')" '+style+'> ' +
-                    '       <a href="#">' +
-                    '           <div class="clearfix">' +
-                    '               <div class="thread-image">' +
-                    '                   <img style="width:20px; height:25px" alt="" src="/assets/images/logo.jpg"> ' +
-                    '               </div> ' +
-                    '               <div class="thread-content"> ' +
-                    '                   <span class="time margin-left-5">'+messageDate+'</span>' +
-                    '                   <span class="preview">'+group_name+' '+value.admin_message+'</span> ' +
-                    '               </div> ' +
-                    '           </div>' +
-                    '        </a>' +
-                    '   </li>'
-
-            })
-
-            if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
-                document.getElementById("myAudio").play();
-                localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
-            }else  if(lastMessageNotificationId>0) {
-                //alert('message-1')
-                if(!localStorage.getItem('lastMessageNotificationId')) {
-                     document.getElementById("myAudio").play();
-                }
-
-                localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
             }
-            $('#app_message_badge').html(count)
-            $('.message_badge').html(count)
-            $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span>{{__('app.Unread')}}  {{__('app.messages')}}')
-            $('#app_header_new_message').html(html)
-
-        }
-
-
-        new_notification_reload = () =>{
-            setTimeout(function(){
-                newNotifications();
-              //  new_notification_reload();
-            }, 10000);
-        }
-
-        newNotifications =  () => {
-            $.ajax({
-                url: "{{ url('app/')}}/new_notifications",
-                type:'GET',
-                async:true,
-                success: function(response){
-                    response = JSON.parse(response)
-                    newMessages(response['individualMessage'])
-                    html = '';
-                    count = 0;
-                    notificationId = 0;
-                    $.each(response['Notifications'], function (key, value) {
-                        date = new Date(value["msg_date"]+ 'Z');
-                        notificationDate 	= date.toLocaleString ();
-
-                        notificationId = notificationId<value.id ? value.id : notificationId;
-                        count = value.status==0 ? count+1 :count;
-                        if(value.status==0){
-                            style = 'class = "alert-warning"'
-                        }else style = ''
-                        if(value.module_id==7)		 title = '{{__('app.New_Course')}} : '+value['title'];
-                        else if(value.module_id==37) title = '{{__('app.New_Notice')}}: '+value['title'];
-                        else if(value.module_id==38) title = '{{__('app.New_Publication')}}: '+value['title'];
-                        else title = value.title
-
-                        html +='<li onclick="notificationView('+value.id+')" '+style+'> ' +
-                            '<a href="javascript:void(0)"> ' +
-                          //  '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
-						    '<span class="time margin-left-5">'+notificationDate+'</span> ' +
-                            '<span class="message"> '+title+'</span> ' +
-                            '</a> ' +
-                            '</li>'
-                    })
-                    if(localStorage.getItem('lastNotificationId')<notificationId){
-                        $('#lastMessageNotificationId').trigger("play")
-						//document.getElementById("myAudio").play();
-
-                        localStorage.setItem('lastNotificationId',notificationId)
-                    }else  if(notificationId>0) {
-                        if(!localStorage.getItem('lastNotificationId')){
-                            $('#lastMessageNotificationId').trigger("play")
-							//document.getElementById("myAudio").play();
-                        }
-                        localStorage.setItem('lastNotificationId',notificationId)
-                    }
-
-                    $('#app_notification_badge').html(count)
-                    $('.notification_badge').html(count)
-                    $('#app_notification_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
-                    $('#app_header_new_notification').html(html)
-                    //console.log(response)
-
-                }
-            })
-            new_notification_reload()
-        }
-        newNotifications();
-
-        badgeCountLoad = () =>{
-            $.ajax({
-                url: "{{ url('app/')}}/badge_count",
-                type: 'GET',
-                async: true,
-                success: function (response) {
-                    //console.log(response)
-                    response = JSON.parse(response)
-                    $.each(response,function (key, data) {
-                        //console.log(data)
-                        if(data['module_id']==7){
-                            $('.course_badge').html(data['number'])
-                        }
-                        if(data['module_id']==38){
-                            $('.publication_badge').html(data['number'])
-                        }
-                        if(data['module_id']==37){
-                            $('.notice_badge').html(data['number'])
-                        }
-                        if(data['module_id']==6){
-                            $('.survey_badge').html(data['number'])
-                        }
-                    })
-                }
-            })
-        }
-        badgeCountLoad()
-
-
-        $('.panel-tools .panel-refresh').on('click', function(e) {
-            var el = $(this).parents(".panel");
-            el.block({
-                overlayCSS: {
-                    backgroundColor: '#fff'
-                },
-                message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
-                css: {
-                    border: 'none',
-                    color: '#333',
-                    background: 'none'
-                }
-            });
-            window.setTimeout(function() {
-                page =1;
-                location.reload()
-                el.unblock();
-            }, 1000);
-            e.preventDefault();
         });
 
-        //alert($('#message_badge').html())
+    }
 
-    </script>
+    multipleChoice = (data,answer) => {
+        //alert('multi')
+        answerList = []
+        if(answer[0] && answer[0]['options'][0] && answer[0]['options'][0]['option_id']){
+            $.each(answer[0]['options'],function (key, value) {
+                answerList.push(value['option_id'])
+            } )
+        }
+        //console.log(data)
+        html = '<input type="hidden" name="type" id="type" value="4">'
+        $.each(data, function (key,option) {
+            checked = ''
+            if(answerList.includes(option["id"])){
+                checked = 'checked';
+            }
+            html += '<input class="form-check-input" type="checkbox" name="answer[]" '+checked+'  value="'+option["id"]+'" >\n' +
+                '     <label class="form-check-label" for="exampleRadios1">'+option["answer_option"]+'</label><br>'
+        })
+        return html
+    }
+
+    singleChoice = (data,answer) => {
+        //alert('single')
+        //console.log(data)
+        //console.log(data[0]['answer_option'])
+        if(answer[0] && answer[0]['options'][0] && answer[0]['options'][0]['option_id']){
+            option_id = answer[0]['options'][0]['option_id']
+        }else{
+            option_id = 0
+        }
+        answerText = option_id
+
+        html = '<input type="hidden" name="type" id="type" value="3">'
+        $.each(data, function (key, option) {
+            checked = ''
+            if(option["id"]==option_id){
+                checked = 'checked';
+            }
+            html += '<input class="form-check-input" type="radio"  name="answer" '+checked+' value="'+option["id"]+'" >\n' +
+                '     <label class="form-check-label" for="exampleRadios1">'+option["answer_option"]+'</label><br>'
+        })
+        return html
+    }
+
+    numberInput = (answer) =>{
+        if(answer[0] && answer[0]['options'][0]['answer']){
+            answer = answer[0]['options'][0]['answer']
+        }else{
+            answer =''
+        }
+        answerText = answer
+
+        html = '<input type="hidden" name="type" id="type" value="2">'
+        html+='<input type="number" placeholder="" class="form-control" name="answer" id="answer" value="'+answer+'">\n'
+
+        return html;
+    }
+
+    textInput = (answer) =>{
+        if(answer[0] && answer[0]['options'][0]['answer']){
+            answer = answer[0]['options'][0]['answer']
+        }else{
+            answer =''
+        }
+        answerText = answer
+
+        html = '<input type="hidden" name="type" id="type" value="1">'
+        html+= '<input type="text" placeholder="" class="form-control" name="answer" id="answer" value="'+answer+'">\n'
+
+        return html;
+    }
+
+    loadSurveyQuestion = (page) =>{
+        //alert('loadSurveyQuestion')
+        if(surveyId==0) return false;
+
+        if(page==0) url="{{ url('app/')}}/load-survey_question/"+surveyId;
+        else url="{{ url('app/')}}/load-survey_question/"+surveyId+"?page="+page;
+        //alert(url)
+
+        $.ajax({
+            url: url,
+            type:'get',
+            async:true,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
+            success: function(response) {
+                $('#load-content').unblock();
+
+                var response = JSON.parse(response);
+                console.log(response)
+
+                question = '<label class="control-label" id="question">'+response["data"][0]["question_details"]+'</label>'
+                question += '<input type="hidden" name="question_no" value="'+response["data"][0]["id"]+'">'
+
+                if(response['data'][0]['question_type'] == 1){
+                    html = textInput(response["data"]['answer'])
+                }else if(response['data'][0]['question_type'] == 2){
+                    html = numberInput(response["data"]['answer'])
+                }else if(response['data'][0]['question_type'] == 3){
+                    html = singleChoice(response["data"][0]["options"],response["data"]['answer'])
+                } else if(response['data'][0]['question_type'] == 4){
+                    html = multipleChoice(response["data"][0]["options"],response["data"]['answer'])
+                }
+                $('#question_body').html(question+'<br>'+html)
+
+                //console.log(response)
+                LastpageNo = response['last_page'];
+
+                pageNo = response['current_page'];
+
+                nxtbtn = "";
+                prvbtn = "";
+                nxtDisplay = 'style="display:block"'
+                submitDisplay = 'style="display:none"'
+
+                if(response['current_page']==1){
+                    prvbtn = "disabled";
+                }else if(response['total']==response['current_page']){
+                    nxtbtn = "disabled";
+                    nxtDisplay = 'style="display:none"'
+                    submitDisplay = 'style="display:block"'
+
+                }
+
+                surveyHtml = ' <div class="alert alert-block alert-info fade in">\n' +
+                    '                        <h3 id="survey_title">'+response['data']["title"]+'</h3>\n' +
+                    '                        <hr>\n' +
+                    '                        <form action="#" role="form" id="question_answer" name="question_answer">\n' +
+                    '                            <div class="row">\n' +
+                    '                                <div class="col-md-6">\n' +
+                    '                                    <div class="form-group" id="question_body">\n' +question+'<br>'+html+
+                    '                                    </div>\n' +
+                    '                                </div>\n' +
+                    '                            </div>\n' +
+                    '                            <div class="row">\n' +
+                    '                                <div class="col-sm-6 col-xs-6">\n' +
+                    '                                    <button class="btn btn-teal btn-block" type="button" onclick="submitAnswer(-1)" '+prvbtn+'id="prvbutton" >\n' +
+                    '                                        <i class="fa fa-arrow-circle-left"></i>  {{__("app.previous")}}\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-6 col-xs-6" '+nxtDisplay+'>\n' +
+                    '                                    <button class="btn btn-teal btn-block" type="button" onclick="submitAnswer(1)" '+nxtbtn+' id="nxtbutton">\n' +
+                    '                                        {{__("app.next")}} <i class="fa fa-arrow-circle-right"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                                <div class="col-sm-6 col-xs-6" '+submitDisplay+'>\n' +
+                    '                                    <button class="btn btn-teal btn-block" type="button" onclick="submitAnswer(0)" id="nxtbutton">\n' +
+                    '                                        {{__("app.submit")}} <i class="fa fa-arrow-circle-right"></i>\n' +
+                    '                                    </button>\n' +
+                    '                                </div>\n' +
+                    '                            </div>\n' +
+                    '                        </form>\n' +
+                    '                    </div>\n'
+
+                $('#modal_body_content').html(surveyHtml)
+                // $('#responsive').modal()
+            }
+        });
+
+    }
+
+    loadNextQuestion = (pageChange,page)=>{
+        if(pageChange!=0){
+            loadSurveyQuestion(page)
+        }
+        else{
+            $('#responsive').modal('toggle');
+        }
+
+    }
+
+    submitAnswer = (pageChange) =>{
+        page = pageNo+pageChange;
+
+        type = $('#type').val()
+        if(type==1 || type==2){
+            answer = $('#answer').val()
+            if(answer==answerText){
+                loadNextQuestion(pageChange,page)
+                return false;
+                //alert('matched')
+            }
+        }else if(type==3){
+            answer = $('input[name="answer"]:checked').val();
+            if(answer==answerText){
+                loadNextQuestion(pageChange,page)
+                return false;
+                //alert('matched')
+            }
+        }else if(type==4){
+            var val = [];
+            $(':checkbox:checked').each(function(i){
+                val.push(parseInt($(this).val()));
+            });
+            is_match=0
+            //console.log(val, answerList)
+            if(val.length==answerList.length){
+                //alert('length')
+                $.each(val, function (key,value) {
+                    if(!answerList.includes(value)){
+                        is_match=1;
+                    }
+                })
+                $.each(answerList, function (key,value) {
+                    if(!val.includes(value)){
+                        is_match=1;
+                    }
+                })
+                if(is_match==0){
+                    loadNextQuestion(pageChange,page)
+                    return false;
+                }
+            }
+        }
+
+
+        var formData = new FormData($('#question_answer')[0]);
+        //alert(1)
+        //return false;
+        //alert(pageNo +'=='+ LastpageNo)
+        if(pageNo == LastpageNo){
+            formData.append('is_completed',1)
+        }
+        formData.append('survey_id',surveyId)
+
+        $.ajax({
+            url: "{{ url('app/')}}/survey_answer",
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                //console.log(data)
+                if(data==1){
+                    loadNextQuestion(pageChange,page)
+                }
+            }
+        });
+    }
+
+    surveyResult = (survey_id) =>{
+        surveyTitle(survey_id)
+
+        // seeSurveyDetails(survey_id,0)
+        //return false;
+        // alert(survey_id)
+        $.ajax({
+            url: "{{ url('app/')}}/survey-result/"+survey_id ,
+
+            success: function (response) {
+                var data = JSON.parse(response);
+                //alert(1)
+                console.log(data)
+                // return false;
+
+                var description = ' <h2>'+data['survey']['survey_name']+'</h2></br>'
+
+                $.each(data['question'], function (key, value) {
+                    //alert(2)
+                    //console.log(value)
+
+                    description+='<div class="col-md-12" style="margin-bottom: 10px">\n'
+
+
+                    description+=' <h6>'+value['serial']+'. '+value['question_details']+'</h6>\n'
+
+
+                    if(value['question_type']==1 || value['question_type']==2){
+                        description+= '<p>:'+data['answer'][value['id']]['answer']+'</p>'
+                    }
+                    else {
+                        var sl = 'A'
+                        if(value['display_option']==1){
+                            $.each(value['answer'],function (key2, answer) {
+                                //var answerChoose=''
+                                var styleChoose = 'style="margin: 10px"'
+
+                                if(data['answer']['answer_choice'].includes(answer['id'])){
+                                    //alert('ok')
+                                    styleChoose='style="margin: 10px; color:green"';
+                                }
+
+                                description+='<span '+styleChoose+'>('+sl+'): '+answer['answer_option']+'</span>\n';
+                                sl = String.fromCharCode(sl.charCodeAt() + 1) // Returns B
+                            })
+                        }
+                        else if(value['display_option']==2){
+                            $.each(value['answer'],function (key2, answer) {
+
+                                var styleChoose = 'style="margin: 10px"'
+
+                                if(data['answer']['answer_choice'].includes(answer['id'])){
+                                    //alert('ok')
+                                    styleChoose='style="margin: 10px; color:green"';
+                                }
+                                description+='<p '+styleChoose+'>('+sl+'): '+answer['answer_option']+'</p>\n';
+                                sl = String.fromCharCode(sl.charCodeAt() + 1) // Returns B
+                            })
+                        }
+                        else if(value['display_option']==3){
+
+                            $.each(value['answer'],function (key2, answer) {
+                                //alert(data['answer']['answer_choice'])
+                                var styleChoose = 'style="margin: 10px"'
+
+                                if(data['answer']['answer_choice'].includes(toString(answer['id']))){
+                                    //alert('ok')
+                                    styleChoose='style="margin: 10px; color:green"';
+                                }
+
+
+                                description+='<div class="col-md-5" '+styleChoose+'>('+sl+'): '+answer['answer_option']+'</div>\n';
+                                sl = String.fromCharCode(sl.charCodeAt() + 1) // Returns B
+                            })
+                        }
+                    }
+                    //alert('ok')
+
+                    description+='</div>'
+                })
+
+                console.log(description)
+                $('#modal_body_content').html(description)
+                $('#responsive').modal()
+                //$("#survey_participant_body_view").html(description);
+
+            }
+        })
+
+    }
+
+    seeSurveyDetails = (id,type) =>{
+        surveyId = id
+        //surveyTitle(surveyId)
+
+        $('#responsive').modal()
+        if(type==0) loadSurveyQuestion(0)
+
+        //e.preventDefault();
+        /*
+        $.ajax({
+            type: "GET",
+            url: "{{ url('app/')}}/user_survey_description/"+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                response = JSON.parse(data)
+                console.log(respons)
+
+                created = new Date(response[0]["created_at"]+ 'Z');
+                created = created.toDateString()
+                start = new Date(response[0]["start_date"]+ 'Z');
+                start = start.toDateString()
+                end = new Date(response[0]["end_date"]+ 'Z');
+                end = end.toDateString()
+
+
+                let category_name = (response[0]["category_name"])?"<button class='btn btn-disabled btn-info btn-xs'>"+response[0]["category_name"]+"</button>":"";
+
+                let  p = '<span><p style="text-align:left"><b style="float:right">Duration: '+start+' to '+end+'</b> </p></span><br>'
+
+
+                html = '<div class="alert alert-block alert-info fade in"><h4>'+response[0]["title"]+'</h4>' + category_name + p +response[0]['details']+'</div>'
+
+                console.log(html)
+                $('#course_description_side').html(html)
+            }
+        })
+        */
+
+    }
+
+    loadpageFunctionality = function loadpageFunctionality(){
+
+        Main.init();
+        //loadPage();
+        $('.hometab').on('click', function (){
+            page = $(this).attr('id');
+            loadPage(page)
+        })
+
+    }
+    courseRegistration = (id) =>{
+        $.ajax({
+            type: "GET",
+            url: "{{ url('app/')}}/user_course_registration/"+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+            }
+        })
+    }
+
+    seeCourseDetails = (id) =>{
+
+        //e.preventDefault();
+        $.ajax({
+            type: "GET",
+            url: "{{ url('app/')}}/user_course_description/"+id,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                response = JSON.parse(data)
+
+                created = new Date(response[0]["created_at"]+ 'Z');
+                created = created.toDateString()
+                start = new Date(response[0]["appx_start_time"]+ 'Z');
+                start = start.toDateString()
+                end = new Date(response[0]["appx_end_time"]+ 'Z');
+                end = end.toDateString()
+                register = '';
+
+                //alert(response[0]['course_status']+'--'+response[0]['is_interested'])
+
+                if((response[0]['course_status']==2 || response[0]['course_status']==4) && response[0]['is_interested']==1){
+                    register = "<button class='btn btn-disabled btn-blue btn-xs' onclick='courseRegistration("+response[0]['cp_id']+")'>Register Now</button>"
+                }
+                c_status = "<button class='btn btn-disabled btn-orange btn-xs' disabled style='float: right'>"+response[0]['status']+"</button>"
+
+
+                let category_name = (response[0]["category_name"])?"<button class='btn btn-disabled btn-info btn-xs'>"+response[0]["category_name"]+"</button>":"";
+
+                let  p = '<span><p style="text-align:left"> Teacher: '+response[0]['name']+'<b style="float:right">Duration: '+start+' to '+end+'</b> </p></span><br>'
+
+                let attachment = '';
+                //alert(register)
+
+                if(response[0]['attachment']){
+                    //attachment = attachment_url+'/'+response[0]['attachment'];
+                    attachment = "<br>"+publication+ '<br><a class="btn btn-disabled btn-warning" href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment"></i></a>'
+                }
+                html = '<div class="alert alert-block alert-info fade in">'+c_status+'<h4>'+response[0]["title"]+'</h4>' + category_name + '  '+register + p +'<hr>'+response[0]['details']+'</div>'
+
+                $('#course_description_side').html(html)
+            }
+        })
+    }
+
+    loadCourseSideBar = () => {
+        $.ajax({
+            type: "GET",
+            url: "{{ url('app/')}}/user_course" ,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                respons = JSON.parse(data)
+                is_interested = 0
+                is_registered = 0
+                is_completed = 0
+                interested = '<h5 class="media-heading padding-10">Interested Course</h5>'
+                registered = '<h5 class="media-heading padding-10">Registered Course</h5>'
+                completed = '<h5 class="media-heading padding-10">Completed Course</h5>'
+
+
+                $.each(respons, function (key, course) {
+                    if(course.is_interested==1){
+                        is_interested = 1
+                        interested += '<li onclick="seeCourseDetails('+course.id+')" class="media">\n' +
+                            '              <a class="activity" href="javascript:void(0)">\n' +
+                            '                <span class="desc">'+course.title+'</span>\n' +
+                            '              </a>\n' +
+                            '           </li>'
+                    }
+                    if(course.is_interested==2){
+                        is_registered =1
+                        registered += '<li onclick="seeCourseDetails('+course.id+')" class="media">\n' +
+                            '              <a class="activity" href="javascript:void(0)">\n' +
+                            '                <span class="desc">'+course.title+'</span>\n' +
+                            '              </a>\n' +
+                            '           </li>'
+                    }
+                    if(course.is_interested==4){
+                        is_completed = 1
+                        completed += '<li onclick="seeCourseDetails('+course.id+')" class="media">\n' +
+                            '              <a class="activity" href="javascript:void(0)">\n' +
+                            '                <span class="desc">'+course.title+'</span>\n' +
+                            '              </a>\n' +
+                            '           </li>'
+                    }
+                })
+
+                html = ''
+                html += is_interested==1? interested: '';
+                html += is_registered==1? registered: '';
+                html += is_completed==1? completed: '';
+
+                $('#user_course_list').html(html)
+
+                $("#page-sidebar .media a").on("click", function(e) {
+                    $(this).closest(".tab-pane").css({
+                        right: $("#page-sidebar").outerWidth()
+                    });
+                    e.preventDefault();
+                });
+
+
+            }
+        })
+    }
+
+    loadCourseSideBar()
+
+    loadSurveySideBar = () => {
+        $.ajax({
+            type: "GET",
+            url: "{{ url('app/')}}/user_survey" ,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                respons = JSON.parse(data)
+                is_interested = 0
+                is_completed = 0
+                interested = '<h5 class="media-heading padding-10">Incomplete Survey</h5>'
+                completed = '<h5 class="media-heading padding-10">Completed Survey</h5>'
+
+                $.each(respons, function (key, course) {
+                    if(course.survey_completed==0){
+                        is_interested = 1
+                        interested += '<li onclick="seeSurveyDetails('+course.id+',0)" class="media">\n' +
+                            '              <a class="activity" href="javascript:void(0)">\n' +
+                            '                <span class="desc">'+course.title+'</span>\n' +
+                            '              </a>\n' +
+                            '           </li>'
+                    }
+                    if(course.survey_completed==1){
+                        is_completed =1
+                        completed += '<li onclick="surveyResult('+course.id+')" class="media">\n' +
+                            '              <a class="activity" href="javascript:void(0)">\n' +
+                            '                <span class="desc">'+course.title+'</span>\n' +
+                            '              </a>\n' +
+                            '           </li>'
+                    }
+
+                })
+
+                html = ''
+                html += is_interested==1? interested: '';
+                html += is_completed==1? completed: '';
+
+
+                $('#user_survey_list').html(html)
+
+                $("#page-sidebar .media a").on("click", function(e) {
+                    $(this).closest(".tab-pane").css({
+                        right: $("#page-sidebar").outerWidth()
+                    });
+                    e.preventDefault();
+                });
+
+
+            }
+        })
+    }
+
+    loadSurveySideBar()
+
+    // page name: message notice course survey publication notification
+    loadPage = function loadPage(pageName) {
+        //alert(pageName)
+        $('.navbar-toggle').trigger('click');
+        // load a ajax loader
+        $.ajax({
+            type: "GET",
+            url:"{{ url('app/')}}/"+pageName,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
+            success: function (data) {
+
+                if($(".sb-toggle").hasClass("open")) {
+                    $(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
+                    $(".sb-toggle").removeClass("open")
+                    $("#page-sidebar").css({
+                        right: -$("#page-sidebar").outerWidth()
+                    });
+                }
+
+
+                $("#load-content").html(data);
+
+
+                if(pageName=='message'){
+                    $('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+65));
+                    $('.chat-form').show();
+                }
+                else{
+                    $('.chat-form').hide();
+                    $('.fixed-panel').css('height', $(window).height() - ($('.footer').outerHeight()+$('.navbar-tools').outerHeight()+40));
+                }
+                $('#load-content').unblock();
+                $("#load-content").fadeIn('slow');
+
+                loadpageFunctionality();
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.log("XHR",xhr);
+                console.log("status",textStatus);
+                console.log("Error in",errorThrown);
+            }
+        });
+    }
+    $('.hometab').on('click', function (){
+        page = $(this).attr('id');
+        changePage(page)
+    })
+
+    //function to open quick sidebar
+
+    $(".sb-toggle").on("click", function(e) {
+        if($(this).hasClass("open")) {
+            $(this).not(".sidebar-toggler ").find(".fa-indent").removeClass("fa-indent").addClass("fa-outdent");
+            $(".sb-toggle").removeClass("open")
+            $("#page-sidebar").css({
+                right: -$("#page-sidebar").outerWidth()
+            });
+        } else {
+            $(this).not(".sidebar-toggler ").find(".fa-outdent").removeClass("fa-outdent").addClass("fa-indent");
+            $(".sb-toggle").addClass("open")
+            $("#page-sidebar").css({
+                right: 0
+            });
+        }
+        e.preventDefault();
+    });
+
+
+    $("#page-sidebar .media a").on("click", function(e) {
+        //alert($("#page-sidebar").outerWidth())
+        $(this).closest(".tab-pane").css({
+            right: $("#page-sidebar").outerWidth()
+        });
+        e.preventDefault();
+    });
+    $("#page-sidebar .sidebar-back").on("click", function(e) {
+
+        $(this).closest(".tab-pane").css({
+            right: 0
+        });
+        e.preventDefault();
+    });
+    $('#page-sidebar .sidebar-wrapper').perfectScrollbar({
+
+        wheelSpeed: 50,
+        minScrollbarLength: 20,
+        suppressScrollX: true
+    });
+    $('#sidebar-tab a').on('shown.bs.tab', function (e) {
+
+        $("#page-sidebar .sidebar-wrapper").perfectScrollbar('update');
+    });
+
+</script>
+<script>
+
+
+    notificationView = (id) =>{
+        $.ajax({
+            url: "{{ url('app/')}}/notification_view/"+id,
+            type: 'GET',
+            async: true,
+            success: function (response) {
+                response = JSON.parse(response)
+                newNotifications();
+                changePage('notification')
+            }
+        })
+    }
+    messageView = (id, group_id) =>{
+        //alert('ok')
+        $.ajax({
+            url: "{{ url('app/')}}/message_view/"+id,
+            type: 'GET',
+            async: true,
+            success: function (response) {
+                //alert('ok')
+                localStorage.setItem('is_group_message',group_id)
+                changePage('message')
+            }
+        })
+    }
+
+    newMessages =  (response) => {
+        html = '';
+        count = 0;
+        lastMessageNotificationId = 0;
+        $.each(response, function (key, value) {
+            lastMessageNotificationId = lastMessageNotificationId < value.id ? value.id :lastMessageNotificationId;
+            count = value.is_seen==0 ? count+1 :count;
+            if(value.is_seen==0){
+                style = 'class = "alert-warning"'
+            }else style = ''
+
+            date = new Date(value["msg_date"]+ 'Z');
+            messageDate 	= date.toLocaleString ();
+
+            group_name = ''
+            if(value.group_id>0){
+                group_name = '('+value.group_name+') '
+            }
+
+
+            html +='<li onclick="messageView('+value.id+','+value.group_id+')" '+style+'> ' +
+                '       <a href="#">' +
+                '           <div class="clearfix">' +
+                '               <div class="thread-image">' +
+                '                   <img style="width:20px; height:25px" alt="" src="/assets/images/logo.jpg"> ' +
+                '               </div> ' +
+                '               <div class="thread-content"> ' +
+                '                   <span class="time margin-left-5">'+messageDate+'</span>' +
+                '                   <span class="preview">'+group_name+' '+value.admin_message+'</span> ' +
+                '               </div> ' +
+                '           </div>' +
+                '        </a>' +
+                '   </li>'
+
+        })
+
+        if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
+            if(!localStorage.getItem('messageMaster')){
+                alert(1);
+                document.getElementById("myAudio").play();
+				//$.mbAudio.play('effectSprite', 'great')
+            }
+
+            localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+        }else  if(lastMessageNotificationId>0) {
+           // alert('message-1')
+            if(!localStorage.getItem('lastMessageNotificationId')) {
+                if(localStorage.getItem('messageMaster')){
+					//$.mbAudio.play('effectSprite', 'great')
+					 alert(2);
+                    document.getElementById("myAudio").play();
+                }
+            }
+            localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
+        }
+        $('#app_message_badge').html(count)
+        $('.message_badge').html(count)
+        $('#app_message_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span>{{__('app.Unread')}}  {{__('app.messages')}}')
+        $('#app_header_new_message').html(html)
+
+    }
+
+
+    new_notification_reload = () =>{
+        setTimeout(function(){
+            newNotifications();
+            //  new_notification_reload();
+        }, 10000);
+    }
+
+    newNotifications =  () => {
+        //alert(11)
+        $.ajax({
+            url: "{{ url('app/')}}/new_notifications",
+            type:'GET',
+            async:true,
+            success: function(response){
+                response = JSON.parse(response)
+                //console.log(response)
+                newMessages(response['individualMessage'])
+                html = '';
+                count = 0;
+                notificationId = 0;
+                $.each(response['Notifications'], function (key, value) {
+                    date = new Date(value["msg_date"]+ 'Z');
+                    notificationDate 	= date.toLocaleString ();
+
+                    notificationId = notificationId<value.id ? value.id : notificationId;
+                    count = value.status==0 ? count+1 :count;
+                    if(value.status==0){
+                        style = 'class = "alert-warning"'
+                    }else style = ''
+                    if(value.module_id==7)		 title = '{{__('app.New_Course')}} : '+value['title'];
+                    else if(value.module_id==37) title = '{{__('app.New_Notice')}}: '+value['title'];
+                    else if(value.module_id==38) title = '{{__('app.New_Publication')}}: '+value['title'];
+                    else title = value.title
+
+                    html +='<li onclick="notificationView('+value.id+')" '+style+'> ' +
+                        '<a href="javascript:void(0)"> ' +
+                        //  '<span class="label label-primary"><i class="fa fa-user"></i></span> ' +
+                        '<span class="time margin-left-5">'+notificationDate+'</span> ' +
+                        '<span class="message"> '+title+'</span> ' +
+                        '</a> ' +
+                        '</li>'
+                })
+
+                if(localStorage.getItem('lastNotificationId')<notificationId){
+                   // $('#lastMessageNotificationId').trigger("play")
+					 //$.mbAudio.play('effectSprite', 'great')
+					 alert(3);
+                    document.getElementById("myAudio").play();
+
+                    localStorage.setItem('lastNotificationId',notificationId)
+                }else  if(notificationId>0) {
+                    if(!localStorage.getItem('lastNotificationId')){
+                        //$('#lastMessageNotificationId').trigger("play")
+						//$.mbAudio.play('effectSprite', 'great')
+						alert(4);
+                        document.getElementById("myAudio").play();
+                    }
+                    localStorage.setItem('lastNotificationId',notificationId)
+                }
+
+                $('#app_notification_badge').html(count)
+                $('.notification_badge').html(count)
+                $('#app_notification_top_unread').html('{{__('app.You_have')}} <span id="total_unseen_message"> '+count+' </span> {{__('app.messages')}}')
+                $('#app_header_new_notification').html(html)
+                //console.log(response)
+
+            }
+        })
+        new_notification_reload()
+    }
+    newNotifications();
+
+    badgeCountLoad = () =>{
+        $.ajax({
+            url: "{{ url('app/')}}/badge_count",
+            type: 'GET',
+            async: true,
+            success: function (response) {
+                //console.log(response)
+                response = JSON.parse(response)
+                $.each(response,function (key, data) {
+                    //console.log(data)
+                    if(data['module_id']==7){
+                        $('.course_badge').html(data['number'])
+                    }
+                    if(data['module_id']==38){
+                        $('.publication_badge').html(data['number'])
+                    }
+                    if(data['module_id']==37){
+                        $('.notice_badge').html(data['number'])
+                    }
+                    if(data['module_id']==6){
+                        $('.survey_badge').html(data['number'])
+                    }
+                })
+            }
+        })
+    }
+    badgeCountLoad()
+
+    $('.panel-tools .panel-refresh').on('click', function(e) {
+        var el = $(this).parents(".panel");
+        el.block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            css: {
+                border: 'none',
+                color: '#333',
+                background: 'none'
+            }
+        });
+        window.setTimeout(function() {
+            page =1;
+            location.reload()
+            el.unblock();
+        }, 1000);
+        e.preventDefault();
+    });
+
+    //alert($('#message_badge').html())
+    //localStorage.setItem('content','message')
+
+
+    if(localStorage.getItem('content')){
+        loadPage(localStorage.getItem('content'))
+        localStorage.removeItem('content')
+
+    }
+
+
+
+</script>
 
 
 

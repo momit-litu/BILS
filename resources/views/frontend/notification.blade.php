@@ -5,7 +5,7 @@
 
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
-		<i class=" clip-notification-2 "></i>		
+		<i class=" clip-notification-2 "></i>
 		{{__('app.Notifications')}}
 		<div class="panel-tools">
 			<a class="btn btn-xs btn-link panel-refresh" href="javascript:void(0)">
@@ -54,8 +54,13 @@
         $.ajax({
             url: "{{ url('app/')}}/all_notifications/"+page,
             type:'GET',
-            async:false,
+            async:true,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
             success: function(response){
+                $('#load-content').unblock();
 
                 response = JSON.parse(response)
                 //console.log(response)
@@ -66,11 +71,11 @@
                     count++;
                     date = new Date(value["msg_date"]+ 'Z');
                     notificationDate 	= date.toLocaleString ();
-						
+
 					if(value.status==0){
 						unseen = 'alert-warning-important';
 					}else unseen = 'alert-success-important';
-					
+
 					if(value.module_id==7) title = '{{__('app.New_Course')}} : '+value['title'];
 					else if(value.module_id==37) title = '{{__('app.New_Notice')}}: '+value['title'];
 					else if(value.module_id==38) title = '{{__('app.New_Publication')}}: '+value['title'];
@@ -93,20 +98,23 @@
                         '   </div>'
 
                 })
-                if(type==2){
-                    $('#allNotificationGrid').append(html)
+                if(html!=''){
+                    if(type==2){
+                        $('#allNotificationGrid').append(html)
+                    }
+                    else{
+                        $('#allNotificationGrid').html(html)
+                    }
+                    page++;
                 }
-                else{
-                    $('#allNotificationGrid').html(html)
-                }
+
 
             }
 
         })
-        page++;
        // all_notification_reload(1)
     }
-    loadAllNotifications()
+    loadAllNotifications(1)
 
     // load more when scroll reachs to bottom of the scrolling div
     $('.fixed-panel').on('scroll', function() {

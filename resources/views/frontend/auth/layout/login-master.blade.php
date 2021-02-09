@@ -1,3 +1,12 @@
+@php
+
+    if(\Session::get('locale') == 'en') \App::setLocale('en');
+    else 							    \App::setLocale('bn');
+
+    if(\Session::get('email')) return back();
+
+@endphp
+
 <!DOCTYPE html>
 <!--[if IE 8]><html class="ie8 no-js" lang="en"><![endif]-->
 <!--[if IE 9]><html class="ie9 no-js" lang="en"><![endif]-->
@@ -20,7 +29,7 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fonts/style.css') }}">
-	
+
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main-responsive.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/iCheck/skins/all.css') }}">
@@ -28,10 +37,10 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme_navy.css') }}" type="text/css" id="skin_color">
     <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}" type="text/css" media="print"/>
-		
-	
-	
-    <!--[if IE 7]>
+
+
+
+<!--[if IE 7]>
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome-ie7.min.css') }}">
     <![endif]-->
     <!-- end: MAIN CSS -->
@@ -43,30 +52,30 @@
 <body class="login example1">
 <div class="main-login col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
     <div class="logo text-center" style="color: #fff">
-       <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>
-	   <h5 class="text-shadow">Bangladesh Institute of Labour Studies-BILS</h5>
+        <i><image src="{{ asset('assets/images/logo.jpg')}}" /></i>
+        <h5 class="text-shadow">{{__('auth.bangladesh_institute_of_labour_studies')}}</h5>
     </div>
     <!-- start: LOGIN BOX -->
-	<div class="box-login">
-	<div class="btn-group pull-right">
-		<button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
-			<span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu" role="menu">
-			<li>
-				<a href="{{url('/app/language/en')}}">
-					EN
-				</a>
-			</li>
-			<li>
-				<a href="{{url('/app/language/bn')}}">
-					BN
-				</a>
-			</li>
-		</ul>
-	</div>
-	@yield('login-content')
-	</div>
+    <div class="box-login">
+        <div class="btn-group pull-right">
+            <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li>
+                    <a href="{{url('/app/language/en')}}" class="showLoading">
+                        EN
+                    </a>
+                </li>
+                <li>
+                    <a href="{{url('/app/language/bn')}}" class="showLoading" >
+                        BN
+                    </a>
+                </li>
+            </ul>
+        </div>
+        @yield('login-content')
+    </div>
 
     <!-- end: LOGIN BOX -->
     <!-- start: FORGOT BOX -->
@@ -92,7 +101,6 @@
 <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/blockUI/jquery.blockUI.js') }}"></script>
 <script src="{{ asset('assets/plugins/iCheck/jquery.icheck.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/perfect-scrollbar/src/jquery.mousewheel.js') }}"></script>
 <script src="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.js') }}"></script>
@@ -102,14 +110,99 @@
 <script src="{{ asset('assets/js/main.js') }}"></script>
 <!-- end: MAIN JAVASCRIPTS -->
 <!-- start: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
+<script src="{{ asset('assets/plugins/blockUI/jquery.blockUI.js') }}"></script>
 <script src="{{ asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
 <script src="{{ asset('assets/js/login.js') }}"></script>
+
 <!-- end: JAVASCRIPTS REQUIRED FOR THIS PAGE ONLY -->
 <script>
     jQuery(document).ready(function() {
         Main.init();
         Login.init();
     });
+
+
+    $('.showLoading').click(function(){
+        //alert('ok')
+        $('.box-login').block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /><b>Loading ....</b>',
+            css: {
+                border: '1px solid black',
+                color: '#333',
+                background: 'none'
+            }
+        });
+    })
+
+    $('.submitButton').click(function(){
+        if($('#email').val()!= "" && $('#password').val()!= ""){
+            $('.box-login').block({
+                overlayCSS: {
+                    backgroundColor: '#fff'
+                },
+                message: '<img src={{ asset('assets/images/loading.gif') }} /><b>Logging In....</b>',
+                css: {
+                    border: '1px solid black',
+                    color: '#333',
+                    background: 'none'
+                }
+            });
+        }
+    })
+	
+	$('.sendSMSButton').click(function(){
+        if($('#contact_no').val()!= ""){
+            $('.box-login').block({
+                overlayCSS: {
+                    backgroundColor: '#fff'
+                },
+                message: '<img src={{ asset('assets/images/loading.gif') }} /><b>Sending SMS....</b>',
+                css: {
+                    border: '1px solid black',
+                    color: '#333',
+                    background: 'none'
+                }
+            });
+        }
+    })
+	
+	/*$('.registerButton').click(function(){
+		if($('#contact_no').val()!= "" && $('#password').val()!= "" && $('#repeat_password').val()!= "" && $('#name').val()!= ""){
+			$('.box-login').block({
+				overlayCSS: {
+					backgroundColor: '#fff'
+				},
+				message: '<img src={{ asset('assets/images/loading.gif') }} /><b>Wait....</b>',
+				css: {
+					border: '1px solid black',
+					color: '#333',
+					background: 'none'
+				}
+			});
+		}
+	})*/
+	
+	$('.regVerifyButton').click(function(){
+		if($('#name').val()!= ""){
+			$('.box-login').block({
+				overlayCSS: {
+					backgroundColor: '#fff'
+				},
+				message: '<img src={{ asset('assets/images/loading.gif') }} /><b>Logging In....</b>',
+				css: {
+					border: '1px solid black',
+					color: '#333',
+					background: 'none'
+				}
+			});
+		}
+	})
+
+
+
 </script>
 </body>
 </html>

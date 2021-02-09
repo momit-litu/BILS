@@ -156,7 +156,7 @@ class System extends Model
 
         try{
 
-            $user_info=\App\User::where('id',$users_id)->first();
+            $user_info=\App\AppUser::where('id',$users_id)->first();
 
             if(isset($user_info)){
                 $users_id=$user_info->id;
@@ -173,6 +173,7 @@ class System extends Model
             $user_email = $users_email;
             $user_name = $user_info->name;
 
+            return true;
 
             \Mail::send('forgot.forget-password-mail', $data, function($message) use ($user_email,$user_name) {
 
@@ -180,9 +181,9 @@ class System extends Model
 
             });
 
-            \App\System::EventLogWrite('send-mail,forget-password-verification',json_encode($data));
+            //\App\System::EventLogWrite('send-mail,forget-password-verification',json_encode($data));
             \Session::flash('errormessage', 'Please check your inbox!');
-            return true;
+
 
         }catch (\Exception $e){
 

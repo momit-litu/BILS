@@ -380,7 +380,8 @@ class SettingController extends Controller
 				DB::beginTransaction();
 				$column_value = [
 					'category_name'=>$request->category_name,
-					'details'=>$request->details,
+                    'category_name_bn'=>$request->category_name_bn,
+                    'details'=>$request->details,
 					'status'=>$status,
 				];
 				if ($request->publication_category_edit_id == '') {
@@ -434,7 +435,7 @@ class SettingController extends Controller
 	}
 
 	public function publication_category_edit($id){
-		$data = PublicationCategory::Select('id','category_name','details','status')->where('id',$id)->first();
+		$data = PublicationCategory::Select('id','category_name','category_name_bn','details','status')->where('id',$id)->first();
 		return json_encode($data);
 	}
 
@@ -483,7 +484,8 @@ class SettingController extends Controller
 				DB::beginTransaction();
 				$column_value = [
 					'category_name'=>$request->category_name,
-					'details'=>$request->details,
+                    'category_name_bn'=>$request->category_name_bn,
+                    'details'=>$request->details,
 					'status'=>$status,
 				];
 				if ($request->course_category_edit_id == '') {
@@ -539,7 +541,7 @@ class SettingController extends Controller
 
 	#Course Categories Edit
 	public function course_category_edit($id){
-		$data = CourseCategory::Select('id','category_name','details','status')->where('id',$id)->first();
+		$data = CourseCategory::Select('id','category_name','category_name_bn','details','status')->where('id',$id)->first();
 		return json_encode($data);
 	}
 
@@ -590,7 +592,8 @@ class SettingController extends Controller
 				DB::beginTransaction();
 				$column_value = [
 					'category_name'=>$request->category_name,
-					'details'=>$request->details,
+                    'category_name_bn'=>$request->category_name_bn,
+                    'details'=>$request->details,
 					'status'=>$status,
 				];
 				if ($request->notice_category_edit_id == '') {
@@ -646,7 +649,7 @@ class SettingController extends Controller
 
 	#Notice Categories Edit
 	public function notice_category_edit($id){
-		$data = NoticeCategory::Select('id','category_name','details','status')->where('id',$id)->first();
+		$data = NoticeCategory::Select('id','category_name','category_name_bn','details','status')->where('id',$id)->first();
 		return json_encode($data);
 	}
 
@@ -697,7 +700,8 @@ class SettingController extends Controller
 				DB::beginTransaction();
 				$column_value = [
 					'category_name'=>$request->category_name,
-					'details'=>$request->details,
+                    'category_name_bn'=>$request->category_name_bn,
+                    'details'=>$request->details,
 					'status'=>$status,
 				];
 				if ($request->survey_category_edit_id == '') {
@@ -753,7 +757,7 @@ class SettingController extends Controller
 
 	#Survey Categories Edit
 	public function survey_category_edit($id){
-		$data = SurveyCategory::Select('id','category_name','details','status')->where('id',$id)->first();
+		$data = SurveyCategory::Select('id','category_name','category_name_bn','details','status')->where('id',$id)->first();
 		return json_encode($data);
 	}
 
@@ -803,6 +807,7 @@ class SettingController extends Controller
                 DB::beginTransaction();
                 $column_value = [
                     'category_name'=>$request->category_name,
+                    'category_name_bn'=>$request->category_name_bn,
                     'details'=>$request->details,
                     'status'=>$status,
                 ];
@@ -861,7 +866,7 @@ class SettingController extends Controller
 
     #Message Categories Edit
     public function message_category_edit($id){
-        $data = MessageCategory::Select('id','category_name','details','status')->where('id',$id)->first();
+        $data = MessageCategory::Select('id','category_name','category_name_bn','details','status')->where('id',$id)->first();
         return json_encode($data);
     }
 

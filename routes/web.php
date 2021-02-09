@@ -42,8 +42,13 @@ Route::post('app/auth/post/login',array('as'=>'Sign in', 'uses' =>'AppAuthContro
 
 Route::get('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegistration'));
 Route::post('app/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegistration'));
-Route::get('app/auth/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authPostRegistration'));
+Route::post('app/register_verify',array('as'=>'Registration', 'uses' =>'AppAuthController@authPostRegistration'));
+
+//Route::get('app/auth/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authPostRegistration'));
 Route::post('app/auth/post/register',array('as'=>'Registration', 'uses' =>'AppAuthController@authPostRegistration'));
+Route::post('app/auth/post/register_verify',array('as'=>'Registration', 'uses' =>'AppAuthController@authRegistrationVerification'));
+Route::get('app/auth/register_verify/{contact_no}',array('as'=>'Registration', 'uses' =>'AppAuthController@sendVerificationCode'));
+Route::get('app/auth/password/reset/{contact_no}',array('as'=>'Registration', 'uses' =>'AppAuthController@authForgotPasswordCode'));
 
 #ForgetPassword
 Route::get('app/auth/forget/password',array('as'=>'Forgot Password' , 'uses' =>'AppAuthController@forgetPasswordAuthPage'));
@@ -56,7 +61,9 @@ Route::group(['middleware'=>'appUser'], function() {
     Route::get('app/auth/logout/{email}',array('as'=>'Logout' , 'uses' =>'FrontEndController@authLogout'));
 
 	Route::get('app/dashboard',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@index'));
-	Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard'));
+    Route::get('app/dashboard/content_load',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@contentLoad'));
+
+    Route::get('app/dashboard-content',array('as'=>' Dashboard' , 'uses' =>'FrontEndController@dashboard'));
 	Route::get('app/profile',array('as'=>' Profile' , 'uses' =>'FrontEndController@profileView'));
     Route::get('app/profile_info',array('as'=>' Profile Info' , 'uses' =>'FrontEndController@profileInfo'));
     Route::post('app/update_profile',array('as'=>'Update Profile' , 'uses' =>'FrontEndController@updateProfile'));
@@ -71,6 +78,7 @@ Route::group(['middleware'=>'appUser'], function() {
     Route::post('app/send-message',array('as'=>'Message' , 'uses' =>'FrontEndController@sendMessage'));
     Route::get('app/message_notification',array('as'=>'Notification' , 'uses' =>'FrontEndController@messageListNotification'));
     Route::get('app/message_view/{id}',array('as'=>'Message View' , 'uses' =>'FrontEndController@messageView'));
+    Route::get('app/course_registration',array('as'=>'Course Registration' , 'uses' =>'FrontEndController@courseRegistration'));
 
 
     Route::get('app/notification_view/{id}',array('as'=>'Notification' , 'uses' =>'FrontEndController@notificationView'));
@@ -83,6 +91,21 @@ Route::group(['middleware'=>'appUser'], function() {
     Route::get('app/load-publications/{page}/{search}',array('as'=>'Notice' , 'uses' =>'FrontEndController@publications'));
     Route::get('app/load-publications-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@publicationsDtails'));
 
+    Route::get('app/load-course/{page}/{search}',array('as'=>'Course' , 'uses' =>'FrontEndController@courses'));
+    Route::get('app/load-course-details/{id}',array('as'=>'Course' , 'uses' =>'FrontEndController@courseDtails'));
+    Route::get('app/course-interest/{id}',array('as'=>'Course' , 'uses' =>'FrontEndController@courseInterest'));
+
+    Route::get('app/load-survey/{page}/{search}',array('as'=>'Notice' , 'uses' =>'FrontEndController@allSurvey'));
+    Route::get('app/load-survey-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@surveyDtails'));
+
+    Route::get('app/user_course',array('as'=>'Notice' , 'uses' =>'FrontEndController@userCourse'));
+    Route::get('app/user_course_description/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userCourseDescription'));
+    Route::get('app/user_course_registration/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userCourseRegistration'));
+
+    Route::get('app/user_survey',array('as'=>'Notice' , 'uses' =>'FrontEndController@userSurvey'));
+    Route::get('app/user_survey_description/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userSurveyDescription'));
+    Route::get('app/survey-interest/{id}',array('as'=>'Survey' , 'uses' =>'FrontEndController@surveyInterest'));
+    Route::get('app/survey-result/{id}',array('as'=>'Survey' , 'uses' =>'FrontEndController@surveyParticipantResultView'));
 
 
     Route::get('app/notice',array('as'=>' Notice' , 'uses' =>'FrontEndController@noticeList'));
@@ -96,6 +119,12 @@ Route::group(['middleware'=>'appUser'], function() {
 
 	Route::get('app/course',array('as'=>' Course' , 'uses' =>'FrontEndController@courseList'));
 	Route::get('app/survey',array('as'=>' Survey' , 'uses' =>'FrontEndController@surveyList'));
+
+    Route::get('app/survey_question',array('as'=>' Survey Questions' , 'uses' =>'FrontEndController@surveyQuestion'));
+    Route::get('app/load-survey_question/{id}',array('as'=>' Survey Questions' , 'uses' =>'FrontEndController@loadSurveyQuestion'));
+    Route::get('app/load-survey_title/{id}',array('as'=>' Survey Questions' , 'uses' =>'FrontEndController@loadSurveyTitle'));
+    Route::post('app/survey_answer',array('as'=>' Survey Answer' , 'uses' =>'FrontEndController@surveyAnswer'));
+
 
 
     Route::get('app/badge_count',array('as'=>' Badge Count' , 'uses' =>'FrontEndController@badgeCount'));

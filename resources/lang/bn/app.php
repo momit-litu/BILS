@@ -33,9 +33,9 @@ return [
     // header
     'See_all_notifications' => 'সকল বিজ্ঞপ্তি',
     'My_Profile' => 'আমার প্রোফাইল',
-    'Edit_Profile' => 'প্রোফাইল পরিবর্তন',
+    'Edit_Profile' => 'তথ্য পরিবর্তন',
     'Change_Password' => 'পাসওয়ার্ড পরিবর্তন',
-    'Overview'=> 'সংক্ষিপ্ত বিবরণ',
+    'Overview'=> 'বিবরণ',
     'Log_Out' =>  'লগ আউট',
     'You_have' => 'আপনার আছে',
     'See_all_messages' => 'সকল ম্যাসেজ',
@@ -71,8 +71,13 @@ return [
     'Unread' => 'অপঠিত',
     'Group' => 'গ্রুপ',
     'None' => 'কিছু নাই',
+    'Profile'=>'প্রোফাইল',
 
 	'Category_Topic'=>'বিভাগ',
 	'Menu' => 'মেন্যু',
+    'next' => 'পরবর্তী',
+    'previous' => 'পূর্ববর্তী',
+    'submit' => 'জমা দিন',
+    'download_file' =>  'সংযুক্তি ডাউনলোড',
 
 ];

@@ -140,7 +140,13 @@ class SurveysController extends Controller
 
     public function getSurveyTypes()
     {
-        $data = SurveyCategory::select('id', 'category_name')->get();
+        //$data = SurveyCategory::select('id', 'category_name')->get();
+        $data = DB::table('survey_categories')
+            ->where ('status',1)
+            ->select('id', DB::raw(
+                'concat(category_name," ",ifnull(category_name_bn,"")) as category_name'
+            ))
+            ->get();
         return json_encode($data);
     }
 

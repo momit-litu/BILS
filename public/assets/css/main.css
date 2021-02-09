@@ -1202,7 +1202,7 @@ li.dropdown.current-user .dropdown-menu li a {
     border-bottom: 1px solid #E4E6EB;
     font-size: 12px;
     margin-left: 0 !important;
-    padding: 10px 100px 10px 10px !important;
+    padding: 4px 100px 4px 10px !important;
     position: relative;
     display: block;
     color: #333333;
@@ -3159,6 +3159,7 @@ div.timeline {
     margin: 0 auto;
     overflow: hidden;
     position: relative;
+    
 }
 div.timeline .columns > li:nth-child(2n+1) {
     float: left;
@@ -3207,6 +3208,7 @@ div.timeline div.spine {
     background-color: #CCCCCC;
 }
 div.timeline_element {
+     width:100% !important;
     border-radius: 5px 5px 5px 5px;
     clear: both;
     margin: 10px 0;
@@ -3345,6 +3347,7 @@ div.timeline_element.teal {
     background-color: #569099;
     border-color: #4D8189;
     color: #FFFFFF;
+       
 }
 div.timeline_element.teal:after {
     background-color: #569099;

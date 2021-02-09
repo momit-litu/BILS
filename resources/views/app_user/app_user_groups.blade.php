@@ -25,7 +25,7 @@
 	            		<p class="text-info">App User Group Management</p>
 	            	</div>
             	<div class="panel-body">
-	            	
+
 	            	<div class="row no-margin-row">
 						<form id="save_group_form" name="admin_user_form" enctype="multipart/form-data" class="form form-horizontal form-label-left">
 							@csrf
@@ -38,6 +38,12 @@
 											<input type="text" id="group_name" name="group_name" class="form-control col-lg-12"/>
 										</div>
 									</div>
+                                    <div class="form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-6">Group Name In Bangla<span class="required">*</span></label>
+                                        <div class="col-md-9 col-sm-9 col-xs-6">
+                                            <input type="text" id="group_name_bn" name="group_name_bn" class="form-control col-lg-12"/>
+                                        </div>
+                                    </div>
 									<input type="hidden" name="type" id="type" value="2">
 									<div class="form-group">
 										<label class="control-label col-md-2 col-sm-2 col-xs-6" >Is Active</label>
@@ -52,16 +58,16 @@
 							<label class="control-label col-md-2 col-sm-2 col-xs-6"></label>
 							<div class="col-md-6 col-sm-6 col-xs-12">
 								@if($actions['add_permisiion']>0)
-									<button type="submit" id="save_app_user_group" class="btn btn-success save">Save</button>                    
+									<button type="submit" id="save_app_user_group" class="btn btn-success save">Save</button>
 									<button type="button" id="clear_button" class="btn btn-warning">Clear</button>
-								@endif                       
-								<button type="button" id="cancle_admin_user_group_button" class="btn btn-danger hidden">Cancle</button>                         
+								@endif
+								<button type="button" id="cancle_admin_user_group_button" class="btn btn-danger hidden">Cancel</button>
 							</div>
 							 <div class="col-md-7 col-sm-7 col-xs-12">
 								<div id="form_submit_error" class="text-center" style="display:none"></div>
 							 </div>
 							</div>
-						</form>		
+						</form>
 	                </div>
             	</div>
             </div>
@@ -92,7 +98,7 @@
 							</div>
 						</div>
 						<div class="panel-body">
-							<table class="table table-bordered table-hover" id="app_user_group" style="width:100% !important"> 
+							<table class="table table-bordered table-hover" id="app_user_group" style="width:100% !important">
 								<thead>
 									<tr>
 										<th>ID</th>

@@ -234,7 +234,7 @@
 
         //08--Done
         loadMessages = function loadMessages(message_load_type){
-            $("#search_app_user").val("");
+            //$("#search_app_user").val("");
             // event.preventDefault();
             $.ajaxSetup({
                 headers:{
@@ -357,8 +357,8 @@
                                 html += '<span class="time_date_sent">'+mc+' '+msg_date+'<a href="javascript:void(0)" onclick="removeMessage('+message["id"]+','+tem_msg+')" class="margin-left-2 text-danger"><i class="clip-remove"></i></a><a href="javascript:void(0)" onclick="editMessage('+message["id"]+','+tem_msg+')" class="margin-left-2"><i class="fa fa-pencil"></i></a></span>';
                             }
                             else {
-                                if(message["replied"]){
-                                    html+='<li class="receive_msg reply" style="margin-bottom: -15px;padding-left: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
+                                if(message["admin_reply_message"]){
+                                    html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px; "><div style="margin-left: 35px">'+message['admin_reply_message']+'</div></li>  ';
                                 }
                                 html += '<li class="receive_msg" id="receive_message_id_'+message['id']+'">';
                                 if($.trim(message['user_profile_image']) == "null" || $.trim(message['user_profile_image']) == ""  ) appuser_image = "no-user-image.png";
@@ -467,7 +467,9 @@
         }
 
         loadMessageUser = function loadMessageUser(app_user_id){
-            $("#search_app_user").val("");
+            //alert(app_user_id)
+            //event.preventDefault()
+            //$("#search_app_user").val("");
             // change the last app users message
             last_appuser_message_id = 0;
             //event.preventDefault();
@@ -502,10 +504,6 @@
             //window.setInterval(loadMessageUser(app_user_id), 1000);
         }
 
-        if(localStorage.getItem('app_user_id')){
-            loadMessageUser(localStorage.getItem('app_user_id'))
-            localStorage.removeItem('app_user_id')
-        }
 
 
         //08---done
@@ -536,7 +534,7 @@
             $.ajax({
                 url: url + '/message/delete-message/'+id,
                 type: 'GET',
-                async: false,
+                async: true,
                 success: function (response) {
 					// need to check whether removed or now
 					if($('#sent_message_id_'+id).prev().hasClass('reply')){
@@ -559,7 +557,7 @@
 
 
         searchAppUsers = function searchAppUsers(){
-            //event.preventDefault();
+            event.preventDefault();
             $.ajaxSetup({
                 headers:{
                     'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
@@ -600,9 +598,7 @@
             }
         }
 
-        $("#search_app_user").keyup(function(){
-            searchAppUsers();
-        });
+
 
 
         loadAppUser = function loadAppUser(){
@@ -640,7 +636,11 @@
                     //$('.msg_auto_load:first-child').trigger('click');
                     //$('.msg_auto_load').trigger('click');
                     //$('.msg_auto_load').first().addClass('active');
-                    if(loaded == 1){
+                    if(localStorage.getItem('app_user_id')){
+                        $('#app_user_id').val(localStorage.getItem('app_user_id'))
+                        loadMessageUser(localStorage.getItem('app_user_id'))
+                        localStorage.removeItem('app_user_id')
+                    }else if(loaded == 1){
                         $('.contact:first').trigger('click');
                         loaded++;
                     }
@@ -649,6 +649,14 @@
         }
 
  	    loadAppUser();
+
+        $("#search_app_user").keyup(function(){
+            //alert('sdf')
+            searchAppUsers();
+            if($("#search_app_user").val()==''){
+                loadAppUser()
+            }
+        });
 
 
         //08---done
@@ -670,15 +678,15 @@
                     url: url+"/message/admin-message-sent-to-user",
                     type:'POST',
                     data:formData,
-                    async:false,
-                    cache:false,
+                    async:true,
+                    cache:true,
                     contentType:false,
                     processData:false,
                     success: function(data){
 						// need to confirmation
 						if($('#edit_msg_id').val() != ""){
 							if(data == 1){
-								$('#sent_message_id_'+$('#edit_msg_id').val()+'>p').html($.trim($('#admin_message').val()));
+								$('#sent_message_id_'+$('#edit_msg_id').val()+'>div').html($.trim($('#admin_message').val()));
 							}
 						}
 						else{
@@ -796,7 +804,7 @@
 
     </script>
 
-    <script src="{{ asset('assets/js/bils/message/message_.js')}}"></script>
+    <script src="{{ asset('assets/js/bils/message/message.js')}}"></script>
 
 @endsection
 

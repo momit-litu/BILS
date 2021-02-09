@@ -1,62 +1,57 @@
-$(document).ready(function () {
-
+$(document).ready(function () {	
+	
 	// for get site url
 	var url = $('.site_url').val();
 
-
+	
 	//Load App User Group
-
-    goupLoad = () =>{
-        $.ajax({
-            url: url+'/notice/load-app-user-groups',
-            success: function(response){
-                var data = JSON.parse(response);
-                if(!jQuery.isEmptyObject(data)){
-                    var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left " class="col-md-8 col-sm-8 col-xs-8" >App User Groups</th><th class="col-md-2 col-sm-2 col-xs-12"> <input type="checkbox" id="check-all" class="tableflat">Select All</th></tr></thead>';
-                    html += '<tr><td colspan="2">';
-                    $.each(data, function(i,data){
-                        html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox" name="app_user_group[]"  class="tableflat check_permission"  value="'+data["id"]+'"/> '+data["group_name"]+'</div>';
-                    });
-                    html += '</td></tr>';
-                    html +='</table>';
-                }
-                $('#app_user_group').html(html);
-
-                $('#notice_form').iCheck({
-                    checkboxClass: 'icheckbox_flat-green',
-                    radioClass: 'iradio_flat-green'
-                });
-
-                $('#notice_form input#check-all').on('ifChecked', function () {
-
-                    $("#notice_form .tableflat").iCheck('check');
-                });
-                $('#notice_form input#check-all').on('ifUnchecked', function () {
-
-                    $("#notice_form .tableflat").iCheck('uncheck');
-                });
-
-            }
-        });
-
-    }
-
+	$.ajax({
+		url: url+'/notice/load-app-user-groups',
+		success: function(response){
+			var data = JSON.parse(response);
+			if(!jQuery.isEmptyObject(data)){
+				var html = '<table class="table table-bordered"><thead><tr class="headings"><th class="column-title text-left " class="col-md-8 col-sm-8 col-xs-8" >App User Groups</th><th class="col-md-2 col-sm-2 col-xs-12"> <input type="checkbox" id="check-all" class="tableflat">Select All</th></tr></thead>';
+					html += '<tr><td colspan="2">';
+					$.each(data, function(i,data){
+						html += '<div class="col-md-3" style="margin-top:5px;"><input type="checkbox" name="app_user_group[]"  class="tableflat check_permission"  value="'+data["id"]+'"/> '+data["group_name"]+'</div>';
+					});
+					html += '</td></tr>';
+				html +='</table>';	
+			}
+			$('#app_user_group').html(html);
+			
+			$('#notice_form').iCheck({
+					checkboxClass: 'icheckbox_flat-green',
+					radioClass: 'iradio_flat-green'
+			});									
+			
+			$('#notice_form input#check-all').on('ifChecked', function () {
+				
+				$("#notice_form .tableflat").iCheck('check');
+			});
+			$('#notice_form input#check-all').on('ifUnchecked', function () {
+				
+				$("#notice_form .tableflat").iCheck('uncheck');
+			});
+			
+		}
+	});
 
 	//Notice Entry And update
-	$('#save_notice').click(function(event){
+	$('#save_notice').click(function(event){		
 		event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
-
+		
 		var formData = new FormData($('#notice_form')[0]);
 		if($.trim($('#title').val()) == ""){
-			success_or_error_msg('#form_submit_error','danger',"Please Insert Notice Title","#title");
+			success_or_error_msg('#form_submit_error','danger',"Please Insert Notice Title","#title");			
 		}
 		else if($("#details").summernote('code') == ""){
-			success_or_error_msg('#form_submit_error','danger',"Please Insert Notice Details","#details");
+			success_or_error_msg('#form_submit_error','danger',"Please Insert Notice Details","#details");			
 		}
 		else{
 			$.ajax({
@@ -68,20 +63,20 @@ $(document).ready(function () {
 				contentType:false,processData:false,
 				success: function(data){
 					var response = JSON.parse(data);
-
+				
 					if(response['result'] == '0'){
-						var errors	= response['errors'];
+						var errors	= response['errors'];					
 						resultHtml = '<ul>';
 							$.each(errors,function (k,v) {
 							resultHtml += '<li>'+ v + '</li>';
 						});
 						resultHtml += '</ul>';
 						success_or_error_msg('#master_message_div',"danger",resultHtml);
-
+						
 					}
-					else{
+					else{				
 						success_or_error_msg('#master_message_div',"success","Save Successfully");
-
+						
 						notice_table.ajax.reload();
 						clear_form();
 						$("#notice_entry").html('Add Notice');
@@ -90,9 +85,9 @@ $(document).ready(function () {
 						$("#notice_edit_id").val("");
 					}
 					$(window).scrollTop();
-				 }
+				 }	
 			});
-		}
+		}	
 	});
 
 	$("#cancel_notice").click(function(){
@@ -134,7 +129,7 @@ $(document).ready(function () {
 				notice_info += "<h3>"+data['title']+"</h3><hr>";
 				notice_info += "<p>"+data['details']+"</p>";
 				$("#modal_body").html(notice_info);
-
+				
 			}
 		});
 	}
@@ -161,7 +156,7 @@ $(document).ready(function () {
 						notice_table.ajax.reload();
 					}
 				});
-			}
+			} 
 			else {
 				swal("Your Data is safe..!", {
 				icon: "warning",
@@ -172,7 +167,6 @@ $(document).ready(function () {
 
 	//Notice Edit
 	edit_notice = function edit_notice(id){
-        goupLoad()
 		var edit_id = id;
 		$.ajax({
 			url: url+'/notice/notice-edit/'+edit_id,
@@ -218,7 +212,7 @@ $(document).ready(function () {
 			});
 		},
 		minLength: 2,
-		select: function(event, ui) {
+		select: function(event, ui) { 
 			var id = ui.item.id;
 			$(this).next().val(id);
 			$("#app_user_id").val(id);
@@ -227,17 +221,17 @@ $(document).ready(function () {
 
 
 	//App User Group Member
-	$('#load_app_user_from_group ').click(function(event){
+	$('#load_app_user_from_group ').click(function(event){		
 		event.preventDefault();
 		$.ajaxSetup({
 			headers:{
 				'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
 			}
 		});
-
+		
 		var formData = new FormData($('#notice_form')[0]);
-
-
+		
+		
 			$.ajax({
 				url: url+"/message/load-app-user-from-group",
 				type:'POST',
@@ -261,14 +255,14 @@ $(document).ready(function () {
 					$('.form').iCheck({
 						checkboxClass: 'icheckbox_flat-green',
 						radioClass: 'iradio_flat-green'
-					});
+					});	
 
 					$('.flat_radio').iCheck({
 						radioClass: 'iradio_flat-green'
 					});
-				 }
+				 }	
 			});
-
+		
 	});
 
 
@@ -277,11 +271,11 @@ $(document).ready(function () {
 
 
 
+	
 
 
 
-
-
+	
 
 	//Clear form
 	$("#clear_button").on('click',function(){
@@ -293,25 +287,25 @@ $(document).ready(function () {
 	$('.form').iCheck({
 		checkboxClass: 'icheckbox_flat-green',
 		radioClass: 'iradio_flat-green'
-	});
+	});	
 
 	$('.flat_radio').iCheck({
 		radioClass: 'iradio_flat-green'
 	});
 
+		
+		
+	
 
 
 
 
 
 
-
-
-
-
-
+	
+	
 });
 
 
-
+  
 

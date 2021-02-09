@@ -4,14 +4,14 @@
 
         <div class="navbar-tools">
             <!-- start: TOP NAVIGATION MENU -->
-			<a class="navbar-brand" href="javascript:void(0)" onCLick="loadPage('dashboard-content')"  style="padding-top: 0px;position: fixed;margin-top: 10px; float:none !important">
-				<span class="text-shadow" style="color: #fff"> BILS</span>
+			<a class="navbar-brand" href="{{url('app/dashboard')}}" {{--onCLick="loadPage('dashboard-content')"--}}  style="padding-top: 0px;position: fixed;margin-top: 10px; float:none !important">
+				<span class="text-shadow" style="color: #fff">BILS</span>
 			</a>
             <ul class="nav navbar-right">
                 <!-- start: NOTIFICATION DROPDOWN -->
-				
-				
-				
+
+
+
 				<li class="dropdown">
                     <a data-toggle="dropdown" data-hover="dropdown" class="dropdown-toggle" data-close-others="true" href="#" style="font-size:12px; font-weight:bold;">
 						<span class="" style="text-transform:uppercase" >{{\Session::get('locale')}}</span>
@@ -19,12 +19,12 @@
 					</a>
 					<ul class="dropdown-menu" style="min-width:70px">
                        <li>
-							<a href="{{url('/app/language/en')}}">
+							<a href="{{url('/app/language/en')}}"  class="showLoading">
 								EN
 							</a>
 						</li>
                         <li>
-							<a href="{{url('/app/language/bn')}}">
+							<a href="{{url('/app/language/bn')}}"  class="showLoading">
 								BN
 							</a>
 						</li>
@@ -46,7 +46,7 @@
                             </div>
                         </li>
                         <li class="view-all">
-                            <a onclick="loadPage('notification')"   href="javascript:void(0)">
+                            <a onclick="changePage('notification')"   href="javascript:void(0)">
                                 {{__('app.See_all_notifications')}} <i class="fa fa-arrow-circle-o-right"></i>
                             </a>
                         </li>
@@ -69,13 +69,13 @@
 							</div>
 						</li>
 						<li class="view-all">
-							<a onclick="loadPage('message')"   href="javascript:void(0)">
+							<a onclick="changePage('message')"   href="javascript:void(0)">
 								{{__('app.See_all_messages')}}   <i class="fa fa-arrow-circle-o-right"></i>
 							</a>
 						</li>
 					</ul>
                 </li>
-              
+
                 <!-- end: USER DROPDOWN -->
 				<!--<li>
 					<a class="sb-toggle" href="#"><i class="fa fa-outdent"></i></a>
@@ -97,7 +97,7 @@
                         <li>
                             @if(\Auth::guard('appUser')->check())
 
-                                   <a class="profile" href="javascript:void(0)" onClick="loadPage('profile')">
+                                   <a class="profile" href="javascript:void(0)" onClick="changePage('profile')">
                                         <i class="clip-user-2"></i>
                                         &nbsp;   {{__('app.My_Profile')}}
                                     </a>
@@ -107,7 +107,7 @@
                         <li class="divider"></li>
 						<li>
                             @if(\Auth::guard('appUser')->check())
-								<a class="profile" href="javascript:void(0)" onClick="loadPage('profile','tab=edit_profile')">
+								<a class="profile" href="javascript:void(0)" onClick="changePage('profile','tab=edit_profile')">
                                     <i class="fa fa-lock"></i>
                                     &nbsp; {{__('app.Edit_Profile')}}
                                 </a>
@@ -115,7 +115,7 @@
                         </li>
                         <li>
                             @if(\Auth::guard('appUser')->check())
-								<a class="profile" href="javascript:void(0)" onClick="loadPage('profile','tab=change_password')">
+								<a class="profile" href="javascript:void(0)" onClick="changePage('profile','tab=change_password')">
                                     <i class="fa fa-lock"></i>
                                     &nbsp;{{__('app.Change_Password')}}
                                 </a>
@@ -138,4 +138,7 @@
     </div>
     <!-- end: TOP NAVIGATION CONTAINER -->
 </div>
+<script>
 
+
+</script>

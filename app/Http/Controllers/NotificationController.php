@@ -29,6 +29,51 @@ class NotificationController extends Controller
     }
 
     public function newNotificationLoad(){
+        $newMessage = array();
+        $groupMessage = DB::table('message_masters as mm')
+            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->leftJoin('user_groups as ug', 'mm.group_id', '=', 'ug.id')
+            ->where('mm.is_seen',0)
+            ->where('mm.is_group_msg',1)
+            ->whereNull('admin_message')
+            ->where('is_attachment',0)
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id', 'mm.message_category as category_id', 'mm.group_id as group_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name', 'ug.group_name as group_name','apu.name as app_user_name', 'apu.user_profile_image')
+            ->groupBy('mm.group_id', 'mm.message_category')
+            ->orderBy('mm.created_at', 'desc')
+            ->get();
+
+        $individualMessage = DB::table('message_masters as mm')
+            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->where('mm.is_seen',0)
+            ->where('mm.is_group_msg',0)
+            ->whereNull('admin_message')
+            ->where('is_attachment',0)
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','apu.name as app_user_name','apu.user_profile_image')
+            ->groupBy('mm.app_user_id')
+            ->orderBy('mm.created_at', 'desc')
+            ->get();
+            
+           /*echo  DB::table('message_masters as mm')
+            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
+            ->leftJoin('message_categories as mc', 'mm.message_category', '=', 'mc.id')
+            ->where('mm.is_seen',0)
+            ->where('mm.is_group_msg',0)
+            ->whereNull('admin_message')
+            ->select('mm.id as id', 'mm.app_user_id as app_user_id','mm.message_category as category_id', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'), 'mm.is_attachment as is_attachment', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','apu.name as app_user_name','apu.user_profile_image')
+            ->groupBy('mm.app_user_id')
+            ->orderBy('mm.created_at', 'desc')->toSql();die; 
+            
+           */ 
+            
+        foreach ($individualMessage as $value){
+            $newMessage[strtotime($value->msg_date)]=$value;
+        }
+        foreach ($groupMessage as $value){
+            $newMessage[strtotime($value->msg_date)]=$value;
+        }
+
         $notifications = DB::table('notifications as nf')
             ->leftJoin('app_users as apu', 'nf.from_id', '=', 'apu.id')
             ->where('nf.status',0)
@@ -37,8 +82,11 @@ class NotificationController extends Controller
             ->groupBy('nf.id')
             ->orderBy('nf.created_at', 'desc')
             ->get();
+        
+        $data['message']=$newMessage;
+        $data['notification']=$notifications;
 
-        return json_encode($notifications);
+        return json_encode($data);
     }
 
     public function viewNotification($id){
@@ -48,6 +96,7 @@ class NotificationController extends Controller
     }
 
     public function allNotificationView(){
+
         $data['page_title'] = $this->page_title;
         $data['module_name']= "Notification";
         //action permissions
@@ -63,6 +112,8 @@ class NotificationController extends Controller
         $edit_action_id     = 95;
         $edit_permisiion    = 0;
         $delete_permisiion  = 0;
+        //$data['module_name']= "Notification";
+
 
         /*echo MessageMaster::Select('id', 'admin_message', 'app_user_id', 'is_seen', 'status', 'message_category')
                         ->distinct('message_id')
@@ -79,11 +130,14 @@ class NotificationController extends Controller
 
 
         $return_arr = array();
+        //return 1;
         foreach($notification_list as $data){
-
-            $module_name = Menu::select('module_name')->where('id',$data->module_id)->first();
-
-            $data['module_name'] = $module_name['module_name'];
+            if($data->module_id!=null){
+                $module_name = Menu::select('module_name')->where('id',$data->module_id)->first();
+                $data['module_name'] = $module_name['module_name'] ? $module_name['module_name']:'';
+            }else{
+                $data['module_name'] = '';
+            }
 
             $app_user_name = AppUser::select('name')->where('id', $data->from_id)->first();
 

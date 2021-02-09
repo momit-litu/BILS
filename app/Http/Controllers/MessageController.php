@@ -443,7 +443,10 @@ class MessageController extends Controller
                     ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                        DB::raw(
+                            'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                        ))
                     ->groupBy('id')
                     ->orderBy('mm.message_date_time', 'desc')
 					->offset($start)
@@ -466,7 +469,10 @@ class MessageController extends Controller
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
 				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
 				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                    DB::raw(
+                        'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                    ))
 				->groupBy('id')
 				->orderBy('mm.message_date_time', 'desc')
 				->limit(1)
@@ -489,7 +495,10 @@ class MessageController extends Controller
 				->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
 				DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
 				DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name')
+				'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                    DB::raw(
+                        'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                    ))
 				->groupBy('id')
 				->orderBy('mm.message_date_time', 'desc')
 				->get();
@@ -632,7 +641,12 @@ class MessageController extends Controller
     }
 
     public function getMessageCategory(){
-        $data = MessageCategory::select('id', 'category_name')->get();
+        //$data = MessageCategory::select('id', 'category_name')->get();
+        $data = DB::table('message_categories')
+            ->where ('status',1)
+            ->select('id', DB::raw(
+                'concat(category_name," ",ifnull(category_name_bn,"")) as category_name'
+            ))->get();
         return json_encode($data);
     }
 
@@ -667,7 +681,9 @@ class MessageController extends Controller
 
         $user_groups = DB::table('user_groups as ug')
             ->leftJoin('message_masters as mm', 'ug.id','=','ug.group_name', 'mm.created_at')
-            ->select('ug.id','ug.group_name')
+            ->select('ug.id',DB::raw(
+                'concat(ug.group_name," ",ifnull(ug.group_name_bn,"")) as group_name'
+            ))
             ->where('ug.status','1')
             ->orderBy('mm.created_at')
             ->groupBy('ug.id')
@@ -804,7 +820,9 @@ class MessageController extends Controller
         $start                  = ($page_no*$limit)-$limit;
         $end                    = $limit;
         $message                = array();
-
+		//echo "GROUP ID -- ".$group_id;die;
+		$groupInfo = UserGroup::where('id',$group_id)->first();
+		//dd($groupInfo);
 
         if($message_load_type ==1 || $message_load_type ==3){
             $message = DB::table('message_masters as mm')
@@ -819,7 +837,10 @@ class MessageController extends Controller
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.name as app_user_name' , 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','ug.group_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                    DB::raw(
+                        'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                    ),'ug.group_name')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->offset($start)
@@ -843,7 +864,10 @@ class MessageController extends Controller
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id','apu.name as app_user_name' , 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','ug.group_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                    DB::raw(
+                        'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                    ),'ug.group_name')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->limit(1)
@@ -867,7 +891,10 @@ class MessageController extends Controller
                 ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.name as app_user_name' ,'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                     DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                     DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name','ug.group_name')
+                    'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                    DB::raw(
+                        'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                    ),'ug.group_name')
                 ->groupBy('id')
                 ->orderBy('mm.message_date_time', 'desc')
                 ->get();
@@ -880,6 +907,7 @@ class MessageController extends Controller
 
 
         return json_encode(array(
+			"group_name"=>$groupInfo['group_name'],
             "message"=>$message
         ));
 
@@ -913,7 +941,10 @@ class MessageController extends Controller
             ->select('mm.id as id', 'mm.reply_to as replay_to_id', 'reply.app_user_message AS reply_message', 'mm.app_user_id as app_user_id', 'apu.name as app_user_name' , 'apu.user_profile_image','u.user_profile_image AS admin_image', 'mm.app_user_message as app_user_message', 'mm.admin_id as admin_id','u.name AS admin_name', 'mm.admin_message as admin_message',DB::Raw('from_unixtime(UNIX_TIMESTAMP(mm.created_at)) as msg_date'),
                 DB::raw('group_concat( ma.app_user_attachment,"*",ma.attachment_type) AS app_user_attachment') ,
                 DB::raw('group_concat( ma.admin_atachment,"*",ma.attachment_type) AS admin_atachment') ,
-                'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user', 'mc.category_name as category_name', 'ug.group_name')
+                'mm.is_attachment as is_attachment', 'ma.attachment_type as attachment_type', 'mm.admin_id as admin_id', 'mm.is_attachment_app_user as is_attachment_app_user',
+                DB::raw(
+                    'concat(mc.category_name," ",ifnull(mc.category_name_bn,"")) as category_name'
+                ), 'ug.group_name')
             ->groupBy('id')
             ->orderBy('mm.message_date_time', 'desc')
             ->offset($start)
@@ -939,6 +970,7 @@ class MessageController extends Controller
             ->groupBy('mm.group_id', 'mm.message_category')
             ->orderBy('mm.created_at', 'desc')
             ->get();
+    
 
         $individualMessage = DB::table('message_masters as mm')
             ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')

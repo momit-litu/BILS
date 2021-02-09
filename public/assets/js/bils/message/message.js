@@ -8,21 +8,21 @@ $(document).ready(function () {
 
 
 	//load message categories
-        $.ajax({
-            url: url+"/message/get-message-category",
-            success: function(response){
-                var data = JSON.parse(response);
-                var option = '<option value="">&nbsp;</option>';
-                $.each(data, function(i,data){
-                    option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
-                });
-                $("#message_category").html(option)
-                $("#message_category").select2({
-                    placeholder: "Categoty/Topic",
-                    allowClear: true
-                });
-            }
-        });
+    $.ajax({
+        url: url+"/message/get-message-category",
+        success: function(response){
+            var data = JSON.parse(response);
+            var option = '<option value="">&nbsp;</option>';
+            $.each(data, function(i,data){
+                option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
+            });
+            $("#message_category").html(option)
+            $("#message_category").select2({
+                placeholder: "Categoty/Topic",
+                allowClear: true
+            });
+        }
+    });
 
 
 	//Load App User Group Using Notice Controller

@@ -81,9 +81,8 @@ var Login = function () {
         var errorHandler = $('.errorHandler', form);
         form.validate({
             rules: {
-                email: {
+                contact_no: {
                     required: true,
-                    email: true,
                 },
                 password: {
                     required: true
@@ -103,12 +102,11 @@ var Login = function () {
         var errorHandler2 = $('.errorHandler', form2);
         form2.validate({
             rules: {
-                email: {
+                contact_no: {
                     required: true,
-                    email: true,
                 }
             },
-            submitHandler: function (form) {
+            submitHandler: function (form2) {
                 errorHandler2.hide();
                 form2.submit();
             },
@@ -126,9 +124,8 @@ var Login = function () {
                     minlength: 2,
                     required: true
                 },
-                email: {
+                contact_no: {
                     required: true,
-                    email:true,
                 },
                 password: {
                     minlength: 6,
@@ -140,7 +137,7 @@ var Login = function () {
                     equalTo: "#password"
                 }
             },
-            submitHandler: function (form) {
+            submitHandler: function (form3) {
                 errorHandler3.hide();
                 form3.submit();
             },

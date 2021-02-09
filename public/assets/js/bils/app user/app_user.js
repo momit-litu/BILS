@@ -49,9 +49,9 @@ $(document).ready(function () {
 		if($.trim($('#app_user_name').val()) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert Name","#app_user_name");			
 		}
-		else if($.trim($('#nid_no').val()) == ""){
+		/*else if($.trim($('#nid_no').val()) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert NID no","#nid_no");			
-		}
+		}*/
 		else if($.trim($('#contact_no').val()) == ""){
 			success_or_error_msg('#form_submit_error','danger',"Please Insert contact no","#contact_no");			
 		}

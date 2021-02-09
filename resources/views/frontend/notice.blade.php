@@ -6,8 +6,8 @@
 <div class="panel panel-default border-none">
 	<div class="panel-heading">
 		<i class=" clip-notification-2 "></i>
-		{{__('app.Notice')}} 
-		<form class="sidebar-search">
+		{{__('app.Notice')}}
+        <form class="sidebar-search">
 			<div class="form-group">
 				<input type="text" id="search_field" placeholder="Start Searching..." data-default="130" style="width: 130px;">
 				<button class="submit">
@@ -41,13 +41,38 @@
         }
     });
 
+    ajaxPreLoad = () =>{
+        $('#load-content').block({
+            overlayCSS: {
+                backgroundColor: '#fff'
+            },
+            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            css: {
+                border: 'none',
+                color: '#333',
+                background: 'none'
+            }
+        });
+    }
+
+
     noticeDetails = (id) =>{
         $.ajax({
             url: "{{ url('app/')}}/load-notice-details/"+id,
             type: 'get',
-            async: false,
+            async: true,
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                  ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
             success: function (response) {
                 //console.log(response)
+                //$("#load-content").html();
+                $('#load-content').unblock();
+
 
                 response = JSON.parse(response);
 				var notice_date = new Date(response[0]["notice_date"]+ 'Z');
@@ -57,7 +82,7 @@
                 let attachment = '';
                 if(response[0]['attachment']){
                     //attachment = attachment_url+'/'+response[0]['attachment'];
-                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment"></i></a>'
+                    attachment = '<br><a href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment">{{__("app.download_file")}}</i></a>'
                 }
                 //alert(p)
                 $('#modal_title_content').html(response[0]['title']+''+attachment);
@@ -70,16 +95,29 @@
 
 
     loadNotice = function loadNotice(type){
+        //alert(type)
         text = 'a'
         if($(search_input).val()!=null && $(search_input).val()!=''  ) {
             //alert(1)
             text = $(search_input).val()
-        }        $.ajax({
+        }
+        $.ajax({
             url: "{{ url('app/')}}/load-notice/"+page+'/'+text,
             type:'get',
-            async:false,
+            async:true,
+            cache: true,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
             success: function(response) {
+                $('#load-content').unblock();
+
                 var response = JSON.parse(response);
+                //console.log(response)
+
                 if(!jQuery.isEmptyObject(response)){
                     html = "";
                     noticeMonth = -1
@@ -136,12 +174,13 @@
 					if(html != ""){
 						if(type==2){
 							$('#all_notice').append(html)
-							page ++ ;
 						}
 						else{
 							$('#all_notice').html(html)
+
 						}
-						
+                        page ++ ;
+
 					}
                     //$('#all_notice').html(html)
                 }

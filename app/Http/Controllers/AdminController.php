@@ -57,7 +57,7 @@ class AdminController extends Controller
 		$delete_action_id 	= 6;
 		$edit_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$edit_action_id);
 		$delete_permisiion 	= $this->PermissionHasOrNot($admin_user_id,$delete_action_id);
-		
+
 		//$public_path = public_path();
 		$a = asset('assets/images/user/admin');
 		$adminUser = User::Select('user_profile_image', 'id',  'name',  'email', 'status')
@@ -79,7 +79,7 @@ class AdminController extends Controller
 			}else{
 				$user['user_profile_image'] = '<img height="50" width="70" src="'.$a.'/no-user-image.png'.'" alt="image" />';
 			}
-			
+
 			if($user->status == 0){$user['status']="<button class='btn btn-xs btn-warning' disabled>In-active</button>";}
 			else if($user->status == 1){$user['status']="<button class='btn btn-xs btn-success' disabled>Active</button>";}
 			else{$user['status']="<button class='btn btn-xs btn-danger' disabled>Deleted</button>";}
@@ -90,9 +90,9 @@ class AdminController extends Controller
 				$user['actions'] .=" <button title='Edit' onclick='admin_user_edit(".$user->id.")' id=edit_" . $user->id . "  class='btn btn-xs btn-green admin-user-edit' ><i class='clip-pencil-3'></i></button>";
 			}
 			if ($delete_permisiion > 0) {
-				
+
 					$user['actions'] .=" <button title='Delete' onclick='delete_admin_user(".$user->id.")' id='delete_" . $user->id . "' class='btn btn-xs btn-danger admin-user-delete' ><i class='clip-remove'></i></button>";
-				
+
 			}
 			$return_arr[] = $user;
 		}
@@ -144,12 +144,12 @@ class AdminController extends Controller
 				# Image
 				$admin_image = $request->file('user_profile_image');
 				if (isset($admin_image)) {
-					
+
 					$image_name = time();
 					$ext = $admin_image->getClientOriginalExtension();
 					$image_full_name = $image_name.'.'.$ext;
 					$upload_path = 'assets/images/user/admin/';
-					
+
 					$success=$admin_image->move($upload_path,$image_full_name);
 
 					$column_value = [
@@ -182,9 +182,9 @@ class AdminController extends Controller
 					$emp_id = $response->id;
 
 					$get_group_id = UserGroup::select('id')->where('type',1)->get();
-					
+
 					foreach ($get_group_id as $get_group_id ) {
-							
+
 							$data_for_group_entry = new UserGroupMember();
 							$data_for_group_entry->group_id=$get_group_id['id'];
 							$data_for_group_entry->emp_id=$emp_id;
@@ -199,7 +199,7 @@ class AdminController extends Controller
 						foreach ($group as $group ) {
 							$group_entry =  UserGroupMember::where('group_id', $group)->where('emp_id', $emp_id)->update(['status'=>1]);
 						}
-						
+
 					}
 
 
@@ -213,7 +213,7 @@ class AdminController extends Controller
 						unlink($delete_img);
 					}
 					$data->update($column_value);
-					
+
 
 					$group = $request->input('group');
 
@@ -324,20 +324,21 @@ class AdminController extends Controller
 
 				$column_value = [
 					'group_name'=>$request->group_name,
-					'type'=>$request->type,
+                    'group_name_bn'=>$request->group_name_bn,
+                    'type'=>$request->type,
 					'status'=>$status,
 				];
 
 				if ($request->edit_id == '') {
-					
+
 					$response = UserGroup::create($column_value);
 					## Get group id
 					$group_id = $response->id;
-					
+
 					if ($request->type=='1') {
 						## Get Admin User
 						$admin_emp_id = User::Select('id')->orderBy('id')->get();
-						
+
 						## Assign Admin user Group for all Admin user with status 0
 						foreach($admin_emp_id as $admin_emp_id){
 							$admin_user_group_member = new UserGroupMember();
@@ -362,7 +363,7 @@ class AdminController extends Controller
 					else{
 						## Get Admin User
 						$app_user = AppUser::Select('id')->orderBy('id')->get();
-						
+
 						## Assign Admin user Group for all Admin user with status 0
 						foreach($app_user as $app_user){
 							$app_user_group_member = new AppUserGroupMember();
@@ -376,7 +377,7 @@ class AdminController extends Controller
 
 				}
 				else{
-					
+
 					$data = UserGroup::find($request->edit_id);
 					$data->update($column_value);
 				}
@@ -429,7 +430,7 @@ class AdminController extends Controller
 
 	//Admin Group Edit
 	public function admin_group_edit($id){
-		$data = UserGroup::Select('id','group_name','type','status')->where('id',$id)->first();
+		$data = UserGroup::Select('id','group_name','group_name_bn','type','status')->where('id',$id)->first();
 		return json_encode($data);
 	}
 
@@ -468,20 +469,22 @@ class AdminController extends Controller
     public function permission_action_entry_update(Request $request){
 		$permission_action = $request->input('permission_action');
 		$group_id = $request->group_id;
+	
 
 		try{
 			DB::beginTransaction();
 
-			$data_for_permission_action_update = DB::table('User_group_permissions')
+			$data_for_permission_action_update = DB::table('user_group_permissions')
 															->where('group_id',$group_id)
 															->update(['status'=>'0']);
+			echo 1;
 
 			if($permission_action!=""){
 				foreach ($permission_action as $permission_action ) {
-
+                    echo $permission_action;
 					if (isset($permission_action)) {
 						$status = '1';
-						$data_for_permission_action_update = DB::table('User_group_permissions')
+						$data_for_permission_action_update = DB::table('user_group_permissions')
 															->where('group_id',$group_id)
 															->where('action_id',$permission_action)
 															->update(['status'=>$status]);

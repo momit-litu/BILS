@@ -45,7 +45,7 @@ class AppUserController extends Controller
     public function app_user_entry_update(Request $request){
     	$rule = [
             'app_user_name' => 'Required|max:50',
-            'nid_no' => 'Required|max:20',
+           // 'nid_no' => 'Required|max:20',
             'contact_no' => 'Required|max:20',
             'email' => 'Required|email',
             //'emp_image_upload' => 'mimes:jpeg,jpg,png,svg'
@@ -95,7 +95,7 @@ class AppUserController extends Controller
 
 					$column_value = [
 					'name'=>$request->app_user_name,
-					'nid_no'=>$request->nid_no,
+					'nid_no'=>($request->nid_no)?$request->nid_no:NULL,
 					'contact_no'=>$request->contact_no,
 					'email'=>$request->email,
 					'address'=>$request->address,
@@ -108,7 +108,7 @@ class AppUserController extends Controller
 			else{
 				$column_value = [
 					'name'=>$request->app_user_name,
-					'nid_no'=>$request->nid_no,
+					'nid_no'=>($request->nid_no)?$request->nid_no:NULL,
 					'contact_no'=>$request->contact_no,
 					'email'=>$request->email,
 					'address'=>$request->address,

@@ -48,7 +48,7 @@ var loaded = 1;
 var last_message_id = "0";
 
 
-   
+
 var msg_image_url = "<?php echo asset('assets/images/message'); ?>";
 var app_user_profile_url = "<?php echo asset('assets/images/user/app_user'); ?>";
 var profile_image_url = "<?php echo asset('assets/images/user/app_user'); ?>";
@@ -69,14 +69,8 @@ ajaxPreLoad = () =>{
 	});
 }
 
-if(localStorage.getItem('is_group_message')){
-    $('#group_id').val(localStorage.getItem('is_group_message'))
-    //group_id_set =localStorage.getItem('is_group_message')
-    //$('#'+group_id_set).trigger('click');
-    localStorage.removeItem('is_group_message')
 
-}
-
+localStorage.setItem('messageMaster','messageMaster')
 
     // message_load_type
     // 1: all message dump first time
@@ -127,11 +121,11 @@ if(localStorage.getItem('is_group_message')){
                 var message_body = "";
 				var i =0;
                 if(!jQuery.isEmptyObject(message)){
+                    last_message_id_noti = 0;
                     $.each(message, function(i,message){
                         html = "";
                         date = new Date(message["msg_date"]+ 'Z');
                         msg_date = date.toLocaleString ();
-
 
 						var app_user_message 		= message["app_user_message"];
                         var is_attachment_app_user 	= message["is_attachment_app_user"];
@@ -264,13 +258,15 @@ if(localStorage.getItem('is_group_message')){
                             html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply circle-icon-message circle-teal"></i></a>'+msg_date+' '+mc+'</span>';
                             html += '</li>';
                         }
+						//alert(html)
                         message_body = html+message_body;
                     });
-
-
+					
                 }
-
+				//alert(message_body)
                 if(message_body != ""){
+
+
                     if(message_load_type == 1){ // 1: all message dump
                         //alert('1:change all message')
                         $(".message_body").html(message_body);
@@ -443,7 +439,7 @@ if(localStorage.getItem('is_group_message')){
     group_message = (id, value) =>{
         $('#groupl_name_span').html(value);
         $('#group_id').val(id);
-		
+
 		$('#reply_msg').html("");
 		$('#edit_msg_id').val("");
 		$('#app_user_id').val("");
@@ -484,15 +480,31 @@ if(localStorage.getItem('is_group_message')){
         }
     });
 
+    categorySelect = (id, val) =>{
+        //alert(id+val)
+        $('#message_category').val(id)
+    }
+
     $.ajax({
         url: "{{ url('app/')}}/message/get-message-category",
         success: function(response){
             var data = JSON.parse(response);
-            var option = '<option value="">&nbsp;</option>';
+            //var option = '<option value="">&nbsp;</option>';
+            var option = ''
+
             $.each(data, function(i,data){
-                option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
+                vals = "'"+data['category_name']+ "'"
+                option += '<li onclick="categorySelect('+data.id+','+vals+')" id="'+data.id+'"> ' +
+                    '<a href="#">'+data['category_name']+'</a> ' +
+                    '</li> ' +
+                    '<li class="divider"></li>\n';
+
+
+               // option += "<option value='"+data['id']+"'>"+data['category_name']+"</option>";
             });
-            $("#message_category").append(option)
+            $("#category_ul").append(option)
+
+            /*$("#message_category").append(option)
             $('#message_category_group').html(option)
             $("#message_category_group").select2({
                 placeholder: "Categoty/Topic",
@@ -501,9 +513,17 @@ if(localStorage.getItem('is_group_message')){
             $("#message_category").select2({
                 placeholder: "Categoty/Topic",
                 allowClear: true
-            });
+            });*/
         }
     });
+group_id_set = 0;
+if(localStorage.getItem('is_group_message')){
+    $('#group_id').val(localStorage.getItem('is_group_message'))
+    group_id_set =localStorage.getItem('is_group_message')
+    //$('#'+group_id_set).trigger('click');
+    localStorage.removeItem('is_group_message')
+
+}
 
 
 $.ajax({
@@ -511,15 +531,29 @@ $.ajax({
     success: function(response){
         var data = JSON.parse(response);
         var option = '';
+
+        group_name_ = ''
+
         $.each(data, function(i,data){
+            if(group_id_set==data.id){
+                group_name_=data.group_name;
+            }
+
             vals = "'"+data.group_name+ "'"
             option += '<li onclick="group_message('+data.id+','+vals+')" id="'+data.id+'"> ' +
                 '<a href="#">'+data.group_name+'</a> ' +
                 '</li> ' +
                 '<li class="divider"></li>\n';
         });
+
+
         //alert($("#groups_ul").html())
         $("#groups_ul").append(option)
+        if(group_id_set!=0){
+            $('#groupl_name_span').html(group_name_)
+            group_message(group_id_set,group_name_)
+
+        }
         //$('#message_category_group').html(option)
 
     }

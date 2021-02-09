@@ -254,7 +254,7 @@
                     url: url+"/message/search-app-users-group",
                     type:'POST',
                     data:{group_name:group_name},
-                    async:false,
+                    async:true,
                     success: function(data){
                         var app_users = JSON.parse(data);
 
@@ -265,7 +265,7 @@
                                 html+='<div class="wrap">';
                                 //html+='<span class="contact-status busy"></span>';
                                 html+='<div class="meta">';
-                                html+='<p onclick="loadGroupMessage('+row["id"]+','+number_of_msg+')" class="name">'+row["group_name"]+'</p>';
+                                html+='<p onclick="loadGroupMessage(1,'+row["id"]+')" class="name">'+row["group_name"]+'</p>';
                                 //html+='<p class="preview">Wrong. You take the gun, or you pull out a bigger one. Or, you call their bluff. Or, you do any one of a hundred and forty six other things.</p>';
                                 html+='</div>';
                                 html+='</div>';
@@ -378,7 +378,7 @@
             $.ajax({
                 url: url + '/message/delete-message/'+id,
                 type: 'GET',
-                async: false,
+                async: true,
                 success: function (response) {
                     // need to check whether removed or now
                     if($('#sent_message_id_'+id).prev().hasClass('reply')){
@@ -413,7 +413,7 @@
                     url: url+"/message/admin-message-sent-to-group",
                     type:'POST',
                     data:formData,
-                    async:false,
+                    async:true,
                     cache:false,
                     contentType:false,
                     processData:false,
@@ -463,9 +463,6 @@
         });
 
         loadGroupMessage = (message_load_type, group_id) => {
-            //alert($('#message_category_group').val())
-
-
             $("#load_more_message").html('<button onclick="loadGroupMessage(3,'+group_id+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
 
             $("#search_app_user").val("");
@@ -481,7 +478,6 @@
             if (message_load_type == 1) {
                 current_page_no = 1;
             }
-
             $.ajax({
                 url: url + '/message/load-group-message',
                 type: 'POST',
@@ -499,13 +495,12 @@
                     //$("#load-content").fadeOut('slow');
                 },
                 success: function(response){
-                   // alert(1)
                     var response = JSON.parse(response);
                     var message = response['message'];
                     var img_id="";
                     var mc;
                     //Messages
-
+					var group_name_ = response['group_name'];
                     var message_body = "";
                     if(!jQuery.isEmptyObject(message)){
                         $.each(message, function(i,message){
@@ -515,8 +510,9 @@
                             var admin_message 			= message["admin_message"];
                             var is_attachment 			= message["is_attachment"];
 
-
-                            group_name_ = message.group_name
+							//alert('inmmmmmmm')
+                            group_name_ = message.group_name;
+							//alert(group_name_)
                             date = new Date(message["msg_date"]+ 'Z');
                             msg_date = date.toLocaleString ()
                             html = "";
@@ -643,6 +639,7 @@
                     }
 
                     $('#msg_group_name').html(group_name_)
+					if(admin_image.length==0) admin_image = "no-user-image.png";
                     $('#admin_image').attr('src',admin_image_url+'/'+admin_image)
 
                     //console.log(message_body)
@@ -731,7 +728,7 @@
                     url: url+"/message/admin-message-sent-to-user",
                     type:'POST',
                     data:formData,
-                    async:false,
+                    async:true,
                     cache:false,
                     contentType:false,
                     processData:false,

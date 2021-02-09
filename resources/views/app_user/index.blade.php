@@ -88,7 +88,7 @@
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<input type="text" id="app_user_name" name="app_user_name" required class="form-control col-lg-12"/>
 										</div>
-										<label class="control-label col-md-2 col-sm-2 col-xs-6" >NID No<span class="required">*</span></label>
+										<label class="control-label col-md-2 col-sm-2 col-xs-6" >NID No</label>
 										<div class="col-md-4 col-sm-4 col-xs-6">
 											<input type="text" id="nid_no" name="nid_no" class="form-control col-lg-12" />
 										</div>

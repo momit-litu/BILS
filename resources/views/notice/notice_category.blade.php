@@ -39,11 +39,17 @@
 													<input type="text" id="category_name" name="category_name" class="form-control col-lg-12"/>
 												</div>
 											</div>
+                                            <div class="form-group">
+                                                <label class="control-label col-md-3 col-sm-3 col-xs-6">Category Name In Bangla<span class="required">*</span></label>
+                                                <div class="col-md-9 col-sm-9 col-xs-6">
+                                                    <input type="text" id="category_name_bn" name="category_name_bn" class="form-control col-lg-12"/>
+                                                </div>
+                                            </div>
 											<div class="form-group">
 												<label class="control-label col-md-3 col-sm-3 col-xs-6">Details</label>
 												<div class="col-md-9 col-sm-9 col-xs-6">
 													<textarea rows="5" name="details" id="details" class="form-control col-lg-12 col-md-12"></textarea>
-													
+
 												</div>
 											</div>
 											<div class="form-group">
@@ -58,16 +64,16 @@
 										<label class="control-label col-md-2 col-sm-2 col-xs-6"></label>
 										<div class="col-md-5 col-sm-5 col-xs-12">
 											@if($actions['add_permisiion']>0)
-												<button type="submit" id="save_notice_category" class="btn btn-success save">Save</button>                    
+												<button type="submit" id="save_notice_category" class="btn btn-success save">Save</button>
 												<button type="button" id="clear_button" class="btn btn-warning">Clear</button>
-											@endif                      
-											<button type="button" id="cancle_btn" class="btn btn-danger hidden">Cancle</button>                         
+											@endif
+											<button type="button" id="cancle_btn" class="btn btn-danger hidden">Cancel</button>
 										</div>
 										<div class="col-md-5 col-sm-5 col-xs-12">
 											<div id="form_submit_error" class="text-center" style="display:none"></div>
 										</div>
 									</div>
-								</form>		
+								</form>
 							</div>
 							</div>
 						</div>
@@ -98,7 +104,7 @@
 									</div>
 								</div>
 								<div class="panel-body">
-									<table class="table table-bordered table-hover" id="notice_category" style="width:100% !important"> 
+									<table class="table table-bordered table-hover" id="notice_category" style="width:100% !important">
 										<thead>
 											<tr>
 												<th>ID</th>
