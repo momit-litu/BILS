@@ -111,8 +111,6 @@ $(document).ready(function () {
 						$("#message_form .tableflat").iCheck('uncheck');
 					}
 					$(window).scrollTop();
-
-
 				 }
 			});
 		}

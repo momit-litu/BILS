@@ -463,6 +463,9 @@
         });
 
         loadGroupMessage = (message_load_type, group_id) => {
+            //alert($('#message_category_group').val())
+
+
             $("#load_more_message").html('<button onclick="loadGroupMessage(3,'+group_id+');" style="margin-right: 10px;" type="button" class="btn btn-xs btn-warning">Load More</button>');
 
             $("#search_app_user").val("");
@@ -478,6 +481,7 @@
             if (message_load_type == 1) {
                 current_page_no = 1;
             }
+
             $.ajax({
                 url: url + '/message/load-group-message',
                 type: 'POST',
@@ -495,12 +499,13 @@
                     //$("#load-content").fadeOut('slow');
                 },
                 success: function(response){
+                   // alert(1)
                     var response = JSON.parse(response);
                     var message = response['message'];
                     var img_id="";
                     var mc;
                     //Messages
-					var group_name_ = response['group_name'];
+
                     var message_body = "";
                     if(!jQuery.isEmptyObject(message)){
                         $.each(message, function(i,message){
@@ -510,9 +515,8 @@
                             var admin_message 			= message["admin_message"];
                             var is_attachment 			= message["is_attachment"];
 
-							//alert('inmmmmmmm')
-                            group_name_ = message.group_name;
-							//alert(group_name_)
+
+                            group_name_ = message.group_name
                             date = new Date(message["msg_date"]+ 'Z');
                             msg_date = date.toLocaleString ()
                             html = "";
@@ -639,7 +643,6 @@
                     }
 
                     $('#msg_group_name').html(group_name_)
-					if(admin_image.length==0) admin_image = "no-user-image.png";
                     $('#admin_image').attr('src',admin_image_url+'/'+admin_image)
 
                     //console.log(message_body)

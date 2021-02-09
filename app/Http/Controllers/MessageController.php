@@ -820,9 +820,7 @@ class MessageController extends Controller
         $start                  = ($page_no*$limit)-$limit;
         $end                    = $limit;
         $message                = array();
-		//echo "GROUP ID -- ".$group_id;die;
-		$groupInfo = UserGroup::where('id',$group_id)->first();
-		//dd($groupInfo);
+
 
         if($message_load_type ==1 || $message_load_type ==3){
             $message = DB::table('message_masters as mm')
@@ -907,7 +905,6 @@ class MessageController extends Controller
 
 
         return json_encode(array(
-			"group_name"=>$groupInfo['group_name'],
             "message"=>$message
         ));
 

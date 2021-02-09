@@ -258,12 +258,12 @@ localStorage.setItem('messageMaster','messageMaster')
                             html += '<span class="time_date">'+'<a href="javascript:void(0)" onclick="replyMessage('+message["id"]+','+tem_msg+')" class="margin-right-2 text-success"><i class="fa fa-mail-reply circle-icon-message circle-teal"></i></a>'+msg_date+' '+mc+'</span>';
                             html += '</li>';
                         }
-						//alert(html)
                         message_body = html+message_body;
                     });
-					
+
+
                 }
-				//alert(message_body)
+
                 if(message_body != ""){
 
 
