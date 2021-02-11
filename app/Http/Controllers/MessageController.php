@@ -377,25 +377,30 @@ class MessageController extends Controller
     public function loadAppUser(){
 
         //$app_user = AppUser::get();
-		/*echo DB::table('message_masters as mm')
-                            ->rightJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-                            ->where('is_group_msg', 0)
+	/*	echo DB::table('message_masters as mm')
+                            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
-                            ->distinct('mm.app_user_id')
-                            //->orderBy('mm.message_date_time', 'desc')
-                            ->orderBy('mm.id', 'desc')
+                            ->groupBy('mm.app_user_id')
+                            ->orderBy('MAX(mm.id)', 'desc')
 							->toSql();die;*/
-        $app_user_info = DB::table('message_masters as mm')
-                            ->rightJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-                           // ->where('is_group_msg', 0)
+		$app_user_info =	\DB::select("SELECT  max(mm.id) AS id, mm.app_user_id AS app_user_id, apu.name AS name, apu.user_profile_image AS user_profile_image
+                                FROM message_masters AS mm
+                                left JOIN app_users AS apu ON mm.app_user_id = apu.id
+                                GROUP BY mm.app_user_id
+                                ORDER BY MAX(mm.id) DESC");
+        $app_users = [];            
+		foreach ($app_user_info as $user) {
+            $app_users[]= $user;
+        }				
+       /*$app_user_info = DB::table('message_masters as mm')
+                            ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
                             ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
-                            ->distinct('mm.app_user_id')
-                            //->orderBy('mm.message_date_time', 'desc')
+                            ->groupBy('mm.app_user_id')
                             ->orderBy('mm.id', 'desc')
                             ->get();
-
+*/
         return json_encode(array(
-            "app_user_info"=>$app_user_info,
+            "app_user_info"=>$app_users,
             // "message"=>$message,
         ));
     }
@@ -677,25 +682,17 @@ class MessageController extends Controller
 
     Public function loadAppUserGroup(){
 
-        $app_user_info = UserGroup::select('group_name', 'id')->get();
-
-        $user_groups = DB::table('user_groups as ug')
-            ->leftJoin('message_masters as mm', 'ug.id','=','ug.group_name', 'mm.created_at')
-            ->select('ug.id',DB::raw(
-                'concat(ug.group_name," ",ifnull(ug.group_name_bn,"")) as group_name'
-            ))
-            ->where('ug.status','1')
-            ->orderBy('mm.created_at')
-            ->groupBy('ug.id')
-            ->get();
-
-        // DB::table('message_masters as mm')
-        //                     ->leftJoin('app_users as apu', 'mm.app_user_id', '=', 'apu.id')
-        //                     ->select('apu.name as name','apu.id as app_user_id', 'apu.user_profile_image as user_profile_image')
-        //                     ->distinct('mm.app_user_id')
-        //                     //->orderBy('mm.message_date_time', 'desc')
-        //                     ->orderBy('mm.id', 'desc')
-        //                     ->get();
+        $user_groups = \DB::select("SELECT ug.id, CONCAT(ug.group_name,' ', IFNULL(ug.group_name_bn,'')) AS group_name
+                        FROM user_groups AS ug
+                        LEFT JOIN message_masters AS mm ON ug.id = mm.group_id
+                        WHERE ug.status = 1
+                        GROUP BY ug.id
+                        ORDER BY MAX(mm.id) DESC");
+        $app_users = [];            
+        $app_user_groups = [];
+        foreach($user_groups as $group){
+            $app_user_groups[] = $group;
+        }
 
         return json_encode(array(
             "app_user_info"=>$user_groups,

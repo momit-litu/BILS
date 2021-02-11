@@ -135,7 +135,6 @@ localStorage.setItem('messageMaster','messageMaster')
 							 message_id = message['id'];
 							i++;
 						}
-
                         if( (app_user_message!==null || is_attachment_app_user>0) && ( is_attachment_app_user!=="" )  ){
                             if(message["reply_message"]){
                                 html+='<li class="sent_msg reply" style="margin-bottom: -15px;padding-right: 30px;"><div class="replied_message_p p_div" ">'+message['reply_message']+'</div></li>  ';
@@ -260,15 +259,12 @@ localStorage.setItem('messageMaster','messageMaster')
                         }
                         message_body = html+message_body;
                     });
-
-
                 }
 
                 if(message_body != ""){
-
-
                     if(message_load_type == 1){ // 1: all message dump
-                        //alert('1:change all message')
+                       // alert('1:change all message')
+						//alert($(document).height());
                         $(".message_body").html(message_body);
                         $(".message_div").animate({ scrollTop: 180000/*$(document).height()*/ }, "fast");
                         /*---------------work on above line-------------*/
@@ -322,7 +318,7 @@ localStorage.setItem('messageMaster','messageMaster')
 
     }
 
-    loadMessages(1); // 1: all message dump
+   // loadMessages(1); // 1: all message dump
 
     // load more when scroll reachs to top of the scrolling div
     /*
@@ -516,50 +512,54 @@ localStorage.setItem('messageMaster','messageMaster')
             });*/
         }
     });
-group_id_set = 0;
-if(localStorage.getItem('is_group_message')){
-    $('#group_id').val(localStorage.getItem('is_group_message'))
-    group_id_set =localStorage.getItem('is_group_message')
-    //$('#'+group_id_set).trigger('click');
-    localStorage.removeItem('is_group_message')
+	
 
-}
+	group_id_set = 0;
+	//alert(localStorage.getItem('is_group_message'))
+	if(localStorage.getItem('is_group_message')){
+		$('#group_id').val(localStorage.getItem('is_group_message'))
+		group_id_set =localStorage.getItem('is_group_message')
+		//$('#'+group_id_set).trigger('click');
+		localStorage.removeItem('is_group_message')
 
+	}
 
-$.ajax({
-    url: "{{ url('app/')}}/message/get-message-group",
-    success: function(response){
-        var data = JSON.parse(response);
-        var option = '';
+	$.ajax({
+		url: "{{ url('app/')}}/message/get-message-group",
+		success: function(response){
+			var data = JSON.parse(response);
+			var option = '';
+			var group_name_ = ''
 
-        group_name_ = ''
+			$.each(data, function(i,data){
+				if(group_id_set==data.id){
+					group_name_=data.group_name;
+				}
 
-        $.each(data, function(i,data){
-            if(group_id_set==data.id){
-                group_name_=data.group_name;
-            }
-
-            vals = "'"+data.group_name+ "'"
-            option += '<li onclick="group_message('+data.id+','+vals+')" id="'+data.id+'"> ' +
-                '<a href="#">'+data.group_name+'</a> ' +
-                '</li> ' +
-                '<li class="divider"></li>\n';
-        });
-
-
-        //alert($("#groups_ul").html())
-        $("#groups_ul").append(option)
-        if(group_id_set!=0){
-            $('#groupl_name_span').html(group_name_)
-            group_message(group_id_set,group_name_)
-
-        }
-        //$('#message_category_group').html(option)
-
-    }
-});
+				vals = "'"+data.group_name+ "'"
+				option += '<li onclick="group_message('+data.id+','+vals+')" id="'+data.id+'"> ' +
+					'<a href="#">'+data.group_name+'</a> ' +
+					'</li> ' +
+					'<li class="divider"></li>\n';
+			});
 
 
+			//alert($("#groups_ul").html())
+			$("#groups_ul").append(option)
+			if(group_id_set!=0){
+				$('#groupl_name_span').html(group_name_)
+				group_message(group_id_set,group_name_)
+
+			}
+			//$('#message_category_group').html(option)
+
+		}
+	});
+
+	if(group_id_set== 0){
+		loadMessages(1)
+	}
+	
 </script>
 
 

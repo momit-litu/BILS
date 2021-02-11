@@ -95,15 +95,15 @@ var FormElements = function () {
             runAutosize();
             runSelect2();
             runMaskInput();
-            runMaskMoney();
-            runDatePicker();
-            runTimePicker();
-            runDateRangePicker();
-            runColorPicker();
-            runColorPalette();
+           // runMaskMoney();
+           // runDatePicker();
+           // runTimePicker();
+           // runDateRangePicker();
+          //  runColorPicker();
+          //  runColorPalette();
             runTagsInput();
-            runSummerNote();
-            runCKEditor();
+           // runSummerNote();
+           // runCKEditor();
         }
     };
 }();

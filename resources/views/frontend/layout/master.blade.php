@@ -34,13 +34,13 @@
     <link rel="stylesheet" href="{{ asset('assets/plugins/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/fonts/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/css/rating.css') }}">
+   <!-- <link rel="stylesheet" href="{{ asset('assets/css/rating.css') }}">-->
     <link rel="stylesheet" href="{{ asset('assets/css/main-responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/iCheck/skins/all.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('assets/plugins/iCheck/skins/all.css') }}"> -->
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-colorpalette/css/bootstrap-colorpalette.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/theme_navy.css') }}" type="text/css" id="skin_color">
-    <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}" type="text/css" media="print"/>
+    <!-- <link rel="stylesheet" href="{{ asset('assets/css/print.css') }}" type="text/css" media="print"/>-->
 <!--[if IE 7]>
 
 
@@ -59,22 +59,22 @@
     <link rel="stylesheet" href="{{asset('assets/plugins/css3-animation/animations.css')}}">
 
     <link rel="stylesheet" href="{{ asset('assets/plugins/select2/select2.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/datepicker.css') }}">
+    <!--<link rel="stylesheet" href="{{ asset('assets/plugins/datepicker/css/datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker-bs3.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css') }}">-->
     <link rel="stylesheet" href="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">
+     <!--<link rel="stylesheet" href="{{ asset('assets/plugins/summernote/build/summernote.css') }}">-->
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.jgrowl.min.css') }}" />
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-ui.css') }}" />
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.min.css') }}"/>
+     <!--<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/datatables.min.css') }}"/>-->
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/image-uploader.min.css') }}"/>
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery-editable.css') }}"/>
     <!--<link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">-->
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+   <!--  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">-->
 
     <script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -127,6 +127,7 @@
     <!-- end: SIDEBAR -->
     </div>
     <!-- start: PAGE -->
+	<button onClick="playAudio()" style="display:none">PLAY AUDIO</button>
     <div class="main-content">
         <!-- start: PANEL CONFIGURATION MODAL FORM -->
 
@@ -179,15 +180,6 @@
 
                                 </ul>
                                 <input type="hidden" name="message_category" id="message_category">
-
-                                    <!--<button type="button" class="btn btn-warning dropdown-toggle btn-custom-side-padding " data-toggle="dropdown" style="padding-top:7px; margin-top:-1px">
-									<span class="caret"></span>
-								</button>
-								<div class="dropdown-menu dropdown-enduring dropdown-checkboxes">
-									<select name="message_category" id="message_category" style="min-width:150px; font-size:10px">
-										<option disabled="" selected="" value="">{{__('app.Category_Topic')}} </option>
-									</select>
-								</div>-->
 							</span>
                 <input type="hidden" name="app_user_id" id="app_user_id">
                 <input type="hidden" name="group_id" id="group_id" value="0">
@@ -207,47 +199,13 @@
             </div>
         </form>
     </div>
-<!--<div class="message-input" >
-                    <div class="wrap">
-                        <form id="sent_message_to_user" name="sent_message_to_user" enctype="multipart/form-data" class="form form-horizontal form-label-left">
-                            @csrf
-    <p id="reply_msg"  class="replied_message_p" style="margin-right:0 !important; padding:2px 4px;color:#fff"></p>
-    <input type="hidden" id="edit_msg_id" name="edit_msg_id">
-    <div class="input-group">
-        <input type="hidden" name="app_user_id" id="app_user_id">
-        <input type="hidden" name="group_id" id="group_id" value="0">
-        <input type="text" name="admin_message" id="admin_message" placeholder="Write your message..." />
-        <label for="attachment" class="custom-file-upload btn btn-file btn-blue btn-custom-side-padding ">
-            <i class="fa fa-paperclip attachment" aria-hidden="true"></i>
-        </label>
-        <input multiple id="attachment" name="attachment[]" type="file"/>
-                                <input type="hidden" id="reply_msg_id" name="reply_msg_id">
-                                <button class="btn btn-success " type="submit" class="submit" id="message_sent_to_user"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-				-->
     <div class="footer-items">
         <!--<span class="go-top"><i class="clip-chevron-up"></i></span>-->
         <ul class="nav navbar-left pull-left"><li><a class="sb-toggle" href="#"><i class="fa fa-outdent" style="color:#a7b4d1; font-size:18px;"></i></a></li></ul>
     </div>
 </div>
 <!-- end: FOOTER -->
-<!--
-		<div id="responsive" class="modal fade" tabindex="-1" data-width="760" style="display: none;">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-					&times;
-				</button>
 
-			</div>
-			<div class="modal-body">
-				<div class="panel-body">
-				</div>
-			</div>
-		</div>
--->
 <div aria-hidden="true" aria-labelledby="myModalLabel" class="modal fade" id="modalIMG" role="dialog" tabindex="-1">
 
     <div class="modal-content">
@@ -319,71 +277,14 @@
             <div class="tab-pane" id="favorites">
                 <div class="users-list">
                     <ul class="media-list" id="user_course_list">
-                        <!--<h5 class="media-heading padding-10">Interested Course</h5>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <h5 class="media-heading padding-10">Registered Course</h5>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <h5 class="media-heading padding-10">Completed Course</h5>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>-->
+                        
                     </ul>
                 </div>
                 <div class="user-chat">
                     <div class="sidebar-content">
                         <a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
                         <div class="panel-body panel-scroll ps-container ps-active-y" id="course_description_side" style="height: 377px;">
-                            <!--
-                            <h4> Vertical description </h4>
-                            <dl>
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                            </dl>
-                            <h4> Horizontal description </h4>
-                            <dl class="dl-horizontal">
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                            </dl>-->
+                           
 
                         </div>
                     </div>
@@ -393,136 +294,19 @@
             <div class="tab-pane" id="settings">
                 <div class="users-list">
                     <ul class="media-list" id="user_survey_list">
-                        <!--<h5 class="media-heading padding-10">Open Survey</h5>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <h5 class="media-heading padding-10">Completed Survey</h5>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>
-                        <li class="media">
-                            <a class="activity" href="javascript:void(0)">
-                                <span class="desc">You added a new event to the calendar.</span>
-                            </a>
-                        </li>-->
+                        
                     </ul>
                 </div>
                 <div class="user-chat">
                     <div class="sidebar-content">
                         <a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
                         <div class="panel-body panel-scroll ps-container ps-active-y" id="survey_description_side" style="height: 377px;">
-                            <!--
-                            <h4> Vertical description </h4>
-                            <dl>
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                            </dl>
-                            <h4> Horizontal description </h4>
-                            <dl class="dl-horizontal">
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                            </dl>-->
+                           
                         </div>
                     </div>
                 </div>
 
-                <!--<div class="user-chat">
-                    <div class="sidebar-content">
-                        <a class="sidebar-back" href="#"><i class="fa fa-chevron-circle-left"></i> Back</a>
-                        <div class="panel-body panel-scroll ps-container ps-active-y" style="height: 377px;">
-                            <h4> Vertical description </h4>
-                            <dl>
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                                <dd>
-                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-                                </dd>
-                                <dd>
-                                    Donec id elit non mi porta gravida at eget metus.
-                                </dd>
-                                <dt>
-                                    Malesuada porta
-                                </dt>
-                                <dd>
-                                    Etiam porta sem malesuada magna mollis euismod.
-                                </dd>
-                            </dl>
-                            <h4> Horizontal description </h4>
-                            <dl class="dl-horizontal">
-                                <dt>
-                                    Description lists
-                                </dt>
-                                <dd>
-                                    A description list is perfect for defining terms.
-                                </dd>
-                                <dt>
-                                    Euismod
-                                </dt>
-                                <dd>
-                                    Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.
-                                </dd>
-                                <dd>
-                                    Donec id elit non mi porta gravida at eget metus.
-                                </dd>
-                                <dt>
-                                    Malesuada porta
-                                </dt>
-                                <dd>
-                                    Etiam porta sem malesuada magna mollis euismod.
-                                </dd>
-                                <dt>
-                                    Felis euismod semper eget lacinia
-                                </dt>
-                                <dd>
-                                    Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.
-                                </dd>
-                            </dl>
-                        </div>
-                    </div>
-
-                </div>-->
+               
             </div>
         </div>
     </div>
@@ -540,20 +324,20 @@
 <!--<![endif]-->
 <script src="{{ asset('assets/plugins/jquery-ui/jquery-ui-1.10.2.custom.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
-<script src="{{ asset('js/jquery-ui.js')}}"></script>
-<script type="text/javascript" src="{{asset('assets/plugins/DataTables/media/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{ asset('assets/js/jquery-ui.min.js')}}"></script>
+<!-- <script type="text/javascript" src="{{asset('assets/plugins/DataTables/media/js/jquery.dataTables.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('assets/plugins/DataTables/media/js/DT_bootstrap.js')}}"></script>
-<script src="{{asset('assets/js/table-data.js')}}"></script>
-
 <script src="{{ asset('assets/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js') }}"></script>
+<script src="{{asset('assets/js/table-data.js')}}"></script>
+<script src="{{ asset('assets/plugins/iCheck/jquery.icheck.min.js') }}"></script>-->
 <script src="{{ asset('assets/plugins/blockUI/jquery.blockUI.js') }}"></script>
-<script src="{{ asset('assets/plugins/iCheck/jquery.icheck.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/perfect-scrollbar/src/jquery.mousewheel.js') }}"></script>
 <script src="{{ asset('assets/plugins/perfect-scrollbar/src/perfect-scrollbar.js') }}"></script>
 <script src="{{ asset('assets/plugins/less/less-1.5.0.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/jquery-cookie/jquery.cookie.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-colorpalette/js/bootstrap-colorpalette.js') }}"></script>
 <script src="{{ asset('assets/js/main.js') }}"></script>
+
 <!-- end: MAIN JAVASCRIPTS -->
 
 <script src="{{ asset('assets/plugins/bootstrap-modal/js/bootstrap-modal.js') }}"></script>
@@ -561,7 +345,7 @@
 <script src="{{ asset('assets/js/ui-modals.js') }}"></script>
 
 <script src="{{ asset('assets/plugins/jquery-validation/dist/jquery.validate.min.js') }}"></script>
-<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>
+<!-- <script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>-->
 <!--sweetlertJs-->
 <script src="{{asset('assets/plugins/sweetalert/sweetalert2.min.js')}}"></script>
 
@@ -570,16 +354,16 @@
 <script src="{{ asset('assets/plugins/select2/select2.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/jquery.maskedinput/src/jquery.maskedinput.js') }}"></script>
 <script src="{{ asset('assets/plugins/jquery-maskmoney/jquery.maskMoney.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
+<!-- <script src="{{ asset('assets/plugins/bootstrap-datepicker/js/bootstrap-datepicker.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-daterangepicker/moment.min.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js') }}"></script>
+<script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.js') }}"></script> -->
 <script src="{{ asset('assets/plugins/bootstrap-colorpicker/js/commits.js') }}"></script>
 <script src="{{ asset('assets/plugins/jQuery-Tags-Input/jquery.tagsinput.js') }}"></script>
 <script src="{{ asset('assets/plugins/bootstrap-fileupload/bootstrap-fileupload.min.js') }}"></script>
 {{--<script src="{{ asset('assets/plugins/summernote/build/summernote.min.js') }}"></script>--}}
-<script src="{{ asset('assets/js/summernote.js') }}"></script>
+<!-- <script src="{{ asset('assets/js/summernote.js') }}"></script> -->
 <script src="{{ asset('assets/plugins/ckeditor/ckeditor.js') }}"></script>
 <script src="{{ asset('assets/plugins/ckeditor/adapters/jquery.js') }}"></script>
 <script src="{{ asset('assets/js/form-elements.js') }}"></script>
@@ -591,8 +375,8 @@
 <!--<script src="{{ asset('js/notify.js')}}"></script>-->
 <!--<script src="https://unpkg.com/swiper/js/swiper.min.js"></script>-->
 
-<script src="{{ asset('assets/js/datatables.min.js')}}"></script>
-<script src="{{ asset('assets/js/dropzone.js')}}"></script>
+<!-- <script src="{{ asset('assets/js/datatables.min.js')}}"></script>
+<script src="{{ asset('assets/js/dropzone.js')}}"></script> -->
 <script src="{{ asset('assets/js/image-uploader.min.js')}}"></script>
 <script src="{{ asset('assets/js/jquery-editable-poshytip.min.js')}}"></script>
 <script src="{{ asset('assets/js/jquery.poshytip.min.js')}}"></script>
@@ -607,7 +391,7 @@
         Main.init();
         UIModals.init();
         FormElements.init();
-        TableData.init();
+        //TableData.init();
     });
     var APP_URL = '{!! url('/') !!}';
 
@@ -627,16 +411,16 @@
         //Main.init();
         Animation.init();
     });
-/*
+
     var player = document.getElementById("myAudio");
     player.addEventListener("play", function () {
       console.log("it's go time");
       alert('1111111');
     });
-   // alert('loaded')
-    player.play();
+	//alert('loaded')
+    //player.play();
+	//alert('close');
 
-*/
 		//{{ asset('assets/tone/effectsSprite.ogg') }}
 
 		/*
@@ -668,6 +452,36 @@
                 }
             }
         };
+   
+    function playAudio(){
+    	//	window.addEventListener('load', () => {
+			// noinspection JSUnresolvedVariable
+			let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+			let xhr = new XMLHttpRequest();
+			xhr.open('GET', '{{ asset('assets/tone/eventually.mp3') }}');
+			xhr.responseType = 'arraybuffer';
+			xhr.addEventListener('load', () => {
+				let playsound = (audioBuffer) => {
+					let source = audioCtx.createBufferSource();
+					source.buffer = audioBuffer;
+					source.connect(audioCtx.destination);
+					source.loop = false;
+					source.start();
+
+					/*setTimeout(function () {
+						let t = document.createElement('p');
+						t.appendChild(document.createTextNode((new Date()).toLocaleString() + ': Sound played'));
+						document.querySelector('.output').appendChild(t);
+						playsound(audioBuffer);
+					}, 1000 + Math.random()*2500);*/
+				};
+
+				audioCtx.decodeAudioData(xhr.response).then(playsound);
+			});
+			xhr.send();
+	    //	});
+    }
+    
 
     $('.showLoading').click(function(){
         //alert('ok')
@@ -1501,9 +1315,7 @@
 
         if(localStorage.getItem('lastMessageNotificationId')<lastMessageNotificationId){
             if(!localStorage.getItem('messageMaster')){
-                alert(1);
-                document.getElementById("myAudio").play();
-				//$.mbAudio.play('effectSprite', 'great')
+               playAudio();
             }
 
             localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
@@ -1511,9 +1323,7 @@
            // alert('message-1')
             if(!localStorage.getItem('lastMessageNotificationId')) {
                 if(localStorage.getItem('messageMaster')){
-					//$.mbAudio.play('effectSprite', 'great')
-					 alert(2);
-                    document.getElementById("myAudio").play();
+					playAudio();
                 }
             }
             localStorage.setItem('lastMessageNotificationId',lastMessageNotificationId)
@@ -1570,18 +1380,12 @@
                 })
 
                 if(localStorage.getItem('lastNotificationId')<notificationId){
-                   // $('#lastMessageNotificationId').trigger("play")
-					 //$.mbAudio.play('effectSprite', 'great')
-					 alert(3);
-                    document.getElementById("myAudio").play();
+					 playAudio();
 
                     localStorage.setItem('lastNotificationId',notificationId)
                 }else  if(notificationId>0) {
                     if(!localStorage.getItem('lastNotificationId')){
-                        //$('#lastMessageNotificationId').trigger("play")
-						//$.mbAudio.play('effectSprite', 'great')
-						alert(4);
-                        document.getElementById("myAudio").play();
+						playAudio();
                     }
                     localStorage.setItem('lastNotificationId',notificationId)
                 }
