@@ -529,7 +529,8 @@
 
 
 
-    ajaxPreLoad = () =>{
+    ajaxPreLoad = (show_loading = 0) =>{
+		alert(show_loading)
         $('#load-content').block({
             overlayCSS: {
                 backgroundColor: '#fff'
@@ -545,7 +546,7 @@
 
     //alert('.ok')
     changePage = (name) =>{
-        ajaxPreLoad()
+         ajaxPreLoad('dontshow')
         localStorage.setItem('content',name)
         window.location.href = "{{ url('app/dashboard/content_load')}}"
     }

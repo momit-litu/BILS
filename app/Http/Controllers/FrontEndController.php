@@ -357,21 +357,23 @@ class FrontEndController extends Controller
         return json_encode($course);
     }
 
+   
     public function courseDtails($id){
         $category = $this->language==='en'? 'cc.category_name as category_name': 'cc.category_name_bn as category_name';
-
+		$user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
+		
         $publication = DB::table('course_masters as p')
             ->leftJoin('teachers as t','p.course_teacher','=','t.id')
             ->leftJoin('course_categories as cc','p.course_type','=','cc.id')
+			->leftJoin('course_perticipants as cp','p.id','=','cp.course_id')
             ->where('p.id','=',$id)
-            ->select('p.id','p.course_title as title','p.payment_fee', 'p.details','p.perticipants_limit','p.course_type','t.name','p.attachment',$category,
+            ->where('cp.perticipant_id','=',$user_info['id'])
+            ->select('p.id','p.course_title as title', 'is_interested', 'p.payment_fee', 'p.details','p.perticipants_limit','p.course_type','t.name','p.attachment',$category,
                 DB::Raw('from_unixtime(UNIX_TIMESTAMP(p.created_at)) as created_at'),
                 DB::Raw('from_unixtime(UNIX_TIMESTAMP(p.appx_start_time)) as appx_start_time'),
                 DB::Raw('from_unixtime(UNIX_TIMESTAMP(p.appx_end_time)) as appx_end_time'),
                 DB::raw('(CASE WHEN p.course_status = 1 THEN "Initiate" WHEN p.course_status = 2 THEN "Approved" WHEN p.course_status = 3 THEN "Rejected"  ELSE "Started" END) AS status'))
             ->get();
-
-        $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
 
         Notification::where([['to_id',$user_info['id']],['module_id',37],['module_reference_id',$id]])->update(['status'=>1]);
 
@@ -379,35 +381,27 @@ class FrontEndController extends Controller
         return json_encode($publication);
     }
 
+
     public function courseInterest($id){
-
         $user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
-
         $interested = CoursePerticipant::where([['perticipant_id',$user_info['id']],['course_id',$id]])->get('id');
-
         try {
             if(!isset($interested[0])){
-
                 $course = new CoursePerticipant();
                 $course->perticipant_id = $user_info['id'];
                 $course->course_id = $id;
                 $course->is_interested = 1;
                 $course->status = 1;
-
                 $course->save();
-
                 //$courseId= $course->save();
-
             }else{
                 $columnValue=array(
                     'is_interested' => 1,
                     'status'=>1,
                 );
-
                 CoursePerticipant::where([['perticipant_id',$user_info['id']],['course_id',$id]])->update($columnValue);
             }
             $course_details = CourseMaster::where('id', $id)->get('course_title');
-
             $column_value1 = [
                 'from_id'=>$user_info['id'],
                 'from_user_type'=>'App User',
@@ -426,6 +420,7 @@ class FrontEndController extends Controller
 
         }
     }
+
 
     public function userCourse(){
 

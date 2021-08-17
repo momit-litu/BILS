@@ -34,6 +34,7 @@ Route::get('app/language/{lang}',function ($lang){
 });
 
 
+
 Route::get('app/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/auth',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));

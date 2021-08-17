@@ -24,9 +24,9 @@ class AdminController extends Controller
 
     public function __construct(Request $request)
     {
-        $this->page_title = $request->route()->getName();
-        $description = \Request::route()->getAction();
-        $this->page_desc = isset($description['desc']) ? $description['desc'] : $this->page_title;
+        $this->page_title 	= $request->route()->getName();
+        $description 		= \Request::route()->getAction();
+        $this->page_desc 	= isset($description['desc']) ? $description['desc'] : $this->page_title;
     }
 
 	public function index()
@@ -442,9 +442,7 @@ class AdminController extends Controller
 		));
 	}
 
-
-
-	 public function load_user_groups(){
+	public function load_user_groups(){
 		$user_groups = UserGroup::Select('id','group_name')
 			->where('status','1')
 			->where('type','1')
@@ -464,7 +462,6 @@ class AdminController extends Controller
     							->get();
 		return json_encode(array('data'=>$permission_details));
     }
-
 
     public function permission_action_entry_update(Request $request){
 		$permission_action = $request->input('permission_action');
@@ -505,9 +502,6 @@ class AdminController extends Controller
 
 
     }
-
-
-
 
 }
 
