@@ -34,7 +34,6 @@ Route::get('app/language/{lang}',function ($lang){
 });
 
 
-
 Route::get('app/login',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
 Route::get('app/auth',array('as'=>'Sign in', 'uses' =>'AppAuthController@authLogin'));
@@ -96,8 +95,8 @@ Route::group(['middleware'=>'appUser'], function() {
     Route::get('app/load-course-details/{id}',array('as'=>'Course' , 'uses' =>'FrontEndController@courseDtails'));
     Route::get('app/course-interest/{id}',array('as'=>'Course' , 'uses' =>'FrontEndController@courseInterest'));
 
-    Route::get('app/load-survey/{page}/{search}',array('as'=>'Notice' , 'uses' =>'FrontEndController@allSurvey'));
-    Route::get('app/load-survey-details/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@surveyDtails'));
+    Route::get('app/load-survey/{page}/{search}',array('as'=>'Survey' , 'uses' =>'FrontEndController@allSurvey'));
+    Route::get('app/load-survey-details/{id}',array('as'=>'Survey' , 'uses' =>'FrontEndController@surveyDtails'));
 
     Route::get('app/user_course',array('as'=>'Notice' , 'uses' =>'FrontEndController@userCourse'));
     Route::get('app/user_course_description/{id}',array('as'=>'Notice' , 'uses' =>'FrontEndController@userCourseDescription'));

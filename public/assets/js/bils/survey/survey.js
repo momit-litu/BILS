@@ -13,6 +13,7 @@ $(document).ready(function () {
         destroy: true,
         "processing": true,
         "serverSide": false,
+		"ordering": false,
         "ajax": url+"/survey/survey-list",
         "aoColumns": [
             { mData: 'survey_name' },
@@ -27,7 +28,6 @@ $(document).ready(function () {
         event.preventDefault();
 
         if(id==0){
-            alert(id)
             $(this).parents().remove()
             return false;
         }

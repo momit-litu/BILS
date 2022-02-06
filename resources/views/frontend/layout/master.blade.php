@@ -101,13 +101,14 @@
 
 
 <body class="footer-fixed">
+    <!--
 <audio id="myAudio1">
     <source src="{{ asset('assets/tone/eventually.mp3')}}" type="audio/mpeg">
     <source src="{{ asset('assets/tone/eventually.m4r')}}" type="audio/mpeg">
     <source src="{{ asset('assets/eventually.ogg')}}" type="audio/mpeg">
 </audio>
 <audio id="myAudio" style="float:right;margin-top:100px; width: 190px; display:none" width="190" controls>
-    <source src="{{ asset('assets/tone/inflicted.mp3')}}" type="audio/mpeg">
+    <source src="{{ asset('assets/tone/eventually.mp3')}}" type="audio/mpeg">
     <source src="{{ asset('assets/tone/inflicted.ogg')}}" type="audio/mpeg">
 </audio>
 
@@ -115,7 +116,7 @@
     <source src="{{ asset('assets/tone/inflicted.mp3')}}" type="audio/mpeg">
     <source src="{{ asset('assets/tone/inflicted.m4r')}}" type="audio/mpeg">
     <source src="{{ asset('assets/inflicted.ogg')}}" type="audio/mpeg">
-</audio>
+</audio>-->
 <!-- start: HEADER -->
 @include('frontend.layout.header')
 <!-- end: HEADER -->
@@ -412,53 +413,22 @@
         Animation.init();
     });
 
-    var player = document.getElementById("myAudio");
-    player.addEventListener("play", function () {
-      console.log("it's go time");
-      alert('1111111');
-    });
-	//alert('loaded')
-    //player.play();
-	//alert('close');
+
+    
+    var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
+    var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
+
 
 		//{{ asset('assets/tone/effectsSprite.ogg') }}
 
-		/*
-         * DEFINE SOUNDS
-         */
-        $.mbAudio.sounds = {
-            backgroundSprite: {
-                id    : "backgroundSprite",
-                ogg   : "sounds/bgndsSprite.ogg",
-                mp3   : "sounds/bgndsSprite.mp3",
-                //example of sprite
-                sprite: {
-                    intro     : {id: "intro", start: 80, end: 116.975, loop: true},
-                    levelIntro: {id: "levelIntro", start: 63, end: 75.5, loop: true},
-                    tellStory : {id: "tellStory", start: 80, end: 116.975, loop: true},
-                    level1    : {id: "level1", start: 5, end: 13, loop: true},
-                    level2    : {id: "level2", start: 40, end: 56, loop: true},
-                    level3    : {id: "level3", start: 120, end: 136.030, loop: true}
-                }
-            },
-
-            effectSprite: {
-                id    : "effectSprite",
-                ogg   : '{{ asset('assets/tone/effectsSprite_small.ogg') }}',
-                mp3   : '{{ asset('assets/tone/effectsSprite_small.mp3') }}',
-                //example of sprite
-                sprite: {
-                    great        : {id: "great", start: 0, end: 1.8, loop: false},
-                }
-            }
-        };
-   
     function playAudio(){
     	//	window.addEventListener('load', () => {
 			// noinspection JSUnresolvedVariable
 			let audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 			let xhr = new XMLHttpRequest();
-			xhr.open('GET', '{{ asset('assets/tone/eventually.mp3') }}');
+			let url = (deviceIsIos)?'{{ asset('assets/tone/effectsSprite_small.ogg') }}':'{{ asset('assets/tone/effectsSprite_small.mp3') }}';
+		//	alert(url)
+			xhr.open('GET', url);
 			xhr.responseType = 'arraybuffer';
 			xhr.addEventListener('load', () => {
 				let playsound = (audioBuffer) => {
@@ -467,13 +437,6 @@
 					source.connect(audioCtx.destination);
 					source.loop = false;
 					source.start();
-
-					/*setTimeout(function () {
-						let t = document.createElement('p');
-						t.appendChild(document.createTextNode((new Date()).toLocaleString() + ': Sound played'));
-						document.querySelector('.output').appendChild(t);
-						playsound(audioBuffer);
-					}, 1000 + Math.random()*2500);*/
 				};
 
 				audioCtx.decodeAudioData(xhr.response).then(playsound);
@@ -506,36 +469,17 @@
 
     localStorage.removeItem('messageMaster')
     //alert("{{$token}}")
-    /*
-    var deviceIsAndroid = /(android)/i.test(navigator.userAgent);
-    var deviceIsIos     = !!navigator.platform.match(/iPhone|iPod|iPad/);
-    $(document).ready(function () {
-        if (deviceIsAndroid || deviceIsIos) {
-            $(document).bind("click", function () {
-                if (document.activeElement.nodeName == 'TEXTAREA' || document.activeElement.nodeName == 'INPUT') {
-                    var textBox = document.activeElement.id;
-                    document.getElementById(textBox).scrollIntoView();
-                }
-            });
-        }
-    });
-    $("input").bind("click", function () {
-        var textBox = document.activeElement.id;
-        document.getElementById(textBox).scrollIntoView();
-    });
-
-    */
 
 
 
 
-    ajaxPreLoad = (show_loading = 0) =>{
-		alert(show_loading)
+   ajaxPreLoad = (show_loading = 0) =>{
+	    let message = (show_loading==0)?'<img src={{ asset('assets/images/loading.gif') }} /> Loading...':"";
         $('#load-content').block({
             overlayCSS: {
                 backgroundColor: '#fff'
             },
-            message: '<img src={{ asset('assets/images/loading.gif') }} /> Loading...',
+            message:message ,
             css: {
                 border: 'none',
                 color: '#333',
@@ -546,7 +490,7 @@
 
     //alert('.ok')
     changePage = (name) =>{
-         ajaxPreLoad('dontshow')
+         ajaxPreLoad('show')
         localStorage.setItem('content',name)
         window.location.href = "{{ url('app/dashboard/content_load')}}"
     }

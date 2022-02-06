@@ -129,7 +129,7 @@ class ProfileController extends Controller
 				DB::beginTransaction();
 				
 				$id = $request->change_pass_id;
-				$current_password = md5($request->current_password);
+				$current_password = bcrypt($request->current_password);
 
 				$column_value = [
 					'password'=>$current_password,		

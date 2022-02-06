@@ -357,7 +357,6 @@ class FrontEndController extends Controller
         return json_encode($course);
     }
 
-   
     public function courseDtails($id){
         $category = $this->language==='en'? 'cc.category_name as category_name': 'cc.category_name_bn as category_name';
 		$user_info = \App\AppUser::where('email',\Auth::guard('appUser')->user()->email)->first();
@@ -420,7 +419,6 @@ class FrontEndController extends Controller
 
         }
     }
-
 
     public function userCourse(){
 
@@ -623,7 +621,8 @@ class FrontEndController extends Controller
         $survey = DB::table('survey_masters as p')
             ->leftJoin('survey_categories as cs','p.survey_category','=','cs.id')
             ->where('p.id','=',$id)
-            ->select('p.id','p.survey_name as title', 'p.details',$category,
+            ->select('p.id','p.survey_name as title',$category,
+				DB::Raw('ifnull(p.details,"") as details'),
                 DB::Raw('from_unixtime(UNIX_TIMESTAMP(p.created_at)) as created_at'),
                 DB::Raw('from_unixtime(UNIX_TIMESTAMP(p.start_date)) as start_date'),
                 DB::Raw('from_unixtime(UNIX_TIMESTAMP(p.end_date)) as end_date'),

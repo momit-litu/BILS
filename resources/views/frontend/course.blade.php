@@ -158,11 +158,11 @@ courseInterest =(id) =>{
         contentType: false,
         processData: false,
         success: function (response) {
-			$('#interested_btn').css('display','none')
+            $('.interested_btn').css('display','none');
            // $('#responsive').modal().hide();
             //$('#responsive').modal('toggle')
             //$("#responsive .close").click()
-           // loadCourseSideBar()
+            //loadCourseSideBar()
 
         }
     })
@@ -171,59 +171,54 @@ courseInterest =(id) =>{
 
 
 courseDetails  = (id) =>{
-	$.ajax({
-		url: "{{ url('app/')}}/load-course-details/"+id,
-		type: 'get',
-		async: true,
-		contentType: false,
-		processData: false,
-		beforeSend: function( xhr ) {
-			ajaxPreLoad()
-			//$("#load-content").fadeOut('slow');
-		},
-		success: function (response) {
-			$('#load-content').unblock();
+        $.ajax({
+            url: "{{ url('app/')}}/load-course-details/"+id,
+            type: 'get',
+            async: true,
+            contentType: false,
+            processData: false,
+            beforeSend: function( xhr ) {
+                ajaxPreLoad()
+                //$("#load-content").fadeOut('slow');
+            },
+            success: function (response) {
+                $('#load-content').unblock();
+                response = JSON.parse(response)
+                //console.log(response)
+                created = new Date(response[0]["created_at"]+ 'Z');
+                created = created.toDateString()
+                start = new Date(response[0]["appx_start_time"]+ 'Z');
+                start = start.toDateString()
+                end = new Date(response[0]["appx_end_time"]+ 'Z');
+                end = end.toDateString()
+                
+                let interested = "";
+                if(response[0]["is_interested"] == 0)
+                interested = '<button class="btn btn-success btn-sm interested_btn" onclick="courseInterest('+response[0]["id"]+')" type="button">\n' +
+                    'Interested?\n' +
+                    '</button>\n' +
+                    '<button  class="btn btn-danger btn-sm interested_btn" onclick="" type="button">\n' +
+                    'No?\n' +
+                    '</button>'
+                let category_name = (response[0]["category_name"])?"<button class='btn btn-disabled btn-info btn-xs'>"+response[0]["category_name"]+"</button>":"";
 
-			response = JSON.parse(response)
+                let  p = '<span><p style="text-align:left"> Teacher: '+response[0]['name']+'<b style="float:right">Duration: '+start+' to '+end+'</b> </p></span><br>'
 
-			//console.log(response)
+                let attachment = '';
 
-			created = new Date(response[0]["created_at"]+ 'Z');
-			created = created.toDateString()
-			start = new Date(response[0]["appx_start_time"]+ 'Z');
-			start = start.toDateString()
-			end = new Date(response[0]["appx_end_time"]+ 'Z');
-			end = end.toDateString()
+                if(response[0]['attachment']){
+                    //attachment = attachment_url+'/'+response[0]['attachment'];
+                    attachment = "<br>"+publication+ '<br><a class="btn btn-disabled btn-warning" href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment">{{__("app.download_file")}}</i></a>'
+                }
+                html = '<div class="alert alert-block alert-info fade in">'+interested+ '<h4>'+response[0]["title"]+'</h4>' + category_name + p +response[0]['details']+'</div>'
 
-			if(response[0]['is_interested'] ==0)
-				let interested = '<button data-dismiss="alert" class="btn btn-success btn-sm intereset_btn" onclick="courseInterest('+response[0]["id"]+')" type="button">\n' +
-				'Interested?\n' +
-				'</button>\n' +
-				'<button data-dismiss="alert" class="btn btn-danger btn-sm" onclick="" type="button">\n' +
-				'No?\n' +
-				'</button>';
-			else
-				let interested = '<button data-dismiss="alert" class="btn btn-danger btn-sm" onclick="" type="button">\n' +	'No?\n' +'</button>';
-			
-			let category_name = (response[0]["category_name"])?"<button class='btn btn-disabled btn-info btn-xs'>"+response[0]["category_name"]+"</button>":"";
+                //$('#modal_title_content').html(response[0]['title'] +''+attachment);
+                $('#modal_body_content').html(html)
+                $('#responsive').modal()
+            }
+        })
 
-			let  p = '<span><p style="text-align:left"> Teacher: '+response[0]['name']+'<b style="float:right">Duration: '+start+' to '+end+'</b> </p></span><br>'
-
-			let attachment = '';
-
-			if(response[0]['attachment']){
-				//attachment = attachment_url+'/'+response[0]['attachment'];
-				attachment = "<br>"+publication+ '<br><a class="btn btn-disabled btn-warning" href="'+attachment_url+'/'+response[0]["attachment"]+'" download><i class="clip-attachment">{{__("app.download_file")}}</i></a>'
-			}
-			html = '<div class="alert alert-block alert-info fade in">'+interested+ '<h4>'+response[0]["title"]+'</h4>' + category_name + p +response[0]['details']+'</div>'
-
-			//$('#modal_title_content').html(response[0]['title'] +''+attachment);
-			$('#modal_body_content').html(html)
-			$('#responsive').modal()
-		}
-	})
-
-}
+    }
 
 
 
